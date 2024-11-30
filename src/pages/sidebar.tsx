@@ -69,10 +69,10 @@ export const RootSidebar = () => {
     <aside className="h-full overflow-y-auto w-[300px] min-w-[300px]">
       <div className="py-10">
         <header className="text-sm px-7 font-semibold pb-1">
-          {user.full_name}
+          {user.display()}
         </header>
         <nav className="px-1">
-          <ItemNav avatar={user.profile} href="/">
+          <ItemNav avatar={user.photoURL} href="/">
             Mi perfil
           </ItemNav>
           <ItemNav icon={Clock20Regular} iconActive={Clock20Filled} href="#">

@@ -5,7 +5,7 @@ export default function RootLoading() {
     <div className="min-h-svh flex flex-col dark:bg-neutral-950">
       <div></div>
       <div className="flex-grow flex items-center justify-center">
-        <Spinner size="medium" />
+        <Spinner size="large" />
       </div>
       <footer></footer>
     </div>

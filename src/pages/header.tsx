@@ -22,7 +22,7 @@ const AppPopover = () => {
   return (
     <Popover>
       <PopoverTrigger disableButtonEnhancement>
-        <button>
+        <button className="opacity-0 md:w-[70px]">
           <GridDots20Regular />
         </button>
       </PopoverTrigger>
@@ -41,7 +41,7 @@ const AppPopover = () => {
 export default function RootHeader() {
   const { user, signOut } = useAuth()
   return (
-    <header className="h-14 shadow-md shadow-black/10 dark:bg-neutral-900 justify-between bg-[#f5f0f0] text-blue-600 w-full z-10 flex items-center gap-4 px-4">
+    <header className="h-14 shadow-md shadow-black/10 dark:bg-[#080808] justify-between bg-[#f5f0f0] text-blue-600 w-full z-10 flex items-center gap-4 px-4">
       <nav className="flex gap-4 flex-grow items-center basis-0">
         <AppPopover />
         <Link to="/" className="flex items-center gap-1">
@@ -60,7 +60,6 @@ export default function RootHeader() {
       <nav className="relative">
         <div className="hidden lg:block">
           <SearchBox
-            appearance="filled-lighter-shadow"
             placeholder="Buscar"
             className="w-[500px]"
             style={{
@@ -110,7 +109,7 @@ export default function RootHeader() {
                 <Avatar
                   icon={<Person20Regular />}
                   image={{
-                    src: user.profile
+                    src: user.photoURL
                   }}
                   size={36}
                 />
@@ -139,13 +138,13 @@ export default function RootHeader() {
                 <Avatar
                   icon={<Person48Regular />}
                   image={{
-                    src: user.profile
+                    src: user.photoURL
                   }}
                   size={96}
                 />
                 <div className="">
                   <h1 className="font-bold text-lg line-clamp-1">
-                    {user.displayName()}
+                    {user.display()}
                   </h1>
                   <p className="text-ellipsis dark:text-neutral-300">
                     {user.email}
