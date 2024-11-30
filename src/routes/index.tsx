@@ -17,6 +17,7 @@ import EventsPage from '@/pages/modules/events/+page'
 import TicketsLayout from '@/pages/modules/tickets/+layout'
 import TicketsPage from '@/pages/modules/tickets/+page'
 import AllCollaboratorsPage from '@/pages/modules/collaborators/all/+page'
+import CreateCollaboratorPage from '@/pages/modules/collaborators/create/+page'
 
 export default function MainRoutes() {
   return (
@@ -33,10 +34,13 @@ export default function MainRoutes() {
         {/* Modules Routes */}
         <Route path="modules" element={<ModuleLayout />}>
           <Route index element={<ModulePage />} />
-          <Route path="collaborators" element={<CollaboratorsLayout />}>
-            <Route index element={<CollaboratorsPage />} />
-            <Route path="all" element={<AllCollaboratorsPage />} />
-            <Route path="*" element={<CollaboratorsPage />} />
+          <Route path="collaborators">
+            <Route element={<CollaboratorsLayout />}>
+              <Route index element={<CollaboratorsPage />} />
+              <Route path="all" element={<AllCollaboratorsPage />} />
+              <Route path="*" element={<CollaboratorsPage />} />
+            </Route>
+            <Route path="create" element={<CreateCollaboratorPage />} />
           </Route>
           <Route path="edas" element={<EdasLayout />}>
             <Route index element={<EdasPage />} />
