@@ -2,6 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
+.geist {
+  font-family: 'Geist', sans-serif;
+  font-optical-sizing: auto;
+  font-weight: 400;
+  font-style: normal;
+}
+
 body {
   box-sizing: border-box;
   margin: 0;
@@ -9,11 +16,11 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
-input:-webkit-autofill,
+/* input:-webkit-autofill,
 input:-webkit-autofill:hover,
 input:-webkit-autofill:focus,
 input:-webkit-autofill:active {
   -webkit-background-clip: text;
   -webkit-text-fill-color: black;
   transition: background-color 5000s ease-in-out 0s;
-}
+} */
