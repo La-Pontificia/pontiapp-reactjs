@@ -6,7 +6,7 @@ const CollaboratorsPage = (): JSX.Element => {
       <Helmet>
         <title>Ponti App - Colaboradores</title>
       </Helmet>
-      <h1>Collaborators overview</h1>
+      <h1></h1>
     </div>
   )
 }

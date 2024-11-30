@@ -3,9 +3,11 @@ import {
   AccordionHeader,
   AccordionItem,
   AccordionPanel,
-  Avatar
+  Avatar,
+  Tooltip
 } from '@fluentui/react-components'
 import {
+  Add16Regular,
   type FluentIcon,
   Info20Filled,
   Info20Regular,
@@ -65,6 +67,17 @@ const ItemNav = (props: ItemNav) => {
 export const CollaboratorsSidebar = () => {
   return (
     <aside className="h-full overflow-y-auto w-[300px] min-w-[300px]">
+      <nav className="px-4 pb-3">
+        <Tooltip relationship="label" content="Nuevo colaborador">
+          <Link
+            to="/modules/collaborators/create"
+            className="flex text-sm rounded-full dark:text-neutral-200 p-1.5 px-4 w-fit justify-center dark:bg-black items-center gap-1 font-semibold"
+          >
+            <Add16Regular className="dark:text-blue-500" />
+            Nuevo
+          </Link>
+        </Tooltip>
+      </nav>
       <nav className="px-1">
         <ItemNav
           icon={Info20Regular}

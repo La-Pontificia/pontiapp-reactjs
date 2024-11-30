@@ -6,7 +6,9 @@ import {
   DocumentRegular,
   PeopleRegular,
   DocumentPdfRegular,
-  VideoRegular
+  VideoRegular,
+  Add20Regular,
+  Search20Regular
 } from '@fluentui/react-icons'
 import {
   PresenceBadgeStatus,
@@ -24,9 +26,11 @@ import {
   MenuList,
   MenuPopover,
   MenuTrigger,
-  MenuItem
+  MenuItem,
+  SearchBox
 } from '@fluentui/react-components'
 import { Helmet } from 'react-helmet'
+import { Link } from 'react-router'
 
 type FileCell = {
   label: string
@@ -183,11 +187,32 @@ const columnSizingOptions = {
 
 const AllCollaboratorsPage = (): JSX.Element => {
   const refMap = React.useRef<Record<string, HTMLElement | null>>({})
+
+  // const res = useQuery<ResponsePaginate<User[]>>({
+  //   queryKey: ['all-collaborators'],
+  //   queryFn: async () => await api.get('users/all')
+  // })
+
   return (
-    <div style={{ overflowX: 'auto' }}>
+    <div className="flex flex-col gap-4">
       <Helmet>
         <title>Ponti App - Todos los colaboradores</title>
       </Helmet>
+      <nav className="flex overflow-hidden items-center border-b border-neutral-500/30">
+        <Link
+          to="/modules/collaborators/create"
+          className="flex items-center gap-1 px-4 py-3 font-semibold"
+        >
+          <Add20Regular className="dark:text-blue-500" />
+          Nuevo
+        </Link>
+      </nav>
+      <nav className="flex items-center gap-4">
+        <SearchBox
+          contentBefore={<Search20Regular className="text-blue-500" />}
+          placeholder="Buscar colaborador"
+        />
+      </nav>
       <DataGrid
         items={items}
         columns={columns}
