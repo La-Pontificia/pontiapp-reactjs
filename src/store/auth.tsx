@@ -1,5 +1,5 @@
 import { api } from '@/lib/api'
-import { User } from '@/types/use'
+import { User } from '@/types/user'
 import React, { createContext } from 'react'
 
 interface AuthState {
@@ -21,12 +21,14 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchAuth = async () => {
     try {
-      const userData = await api.get<User>('auth/current')
+      const userData = await api.get<User>(
+        'auth/current?includes=userRole,role'
+      )
       const userInstance = new User(userData)
       setUser(userInstance)
-      setPrivileges(userInstance.role.privileges || [])
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      setPrivileges(userInstance.userRole.privileges || [])
     } catch (err) {
+      console.error(err)
       setUser(null)
     } finally {
       setLoading(false)
