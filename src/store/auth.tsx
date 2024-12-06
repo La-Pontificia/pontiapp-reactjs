@@ -21,10 +21,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const fetchAuth = async () => {
     try {
-      const userData = await api.get<User>(
-        'auth/current?includes=userRole,role'
-      )
-      const userInstance = new User(userData)
+      const res = await api.get<User>('auth/current?relationship=userRole,role')
+      if (!res.ok) throw new Error(res.error)
+
+      const userInstance = new User(res.data)
       setUser(userInstance)
       setPrivileges(userInstance.userRole.privileges || [])
     } catch (err) {
