@@ -2,6 +2,7 @@ import { toast } from '@/commons/toast'
 import { api } from '@/lib/api'
 import { handleAuthError } from '@/utils'
 import { Spinner } from '@fluentui/react-components'
+import { ArrowCircleRightRegular } from '@fluentui/react-icons'
 import * as React from 'react'
 import { useSearchParams } from 'react-router'
 
@@ -9,16 +10,35 @@ const host = import.meta.env.VITE_HOST
 const apiHost = import.meta.env.VITE_API_HOST
 
 export default function LoginPage() {
-  const [loading, setLoading] = React.useState(false)
+  const [loadingId, setLoadingId] = React.useState(false)
+  const [loadingCredential, setLoadingCredential] = React.useState(false)
+  const [credentialLogin, setCredentialLogin] = React.useState(false)
   const [searchParams] = useSearchParams()
 
   const handleID = async () => {
-    setLoading(true)
+    setLoadingId(true)
     const uri = new URL(`${apiHost}/api/auth/login/id`)
     uri.searchParams.set('redirectURL', `${host}`)
     uri.searchParams.set('redirectErrorURL', `${host}/login`)
     await api('auth/sanctum/csrf-cookie')
     window.location.href = uri.href
+  }
+
+  const handleCredential = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault()
+    setLoadingCredential(true)
+    const form = new FormData(e.currentTarget)
+    const res = await api.post('auth/login/credentials', {
+      data: JSON.stringify({
+        username: form.get('username'),
+        password: form.get('password')
+      })
+    })
+    console.log(res)
+    if (res.ok) return (window.location.href = '/')
+    setLoadingCredential(false)
+    toast(handleAuthError(res.error))
+    return
   }
 
   React.useEffect(() => {
@@ -35,16 +55,17 @@ export default function LoginPage() {
       }}
     >
       <div className="w-full h-full flex-col flex flex-grow bg-gradient-to-b from-stone-950/95 via-stone-950/90 to-stone-950/80">
-        <div className="flex-grow flex-col px-10 w-full max-w-2xl mx-auto flex items-center justify-center">
-          <h1 className="text-yellow-50 py-8 font-serif font-medium tracking-tight text-5xl text-center">
+        <div className="flex-grow flex-col px-10 w-full max-w-xl mx-auto flex items-center justify-center">
+          <h1 className="text-yellow-50 py-8 font-medium tracking-tight text-2xl text-center">
             Ponti App
           </h1>
+
           <button
-            disabled={loading}
+            disabled={loadingId}
             onClick={handleID}
             className="mx-auto font-semibold text-yellow-50 group w-full bg-black h-16 px-10 rounded-2xl flex items-center gap-2 justify-center"
           >
-            {loading ? (
+            {loadingId ? (
               <Spinner />
             ) : (
               <>
@@ -58,12 +79,53 @@ export default function LoginPage() {
               </>
             )}
           </button>
-          <div className="py-4">
-            <button className="dark:text-blue-500 hover:underline font-semibold">
-              Utilizar correo institucional{' '}
-            </button>
+
+          <div className="py-4 w-full flex items-center flex-col">
+            {credentialLogin ? (
+              <form
+                onSubmit={handleCredential}
+                className="rounded-2xl divide-y overflow-hidden divide-stone-500/50 bg-black w-full"
+              >
+                <input
+                  disabled={!!loadingCredential}
+                  autoFocus
+                  name="username"
+                  placeholder="Correo o nombre de usuario"
+                  className="p-5 placeholder:text-stone-500 outline-none bg-transparent w-full"
+                />
+                <div className="relative">
+                  <input
+                    name="password"
+                    disabled={!!loadingCredential}
+                    type="password"
+                    placeholder="Contraseña"
+                    className="p-5 placeholder:text-stone-500 outline-none bg-transparent w-full"
+                  />
+                  <div className="absolute inset-y-0 right-0 px-3 flex items-center">
+                    <button
+                      disabled={!!loadingCredential}
+                      className="aspect-square dark:text-blue-500 hover:scale-110 transition-all rounded-full"
+                    >
+                      {loadingCredential ? (
+                        <Spinner size="medium" />
+                      ) : (
+                        <ArrowCircleRightRegular fontSize={35} />
+                      )}
+                    </button>
+                  </div>
+                </div>
+              </form>
+            ) : (
+              <button
+                onClick={() => setCredentialLogin(true)}
+                className="dark:text-blue-500 hover:underline font-semibold"
+              >
+                Utilizar correo y contraseña
+              </button>
+            )}
           </div>
         </div>
+
         <footer className="pb-10">
           <p className="mt-6 text-xs text-gray-100 text-center">
             {new Date().getFullYear()} ©{' '}
