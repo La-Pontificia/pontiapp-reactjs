@@ -3,11 +3,11 @@ import { User } from './user'
 
 export class UserRole {
   id: string
-  privileges?: string[] | null
+  privileges: string[]
   title: string
   status?: boolean
   level: number
-
+  usersCount: number
   created_at?: Date
   updated_at?: Date
   createdBy?: string
@@ -21,6 +21,7 @@ export class UserRole {
     this.title = data.title
     this.status = data.status
     this.level = data.level
+    this.usersCount = data.usersCount
     this.created_at = data.created_at
     this.updated_at = data.updated_at
     this.createdBy = data.createdBy
@@ -29,7 +30,7 @@ export class UserRole {
     this.updatedUser = data.updatedUser
   }
 
-  isDeveloper(): boolean {
+  get isDeveloper(): boolean {
     return this.privileges?.includes(PRIVILEGE_DEVELOPER) ?? false
   }
 }

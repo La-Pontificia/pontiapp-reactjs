@@ -8,8 +8,9 @@ export class Role {
   name: string
   jobId: string
   departmentId: string
-  code: string
+  codePrefix: string
   job: Job
+  usersCount: number
   department: Department
 
   created_at?: Date
@@ -24,19 +25,22 @@ export class Role {
     this.name = data.name
     this.jobId = data.jobId
     this.departmentId = data.departmentId
-    this.code = data.code
-    this.job = data.job
-    this.department = data.department
-
+    this.codePrefix = data.codePrefix
     this.created_at = data.created_at
     this.updated_at = data.updated_at
     this.createdBy = data.createdBy
     this.updatedBy = data.updatedBy
     this.createdUser = data.createdUser
     this.updatedUser = data.updatedUser
+    this.job = data.job
+    this.usersCount = data.usersCount
+    this.department = data.department
+
+    if (data.job) this.job = new Job(data.job)
+    if (data.department) this.department = new Department(data.department)
   }
 
-  isDeveloper(): boolean {
+  get isDeveloper(): boolean {
     return this.id === ROLE_DEVELOPER_ID
   }
 }

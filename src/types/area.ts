@@ -1,10 +1,12 @@
 import { AREA_DEVELOPER_ID } from '@/const'
 import { User } from './user'
+import { Department } from './department'
 
 export class Area {
   id: string
-  code: string
+  codePrefix: string
   name: string
+  departments: Department[]
   created_at?: Date
   updated_at?: Date
   createdBy?: string
@@ -14,7 +16,7 @@ export class Area {
 
   constructor(data: Area) {
     this.id = data.id
-    this.code = data.code
+    this.codePrefix = data.codePrefix
     this.name = data.name
     this.created_at = data.created_at
     this.updated_at = data.updated_at
@@ -22,9 +24,12 @@ export class Area {
     this.updatedBy = data.updatedBy
     this.createdUser = data.createdUser
     this.updatedUser = data.updatedUser
+    this.departments = data.departments
+    if (data.departments)
+      this.departments = data.departments.map((d) => new Department(d))
   }
 
-  isDeveloper(): boolean {
+  get isDeveloper(): boolean {
     return this.id === AREA_DEVELOPER_ID
   }
 }

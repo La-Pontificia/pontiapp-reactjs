@@ -1,10 +1,11 @@
+import { Time } from '.'
 import { AssistTerminal } from './assist-terminal'
 import { User } from './user'
 
 export class Schedule {
   id: string
-  from: Date
-  to: Date
+  from: Time
+  to: Time
   title: string
   days?: string[]
   startDate: Date
@@ -38,5 +39,6 @@ export class Schedule {
     this.updatedBy = data.updatedBy
     this.createdUser = data.createdUser
     this.updatedUser = data.updatedUser
+    if (data.terminal) this.terminal = new AssistTerminal(data.terminal)
   }
 }
