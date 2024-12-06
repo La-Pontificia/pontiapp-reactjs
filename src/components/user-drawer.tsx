@@ -1,3 +1,4 @@
+import { toast } from '@/commons/toast'
 import { useDebounced } from '@/hooks/use-debounced'
 import { api } from '@/lib/api'
 import { useAuth } from '@/store/auth'
@@ -36,7 +37,7 @@ export default function UserDrawer(props: UserDrawerProps) {
   const restoreFocusSourceAttributes = useRestoreFocusSource()
   const [open, setOpen] = React.useState(false)
   const [selectedUsers, setSelectedUsers] = React.useState<User[]>(
-    props.users ?? []
+    props.users || []
   )
 
   const handleSubmit = () => {
@@ -54,7 +55,7 @@ export default function UserDrawer(props: UserDrawerProps) {
         position="end"
         {...restoreFocusSourceAttributes}
         separator
-        className="xl:min-w-[50svw] sm:min-w-[80svw] max-w-full min-w-full"
+        className="xl:min-w-[50svw] lg:min-w-[80svw] max-w-full min-w-full"
         open={open}
         onOpenChange={(_, { open }) => setOpen(open)}
       >
@@ -85,6 +86,9 @@ export default function UserDrawer(props: UserDrawerProps) {
             <Button onClick={handleSubmit} appearance="primary">
               {props.onSubmitTitle}
             </Button>
+            <Button onClick={() => setOpen(false)} appearance="outline">
+              Cerrar
+            </Button>
           </footer>
         </DrawerBody>
       </Drawer>
@@ -107,21 +111,23 @@ export function Users(
   } = props
 
   const [query, setQuery] = React.useState<string>(
-    props.users?.length === 1 ? props.users[0].firstNames : ''
+    props.users?.length === 1 ? props.users[0].email : ''
   )
-  const [isUsersLoading, setIsUsersLoading] = React.useState<boolean>(true)
 
-  const { data: users, refetch } = useQuery<User[]>({
-    queryKey: ['users/all', { limit: 15 }],
+  const {
+    data: users,
+    refetch,
+    isLoading
+  } = useQuery<User[]>({
+    queryKey: ['users/all', query],
     queryFn: async () => {
       const res = await api.get<User[]>('users/all?limit=15&q=' + query)
-      setIsUsersLoading(false)
-      return res.map((u) => new User(u))
+      if (!res.ok) return []
+      return res.data.map((u) => new User(u))
     }
   })
 
   React.useEffect(() => {
-    setIsUsersLoading(true)
     refetch()
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
@@ -136,6 +142,11 @@ export function Users(
 
     if (max === 1) {
       return selected ? setSelectedUsers([]) : setSelectedUsers([u])
+    }
+
+    if (selectedUsers.length >= max && !selected) {
+      toast(`Solo puedes seleccionar ${max} usuarios`)
+      return
     }
 
     if (selected) {
@@ -162,9 +173,12 @@ export function Users(
           </Badge>
         )}
       </nav>
-      <div className="grid divide-x flex-grow pb-4 overflow-y-auto divide-neutral-500/50">
-        <div className="pr-5 w-full overflow-y-auto">
-          {isUsersLoading ? (
+      <div
+        data-grided={max > 1 ? '' : undefined}
+        className="grid data-[grided]:grid-cols-2 flex-grow pb-4 overflow-y-auto"
+      >
+        <div className="w-full overflow-y-auto">
+          {isLoading ? (
             <div className="space-y-5">
               <div className="grid items-center gap-5 grid-cols-[min-content,20%,20%,15%,15%]">
                 <SkeletonItem
@@ -190,14 +204,15 @@ export function Users(
               </div>
             </div>
           ) : (
-            <div className="overflow-y-auto divide-y divide-neutral-500/60">
+            <div className="overflow-y-auto divide-y divide-black">
               {users?.map((u) => {
                 const selected = selectedUsers.find((user) => user.id === u.id)
                 if (!includeCurrentUser && u.id === user.id) return null
                 return (
                   <label
+                    data-blocked={!u.status ? '' : undefined}
                     key={u.id}
-                    className="flex cursor-pointer items-center gap-2 py-3"
+                    className="flex data-[blocked]:grayscale data-[blocked]:opacity-90 cursor-pointer items-center gap-2 py-3"
                   >
                     <div>
                       <Checkbox
@@ -206,22 +221,20 @@ export function Users(
                       />
                     </div>
                     <Avatar
-                      size={48}
+                      badge={{
+                        status: u.status ? 'available' : 'blocked'
+                      }}
+                      color="colorful"
+                      size={36}
+                      name={u.displayName}
                       image={{
                         src: u.photoURL
                       }}
                     />
                     <div className="flex-grow">
-                      <p>{u.display()}</p>
-                      <p className=" dark:text-blue-500">{u.email}</p>
+                      <p>{u.displayName}</p>
+                      <p className="text-xs dark:text-blue-500">{u.email}</p>
                     </div>
-                    {!u.status && (
-                      <div className="px-3">
-                        <Badge appearance="tint" color="danger">
-                          Inactive
-                        </Badge>
-                      </div>
-                    )}
                   </label>
                 )
               })}
@@ -236,34 +249,46 @@ export function Users(
           )}
         </div>
         {max > 1 && (
-          <div className="pl-5 overflow-y-auto">
-            <h2>Personas seleccionadas</h2>
-            <div>
-              <div className="overflow-y-auto divide-y divide-neutral-500/60">
-                {selectedUsers.map((u) => {
-                  return (
-                    <div key={u.id} className="flex items-center gap-2 py-3">
-                      <Avatar
-                        size={48}
-                        image={{
-                          src: u.photoURL
-                        }}
-                      />
-                      <div className="flex-grow">
-                        <p className="text-nowrap">{u.display()}</p>
-                      </div>
-                      <div>
-                        <Button
-                          onClick={() => handleAddOrRemoveUser(u)}
-                          size="small"
-                        >
-                          Quitar
-                        </Button>
-                      </div>
+          <div className="ml-2 rounded-xl flex flex-col bg-black/50 py-3 overflow-y-auto">
+            <h2 className="px-3">
+              Personas seleccionadas ({selectedUsers.length} / {max})
+            </h2>
+            <div className="overflow-y-auto h-full flex-grow divide-y divide-neutral-500/60">
+              {selectedUsers.map((u) => {
+                return (
+                  <div key={u.id} className="flex px-4 items-center gap-2 py-3">
+                    <Avatar
+                      size={36}
+                      color="colorful"
+                      name={u.displayName}
+                      image={{
+                        src: u.photoURL
+                      }}
+                    />
+                    <div className="flex-grow">
+                      <p className="text-nowrap">{u.displayName}</p>
+                      <p className="text-nowrap text-xs opacity-50">
+                        {u.email}
+                      </p>
                     </div>
-                  )
-                })}
-              </div>
+                    <div>
+                      <Button
+                        onClick={() => handleAddOrRemoveUser(u)}
+                        size="small"
+                      >
+                        Quitar
+                      </Button>
+                    </div>
+                  </div>
+                )
+              })}
+              {selectedUsers.length < 1 && (
+                <div className="flex-grow h-full grid place-content-center">
+                  <p className="text-center opacity-70 text-sm">
+                    No hay usuarios seleccionados
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         )}

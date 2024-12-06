@@ -1,8 +1,10 @@
 import { PRIVILEGE_DEVELOPER, PRIVILEGES } from '@/const'
 import { useAuth } from '@/store/auth'
 import {
+  Badge,
   Button,
   ButtonProps,
+  Checkbox,
   Drawer,
   DrawerBody,
   DrawerHeader,
@@ -11,11 +13,7 @@ import {
   useRestoreFocusSource,
   useRestoreFocusTarget
 } from '@fluentui/react-components'
-import {
-  Checkmark20Filled,
-  Dismiss24Regular,
-  GlobeSearch24Regular
-} from '@fluentui/react-icons'
+import { Dismiss24Regular, GlobeSearch24Regular } from '@fluentui/react-icons'
 import * as React from 'react'
 
 type PrivilegesDrawerProps = {
@@ -51,6 +49,10 @@ export default function PrivilegesDrawer(props: PrivilegesDrawerProps) {
     setPrivileges(filteredPrivileges)
   }
 
+  React.useEffect(() => {
+    setPrivileges(PRIVILEGES)
+  }, [props.asignedPrivileges])
+
   const handleAsignPrivilege = (key: string) => {
     setAsignedPrivileges((prev) => [...prev, key])
   }
@@ -71,7 +73,7 @@ export default function PrivilegesDrawer(props: PrivilegesDrawerProps) {
         position="end"
         {...restoreFocusSourceAttributes}
         separator
-        className="sm:min-w-[50svw] w-full max-w-full"
+        className="md:min-w-[50svw] min-w-full w-full max-w-full"
         open={open}
         onOpenChange={(_, { open }) => setOpen(open)}
       >
@@ -91,7 +93,7 @@ export default function PrivilegesDrawer(props: PrivilegesDrawerProps) {
         </DrawerHeader>
 
         <DrawerBody className="flex flex-col overflow-y-auto">
-          <nav className="pb-3">
+          <nav className="pb-3 flex justify-between">
             <SearchBox
               onChange={(_, e) => handleSearch(e.value)}
               style={{
@@ -99,12 +101,15 @@ export default function PrivilegesDrawer(props: PrivilegesDrawerProps) {
               }}
               placeholder="Filtrar los privilegios"
             />
+            <Badge appearance="tint">
+              Privilegios seleccionados: {asignedPrivileges.length}
+            </Badge>
           </nav>
-          <div className="px-1 divide-y overflow-y-auto divide-neutral-500">
+          <div className="px-1 flex-grow h-full divide-y bg-black/50 rounded-2xl overflow-y-auto divide-neutral-500/20">
             {Object.entries(privileges).map(([key, value]) => {
               const hasAsigned = asignedPrivileges.includes(key)
 
-              if (key === PRIVILEGE_DEVELOPER && !user.isDeveloper()) return
+              if (key === PRIVILEGE_DEVELOPER && !user.isDeveloper) return
 
               return (
                 <button
@@ -118,19 +123,17 @@ export default function PrivilegesDrawer(props: PrivilegesDrawerProps) {
                   className="flex items-center px-5 justify-start text-left w-full gap-2 py-2"
                   key={key}
                 >
+                  <Checkbox checked={!!hasAsigned} />
                   <GlobeSearch24Regular className="text-blue-500" />
                   <div className="flex-grow">
                     <p>{value}</p>
                     <span className="text-xs dark:text-stone-400">{key}</span>
                   </div>
-                  {hasAsigned && (
-                    <Checkmark20Filled className="dark:text-blue-500" />
-                  )}
                 </button>
               )
             })}
           </div>
-          <footer className="border-t py-4 flex gap-3 border-stone-500">
+          <footer className="py-4 flex gap-3 border-stone-500">
             <Button onClick={handSubmit} appearance="primary">
               {props.onSubmitTitle}
             </Button>
