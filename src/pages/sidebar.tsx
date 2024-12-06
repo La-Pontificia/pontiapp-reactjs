@@ -41,9 +41,9 @@ const ItemNav = (props: ItemNav) => {
       className="block relative dark:text-neutral-300 text-neutral-700 data-[active]:font-semibold group pl-4"
     >
       <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center px-1">
-        <span className="h-[17px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
+        <span className="h-[17px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-stone-500/30 group-hover:opacity-100 opacity-0" />
       </div>
-      <div className="flex items-center group-data-[active]:dark:text-white transition-all gap-2 px-2 py-2.5 rounded-lg group-hover:bg-neutral-200 dark:group-hover:bg-black">
+      <div className="flex items-center group-data-[active]:dark:text-white transition-all gap-2 px-2 py-2.5 rounded-lg group-hover:bg-stone-200 dark:group-hover:bg-black">
         {props.emptyIcon ? (
           <span className="w-[20px] aspect-square"></span>
         ) : Icon ? (
@@ -69,7 +69,7 @@ export const RootSidebar = () => {
     <aside className="h-full overflow-y-auto w-[300px] min-w-[300px]">
       <div className="py-10">
         <header className="text-sm px-7 font-semibold pb-1">
-          {user.display()}
+          {user.displayName}
         </header>
         <nav className="px-1">
           <ItemNav avatar={user.photoURL} href="/">

@@ -9,7 +9,7 @@ import {
   Text
 } from '@fluentui/react-components'
 import {
-  GridDots20Regular,
+  GridDotsRegular,
   Person20Regular,
   Person48Regular,
   PersonFeedback20Regular,
@@ -22,8 +22,8 @@ const AppPopover = () => {
   return (
     <Popover>
       <PopoverTrigger disableButtonEnhancement>
-        <button className="opacity-0 md:w-[70px]">
-          <GridDots20Regular />
+        <button className="opacity-0 w-[70px]">
+          <GridDotsRegular fontSize={20} />
         </button>
       </PopoverTrigger>
       <PopoverSurface
@@ -41,7 +41,7 @@ const AppPopover = () => {
 export default function RootHeader() {
   const { user, signOut } = useAuth()
   return (
-    <header className="h-14 shadow-md shadow-black/10 dark:bg-[#080808] justify-between bg-[#f5f0f0] text-blue-600 w-full z-10 flex items-center gap-4 px-4">
+    <header className="h-14 dark:text-blue-500 shadow-xl shadow-black/20 justify-between dark:bg-[#131210] text-blue-600 w-full z-20 flex items-center gap-4 px-4">
       <nav className="flex gap-4 flex-grow items-center basis-0">
         <AppPopover />
         <Link to="/" className="flex items-center gap-1">
@@ -53,9 +53,7 @@ export default function RootHeader() {
             alt='Logo Lettras "La Pontificia"'
           />
         </Link>
-        <h1 className="text-blue-700 font-semibold text-base hidden md:block">
-          Ponti App
-        </h1>
+        <h1 className="font-semibold text-base hidden md:block">Ponti App</h1>
       </nav>
       <nav className="relative">
         <div className="hidden lg:block">
@@ -144,12 +142,15 @@ export default function RootHeader() {
                 />
                 <div className="">
                   <h1 className="font-bold text-lg line-clamp-1">
-                    {user.display()}
+                    {user.displayName}
                   </h1>
                   <p className="text-ellipsis dark:text-neutral-300">
                     {user.email}
                   </p>
-                  <Link to="/me" className="text-blue-500 hover:underline">
+                  <Link
+                    to={`/${user.username}`}
+                    className="text-blue-500 hover:underline"
+                  >
                     Ver perfil
                   </Link>
                 </div>
