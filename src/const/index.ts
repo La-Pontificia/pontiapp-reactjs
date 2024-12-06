@@ -33,6 +33,12 @@ export const modules = {
   }
 } as const
 
+export const CONTACT_TYPES = {
+  email: 'Correo electrónico',
+  phone: 'Número de teléfono',
+  whatsapp: 'WhatsApp'
+} as const
+
 export const calendarStrings = {
   days: ['D', 'L', 'M', 'M', 'J', 'V', 'S'],
   goToToday: 'Ir a hoy',
@@ -121,8 +127,16 @@ export const PRIVILEGES = {
   'users:asignSupervisor': 'Asignar supervisor a usuarios',
   'users:toggleStaus': 'Deshabilitar o habilitar usuarios',
   'users:resetPassword': 'Restablecer contraseñas',
-  'users:report': 'Generar reportes de usuarios',
-  'users:roles': 'Roles y permisos',
+  'users:groups:create': 'Registrar grupos de usuarios',
+  'users:groups:edit': 'Editar grupos de usuarios',
+  'users:groups:delete': 'Eliminar grupos de usuarios',
+  'users:report:generate': 'Generar reportes de usuarios',
+  'users:report:show': 'Visualizar reportes de usuarios',
+  'users:roles': 'Roles y permisos de usuarios',
+  'users:jobs': 'Puestos de trabajo de usuarios',
+  'users:areas': 'Areas de trabajo de usuarios',
+  'users:departments': 'Departamentos de usuarios',
+  'users:contractsTypes': 'Tipos de contratos de usuarios',
 
   // Assistances management
   'assists:centralized': 'Asistencias centralizadas',
@@ -134,7 +148,6 @@ export const PRIVILEGES = {
   'assists:assistTerminals': 'Terminales de asistencias',
 
   // Edas management
-
   'edas:showAll': 'Ver todas las edas',
   'edas:show': 'Ver edas que supervisa',
   'edas:createAll': 'Registrar todas las edas',
@@ -162,9 +175,8 @@ export const PRIVILEGES = {
   // Audits management
   audits: 'Auditoria del sistema',
 
-  // Reports management
-  'reports:showAll': 'Ver y descargar todos los reportes',
-  'reports:showYourSelf': 'Ver y descargar sus reportes',
+  // Events management
+  'tickets:show': 'Ver tickets',
 
   // Settings management
   settings: 'Acceso a configuraciones del sistema'
