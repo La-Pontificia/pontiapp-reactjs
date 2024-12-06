@@ -1,281 +1,168 @@
+import { toast } from '@/commons/toast'
+import { api } from '@/lib/api'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { User } from '@/types/user'
 import * as React from 'react'
-import {
-  FolderRegular,
-  EditRegular,
-  OpenRegular,
-  DocumentRegular,
-  PeopleRegular,
-  DocumentPdfRegular,
-  VideoRegular,
-  Add20Regular,
-  Search20Regular
-} from '@fluentui/react-icons'
-import {
-  PresenceBadgeStatus,
-  Avatar,
-  DataGrid,
-  DataGridBody,
-  DataGridCell,
-  DataGridHeader,
-  DataGridHeaderCell,
-  DataGridRow,
-  TableCellLayout,
-  TableColumnDefinition,
-  createTableColumn,
-  Menu,
-  MenuList,
-  MenuPopover,
-  MenuTrigger,
-  MenuItem,
-  SearchBox
-} from '@fluentui/react-components'
-import { Helmet } from 'react-helmet'
-import { Link } from 'react-router'
+import { Button, SearchBox, Spinner } from '@fluentui/react-components'
+import { Search20Regular, TableSearch20Regular } from '@fluentui/react-icons'
+import CollaboratorsGrid from './grid'
+import { useDebounced } from '@/hooks/use-debounced'
+import CollaboratorsFilters from './filters'
+import { useQuery } from '@tanstack/react-query'
 
-type FileCell = {
-  label: string
-  icon: JSX.Element
+export type FiltersValues = {
+  q: string | null
+  job: string | null
+  department: string | null
+  area: string | null
+  role: string | null
+  hasManager: string | null
+  hasSchedules: string | null
 }
 
-type LastUpdatedCell = {
-  label: string
-  timestamp: number
-}
+export default function AllCollaboratorsPage() {
+  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
+  const [loadingMore, setLoadingMore] = React.useState(false)
+  const [info, setInfo] = React.useState<ResponsePaginate<User[]>>(
+    {} as ResponsePaginate<User[]>
+  )
+  const [filters, setFilters] = React.useState<FiltersValues>({
+    q: null,
+    job: null,
+    department: null,
+    area: null,
+    role: null,
+    hasManager: null,
+    hasSchedules: null
+  })
 
-type LastUpdateCell = {
-  label: string
-  icon: JSX.Element
-}
-
-type AuthorCell = {
-  label: string
-  status: PresenceBadgeStatus
-}
-
-type Item = {
-  file: FileCell
-  author: AuthorCell
-  lastUpdated: LastUpdatedCell
-  lastUpdate: LastUpdateCell
-}
-
-const items: Item[] = [
-  {
-    file: { label: 'Meeting notes', icon: <DocumentRegular /> },
-    author: { label: 'Max Mustermann', status: 'available' },
-    lastUpdated: { label: '7h ago', timestamp: 1 },
-    lastUpdate: {
-      label: 'You edited this',
-      icon: <EditRegular />
-    }
-  },
-  {
-    file: { label: 'Thursday presentation', icon: <FolderRegular /> },
-    author: { label: 'Erika Mustermann', status: 'busy' },
-    lastUpdated: { label: 'Yesterday at 1:45 PM', timestamp: 2 },
-    lastUpdate: {
-      label: 'You recently opened this',
-      icon: <OpenRegular />
-    }
-  },
-  {
-    file: { label: 'Training recording', icon: <VideoRegular /> },
-    author: { label: 'John Doe', status: 'away' },
-    lastUpdated: { label: 'Yesterday at 1:45 PM', timestamp: 2 },
-    lastUpdate: {
-      label: 'You recently opened this',
-      icon: <OpenRegular />
-    }
-  },
-  {
-    file: { label: 'Purchase order', icon: <DocumentPdfRegular /> },
-    author: { label: 'Jane Doe', status: 'offline' },
-    lastUpdated: { label: 'Tue at 9:30 AM', timestamp: 3 },
-    lastUpdate: {
-      label: 'You shared this in a Teams chat',
-      icon: <PeopleRegular />
-    }
+  const getFiltersQuery = () => {
+    let query =
+      '?relationship=userRole,role,role.department,role.department.area,manager'
+    if (filters.q) query += `&q=${filters.q}`
+    if (filters.job) query += `&job=${filters.job}`
+    if (filters.department) query += `&department=${filters.department}`
+    if (filters.area) query += `&area=${filters.area}`
+    if (filters.role) query += `&role=${filters.role}`
+    if (filters.hasManager) query += `&hasManager=${filters.hasManager}`
+    if (filters.hasSchedules) query += `&hasSchedules=${filters.hasSchedules}`
+    return query
   }
-]
 
-const columns: TableColumnDefinition<Item>[] = [
-  createTableColumn<Item>({
-    columnId: 'file',
-    compare: (a, b) => {
-      return a.file.label.localeCompare(b.file.label)
-    },
-    renderHeaderCell: () => {
-      return 'File'
-    },
-    renderCell: (item) => {
-      return (
-        <TableCellLayout truncate media={item.file.icon}>
-          {item.file.label}
-        </TableCellLayout>
-      )
-    }
-  }),
-  createTableColumn<Item>({
-    columnId: 'author',
-    compare: (a, b) => {
-      return a.author.label.localeCompare(b.author.label)
-    },
-    renderHeaderCell: () => {
-      return 'Author'
-    },
-    renderCell: (item) => {
-      return (
-        <TableCellLayout
-          truncate
-          media={
-            <Avatar
-              aria-label={item.author.label}
-              name={item.author.label}
-              badge={{ status: item.author.status }}
-            />
-          }
-        >
-          {item.author.label}
-        </TableCellLayout>
-      )
-    }
-  }),
-  createTableColumn<Item>({
-    columnId: 'lastUpdated',
-    compare: (a, b) => {
-      return a.lastUpdated.timestamp - b.lastUpdated.timestamp
-    },
-    renderHeaderCell: () => {
-      return 'Last updated'
-    },
+  const [users, setUsers] = React.useState<User[]>([])
 
-    renderCell: (item) => {
-      return (
-        <TableCellLayout truncate>{item.lastUpdated.label}</TableCellLayout>
+  const {
+    data,
+    isLoading: loading,
+    refetch
+  } = useQuery<ResponsePaginate<User[]> | null>({
+    queryKey: ['users/all', getFiltersQuery()],
+    queryFn: async () => {
+      const res = await api.get<ResponsePaginate<User[]>>(
+        'users/all' + getFiltersQuery()
       )
-    }
-  }),
-  createTableColumn<Item>({
-    columnId: 'lastUpdate',
-    compare: (a, b) => {
-      return a.lastUpdate.label.localeCompare(b.lastUpdate.label)
-    },
-    renderHeaderCell: () => {
-      return 'Last update'
-    },
-    renderCell: (item) => {
-      return (
-        <TableCellLayout truncate media={item.lastUpdate.icon}>
-          {item.lastUpdate.label}
-        </TableCellLayout>
-      )
+      if (!res.ok) return null
+      return res.data
     }
   })
-]
 
-const columnSizingOptions = {
-  file: {
-    minWidth: 80,
-    defaultWidth: 180
-  },
-  author: {
-    defaultWidth: 180,
-    minWidth: 120,
-    idealWidth: 180
+  React.useEffect(() => {
+    if (!data) return
+    setUsers(data.data.map((user) => new User(user)))
+    setInfo(data)
+  }, [data])
+
+  const nextPage = async () => {
+    setLoadingMore(true)
+    const query = getFiltersQuery()
+    const res = await api.get<ResponsePaginate<User[]>>(
+      'users/all' + query + `&page=${info.current_page + 1}`
+    )
+    if (res.ok) {
+      setUsers((prev) => [
+        ...prev,
+        ...res.data.data.map((user) => new User(user))
+      ])
+      setInfo({
+        ...res.data,
+        data: []
+      })
+    } else {
+      toast('No se pudo cargar la lista de colaboradores')
+    }
+    setLoadingMore(false)
   }
-}
 
-const AllCollaboratorsPage = (): JSX.Element => {
-  const refMap = React.useRef<Record<string, HTMLElement | null>>({})
-
-  // const res = useQuery<ResponsePaginate<User[]>>({
-  //   queryKey: ['all-collaborators'],
-  //   queryFn: async () => await api.get('users/all')
-  // })
+  const { handleChange, value: searchValue } = useDebounced({
+    delay: 300,
+    onCompleted: (value) => setFilters((prev) => ({ ...prev, q: value }))
+  })
 
   return (
-    <div className="flex flex-col gap-4">
-      <Helmet>
-        <title>Ponti App - Todos los colaboradores</title>
-      </Helmet>
-      <nav className="flex overflow-hidden items-center border-b border-neutral-500/30">
-        <Link
-          to="/modules/collaborators/create"
-          className="flex items-center gap-1 px-4 py-3 font-semibold"
-        >
-          <Add20Regular className="dark:text-blue-500" />
-          Nuevo
-        </Link>
-      </nav>
-      <nav className="flex items-center gap-4">
+    <div className="flex flex-col flex-grow overflow-y-auto">
+      <nav className="flex px-4 items-center w-full gap-4 py-4">
         <SearchBox
+          value={searchValue}
+          dismiss={{
+            onClick: () => {
+              setFilters((prev) => ({ ...prev, q: null }))
+            }
+          }}
+          onChange={(_, e) => {
+            if (e.value === '') setFilters((prev) => ({ ...prev, q: null }))
+            handleChange(e.value)
+          }}
           contentBefore={<Search20Regular className="text-blue-500" />}
           placeholder="Buscar colaborador"
         />
+        <Button
+          appearance="transparent"
+          className="text-nowrap"
+          onClick={() => setIsSidebarOpen(true)}
+          icon={<TableSearch20Regular />}
+        >
+          Filtros
+        </Button>
+        {isSidebarOpen && (
+          <CollaboratorsFilters
+            filters={filters}
+            setFilters={setFilters}
+            setSidebarIsOpen={setIsSidebarOpen}
+            sidebarIsOpen={isSidebarOpen}
+          />
+        )}
       </nav>
-      <DataGrid
-        items={items}
-        columns={columns}
-        sortable
-        getRowId={(item) => item.file.label}
-        selectionMode="multiselect"
-        resizableColumns
-        columnSizingOptions={columnSizingOptions}
-        resizableColumnsOptions={{
-          autoFitColumns: false
-        }}
-      >
-        <DataGridHeader>
-          <DataGridRow
-            selectionCell={{
-              checkboxIndicator: { 'aria-label': 'Select all rows' }
-            }}
-          >
-            {({ renderHeaderCell, columnId }, dataGrid) =>
-              dataGrid.resizableColumns ? (
-                <Menu openOnContext>
-                  <MenuTrigger>
-                    <DataGridHeaderCell
-                      ref={(el) => (refMap.current[columnId] = el)}
-                    >
-                      {renderHeaderCell()}
-                    </DataGridHeaderCell>
-                  </MenuTrigger>
-                  <MenuPopover>
-                    <MenuList>
-                      <MenuItem
-                        onClick={dataGrid.columnSizing_unstable.enableKeyboardMode(
-                          columnId
-                        )}
-                      >
-                        Keyboard Column Resizing
-                      </MenuItem>
-                    </MenuList>
-                  </MenuPopover>
-                </Menu>
-              ) : (
-                <DataGridHeaderCell>{renderHeaderCell()}</DataGridHeaderCell>
-              )
-            }
-          </DataGridRow>
-        </DataGridHeader>
-        <DataGridBody<Item>>
-          {({ item, rowId }) => (
-            <DataGridRow<Item>
-              key={rowId}
-              selectionCell={{
-                checkboxIndicator: { 'aria-label': 'Select row' }
-              }}
-            >
-              {({ renderCell }) => (
-                <DataGridCell>{renderCell(item)}</DataGridCell>
+      <div className="w-full h-full flex-col flex flex-grow overflow-auto">
+        <div className="flex-grow rounded-xl overflow-y-auto">
+          <CollaboratorsGrid
+            refetch={refetch}
+            isLoadingMore={loadingMore}
+            users={users}
+            isLoading={loading}
+          />
+        </div>
+        {info && (
+          <footer className="flex p-5 justify-center">
+            <div className="flex justify-between w-full">
+              <p className="flex basis-0 flex-grow">
+                Mostrando {info.from} - {info.to} de {info.total} resultados
+              </p>
+              {info.next_page_url && (
+                <button
+                  disabled={loadingMore}
+                  onClick={nextPage}
+                  className="dark:text-blue-500 hover:underline"
+                >
+                  {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
+                </button>
               )}
-            </DataGridRow>
-          )}
-        </DataGridBody>
-      </DataGrid>
+              <p className="flex basis-0 flex-grow justify-end">
+                Página {info.current_page} de {info.last_page}
+              </p>
+            </div>
+          </footer>
+        )}
+      </div>
     </div>
   )
 }
-
-export default AllCollaboratorsPage

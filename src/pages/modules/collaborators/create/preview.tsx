@@ -42,7 +42,7 @@ export default function PreviewUser({
     userRole,
     password,
     birthdate,
-    adminstrator,
+    manage,
     contacts,
     customPrivileges,
     entryDate
@@ -123,12 +123,12 @@ export default function PreviewUser({
             <p>{userRole?.title}</p>
           </div>
         </ShowOrHide>
-        <ShowOrHide show={!!adminstrator}>
+        <ShowOrHide show={!!manage}>
           <div className="flex items-center gap-4">
             <p className="min-w-[200px] text-nowrap dark:text-neutral-400">
               Adminstrador (Jefe inmediato)
             </p>
-            <p>{adminstrator?.display()}</p>
+            <p>{manage?.displayName}</p>
           </div>
         </ShowOrHide>
         <ShowOrHide show={!!username}>

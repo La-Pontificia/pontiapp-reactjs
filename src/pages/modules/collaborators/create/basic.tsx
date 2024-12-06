@@ -37,20 +37,21 @@ export default function BasicUser({
   setValue: UseFormSetValue<FormValues>
 }) {
   const { user } = useAuth()
-  const { customPrivileges, adminstrator } = watch()
+  const { customPrivileges } = watch()
   const { data: userRoles, isLoading: isUserRolesLoading } = useQuery<
     UserRole[]
   >({
     queryKey: ['rolesUsers'],
     queryFn: async () => {
       const res = await api.get<UserRole[]>('partials/user-roles/all')
-      return res.map((r) => new UserRole(r))
+      if (!res.ok) return []
+      return res.data.map((r) => new UserRole(r))
     }
   })
   const [showPassword, setShowPassword] = React.useState(false)
   const [autoGeneratePassword, setAutoGeneratePassword] = React.useState(true)
   return (
-    <div className="space-y-5 pt-10">
+    <div className="space-y-5">
       <div className="flex items-center gap-1">
         <Field
           required
@@ -230,7 +231,7 @@ export default function BasicUser({
                 placeholder="Selecciona un rol"
               >
                 {userRoles?.map((c) =>
-                  c.isDeveloper() && !user.isDeveloper() ? null : (
+                  c.isDeveloper && !user.isDeveloper ? null : (
                     <Option key={c.id} text={c.title} value={c.id}>
                       <div>
                         <p>{c.title}</p>
@@ -274,11 +275,10 @@ export default function BasicUser({
       <div className="flex items-center gap-1">
         <Controller
           control={control}
-          name="adminstrator"
+          name="manager"
           render={({ field, fieldState: { error } }) => (
             <>
               <Field
-                required
                 className="min-w-[200px] text-nowrap"
                 label="Administrador (Jefe inmediato)"
                 validationMessage={error?.message}
@@ -292,15 +292,15 @@ export default function BasicUser({
                 onSubmitTitle="Seleccionar"
                 triggerProps={{
                   icon: <Add20Regular className="dark:text-blue-500" />,
-                  children: adminstrator ? (
+                  children: field.value ? (
                     <div className="flex items-center gap-1">
                       <Avatar
                         size={24}
                         image={{
-                          src: adminstrator.photoURL
+                          src: field.value.photoURL
                         }}
                       />
-                      {adminstrator.display()}
+                      {field.value.displayName}
                     </div>
                   ) : (
                     'Añadir'

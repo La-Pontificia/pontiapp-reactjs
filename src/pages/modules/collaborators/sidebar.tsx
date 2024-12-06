@@ -7,16 +7,18 @@ import {
   Tooltip
 } from '@fluentui/react-components'
 import {
-  Add16Regular,
+  Add20Regular,
+  DocumentTableFilled,
+  DocumentTableRegular,
   type FluentIcon,
-  Info20Filled,
-  Info20Regular,
-  People20Filled,
-  People20Regular,
-  PeopleProhibited20Filled,
-  PeopleProhibited20Regular,
-  PeopleTeam20Filled,
-  PeopleTeam20Regular
+  FolderFilled,
+  FolderRegular,
+  InfoFilled,
+  InfoRegular,
+  PeopleFilled,
+  PeopleRegular,
+  PeopleTeamFilled,
+  PeopleTeamRegular
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
 
@@ -32,24 +34,29 @@ const ItemNav = (props: ItemNav) => {
   const { pathname } = useLocation()
 
   const isActive =
-    props.href === '/' ? pathname === props.href : pathname.endsWith(props.href)
+    props.href === '/modules/collaborators'
+      ? pathname === props.href
+      : pathname.startsWith(props.href)
 
-  const Icon = isActive ? props.iconActive ?? props.icon : props.icon
+  const Icon = isActive ? props.iconActive : props.icon
 
   return (
     <Link
       data-active={isActive ? '' : undefined}
       to={props.href}
-      className="block relative dark:text-neutral-300 text-neutral-700 data-[active]:font-semibold group pl-4"
+      className="block relative dark:text-neutral-300 text-neutral-700 data-[active]:font-semibold group pl-5"
     >
-      <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center px-1">
-        <span className="h-[17px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
+      <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center">
+        <span className="h-[20px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-stone-500/30 group-hover:opacity-100 opacity-0" />
       </div>
-      <div className="flex items-center group-data-[active]:dark:text-white transition-all gap-2 px-2 py-2 rounded-lg group-hover:bg-neutral-200 dark:group-hover:bg-black">
+      <div className="flex items-center group-data-[active]:dark:text-white transition-all gap-2 px-2 py-2 rounded-lg group-hover:bg-stone-200 dark:group-hover:bg-stone-500/20">
         {props.emptyIcon ? (
-          <span className="w-[20px] aspect-square"></span>
+          <span className="w-[24px] aspect-square"></span>
         ) : Icon ? (
-          <Icon className="group-data-[active]:text-blue-800 group-data-[active]:dark:text-blue-500" />
+          <Icon
+            fontSize={24}
+            className="group-data-[active]:text-blue-500 dark:text-stone-400 group-data-[active]:dark:text-blue-500"
+          />
         ) : (
           <Avatar
             size={24}
@@ -66,66 +73,99 @@ const ItemNav = (props: ItemNav) => {
 
 export const CollaboratorsSidebar = () => {
   return (
-    <aside className="h-full overflow-y-auto w-[300px] min-w-[300px]">
-      <nav className="px-4 pb-3">
+    <aside className="h-full lg:block hidden overflow-y-auto w-[280px] min-w-[280px]">
+      <nav className="w-full px-5 pt-4">
         <Tooltip relationship="label" content="Nuevo colaborador">
           <Link
             to="/modules/collaborators/create"
-            className="flex text-sm rounded-full dark:text-neutral-200 p-1.5 px-4 w-fit justify-center dark:bg-black items-center gap-1 font-semibold"
+            className="flex text-sm rounded-full dark:text-white p-1.5 px-4 w-fit justify-center dark:bg-blue-600 hover:dark:bg-blue-500 items-center gap-1 font-semibold"
           >
-            <Add16Regular className="dark:text-blue-500" />
+            <Add20Regular />
             Nuevo
           </Link>
         </Tooltip>
       </nav>
-      <nav className="px-1">
+      <nav className="pr-2 py-2">
         <ItemNav
-          icon={Info20Regular}
-          iconActive={Info20Filled}
+          icon={InfoRegular}
+          iconActive={InfoFilled}
           href="/modules/collaborators"
         >
           Overview
         </ItemNav>
         <ItemNav
-          icon={People20Regular}
-          iconActive={People20Filled}
+          icon={PeopleRegular}
+          iconActive={PeopleFilled}
           href="/modules/collaborators/all"
         >
           Todos
         </ItemNav>
         <ItemNav
-          icon={PeopleProhibited20Regular}
-          iconActive={PeopleProhibited20Filled}
-          href="/modules/collaborators/actives"
-        >
-          Inactivos
-        </ItemNav>
-        <ItemNav
-          icon={PeopleTeam20Regular}
-          iconActive={PeopleTeam20Filled}
+          icon={PeopleTeamRegular}
+          iconActive={PeopleTeamFilled}
           href="/modules/collaborators/teams"
         >
-          Grupos
+          Equipos
         </ItemNav>
-        <ItemNav emptyIcon href="/modules/collaborators/import">
-          Importar
+        <ItemNav
+          icon={DocumentTableRegular}
+          iconActive={DocumentTableFilled}
+          href="/modules/collaborators/report-files"
+        >
+          Archivos de reportes
         </ItemNav>
-        <ItemNav emptyIcon href="/modules/collaborators/export">
-          Exportar
-        </ItemNav>
+        <Accordion multiple defaultOpenItems={['1']} collapsible>
+          <AccordionItem value="1">
+            <AccordionHeader expandIconPosition="end" className="pl-4">
+              <span className="font-semibold">Ajustes</span>
+            </AccordionHeader>
+            <AccordionPanel className="p-0 !mx-5">
+              <ItemNav
+                icon={FolderRegular}
+                iconActive={FolderFilled}
+                href="/modules/collaborators/areas"
+              >
+                Areas de trabajo
+              </ItemNav>
+              <ItemNav
+                icon={FolderRegular}
+                iconActive={FolderFilled}
+                href="/modules/collaborators/departments"
+              >
+                Departamentos
+              </ItemNav>
+              <ItemNav
+                icon={FolderRegular}
+                iconActive={FolderFilled}
+                href="/modules/collaborators/jobs"
+              >
+                Puestos
+              </ItemNav>
+              <ItemNav
+                icon={FolderRegular}
+                iconActive={FolderFilled}
+                href="/modules/collaborators/roles"
+              >
+                Cargos
+              </ItemNav>
+              <ItemNav
+                icon={FolderRegular}
+                iconActive={FolderFilled}
+                href="/modules/collaborators/user-roles"
+              >
+                Privilegios y roles
+              </ItemNav>
+              <ItemNav
+                icon={FolderRegular}
+                iconActive={FolderFilled}
+                href="/modules/collaborators/contract-types"
+              >
+                Tipos de contrato
+              </ItemNav>
+            </AccordionPanel>
+          </AccordionItem>
+        </Accordion>
       </nav>
-      <Accordion multiple defaultOpenItems={['1']} collapsible>
-        <AccordionItem value="1">
-          <AccordionHeader expandIconPosition="end" className="pl-4">
-            <span className="font-semibold">Ajustes</span>
-          </AccordionHeader>
-          <AccordionPanel className="p-0 !mx-1">
-            <ItemNav emptyIcon href="/modules/collaborators/roles">
-              Privilegios y roles
-            </ItemNav>
-          </AccordionPanel>
-        </AccordionItem>
-      </Accordion>
     </aside>
   )
 }

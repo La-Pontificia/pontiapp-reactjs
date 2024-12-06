@@ -5,6 +5,7 @@ import { FormValues } from './+page'
 import {
   Badge,
   Button,
+  ButtonProps,
   Checkbox,
   Combobox,
   Dialog,
@@ -53,7 +54,8 @@ export default function OrganizationUser({
     queryKey: ['jobs'],
     queryFn: async () => {
       const res = await api.get<Job[]>('partials/jobs/all')
-      return res.map((job) => new Job(job))
+      if (!res.ok) return []
+      return res.data.map((job) => new Job(job))
     }
   })
 
@@ -61,7 +63,8 @@ export default function OrganizationUser({
     queryKey: ['roles', job],
     queryFn: async () => {
       const res = await api.get<Role[]>(`partials/roles/all?job=${job?.id}`)
-      return res.map((role) => new Role(role))
+      if (!res.ok) return []
+      return res.data.map((role) => new Role(role))
     },
     enabled: !!job
   })
@@ -70,8 +73,11 @@ export default function OrganizationUser({
     ContractType[]
   >({
     queryKey: ['contract-types'],
-    queryFn: async () =>
-      await api.get<ContractType[]>('partials/contract-types/all')
+    queryFn: async () => {
+      const res = await api.get<ContractType[]>('partials/contract-types/all')
+      if (!res.ok) return []
+      return res.data.map((contractType) => new ContractType(contractType))
+    }
   })
 
   return (
@@ -100,7 +106,7 @@ export default function OrganizationUser({
               placeholder="Selecciona un puesto"
             >
               {jobs?.map((j) =>
-                j.isDeveloper() && !user.isDeveloper() ? null : (
+                j.isDeveloper && !user.isDeveloper ? null : (
                   <Option key={j.id} text={j.name} value={j.id}>
                     {j.name}
                   </Option>
@@ -137,7 +143,7 @@ export default function OrganizationUser({
               placeholder="Selecciona un cargo"
             >
               {roles?.map((role) =>
-                role.isDeveloper() && !user.isDeveloper() ? null : (
+                role.isDeveloper && !user.isDeveloper ? null : (
                   <Option key={role.id} text={role.name} value={role.id}>
                     {role.name}
                   </Option>
@@ -211,15 +217,12 @@ export default function OrganizationUser({
       <div className="col-span-2 pt-3 space-y-2">
         <Field className="pb-1" label="Horarios de trabajo" />
         <FormSchedule
-          trigger={
-            <Button
-              icon={<Add20Regular className="text-blue-500" />}
-              appearance="subtle"
-              className="w-fit"
-            >
-              Agregar horario
-            </Button>
-          }
+          trigger={{
+            icon: <Add20Regular className="text-blue-500" />,
+            appearance: 'subtle',
+            className: 'w-fit',
+            children: ' Agregar horario'
+          }}
           onCreate={(s) => setValue('schedules', schedules.concat(s))}
           onUpdate={(id, updated) =>
             setValue(
@@ -273,7 +276,7 @@ export default function OrganizationUser({
 
 function FormSchedule(props: {
   default?: Partial<Schedule>
-  trigger?: any
+  trigger?: ButtonProps
   onCreate: (schedule: Schedule) => void
   onUpdate: (id: string, schedule: Schedule) => void
 }) {
@@ -282,8 +285,13 @@ function FormSchedule(props: {
     AssistTerminal[]
   >({
     queryKey: ['AssistTerminals'],
-    queryFn: async () =>
-      await api.get<AssistTerminal[]>('partials/assist-terminals/all')
+    queryFn: async () => {
+      const res = await api.get<AssistTerminal[]>(
+        'partials/assist-terminals/all'
+      )
+      if (!res.ok) return []
+      return res.data.map((terminal) => new AssistTerminal(terminal))
+    }
   })
 
   const { control, handleSubmit, reset, watch, setValue } = useForm<Schedule>({
@@ -311,177 +319,186 @@ function FormSchedule(props: {
 
   return (
     <div className="col-span-2 grid grid-cols-2">
-      <Dialog
-        modalType="modal"
-        open={open}
-        onOpenChange={(_, e) => setOpen(e.open)}
-      >
-        <DialogTrigger disableButtonEnhancement>{props.trigger}</DialogTrigger>
-        <DialogSurface aria-describedby={undefined}>
-          <DialogBody>
-            <DialogTitle className="pb-5">
-              {props.default ? 'Editar Horario' : 'Agregar nuevo horario'}
-            </DialogTitle>
-            <DialogContent className="grid gap-4">
-              <Controller
-                control={control}
-                rules={{
-                  required: 'Selecciona la fecha de inicio'
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <Field
-                    validationMessage={error?.message}
-                    label="Inicia o inició a partir de la fecha"
-                  >
-                    <DatePicker
-                      value={field.value ? new Date(field.value) : null}
-                      onSelectDate={(date) => {
-                        field.onChange(date)
-                      }}
-                      appearance="filled-darker"
-                      formatDate={(date) => format(date, 'DD/MM/YYYY')}
-                      strings={calendarStrings}
-                      placeholder="Selecciona una fecha"
-                    />
-                  </Field>
-                )}
-                name="startDate"
-              />
-              <div>
-                <Field label="Días de la semana que se aplicará el horario:" />
-                <div className="flex items-center gap-2">
-                  {Object.entries(days).map(([key, day]) => {
-                    return (
-                      <Checkbox
-                        checked={watchDays?.includes(key)}
-                        onChange={(_, d) => {
-                          setValue(
-                            'days',
-                            d.checked
-                              ? [...(watchDays ?? []), key]
-                              : watchDays
-                              ? watchDays.filter((w) => w !== key)
-                              : []
-                          )
-                        }}
-                        label={day.short}
-                        value={key}
-                        key={key}
-                      />
-                    )
-                  })}
-                </div>
-              </div>
-              <div className="border-t grid items-start grid-cols-2 pt-2 gap-4 border-neutral-500/30">
+      <Button onClick={() => setOpen(true)} {...props.trigger} />
+      {open && (
+        <Dialog
+          modalType="modal"
+          open={open}
+          onOpenChange={(_, e) => setOpen(e.open)}
+        >
+          <DialogSurface aria-describedby={undefined}>
+            <DialogBody>
+              <DialogTitle className="pb-5">
+                {props.default ? 'Editar Horario' : 'Agregar nuevo horario'}
+              </DialogTitle>
+              <DialogContent className="grid gap-4">
                 <Controller
                   control={control}
                   rules={{
-                    required: 'Selecciona la hora de ingreso'
+                    required: 'Selecciona la fecha de inicio'
                   }}
-                  render={({ field, fieldState: { error } }) => (
-                    <Field validationMessage={error?.message} label="Entrada:">
-                      <TimePicker
-                        ref={field.ref}
-                        onBlur={field.onBlur}
-                        startHour={5}
-                        endHour={23}
-                        increment={15}
-                        onTimeChange={(_, e) => field.onChange(e.selectedTime)}
-                        selectedTime={
-                          field.value ? new Date(field.value) : undefined
-                        }
-                        value={
-                          field.value
-                            ? formatDateToTimeString(new Date(field.value))
-                            : undefined
-                        }
-                        placeholder="Hora de ingreso"
-                      />
-                    </Field>
-                  )}
-                  name="from"
-                />
-                <Controller
-                  control={control}
-                  rules={{
-                    required: 'Selecciona la hora de salida'
-                  }}
-                  render={({ field, fieldState: { error } }) => (
-                    <Field validationMessage={error?.message} label="Salida:">
-                      <TimePicker
-                        ref={field.ref}
-                        onBlur={field.onBlur}
-                        startHour={5}
-                        endHour={23}
-                        increment={15}
-                        onTimeChange={(_, e) => field.onChange(e.selectedTime)}
-                        selectedTime={
-                          field.value ? new Date(field.value) : undefined
-                        }
-                        value={
-                          field.value
-                            ? formatDateToTimeString(new Date(field.value))
-                            : ''
-                        }
-                        placeholder="Hora de salida"
-                      />
-                    </Field>
-                  )}
-                  name="to"
-                />
-              </div>
-              <div className="border-t grid grid-cols-2 pt-2 gap-4 border-neutral-500/30">
-                <Controller
-                  rules={{
-                    required: 'Selecciona un puesto de trabajo'
-                  }}
-                  control={control}
                   render={({ field, fieldState: { error } }) => (
                     <Field
-                      required
                       validationMessage={error?.message}
-                      label="Terminal de asistencia"
+                      label="Inicia o inició a partir de la fecha"
                     >
-                      <Combobox
-                        {...field}
-                        selectedOptions={[field.value.id ?? '']}
-                        disabled={isTerminalsLoading}
-                        onOptionSelect={(_, data) => {
-                          const terminal = terminals!.find(
-                            (t) => t.id === data.optionValue
-                          )
-                          field.onChange(terminal)
+                      <DatePicker
+                        value={field.value ? new Date(field.value) : null}
+                        onSelectDate={(date) => {
+                          field.onChange(date)
                         }}
-                        value={field.value.name ?? ''}
-                        placeholder="Selecciona un terminal"
-                      >
-                        {terminals?.map((terminal) => (
-                          <Option
-                            key={terminal.id}
-                            text={terminal.name}
-                            value={terminal.id}
-                          >
-                            {terminal.name}
-                          </Option>
-                        ))}
-                      </Combobox>
+                        appearance="filled-darker"
+                        formatDate={(date) => format(date, 'DD/MM/YYYY')}
+                        strings={calendarStrings}
+                        placeholder="Selecciona una fecha"
+                      />
                     </Field>
                   )}
-                  name="terminal"
+                  name="startDate"
                 />
-              </div>
-            </DialogContent>
-            <DialogActions>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary">Cancelar</Button>
-              </DialogTrigger>
-              <Button onClick={onSubmit} appearance="primary">
-                {props.default ? 'Actualizar' : 'Agregar'}
-              </Button>
-            </DialogActions>
-          </DialogBody>
-        </DialogSurface>
-      </Dialog>
+                <div>
+                  <Field label="Días de la semana que se aplicará el horario:" />
+                  <div className="flex items-center gap-2">
+                    {Object.entries(days).map(([key, day]) => {
+                      return (
+                        <Checkbox
+                          checked={watchDays?.includes(key)}
+                          onChange={(_, d) => {
+                            setValue(
+                              'days',
+                              d.checked
+                                ? [...(watchDays ?? []), key]
+                                : watchDays
+                                ? watchDays.filter((w) => w !== key)
+                                : []
+                            )
+                          }}
+                          label={day.short}
+                          value={key}
+                          key={key}
+                        />
+                      )
+                    })}
+                  </div>
+                </div>
+                <div className="border-t grid items-start grid-cols-2 pt-2 gap-4 border-neutral-500/30">
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: 'Selecciona la hora de ingreso'
+                    }}
+                    render={({ field, fieldState: { error } }) => (
+                      <Field
+                        validationMessage={error?.message}
+                        label="Entrada:"
+                      >
+                        <TimePicker
+                          ref={field.ref}
+                          onBlur={field.onBlur}
+                          startHour={5}
+                          endHour={23}
+                          increment={15}
+                          onTimeChange={(_, e) =>
+                            field.onChange(e.selectedTime)
+                          }
+                          selectedTime={
+                            field.value ? new Date(field.value) : undefined
+                          }
+                          value={
+                            field.value
+                              ? formatDateToTimeString(new Date(field.value))
+                              : undefined
+                          }
+                          placeholder="Hora de ingreso"
+                        />
+                      </Field>
+                    )}
+                    name="from"
+                  />
+                  <Controller
+                    control={control}
+                    rules={{
+                      required: 'Selecciona la hora de salida'
+                    }}
+                    render={({ field, fieldState: { error } }) => (
+                      <Field validationMessage={error?.message} label="Salida:">
+                        <TimePicker
+                          ref={field.ref}
+                          onBlur={field.onBlur}
+                          startHour={5}
+                          endHour={23}
+                          increment={15}
+                          onTimeChange={(_, e) =>
+                            field.onChange(e.selectedTime)
+                          }
+                          selectedTime={
+                            field.value ? new Date(field.value) : undefined
+                          }
+                          value={
+                            field.value
+                              ? formatDateToTimeString(new Date(field.value))
+                              : ''
+                          }
+                          placeholder="Hora de salida"
+                        />
+                      </Field>
+                    )}
+                    name="to"
+                  />
+                </div>
+                <div className="border-t grid grid-cols-2 pt-2 gap-4 border-neutral-500/30">
+                  <Controller
+                    rules={{
+                      required: 'Selecciona un terminal de asistencia'
+                    }}
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                      <Field
+                        required
+                        validationMessage={error?.message}
+                        label="Terminal de asistencia"
+                      >
+                        <Combobox
+                          ref={field.ref}
+                          selectedOptions={[field.value?.id ?? '']}
+                          disabled={isTerminalsLoading}
+                          onOptionSelect={(_, data) => {
+                            const terminal = terminals!.find(
+                              (t) => t.id === data.optionValue
+                            )
+                            field.onChange(terminal)
+                          }}
+                          value={field.value?.name ?? ''}
+                          placeholder="Selecciona un terminal"
+                        >
+                          {terminals?.map((terminal) => (
+                            <Option
+                              key={terminal.id}
+                              text={terminal.name}
+                              value={terminal.id}
+                            >
+                              {terminal.name}
+                            </Option>
+                          ))}
+                        </Combobox>
+                      </Field>
+                    )}
+                    name="terminal"
+                  />
+                </div>
+              </DialogContent>
+              <DialogActions>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button appearance="secondary">Cancelar</Button>
+                </DialogTrigger>
+                <Button onClick={onSubmit} appearance="primary">
+                  {props.default ? 'Actualizar' : 'Agregar'}
+                </Button>
+              </DialogActions>
+            </DialogBody>
+          </DialogSurface>
+        </Dialog>
+      )}
     </div>
   )
 }

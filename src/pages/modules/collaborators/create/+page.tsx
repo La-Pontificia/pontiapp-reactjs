@@ -1,4 +1,10 @@
-import { Button, Tab, TabList } from '@fluentui/react-components'
+import {
+  Button,
+  Spinner,
+  Tab,
+  TabList,
+  Tooltip
+} from '@fluentui/react-components'
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import PropertiesUser from './properties'
@@ -8,12 +14,20 @@ import BasicUser from './basic'
 import { availableDomains } from '@/const'
 import { generateRandomPassword } from '@/utils'
 import { ContactType, User } from '@/types/user'
-import { ArrowLeft24Filled, ArrowRight24Filled } from '@fluentui/react-icons'
+import {
+  AddFilled,
+  ArrowLeft24Filled,
+  ArrowRight24Filled
+} from '@fluentui/react-icons'
 import PreviewUser from './preview'
 import { Role } from '@/types/role'
 import { Job } from '@/types/job'
 import { UserRole } from '@/types/user-role'
 import { ContractType } from '@/types/contract-type'
+import { api } from '@/lib/api'
+import { format } from '@/lib/dayjs'
+import { useNavigate } from 'react-router'
+import { toast } from '@/commons/toast'
 
 export type FormValues = {
   documentId: string
@@ -35,7 +49,7 @@ export type FormValues = {
   status: boolean
   userRole: UserRole | null
   customPrivileges: string[]
-  adminstrator: User
+  manager?: User
 }
 
 const TABS = {
@@ -47,6 +61,8 @@ const TABS = {
 
 export default function CreateCollaboratorPage() {
   const [tab, setTab] = React.useState<keyof typeof TABS>('basic')
+  const [saving, setSaving] = React.useState(false)
+  const navigate = useNavigate()
   const {
     control,
     handleSubmit,
@@ -64,13 +80,9 @@ export default function CreateCollaboratorPage() {
       status: true,
       domain: Object.keys(availableDomains)[0],
       password: generateRandomPassword(),
-      username: ''
+      username: '',
+      contacts: []
     }
-  })
-
-  const onSubmit = handleSubmit((data) => {
-    if (tab !== 'preview+create') return setTab('preview+create')
-    console.log(data)
   })
 
   const nextText = React.useMemo(() => {
@@ -136,25 +148,78 @@ export default function CreateCollaboratorPage() {
   register('entryDate', {
     required: 'Selecciona una fecha de ingreso'
   })
-  register('adminstrator', {
-    required: 'Selecciona un administrador'
+  register('manager')
+
+  const onSubmit = handleSubmit(async (data) => {
+    if (tab !== 'preview+create') return setTab('preview+create')
+    const newData = {
+      documentId: data.documentId,
+      lastNames: data.lastNames,
+      firstNames: data.firstNames,
+      displayName: data.displayName,
+      birthdate: data.birthdate,
+      contacts: data.contacts.length > 0 ? data.contacts : undefined,
+      photoURL: data.photoURL,
+      roleId: data.role!.id as string,
+      userRoleId: data.userRole!.id as string,
+      contractTypeId: data.contractType!.id as string,
+      schedules: data.schedules.map((s) => ({
+        ...s,
+        from: format(s.from, 'HH:mm:ss'),
+        to: format(s.to, 'HH:mm:ss'),
+        startDate: format(s.startDate, 'YYYY-MM-DD'),
+        terminalId: s.terminal?.id
+      })),
+      entryDate: data.entryDate,
+      email: data.username + '@' + data.domain,
+      username: data.username,
+      password: data.password,
+      status: data.status,
+      customPrivileges: data.customPrivileges,
+      managerId: data.manager?.id
+    }
+    setSaving(true)
+    const res = await api.post<User>('users/create', {
+      data: JSON.stringify(newData)
+    })
+    if (res.ok) {
+      return navigate(`/modules/collaborators/${res.data.username}`)
+    }
+    toast(res.error)
+
+    setSaving(false)
   })
 
   return (
     <div className="h-full flex-grow flex flex-col overflow-y-auto">
-      <nav className="flex items-center gap-2 px-2">
+      <nav className="flex items-center border-b border-stone-500/10 gap-2 px-2">
         <TabList
+          className="flex-grow"
           selectedValue={tab}
           onTabSelect={(_, d) => setTab(d.value as keyof typeof TABS)}
         >
           {Object.entries(TABS).map(([key, value]) => (
-            <Tab key={key} value={key}>
+            <Tab
+              key={key}
+              value={key}
+              style={{
+                padding: '16px 15px'
+              }}
+            >
               {value}
             </Tab>
           ))}
         </TabList>
+        <Tooltip relationship="label" content="Cerrar">
+          <button
+            onClick={() => navigate(-1)}
+            className="opacity-50 hover:opacity-100"
+          >
+            <AddFilled fontSize={25} className="rotate-45" />
+          </button>
+        </Tooltip>
       </nav>
-      <div className="px-5 py-3 flex-grow overflow-y-auto">
+      <div className="px-5 py-5 flex-grow overflow-y-auto">
         <div className="max-w-xl">
           {tab === 'basic' && (
             <BasicUser control={control} setValue={setValue} watch={watch} />
@@ -185,13 +250,13 @@ export default function CreateCollaboratorPage() {
       </div>
       <footer className="border-t gap-24 flex dark:border-stone-700 p-4">
         <Button
-          // icon={<Spinner size="extra-tiny" />}
-          disabled={Object.keys(errors).length > 0}
+          appearance="primary"
+          icon={saving ? <Spinner size="extra-tiny" /> : null}
+          disabled={Object.keys(errors).length > 0 || saving}
           onClick={onSubmit}
         >
           {tab === 'preview+create' ? 'Crear' : 'Revisar + crear'}
         </Button>
-
         <div className="flex items-center gap-4">
           <Button
             disabled={tab === 'basic'}
@@ -199,7 +264,7 @@ export default function CreateCollaboratorPage() {
             icon={<ArrowLeft24Filled />}
             onClick={onPrevious}
           >
-            Anterior
+            <span className="max-sm:hidden">Anterior</span>
           </Button>
           <Button
             disabled={tab === 'preview+create'}
@@ -207,7 +272,9 @@ export default function CreateCollaboratorPage() {
             icon={<ArrowRight24Filled />}
             onClick={onNext}
           >
-            Siguiente {nextText ? `: ${nextText}` : ''}
+            <span className="max-sm:hidden">
+              Siguiente {nextText ? `: ${nextText}` : ''}
+            </span>
           </Button>
         </div>
       </footer>

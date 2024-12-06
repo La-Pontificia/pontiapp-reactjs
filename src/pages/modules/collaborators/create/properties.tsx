@@ -20,13 +20,15 @@ import {
 import { FormValues } from './+page'
 import * as React from 'react'
 import { format } from '@/lib/dayjs'
-import { calendarStrings } from '@/const'
+import { calendarStrings, CONTACT_TYPES } from '@/const'
 import {
   Add20Filled,
   Mail20Regular,
   Phone20Regular
 } from '@fluentui/react-icons'
-import { ContactType, contactTypes } from '@/types/user'
+import { ContactType } from '@/types/user'
+import { toast } from '@/commons/toast'
+import { api } from '@/lib/api'
 
 export default function PropertiesUser({
   control,
@@ -39,6 +41,31 @@ export default function PropertiesUser({
 }) {
   const { photoURL, contacts } = watch()
   const imageRef = React.useRef<HTMLInputElement>(null)
+
+  const handeImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setValue('photoURL', URL.createObjectURL(file))
+
+    const form = new FormData()
+    form.append('file', file)
+    form.append('path', 'users')
+
+    const res = await api.image<string>('uploads/image', {
+      data: form
+    })
+
+    if (!res.ok) {
+      console.error(res.error)
+      setValue('photoURL', '')
+      toast('No se pudo subir la imagen', {
+        description: res.error
+      })
+      return
+    }
+
+    setValue('photoURL', res.data)
+  }
 
   return (
     <div className="grid grid-cols-2 gap-5">
@@ -53,13 +80,7 @@ export default function PropertiesUser({
           />
           <input
             ref={imageRef}
-            onChange={(e) => {
-              const file = e.target.files?.[0]
-              if (file) {
-                setValue('photoFile', file)
-                setValue('photoURL', URL.createObjectURL(file))
-              }
-            }}
+            onChange={handeImageChange}
             type="file"
             accept="image/*"
             className="hidden"
@@ -227,7 +248,7 @@ function FormContact({
                     value={field.value}
                     onChange={(_, e) => field.onChange(e.value)}
                   >
-                    {Object.entries(contactTypes).map(([key, value]) => (
+                    {Object.entries(CONTACT_TYPES).map(([key, value]) => (
                       <option value={key}>{value}</option>
                     ))}
                   </Select>
