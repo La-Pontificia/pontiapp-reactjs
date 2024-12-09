@@ -51,47 +51,49 @@ export default function UserDrawer(props: UserDrawerProps) {
         {...restoreFocusTargetAttributes}
         onClick={() => setOpen(true)}
       />
-      <Drawer
-        position="end"
-        {...restoreFocusSourceAttributes}
-        separator
-        className="xl:min-w-[50svw] lg:min-w-[80svw] max-w-full min-w-full"
-        open={open}
-        onOpenChange={(_, { open }) => setOpen(open)}
-      >
-        <DrawerHeader>
-          <DrawerHeaderTitle
-            action={
-              <Button
-                appearance="subtle"
-                aria-label="Close"
-                icon={<Dismiss24Regular />}
-                onClick={() => setOpen(false)}
-              />
-            }
-          >
-            {props.title}
-          </DrawerHeaderTitle>
-        </DrawerHeader>
+      {open && (
+        <Drawer
+          position="end"
+          {...restoreFocusSourceAttributes}
+          separator
+          className="xl:min-w-[50svw] lg:min-w-[80svw] max-w-full min-w-full"
+          open={open}
+          onOpenChange={(_, { open }) => setOpen(open)}
+        >
+          <DrawerHeader>
+            <DrawerHeaderTitle
+              action={
+                <Button
+                  appearance="subtle"
+                  aria-label="Close"
+                  icon={<Dismiss24Regular />}
+                  onClick={() => setOpen(false)}
+                />
+              }
+            >
+              {props.title}
+            </DrawerHeaderTitle>
+          </DrawerHeader>
 
-        <DrawerBody className="flex flex-col overflow-y-auto">
-          {open && (
-            <Users
-              {...props}
-              selectedUsers={selectedUsers}
-              setSelectedUsers={setSelectedUsers}
-            />
-          )}
-          <footer className="border-t py-4 flex gap-3 border-stone-500">
-            <Button onClick={handleSubmit} appearance="primary">
-              {props.onSubmitTitle}
-            </Button>
-            <Button onClick={() => setOpen(false)} appearance="outline">
-              Cerrar
-            </Button>
-          </footer>
-        </DrawerBody>
-      </Drawer>
+          <DrawerBody className="flex flex-col overflow-y-auto">
+            {open && (
+              <Users
+                {...props}
+                selectedUsers={selectedUsers}
+                setSelectedUsers={setSelectedUsers}
+              />
+            )}
+            <footer className="border-t py-4 flex gap-3 border-stone-500">
+              <Button onClick={handleSubmit} appearance="primary">
+                {props.onSubmitTitle}
+              </Button>
+              <Button onClick={() => setOpen(false)} appearance="outline">
+                Cerrar
+              </Button>
+            </footer>
+          </DrawerBody>
+        </Drawer>
+      )}
     </>
   )
 }
