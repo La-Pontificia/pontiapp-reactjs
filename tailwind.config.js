@@ -17,13 +17,18 @@ export default {
         swipeOut: {
           from: { transform: 'translateY(var(--radix-toast-swipe-end-y))' },
           to: { transform: 'translateY(100%)' }
+        },
+        'scale-pulse': {
+          '0%, 100%': { transform: 'scale(1)' },
+          '50%': { transform: 'scale(1.1)' }
         }
       },
       animation: {
         hide: 'hide 200ms ease-in',
         slideIn: 'slideIn 200ms cubic-bezier(0.16, 1, 0.3, 1)',
         slideOut: 'slideOut 200ms cubic-bezier(0.16, 1, 0.3, 1)',
-        swipeOut: 'swipeOut 200ms ease-out'
+        swipeOut: 'swipeOut 200ms ease-out',
+        'scale-pulse': 'scale-pulse 1.5s infinite ease-in-out'
       }
     }
   },
