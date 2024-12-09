@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router'
+import { Navigate, Route, Routes } from 'react-router'
 import RootLayout from '@/pages/+layout'
 import HomePage from '@/pages/+page'
 import LandingLayout from '@/layouts/landing'
@@ -6,8 +6,8 @@ import LoginPage from '@/pages/login/+page'
 import AuthMiddleware from '@/middlewares/auth'
 import ModuleLayout from '@/pages/modules/+layout'
 import ModulePage from '@/pages/modules/+page'
-import CollaboratorsLayout from '@/pages/modules/collaborators/+layout'
-import CollaboratorsPage from '@/pages/modules/collaborators/+page'
+import UsersLayout from '@/pages/modules/users/+layout'
+import UsersPage from '@/pages/modules/users/+page'
 import EdasLayout from '@/pages/modules/edas/+layout'
 import EdasPage from '@/pages/modules/edas/+page'
 import AssistsPage from '@/pages/modules/assists/+page'
@@ -16,118 +16,211 @@ import EventsLayout from '@/pages/modules/events/+layout'
 import EventsPage from '@/pages/modules/events/+page'
 import TicketsLayout from '@/pages/modules/tickets/+layout'
 import TicketsPage from '@/pages/modules/tickets/+page'
-import AllCollaboratorsPage from '@/pages/modules/collaborators/all/+page'
-import CreateCollaboratorPage from '@/pages/modules/collaborators/create/+page'
-import CollaboratorsSlugLayout from '@/pages/modules/collaborators/slug/+layout'
-import CollaboratorsSlugPage from '@/pages/modules/collaborators/slug/+page'
-import CollaboratorsSlugOrganizationPage from '@/pages/modules/collaborators/slug/organization/+page'
-import CollaboradotorsSlugPropertiesPage from '@/pages/modules/collaborators/slug/properties/+page'
-import CollaboradotorsSlugSchedulesPage from '@/pages/modules/collaborators/slug/schedules/+page'
+import AllUsersPage from '@/pages/modules/users/all/+page'
+import CreateUserPage from '@/pages/modules/users/create/+page'
+import UsersSlugLayout from '@/pages/modules/users/slug/+layout'
+import UsersSlugPage from '@/pages/modules/users/slug/+page'
+import UsersSlugOrganizationPage from '@/pages/modules/users/slug/organization/+page'
+import UsersSlugPropertiesPage from '@/pages/modules/users/slug/properties/+page'
+import UsersSlugSchedulesPage from '@/pages/modules/users/slug/schedules/+page'
 import RootSlugLayout from '@/pages/slug/+page'
-import ColllaboratorsSlugHistoryPage from '@/pages/modules/collaborators/slug/history/+page'
-import CollaboratorsEditLayout from '@/pages/modules/collaborators/edit/+layout'
-import CollaboratorsEditPage from '@/pages/modules/collaborators/edit/+page'
-import CollaboratorsTeamsPage from '@/pages/modules/collaborators/teams/+page'
-import CollaboratorsTeamSlugPage from '@/pages/modules/collaborators/teams/[slug]/+page'
-import CollaboratorsReportFilesPage from '@/pages/modules/collaborators/report-files/+page'
-import CollaboratorsAreasPage from '@/pages/modules/collaborators/areas/+page'
-import CollaboratorsDepartmentsPage from '@/pages/modules/collaborators/departments/+page'
-import CollaboratorsJobsPage from '@/pages/modules/collaborators/jobs/+page'
-import CollaboratorsRolesPage from '@/pages/modules/collaborators/roles/+page'
-import CollaboratorsContractTypesPage from '@/pages/modules/collaborators/contract-types/+page'
-import CollaboratorsUserRolesPage from '@/pages/modules/collaborators/user-roles/+page'
-import CollaboratorsEditOrganizationPage from '@/pages/modules/collaborators/edit/organization/+page'
-import CollaboratorsPropertiesEditPage from '@/pages/modules/collaborators/edit/properties/+page'
+import UsersSlugHistoryPage from '@/pages/modules/users/slug/history/+page'
+import UsersEditLayout from '@/pages/modules/users/edit/+layout'
+import UsersEditPage from '@/pages/modules/users/edit/+page'
+import UsersTeamsPage from '@/pages/modules/users/teams/+page'
+import UsersTeamSlugPage from '@/pages/modules/users/teams/[slug]/+page'
+import UsersReportFilesPage from '@/pages/modules/users/report-files/+page'
+import UsersAreasPage from '@/pages/modules/users/areas/+page'
+import UsersDepartmentsPage from '@/pages/modules/users/departments/+page'
+import UsersJobsPage from '@/pages/modules/users/jobs/+page'
+import UsersRolesPage from '@/pages/modules/users/roles/+page'
+import UsersContractTypesPage from '@/pages/modules/users/contract-types/+page'
+import UsersUserRolesPage from '@/pages/modules/users/user-roles/+page'
+import UsersEditOrganizationPage from '@/pages/modules/users/edit/organization/+page'
+import UsersEditPropertiesPage from '@/pages/modules/users/edit/properties/+page'
+import { AuthProvider } from '@/store/auth'
+import UsersEditSchedulesPage from '@/pages/modules/users/edit/schedules/+page'
+import Protected from '@/protected/auth'
+import ProtectedModule from '@/protected/module'
+import CollaboratorsPage from '@/pages/modules/edas/collaborators/+page'
+import NotFounPage from '@/pages/not-fount'
+import AssistsReportFilesPage from '@/pages/modules/assists/report-files/+page'
+import AssistTerminalsPage from '@/pages/modules/assists/assist-terminals/+page'
+import AssistsWithoutUsersPage from '@/pages/modules/assists/without-users/+page'
+import AssistsSummaryPage from '@/pages/modules/assists/summary/+page'
+import AssistsDatabasesPage from '@/pages/modules/assists/databases/+page'
+import AssistsMyPage from '@/pages/modules/assists/my/+page'
+import EventsRegister from '@/pages/modules/events/register/+page'
+import EventsRecordsPage from '@/pages/modules/events/records/+page'
+import EventsReportFilesPage from '@/pages/modules/events/report-files/+page'
 
 export default function MainRoutes() {
   return (
     <Routes>
+      <Route element={<LandingLayout />} path="/login">
+        <Route index element={<LoginPage />} />
+      </Route>
+
       <Route
         element={
-          <AuthMiddleware>
-            <RootLayout />
-          </AuthMiddleware>
+          <AuthProvider>
+            <AuthMiddleware>
+              <RootLayout />
+            </AuthMiddleware>
+          </AuthProvider>
         }
       >
         <Route index element={<HomePage />} />
 
-        {/* Modules Routes */}
-        <Route path="modules" element={<ModuleLayout />}>
+        <Route path="m" element={<ModuleLayout />}>
           <Route index element={<ModulePage />} />
-          <Route path="collaborators">
-            <Route element={<CollaboratorsLayout />}>
-              <Route index element={<CollaboratorsPage />} />
-              <Route path="all" element={<AllCollaboratorsPage />} />
-              <Route path="create" element={<CreateCollaboratorPage />} />
-              <Route path="teams" element={<CollaboratorsTeamsPage />} />
+          <Route path="users">
+            <Route
+              element={
+                <ProtectedModule navigate="/" has="users">
+                  <UsersLayout />
+                </ProtectedModule>
+              }
+            >
+              <Route index element={<Navigate to={'/m/users/all'} />} />
+              <Route path="all" element={<AllUsersPage />} />
+              <Route
+                path="create"
+                element={
+                  <Protected has="users:create" navigate="/m/users/all">
+                    <CreateUserPage />
+                  </Protected>
+                }
+              />
               <Route
                 path="report-files"
-                element={<CollaboratorsReportFilesPage />}
+                element={
+                  <Protected has="users:reportFiles" navigate="/m/users/all">
+                    <UsersReportFilesPage />
+                  </Protected>
+                }
               />
-              <Route path="areas" element={<CollaboratorsAreasPage />} />
+              <Route
+                path="areas"
+                element={
+                  <Protected has="users:areas" navigate="/m/users/all">
+                    <UsersAreasPage />
+                  </Protected>
+                }
+              />
               <Route
                 path="departments"
-                element={<CollaboratorsDepartmentsPage />}
+                element={
+                  <Protected has="users:departments" navigate="/m/users/all">
+                    <UsersDepartmentsPage />
+                  </Protected>
+                }
               />
-              <Route path="jobs" element={<CollaboratorsJobsPage />} />
-              <Route path="roles" element={<CollaboratorsRolesPage />} />
+              <Route
+                path="jobs"
+                element={
+                  <Protected has="users:jobs" navigate="/m/users/all">
+                    <UsersJobsPage />
+                  </Protected>
+                }
+              />
+              <Route
+                path="roles"
+                element={
+                  <Protected has="users:roles" navigate="/m/users/all">
+                    <UsersRolesPage />
+                  </Protected>
+                }
+              />
               <Route
                 path="user-roles"
-                element={<CollaboratorsUserRolesPage />}
+                element={
+                  <Protected has="users:userRoles" navigate="/m/users/all">
+                    <UsersUserRolesPage />
+                  </Protected>
+                }
               />
               <Route
                 path="contract-types"
-                element={<CollaboratorsContractTypesPage />}
+                element={
+                  <Protected has="users:contractTypes" navigate="/m/users/all">
+                    <UsersContractTypesPage />
+                  </Protected>
+                }
               />
+              <Route path="teams">
+                <Route
+                  index
+                  element={
+                    <Protected has="users:teams" navigate="/m/users/all">
+                      <UsersTeamsPage />
+                    </Protected>
+                  }
+                />
+                <Route
+                  path=":slug"
+                  element={
+                    <Protected has="users:teams" navigate="/m/users/all">
+                      <UsersTeamSlugPage />
+                    </Protected>
+                  }
+                />
+              </Route>
               <Route
-                path="teams/:slug"
-                element={<CollaboratorsTeamSlugPage />}
-              />
-
-              <Route path="edit/:slug" element={<CollaboratorsEditLayout />}>
-                <Route index element={<CollaboratorsEditPage />} />
+                path="edit/:slug"
+                element={
+                  <Protected has="users:edit" navigate="/m/users/all">
+                    <UsersEditLayout />
+                  </Protected>
+                }
+              >
+                <Route index element={<UsersEditPage />} />
                 <Route
                   path="organization"
-                  element={<CollaboratorsEditOrganizationPage />}
+                  element={<UsersEditOrganizationPage />}
                 />
                 <Route
                   path="properties"
-                  element={<CollaboratorsPropertiesEditPage />}
+                  element={<UsersEditPropertiesPage />}
                 />
-              </Route>
 
-              <Route path=":slug" element={<CollaboratorsSlugLayout />}>
-                <Route index element={<CollaboratorsSlugPage />} />
+                <Route path="schedules" element={<UsersEditSchedulesPage />} />
+              </Route>
+              <Route path=":slug" element={<UsersSlugLayout />}>
+                <Route index element={<UsersSlugPage />} />
                 <Route
                   path="organization"
-                  element={<CollaboratorsSlugOrganizationPage />}
+                  element={<UsersSlugOrganizationPage />}
                 />
                 <Route
                   path="properties"
-                  element={<CollaboradotorsSlugPropertiesPage />}
+                  element={<UsersSlugPropertiesPage />}
                 />
-                <Route
-                  path="schedules"
-                  element={<CollaboradotorsSlugSchedulesPage />}
-                />
-                <Route
-                  path="history"
-                  element={<ColllaboratorsSlugHistoryPage />}
-                />
+                <Route path="schedules" element={<UsersSlugSchedulesPage />} />
+                <Route path="history" element={<UsersSlugHistoryPage />} />
               </Route>
-
-              <Route path="*" element={<CollaboratorsPage />} />
+              <Route path="*" element={<UsersPage />} />
             </Route>
           </Route>
 
           <Route path="edas" element={<EdasLayout />}>
             <Route index element={<EdasPage />} />
+            <Route path="collaborators" element={<CollaboratorsPage />} />
           </Route>
           <Route path="assists" element={<AssistsLayout />}>
             <Route index element={<AssistsPage />} />
+            <Route path="my" element={<AssistsMyPage />} />
+            <Route path="report-files" element={<AssistsReportFilesPage />} />
+            <Route path="assist-terminals" element={<AssistTerminalsPage />} />
+            <Route path="without-users" element={<AssistsWithoutUsersPage />} />
+            <Route path="summary" element={<AssistsSummaryPage />} />
+            <Route path="databases" element={<AssistsDatabasesPage />} />
           </Route>
           <Route path="events" element={<EventsLayout />}>
             <Route index element={<EventsPage />} />
+            <Route path="register" element={<EventsRegister />} />
+            <Route path="records" element={<EventsRecordsPage />} />
+            <Route path="report-files" element={<EventsReportFilesPage />} />
           </Route>
           <Route path="tickets" element={<TicketsLayout />}>
             <Route index element={<TicketsPage />} />
@@ -135,27 +228,19 @@ export default function MainRoutes() {
         </Route>
 
         <Route element={<RootSlugLayout />}>
-          <Route path=":slug" element={<CollaboratorsSlugLayout />}>
-            <Route index element={<CollaboratorsSlugPage />} />
+          <Route path=":slug" element={<UsersSlugLayout />}>
+            <Route index element={<UsersSlugPage />} />
             <Route
               path="organization"
-              element={<CollaboratorsSlugOrganizationPage />}
+              element={<UsersSlugOrganizationPage />}
             />
-            <Route
-              path="properties"
-              element={<CollaboradotorsSlugPropertiesPage />}
-            />
-            <Route
-              path="schedules"
-              element={<CollaboradotorsSlugSchedulesPage />}
-            />
+            <Route path="properties" element={<UsersSlugPropertiesPage />} />
+            <Route path="schedules" element={<UsersSlugSchedulesPage />} />
           </Route>
         </Route>
       </Route>
 
-      <Route element={<LandingLayout />} path="/login">
-        <Route index element={<LoginPage />} />
-      </Route>
+      <Route path="*" element={<NotFounPage />} />
     </Routes>
   )
 }
