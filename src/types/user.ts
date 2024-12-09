@@ -36,7 +36,12 @@ export class User {
   createdUser?: User
   updatedUser?: User
 
-  constructor(data: User) {
+  constructor(
+    data: User & {
+      user_role?: UserRole
+      contract_type?: ContractType
+    }
+  ) {
     this.id = data.id
     this.photoURL = data.photoURL
     this.documentId = data.documentId
@@ -64,6 +69,9 @@ export class User {
     this.subordinates = data.subordinates
     this.coworkers = data.coworkers
     this.customPrivileges = data.customPrivileges
+    this.userRole = data.user_role as UserRole
+    this.contractType = data.contract_type as ContractType
+
     if (data.manager) this.manager = new User(data.manager)
     if (data.role) this.role = new Role(data.role)
     if (data.userRole) this.userRole = new UserRole(data.userRole)
@@ -99,6 +107,14 @@ export class User {
       ...(this.userRole.privileges || []),
       ...(this.customPrivileges || [])
     ]
-    return allPrivileges.includes(privilege)
+    return allPrivileges.includes(privilege) || this.isDeveloper
+  }
+
+  hasModule(module: string): boolean {
+    const allPrivileges = [
+      ...(this.userRole.privileges || []),
+      ...(this.customPrivileges || [])
+    ]
+    return allPrivileges.some((p) => p.startsWith(module)) || this.isDeveloper
   }
 }

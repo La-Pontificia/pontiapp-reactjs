@@ -9,6 +9,7 @@ export class Schedule {
   title: string
   days?: string[]
   startDate: Date
+  endDate?: Date
   userId: string
   user: User
   archived: boolean
@@ -28,9 +29,10 @@ export class Schedule {
     this.title = data.title
     this.days = data.days
     this.startDate = data.startDate
+    this.endDate = data.endDate
     this.userId = data.userId
     this.user = data.user
-    this.archived = data.archived
+    this.archived = !!data.archived
     this.terminalId = data.terminalId
     this.terminal = data.terminal
     this.created_at = data.created_at
