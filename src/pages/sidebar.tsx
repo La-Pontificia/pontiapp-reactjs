@@ -1,141 +1,123 @@
 import { useAuth } from '@/store/auth'
+import { Tooltip } from '@fluentui/react-components'
 import {
-  Accordion,
-  AccordionHeader,
-  AccordionItem,
-  AccordionPanel,
-  Avatar
-} from '@fluentui/react-components'
-import {
-  Book20Regular,
-  Clock20Filled,
-  Clock20Regular,
-  DocumentBulletList20Regular,
+  ClockBillFilled,
+  ClockBillRegular,
+  DataHistogramFilled,
+  DataHistogramRegular,
   type FluentIcon,
-  Megaphone20Regular,
-  People20Regular,
-  TicketDiagonal20Regular
+  HomeFilled,
+  HomeRegular,
+  MegaphoneLoudFilled,
+  MegaphoneLoudRegular,
+  PeopleEditFilled,
+  PeopleEditRegular,
+  SquareHintAppsFilled,
+  SquareHintAppsRegular
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
 
 type ItemNav = {
-  icon?: FluentIcon
-  iconActive?: FluentIcon
+  icon: FluentIcon
+  activeIcon: FluentIcon
   href: string
-  avatar?: string
-  children?: React.ReactNode
-  emptyIcon?: boolean
+  tooltip: string
+  text: string
 }
 
 const ItemNav = (props: ItemNav) => {
-  const location = useLocation()
+  const { pathname } = useLocation()
 
-  const isActive = location.pathname.startsWith(props.href)
+  const isActive =
+    props.href === '/'
+      ? pathname === props.href
+      : pathname.startsWith(props.href)
 
-  const Icon = isActive ? props.iconActive ?? props.icon : props.icon
+  const Icon = isActive ? props.activeIcon : props.icon
 
   return (
-    <Link
-      data-active={isActive ? '' : undefined}
-      to={props.href}
-      className="block relative dark:text-neutral-300 text-neutral-700 data-[active]:font-semibold group pl-4"
+    <Tooltip
+      relationship="inaccessible"
+      positioning="before-top"
+      content={props.tooltip}
     >
-      <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center px-1">
-        <span className="h-[17px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-stone-500/30 group-hover:opacity-100 opacity-0" />
-      </div>
-      <div className="flex items-center group-data-[active]:dark:text-white transition-all gap-2 px-2 py-2.5 rounded-lg group-hover:bg-stone-200 dark:group-hover:bg-black">
-        {props.emptyIcon ? (
-          <span className="w-[20px] aspect-square"></span>
-        ) : Icon ? (
-          <Icon className="group-data-[active]:text-blue-800 group-data-[active]:dark:text-blue-500" />
-        ) : (
-          <Avatar
-            size={24}
-            image={{
-              src: props.avatar
-            }}
-          />
-        )}
-        {props.children}
-      </div>
-    </Link>
+      <Link
+        data-active={isActive ? '' : undefined}
+        to={props.href}
+        className="relative px-1.5 group dark:text-stone-400 hover:dark:text-stone-50 data-[active]:dark:text-[#6e7aff] flex justify-center items-center"
+      >
+        <div className="absolute inset-y-0 group-hover:py-4 group-data-[active]:py-4 py-6 transition-all left-0">
+          <div className="h-full w-[3px] group-hover:bg-stone-500/50 transition-all group-data-[active]:dark:bg-[#1e38e2] rounded-xl"></div>
+        </div>
+        <div className="w-[55px] flex items-center flex-col justify-center aspect-[10/8] py-0.5 text-center rounded-[14px] group-hover:dark:bg-[#0c0b0d] transition-all group-data-[active]:dark:bg-[#0d0d0f] border group-data-[active]:dark:border-violet-300/20 border-transparent">
+          <Icon fontSize={25} />
+          <p className="text-[10px] pt-0.5 leading-4">{props.text}</p>
+        </div>
+      </Link>
+    </Tooltip>
   )
 }
 
 export const RootSidebar = () => {
-  const { user } = useAuth()
-
+  const { user: authUser } = useAuth()
   return (
-    <aside className="h-full overflow-y-auto w-[300px] min-w-[300px]">
-      <div className="py-10">
-        <header className="text-sm px-7 font-semibold pb-1">
-          {user.displayName}
-        </header>
-        <nav className="px-1">
-          <ItemNav avatar={user.photoURL} href="/">
-            Mi perfil
-          </ItemNav>
-          <ItemNav icon={Clock20Regular} iconActive={Clock20Filled} href="#">
-            Mis asistencias
-          </ItemNav>
-        </nav>
-        <Accordion multiple defaultOpenItems={['1']} collapsible>
-          <AccordionItem value="1">
-            <AccordionHeader expandIconPosition="end" className="pl-4">
-              <span className="font-semibold">Módulos administrativos</span>
-            </AccordionHeader>
-            <AccordionPanel className="p-0 !mx-1">
-              <ItemNav icon={People20Regular} href="/modules/collaborators">
-                Gestión Colaboradores
-              </ItemNav>
-              <ItemNav icon={Book20Regular} href="/modules/edas">
-                Gestión EDAs
-              </ItemNav>
-              <ItemNav
-                icon={DocumentBulletList20Regular}
-                href="/modules/assists"
-              >
-                Gestión Asistencia
-              </ItemNav>
-              <ItemNav icon={Megaphone20Regular} href="/modules/events">
-                Gestión Eventos
-              </ItemNav>
-              <ItemNav icon={TicketDiagonal20Regular} href="/modules/tickets">
-                Gestión Tickets
-              </ItemNav>
-            </AccordionPanel>
-          </AccordionItem>
-          <AccordionItem value="2">
-            <AccordionHeader expandIconPosition="end" className="pl-4">
-              <span className="font-semibold">Ajustes de sistema</span>
-            </AccordionHeader>
-            <AccordionPanel className="p-0 !mx-1">
-              <ItemNav emptyIcon href="/settings/areas">
-                Areas de trabajo
-              </ItemNav>
-              <ItemNav emptyIcon href="/settings/departments">
-                Departamentos
-              </ItemNav>
-              <ItemNav emptyIcon href="/settings/positions">
-                Puestos de trabajo
-              </ItemNav>
-              <ItemNav emptyIcon href="/settings/roles">
-                Cargos
-              </ItemNav>
-              <ItemNav emptyIcon href="/settings/branches">
-                Sedes
-              </ItemNav>
-              <ItemNav emptyIcon href="/settings/businesses">
-                Unidades de negocio
-              </ItemNav>
-              <ItemNav emptyIcon href="/settings/contract-types">
-                Tipos de contrato
-              </ItemNav>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
-      </div>
-    </aside>
+    <nav className="flex pl-1 relative z-[1] flex-col space-y-2 justify-center">
+      <ItemNav
+        tooltip="Ponti App"
+        text="Inicio"
+        icon={HomeRegular}
+        activeIcon={HomeFilled}
+        href="/"
+      />
+
+      {authUser.hasModule('users') && (
+        <ItemNav
+          tooltip="Gestión de usuarios"
+          text="Usuarios"
+          icon={PeopleEditRegular}
+          activeIcon={PeopleEditFilled}
+          href="/m/users"
+        />
+      )}
+
+      {authUser.hasModule('edas') && (
+        <ItemNav
+          tooltip="Gestión de Edas"
+          text="Edas"
+          icon={DataHistogramRegular}
+          activeIcon={DataHistogramFilled}
+          href="/m/edas"
+        />
+      )}
+
+      {authUser.hasModule('assists') && (
+        <ItemNav
+          tooltip="Gestión de asistencias"
+          text="Asisten..."
+          icon={ClockBillRegular}
+          activeIcon={ClockBillFilled}
+          href="/m/assists"
+        />
+      )}
+      {authUser.hasModule('events') && (
+        <ItemNav
+          tooltip="Gestión de eventos"
+          text="Eventos"
+          icon={MegaphoneLoudRegular}
+          activeIcon={MegaphoneLoudFilled}
+          href="/m/events"
+        />
+      )}
+      {authUser.hasModule('tickets') && (
+        <ItemNav
+          tooltip="Gestión de tickets y colas"
+          text="Tickets"
+          icon={SquareHintAppsRegular}
+          activeIcon={SquareHintAppsFilled}
+          href="/m/tickets"
+        />
+      )}
+    </nav>
   )
 }
 
