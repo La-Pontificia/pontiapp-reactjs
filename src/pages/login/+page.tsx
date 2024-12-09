@@ -4,6 +4,7 @@ import { handleAuthError } from '@/utils'
 import { Spinner } from '@fluentui/react-components'
 import { ArrowCircleRightRegular } from '@fluentui/react-icons'
 import * as React from 'react'
+import { Helmet } from 'react-helmet'
 import { useSearchParams } from 'react-router'
 
 const host = import.meta.env.VITE_HOST
@@ -28,6 +29,7 @@ export default function LoginPage() {
     e.preventDefault()
     setLoadingCredential(true)
     const form = new FormData(e.currentTarget)
+    await api('auth/sanctum/csrf-cookie')
     const res = await api.post('auth/login/credentials', {
       data: JSON.stringify({
         username: form.get('username'),
@@ -54,6 +56,9 @@ export default function LoginPage() {
           'url(college_1090_29-15_00_o-HARVARD-UNIVERSITY-BUILDING-facebook.jpeg)'
       }}
     >
+      <Helmet>
+        <title>Ponti App | Login</title>
+      </Helmet>
       <div className="w-full h-full flex-col flex flex-grow bg-gradient-to-b from-stone-950/95 via-stone-950/90 to-stone-950/80">
         <div className="flex-grow flex-col px-10 w-full max-w-xl mx-auto flex items-center justify-center">
           <h1 className="text-yellow-50 py-8 font-medium tracking-tight text-2xl text-center">
