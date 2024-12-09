@@ -6,5 +6,7 @@ export const ERRORS = {
   inactive: 'Tu cuenta se encuentra inactiva, por favor contacta a soporte.',
   user_not_found:
     'No se encontro ningun usuario con el correo o usuario ingresado.',
-  incorrect_password: 'Contraseña incorrecta, por favor intenta de nuevo.'
+  incorrect_password: 'Contraseña incorrecta, por favor intenta de nuevo.',
+  account_disabled:
+    'Tu cuenta se encuentra deshabilitada, por favor contacta a soporte.'
 } as const

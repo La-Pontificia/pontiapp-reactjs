@@ -73,6 +73,8 @@ export const calendarStrings = {
   ]
 }
 
+export const localizedStrings = calendarStrings
+
 export const days = {
   '1': {
     label: 'Lunes',
@@ -124,19 +126,20 @@ export const PRIVILEGES = {
   'users:edit': 'Editar usuarios',
   'users:editYourself': 'Editar su propio usuario',
   'users:asignCustomPrivileges': 'Asignar privilegios personalizados',
-  'users:asignSupervisor': 'Asignar supervisor a usuarios',
-  'users:toggleStaus': 'Deshabilitar o habilitar usuarios',
+  'users:asignManager': 'Asignar jefes inmediato a usuarios',
+  'users:toggleStatus': 'Deshabilitar o habilitar usuarios',
+  'users:createVersion': 'Crear versiones de usuarios',
   'users:resetPassword': 'Restablecer contraseñas',
-  'users:groups:create': 'Registrar grupos de usuarios',
-  'users:groups:edit': 'Editar grupos de usuarios',
-  'users:groups:delete': 'Eliminar grupos de usuarios',
+  'users:teams:create': 'Registrar grupos de usuarios',
   'users:report:generate': 'Generar reportes de usuarios',
-  'users:report:show': 'Visualizar reportes de usuarios',
-  'users:roles': 'Roles y permisos de usuarios',
-  'users:jobs': 'Puestos de trabajo de usuarios',
+  'users:teams': 'Ver grupos de usuarios',
+  'users:reportFiles': 'Acceso a reportes de usuarios',
   'users:areas': 'Areas de trabajo de usuarios',
   'users:departments': 'Departamentos de usuarios',
-  'users:contractsTypes': 'Tipos de contratos de usuarios',
+  'users:jobs': 'Puestos de trabajo de usuarios',
+  'users:roles': 'Cargos de usuarios',
+  'users:userRoles': 'Roles y permisos de usuarios',
+  'users:contractTypes': 'Tipos de contratos de usuarios',
 
   // Assistances management
   'assists:centralized': 'Asistencias centralizadas',
