@@ -4,6 +4,7 @@ import React, { createContext } from 'react'
 
 interface AuthState {
   user: User
+  setUser: React.Dispatch<React.SetStateAction<User | null>>
   privileges?: string[]
   loading?: boolean
   signOut?: () => void
@@ -57,7 +58,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         privileges,
         user: user as User,
         loading,
-        signOut
+        signOut,
+        setUser
       }}
     >
       {children}
