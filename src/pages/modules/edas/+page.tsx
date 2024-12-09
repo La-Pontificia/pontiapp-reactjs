@@ -1,3 +1,3 @@
 export default function EdasPage() {
-  return <div>EdasPage</div>
+  return <div className="grid grid-cols-3 p-3 w-full"></div>
 }
