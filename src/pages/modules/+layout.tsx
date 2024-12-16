@@ -1,4 +1,3 @@
-import { useUi } from '@/store/ui'
 import { Outlet } from 'react-router'
 
 // eslint-disable-next-line react-refresh/only-export-components
