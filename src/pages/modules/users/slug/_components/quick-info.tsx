@@ -1,5 +1,5 @@
 import { useSlugUser } from '../+layout'
-import { timeAgo } from '@/lib/dayjs'
+import { timeAgo } from '~/lib/dayjs'
 
 export default function QuickInfo() {
   const { user } = useSlugUser()
