@@ -1,4 +1,4 @@
-import { customDarkTheme } from '@/themes'
+import { customDarkTheme } from '~/themes'
 import {
   FluentProvider
   // webDarkTheme,

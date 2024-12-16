@@ -1,4 +1,4 @@
-import { Toaster } from '@/commons/toast'
+import { Toaster } from '~/commons/toast'
 import React from 'react'
 
 export default function UiProvider({
