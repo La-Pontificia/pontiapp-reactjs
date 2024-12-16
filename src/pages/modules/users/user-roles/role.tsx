@@ -21,14 +21,14 @@ import {
   ShareRegular
 } from '@fluentui/react-icons'
 import React from 'react'
-import { format, timeAgo } from '@/lib/dayjs'
-import { api } from '@/lib/api'
-import { handleError } from '@/utils'
-import { toast } from '@/commons/toast'
+import { format, timeAgo } from '~/lib/dayjs'
+import { api } from '~/lib/api'
+import { handleError } from '~/utils'
+import { toast } from '~/commons/toast'
 
 import { useQuery } from '@tanstack/react-query'
-import { useAuth } from '@/store/auth'
-import { UserRole } from '@/types/user-role'
+import { useAuth } from '~/store/auth'
+import { UserRole } from '~/types/user-role'
 import Form from './form'
 
 export default function Item({
