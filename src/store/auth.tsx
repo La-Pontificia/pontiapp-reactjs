@@ -1,5 +1,5 @@
-import { api } from '@/lib/api'
-import { User } from '@/types/user'
+import { api } from '~/lib/api'
+import { User } from '~/types/user'
 import React, { createContext } from 'react'
 
 interface AuthState {

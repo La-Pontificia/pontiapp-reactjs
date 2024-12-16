@@ -1,5 +1,4 @@
 import { create, type StateCreator } from 'zustand'
-import { persist } from 'zustand/middleware'
 
 interface UiState {
   isSidebarOpen: boolean
@@ -7,6 +6,9 @@ interface UiState {
 
   isModuleMaximized: boolean
   toggleModuleMaximized: () => void
+
+  isHeaderOpen: boolean
+  toggleHeader: () => void
 }
 
 const StoreApi: StateCreator<UiState> = (set) => ({
@@ -15,11 +17,9 @@ const StoreApi: StateCreator<UiState> = (set) => ({
     set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
   isModuleMaximized: false,
   toggleModuleMaximized: () =>
-    set((state) => ({ isModuleMaximized: !state.isModuleMaximized }))
+    set((state) => ({ isModuleMaximized: !state.isModuleMaximized })),
+  isHeaderOpen: true,
+  toggleHeader: () => set((state) => ({ isHeaderOpen: !state.isHeaderOpen }))
 })
 
-export const useUi = create<UiState>()(
-  persist(StoreApi, {
-    name: 'ponti-app-ui-store'
-  })
-)
+export const useUi = create<UiState>(StoreApi)
