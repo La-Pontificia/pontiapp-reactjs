@@ -1,8 +1,8 @@
-import { toast } from '@/commons/toast'
-import { useDebounced } from '@/hooks/use-debounced'
-import { api } from '@/lib/api'
-import { useAuth } from '@/store/auth'
-import { User } from '@/types/user'
+import { toast } from '~/commons/toast'
+import { useDebounced } from '~/hooks/use-debounced'
+import { api } from '~/lib/api'
+import { useAuth } from '~/store/auth'
+import { User } from '~/types/user'
 import {
   Avatar,
   Badge,
