@@ -1,6 +1,6 @@
-import { api } from '@/lib/api'
-import { format, timeAgo } from '@/lib/dayjs'
-import { Report } from '@/types/report'
+import { api } from '~/lib/api'
+import { format, timeAgo } from '~/lib/dayjs'
+import { Report } from '~/types/report'
 import {
   Accordion,
   AccordionHeader,
