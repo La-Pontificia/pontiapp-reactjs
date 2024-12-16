@@ -1,6 +1,6 @@
-import { api } from '@/lib/api'
-import { format, timeAgo } from '@/lib/dayjs'
-import { Report } from '@/types/report'
+import { api } from '~/lib/api'
+import { format, timeAgo } from '~/lib/dayjs'
+import { Report } from '~/types/report'
 import {
   Accordion,
   AccordionHeader,
@@ -15,7 +15,7 @@ export default function AssistsReportFilesPage() {
   const { data: reports, isLoading } = useQuery<Report[]>({
     queryKey: ['sssists', 'report-files'],
     queryFn: async () => {
-      const res = await api.get<Report[]>('partials/reports/all')
+      const res = await api.get<Report[]>('partials/reports/all?module=assists')
       if (!res.ok) return []
       return res.data.map((d) => new Report(d))
     }
@@ -47,7 +47,7 @@ export default function AssistsReportFilesPage() {
   const firstKey = grouped ? Object.keys(grouped)[0] : null
 
   return (
-    <div className="w-full">
+    <div className="w-full overflow-auto">
       <p className="p-3 text-xs dark:text-blue-500">
         Archivos de reportes de asistencias.
       </p>

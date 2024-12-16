@@ -1,4 +1,4 @@
-import { format } from '@/lib/dayjs'
+import { format } from '~/lib/dayjs'
 import { Avatar } from '@fluentui/react-components'
 import { CalendarRegular } from '@fluentui/react-icons'
 

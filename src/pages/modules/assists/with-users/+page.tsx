@@ -8,28 +8,27 @@ import { AssistTerminal } from '~/types/assist-terminal'
 import AssistsGrid from './grid'
 import AssistFilters from './filters'
 import { format } from '~/lib/dayjs'
-
-export type AssistSingle = {
-  datetime: string
-  firstNames: string
-  lastNames: string
-  documentId: string
-  terminalId: string
-}
+import { Area } from '~/types/area'
+import { Job } from '~/types/job'
+import { AssistWithUser } from '~/types/assist-withuser'
 
 export type Filter = {
   startDate: Date | null
   endDate: Date | null
   q: string | null
   terminalsIds: string[]
+  areaId: string | null
+  jobId: string | null
 }
 
-export default function AssistsWithoutUsersPage() {
+export default function AssistsWithUsersPage() {
   const [filters, setFilters] = React.useState<Filter>({
     startDate: null,
     endDate: null,
     q: null,
-    terminalsIds: []
+    terminalsIds: [],
+    areaId: null,
+    jobId: null
   })
 
   const { data: terminals, isLoading: isTerminalsLoading } = useQuery<
@@ -45,12 +44,30 @@ export default function AssistsWithoutUsersPage() {
     }
   })
 
-  const { data: assists, isLoading: isAssistsLoading } = useQuery<
-    AssistSingle[]
-  >({
-    queryKey: ['assists', 'withoutUsers', 'single', filters],
+  const { data: areas, isLoading: isAreasLoading } = useQuery<Area[]>({
+    queryKey: ['areas/all'],
     queryFn: async () => {
-      let uri = 'assists/withoutUsers?tm=true'
+      const res = await api.get<Area[]>('partials/areas/all')
+      if (!res.ok) return []
+      return res.data.map((item) => new Area(item))
+    }
+  })
+
+  const { data: jobs, isLoading: isJobsLoading } = useQuery<Job[]>({
+    queryKey: ['jobs/all'],
+    queryFn: async () => {
+      const res = await api.get<Job[]>('partials/jobs/all')
+      if (!res.ok) return []
+      return res.data.map((item) => new Job(item))
+    }
+  })
+
+  const { data: assists, isLoading: isAssistsLoading } = useQuery<
+    AssistWithUser[]
+  >({
+    queryKey: ['assists', 'withUsers', 'advanced', filters],
+    queryFn: async () => {
+      let uri = 'assists/withUsers?advanced=true'
       if (filters.startDate)
         uri += `&startDate=${format(filters.startDate, 'YYYY-MM-DD')}`
       if (filters.endDate)
@@ -58,9 +75,11 @@ export default function AssistsWithoutUsersPage() {
       if (filters.q) uri += `&q=${filters.q}`
       if (filters.terminalsIds.length > 0)
         uri += `&assistTerminals=${filters.terminalsIds.join(',')}`
-      const res = await api.get<AssistSingle[]>(uri)
+      if (filters.areaId) uri += `&areaId=${filters.areaId}`
+      if (filters.jobId) uri += `&jobId=${filters.jobId}`
+      const res = await api.get<AssistWithUser[]>(uri)
       if (!res.ok) return []
-      return res.data
+      return res.data.map((assist) => new AssistWithUser(assist))
     }
   })
 
@@ -73,11 +92,15 @@ export default function AssistsWithoutUsersPage() {
       <header className="pb-3">
         <nav className="pb-2">
           <p className="text-xs dark:text-blue-600">
-            Aquí podrás ver los registros de asistencias en las bases de datos,
-            exactamente como se registraron.
+            Asistencias con información de los colaboradores, "solo de los
+            usuarios registrados en el sistema".
           </p>
         </nav>
         <AssistFilters
+          jobs={jobs ?? []}
+          isJobsLoading={isJobsLoading}
+          areas={areas ?? []}
+          isAreasLoading={isAreasLoading}
           isTerminalsLoading={isTerminalsLoading}
           terminals={terminals ?? []}
           onAplyFilters={onAplyFilters}
@@ -104,10 +127,7 @@ export default function AssistsWithoutUsersPage() {
                 </p>
               </div>
             ) : (
-              <AssistsGrid
-                assists={assists ?? []}
-                assistTerminals={terminals ?? []}
-              />
+              <AssistsGrid assists={assists ?? []} />
             )}
           </>
         )}

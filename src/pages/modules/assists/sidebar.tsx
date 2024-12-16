@@ -1,5 +1,5 @@
-// import { useAuth } from '@/store/auth'
-import { ReusableSidebar } from '@/components/reusable-sidebar'
+// import { useAuth } from '~/store/auth'
+import { ReusableSidebar } from '~/components/reusable-sidebar'
 import {
   Accordion,
   AccordionHeader,
@@ -12,6 +12,8 @@ import {
   ClockRegular,
   CloudDatabaseFilled,
   CloudDatabaseRegular,
+  DocumentPersonFilled,
+  DocumentPersonRegular,
   DocumentTableFilled,
   DocumentTableRegular,
   type FluentIcon,
@@ -107,6 +109,13 @@ export const AssistsSidebar = () => {
         >
           Por grupo
         </ItemNav> */}
+        <ItemNav
+          icon={DocumentPersonRegular}
+          iconActive={DocumentPersonFilled}
+          href="/m/assists/with-users"
+        >
+          Con usuarios
+        </ItemNav>
         <ItemNav
           icon={PersonDeleteRegular}
           iconActive={PersonDeleteFilled}
