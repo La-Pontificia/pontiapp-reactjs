@@ -1,4 +1,4 @@
-import { ROLE_DEVELOPER_ID } from '@/const'
+import { ROLE_DEVELOPER_ID } from '~/const'
 import { Department } from './department'
 import { Job } from './job'
 import { User } from './user'

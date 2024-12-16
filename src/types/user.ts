@@ -1,4 +1,4 @@
-import { CONTACT_TYPES, PRIVILEGE_DEVELOPER } from '@/const'
+import { CONTACT_TYPES, PRIVILEGE_DEVELOPER } from '~/const'
 import { Role } from './role'
 import { UserRole } from './user-role'
 import { ContractType } from './contract-type'
