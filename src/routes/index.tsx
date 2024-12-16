@@ -1,58 +1,64 @@
 import { Navigate, Route, Routes } from 'react-router'
-import RootLayout from '@/pages/+layout'
-import HomePage from '@/pages/+page'
-import LandingLayout from '@/layouts/landing'
-import LoginPage from '@/pages/login/+page'
-import AuthMiddleware from '@/middlewares/auth'
-import ModuleLayout from '@/pages/modules/+layout'
-import ModulePage from '@/pages/modules/+page'
-import UsersLayout from '@/pages/modules/users/+layout'
-import UsersPage from '@/pages/modules/users/+page'
-import EdasLayout from '@/pages/modules/edas/+layout'
-import EdasPage from '@/pages/modules/edas/+page'
-import AssistsPage from '@/pages/modules/assists/+page'
-import AssistsLayout from '@/pages/modules/assists/+layout'
-import EventsLayout from '@/pages/modules/events/+layout'
-import EventsPage from '@/pages/modules/events/+page'
-import TicketsLayout from '@/pages/modules/tickets/+layout'
-import TicketsPage from '@/pages/modules/tickets/+page'
-import AllUsersPage from '@/pages/modules/users/all/+page'
-import CreateUserPage from '@/pages/modules/users/create/+page'
-import UsersSlugLayout from '@/pages/modules/users/slug/+layout'
-import UsersSlugPage from '@/pages/modules/users/slug/+page'
-import UsersSlugOrganizationPage from '@/pages/modules/users/slug/organization/+page'
-import UsersSlugPropertiesPage from '@/pages/modules/users/slug/properties/+page'
-import UsersSlugSchedulesPage from '@/pages/modules/users/slug/schedules/+page'
-import RootSlugLayout from '@/pages/slug/+page'
-import UsersSlugHistoryPage from '@/pages/modules/users/slug/history/+page'
-import UsersEditLayout from '@/pages/modules/users/edit/+layout'
-import UsersEditPage from '@/pages/modules/users/edit/+page'
-import UsersTeamsPage from '@/pages/modules/users/teams/+page'
-import UsersTeamSlugPage from '@/pages/modules/users/teams/[slug]/+page'
-import UsersReportFilesPage from '@/pages/modules/users/report-files/+page'
-import UsersAreasPage from '@/pages/modules/users/areas/+page'
-import UsersDepartmentsPage from '@/pages/modules/users/departments/+page'
-import UsersJobsPage from '@/pages/modules/users/jobs/+page'
-import UsersRolesPage from '@/pages/modules/users/roles/+page'
-import UsersContractTypesPage from '@/pages/modules/users/contract-types/+page'
-import UsersUserRolesPage from '@/pages/modules/users/user-roles/+page'
-import UsersEditOrganizationPage from '@/pages/modules/users/edit/organization/+page'
-import UsersEditPropertiesPage from '@/pages/modules/users/edit/properties/+page'
-import { AuthProvider } from '@/store/auth'
-import UsersEditSchedulesPage from '@/pages/modules/users/edit/schedules/+page'
-import Protected from '@/protected/auth'
-import ProtectedModule from '@/protected/module'
-import CollaboratorsPage from '@/pages/modules/edas/collaborators/+page'
-import NotFounPage from '@/pages/not-fount'
-import AssistsReportFilesPage from '@/pages/modules/assists/report-files/+page'
-import AssistTerminalsPage from '@/pages/modules/assists/assist-terminals/+page'
-import AssistsWithoutUsersPage from '@/pages/modules/assists/without-users/+page'
-import AssistsSummaryPage from '@/pages/modules/assists/summary/+page'
-import AssistsDatabasesPage from '@/pages/modules/assists/databases/+page'
-import AssistsMyPage from '@/pages/modules/assists/my/+page'
-import EventsRegister from '@/pages/modules/events/register/+page'
-import EventsRecordsPage from '@/pages/modules/events/records/+page'
-import EventsReportFilesPage from '@/pages/modules/events/report-files/+page'
+import RootLayout from '~/pages/+layout'
+import HomePage from '~/pages/+page'
+import LandingLayout from '~/layouts/landing'
+import LoginPage from '~/pages/login/+page'
+import AuthMiddleware from '~/middlewares/auth'
+import ModuleLayout from '~/pages/modules/+layout'
+import ModulePage from '~/pages/modules/+page'
+import UsersLayout from '~/pages/modules/users/+layout'
+import UsersPage from '~/pages/modules/users/+page'
+import EdasLayout from '~/pages/modules/edas/+layout'
+import EdasPage from '~/pages/modules/edas/+page'
+import AssistsPage from '~/pages/modules/assists/+page'
+import AssistsLayout from '~/pages/modules/assists/+layout'
+import EventsLayout from '~/pages/modules/events/+layout'
+import EventsPage from '~/pages/modules/events/+page'
+import AllUsersPage from '~/pages/modules/users/all/+page'
+import CreateUserPage from '~/pages/modules/users/create/+page'
+import UsersSlugLayout from '~/pages/modules/users/slug/+layout'
+import UsersSlugPage from '~/pages/modules/users/slug/+page'
+import UsersSlugOrganizationPage from '~/pages/modules/users/slug/organization/+page'
+import UsersSlugPropertiesPage from '~/pages/modules/users/slug/properties/+page'
+import UsersSlugSchedulesPage from '~/pages/modules/users/slug/schedules/+page'
+import RootSlugLayout from '~/pages/slug/+page'
+import UsersSlugHistoryPage from '~/pages/modules/users/slug/history/+page'
+import UsersEditLayout from '~/pages/modules/users/edit/+layout'
+import UsersEditPage from '~/pages/modules/users/edit/+page'
+import UsersTeamsPage from '~/pages/modules/users/teams/+page'
+import UsersTeamSlugPage from '~/pages/modules/users/teams/[slug]/+page'
+import UsersReportFilesPage from '~/pages/modules/users/report-files/+page'
+import UsersAreasPage from '~/pages/modules/users/areas/+page'
+import UsersDepartmentsPage from '~/pages/modules/users/departments/+page'
+import UsersJobsPage from '~/pages/modules/users/jobs/+page'
+import UsersRolesPage from '~/pages/modules/users/roles/+page'
+import UsersContractTypesPage from '~/pages/modules/users/contract-types/+page'
+import UsersUserRolesPage from '~/pages/modules/users/user-roles/+page'
+import UsersEditOrganizationPage from '~/pages/modules/users/edit/organization/+page'
+import UsersEditPropertiesPage from '~/pages/modules/users/edit/properties/+page'
+import { AuthProvider } from '~/store/auth'
+import UsersEditSchedulesPage from '~/pages/modules/users/edit/schedules/+page'
+import Protected from '~/protected/auth'
+import ProtectedModule from '~/protected/module'
+import CollaboratorsPage from '~/pages/modules/edas/collaborators/+page'
+import NotFounPage from '~/pages/not-fount'
+import AssistsReportFilesPage from '~/pages/modules/assists/report-files/+page'
+import AssistTerminalsPage from '~/pages/modules/assists/assist-terminals/+page'
+import AssistsWithoutUsersPage from '~/pages/modules/assists/without-users/+page'
+import AssistsSummaryPage from '~/pages/modules/assists/summary/+page'
+import AssistsDatabasesPage from '~/pages/modules/assists/databases/+page'
+import AssistsMyPage from '~/pages/modules/assists/my/+page'
+import EventsRegister from '~/pages/modules/events/register/+page'
+import EventsRecordsPage from '~/pages/modules/events/records/+page'
+import EventsReportFilesPage from '~/pages/modules/events/report-files/+page'
+import AttentionsLayout from '~/pages/modules/attentions/+layout'
+import AttentionsPage from '~/pages/modules/attentions/+page'
+import AttentionsRegisterPage from '~/pages/modules/attentions/register/+page'
+import AttentionsPositionsPage from '~/pages/modules/attentions/positions/+page'
+import AttentionsServicesPage from '~/pages/modules/attentions/services/+page'
+import AttentionsReportFilesPage from '~/pages/modules/attentions/report-files/+page'
+import AttentionsTicketsPage from '~/pages/modules/attentions/tickets/+page'
+import AssistsWithUsersPage from '~/pages/modules/assists/with-users/+page'
 
 export default function MainRoutes() {
   return (
@@ -213,6 +219,7 @@ export default function MainRoutes() {
             <Route path="report-files" element={<AssistsReportFilesPage />} />
             <Route path="assist-terminals" element={<AssistTerminalsPage />} />
             <Route path="without-users" element={<AssistsWithoutUsersPage />} />
+            <Route path="with-users" element={<AssistsWithUsersPage />} />
             <Route path="summary" element={<AssistsSummaryPage />} />
             <Route path="databases" element={<AssistsDatabasesPage />} />
           </Route>
@@ -222,8 +229,16 @@ export default function MainRoutes() {
             <Route path="records" element={<EventsRecordsPage />} />
             <Route path="report-files" element={<EventsReportFilesPage />} />
           </Route>
-          <Route path="tickets" element={<TicketsLayout />}>
-            <Route index element={<TicketsPage />} />
+          <Route path="attentions" element={<AttentionsLayout />}>
+            <Route index element={<AttentionsPage />} />
+            <Route path="register" element={<AttentionsRegisterPage />} />
+            <Route path="positions" element={<AttentionsPositionsPage />} />
+            <Route path="services" element={<AttentionsServicesPage />} />
+            <Route path="tickets" element={<AttentionsTicketsPage />} />
+            <Route
+              path="report-files"
+              element={<AttentionsReportFilesPage />}
+            />
           </Route>
         </Route>
 
