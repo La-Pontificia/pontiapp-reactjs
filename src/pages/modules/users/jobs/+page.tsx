@@ -1,12 +1,12 @@
-import { api } from '@/lib/api'
+import { api } from '~/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { AddFilled, Search20Regular } from '@fluentui/react-icons'
 import Form from './form'
 import { SearchBox, Spinner } from '@fluentui/react-components'
 import React from 'react'
-import { useDebounced } from '@/hooks/use-debounced'
+import { useDebounced } from '~/hooks/use-debounced'
 import Item from './job'
-import { Job } from '@/types/job'
+import { Job } from '~/types/job'
 
 export default function CollaboratorsJobsPage() {
   const [q, setQ] = React.useState<string>()

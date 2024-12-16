@@ -17,17 +17,17 @@ import {
 } from '@fluentui/react-icons'
 import React from 'react'
 import Form from './form'
-import { format, timeAgo } from '@/lib/dayjs'
-import { api } from '@/lib/api'
-import { handleError } from '@/utils'
-import { toast } from '@/commons/toast'
+import { format, timeAgo } from '~/lib/dayjs'
+import { api } from '~/lib/api'
+import { handleError } from '~/utils'
+import { toast } from '~/commons/toast'
 
-import { Job } from '@/types/job'
+import { Job } from '~/types/job'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger
-} from '@/commons/hover-card'
+} from '~/commons/hover-card'
 
 export default function Item({
   item,
