@@ -1,13 +1,13 @@
 import { Helmet } from 'react-helmet'
 import { useSlugUser } from '../+layout'
 import { Link, useParams } from 'react-router'
-import { Schedule } from '@/types/schedule'
+import { Schedule } from '~/types/schedule'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api'
-import { cn } from '@/utils'
+import { api } from '~/lib/api'
+import { cn } from '~/utils'
 import { ScheduleItem } from './schedule'
 import { PenRegular } from '@fluentui/react-icons'
-import { useAuth } from '@/store/auth'
+import { useAuth } from '~/store/auth'
 
 export default function UsersSlugSchedulesPage() {
   const params = useParams<{

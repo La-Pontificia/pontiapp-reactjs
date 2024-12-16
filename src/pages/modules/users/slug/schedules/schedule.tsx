@@ -1,6 +1,6 @@
-import { days } from '@/const'
-import { countRangeMinutes, format, formatTime } from '@/lib/dayjs'
-import { Schedule } from '@/types/schedule'
+import { days } from '~/const'
+import { countRangeMinutes, format, formatTime } from '~/lib/dayjs'
+import { Schedule } from '~/types/schedule'
 import { Badge } from '@fluentui/react-components'
 import { CalendarRegular, ClockRegular } from '@fluentui/react-icons'
 

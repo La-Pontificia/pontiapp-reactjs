@@ -1,7 +1,7 @@
-import { toast } from '@/commons/toast'
-import { api } from '@/lib/api'
-import { User } from '@/types/user'
-import { handleAuthError } from '@/utils'
+import { toast } from '~/commons/toast'
+import { api } from '~/lib/api'
+import { User } from '~/types/user'
+import { handleAuthError } from '~/utils'
 import {
   Avatar,
   Button,
@@ -32,7 +32,7 @@ import React, { createContext } from 'react'
 import { Helmet } from 'react-helmet'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
 import { FaWhatsapp } from 'react-icons/fa'
-import { useAuth } from '@/store/auth'
+import { useAuth } from '~/store/auth'
 
 type AuthState = {
   user?: User | null
