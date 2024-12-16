@@ -1,4 +1,4 @@
-import { UserTeam } from '@/types/user-team'
+import { UserTeam } from '~/types/user-team'
 import {
   Avatar,
   Button,

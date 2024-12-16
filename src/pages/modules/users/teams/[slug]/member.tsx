@@ -1,7 +1,7 @@
-import { toast } from '@/commons/toast'
-import { api } from '@/lib/api'
-import { UserTeamMember } from '@/types/user-team'
-import { handleError } from '@/utils'
+import { toast } from '~/commons/toast'
+import { api } from '~/lib/api'
+import { UserTeamMember } from '~/types/user-team'
+import { handleError } from '~/utils'
 import {
   Avatar,
   Badge,

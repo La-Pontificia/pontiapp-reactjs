@@ -1,4 +1,4 @@
-import { cn } from '@/utils'
+import { cn } from '~/utils'
 import UserTeamMemberItem from './member'
 import { useTeamSlug } from './+page'
 

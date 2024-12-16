@@ -3,10 +3,10 @@ import { PeopleTeamAddRegular } from '@fluentui/react-icons'
 import TeamForm from './form'
 import React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import { UserTeam } from '@/types/user-team'
-import { api } from '@/lib/api'
+import { UserTeam } from '~/types/user-team'
+import { api } from '~/lib/api'
 import GridTeams from './grid'
-import { useAuth } from '@/store/auth'
+import { useAuth } from '~/store/auth'
 import { Helmet } from 'react-helmet'
 
 export default function CollaboratorsTeamsPage() {

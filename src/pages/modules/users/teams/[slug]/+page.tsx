@@ -1,17 +1,17 @@
 /* eslint-disable react-refresh/only-export-components */
-import { api } from '@/lib/api'
-import { UserTeam, UserTeamMember } from '@/types/user-team'
+import { api } from '~/lib/api'
+import { UserTeam, UserTeamMember } from '~/types/user-team'
 import { SearchBox, Spinner } from '@fluentui/react-components'
 import { Search20Regular } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { useParams } from 'react-router'
-import { ResponsePaginate } from '@/types/paginate-response'
+import { ResponsePaginate } from '~/types/paginate-response'
 import UserTeamsMemersGrid from './grid'
-import { toast } from '@/commons/toast'
-import { useDebounced } from '@/hooks/use-debounced'
+import { toast } from '~/commons/toast'
+import { useDebounced } from '~/hooks/use-debounced'
 import CollaboratorsTeamSlugNav from './nav'
-import { handleError } from '@/utils'
+import { handleError } from '~/utils'
 
 type State = {
   team?: UserTeam

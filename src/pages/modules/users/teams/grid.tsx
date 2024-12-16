@@ -1,6 +1,6 @@
-import { UserTeam } from '@/types/user-team'
+import { UserTeam } from '~/types/user-team'
 import TeamItem from './team'
-import { cn } from '@/utils'
+import { cn } from '~/utils'
 
 export default function GridTeams({
   teams,
