@@ -21,22 +21,22 @@ import {
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { Controller, useForm } from 'react-hook-form'
 import { useQuery } from '@tanstack/react-query'
-import { Job } from '@/types/job'
-import { api } from '@/lib/api'
+import { Job } from '~/types/job'
+import { api } from '~/lib/api'
 import * as React from 'react'
-import { format } from '@/lib/dayjs'
-import { calendarStrings, days } from '@/const'
+import { format } from '~/lib/dayjs'
+import { calendarStrings, days } from '~/const'
 import { Add20Regular, Clock24Regular } from '@fluentui/react-icons'
-import { Role } from '@/types/role'
-import { useAuth } from '@/store/auth'
-import { ContractType } from '@/types/contract-type'
-import { Schedule } from '@/types/schedule'
-import { AssistTerminal } from '@/types/assist-terminal'
+import { Role } from '~/types/role'
+import { useAuth } from '~/store/auth'
+import { ContractType } from '~/types/contract-type'
+import { Schedule } from '~/types/schedule'
+import { AssistTerminal } from '~/types/assist-terminal'
 import {
   formatDateToTimeString,
   TimePicker
 } from '@fluentui/react-timepicker-compat'
-import { toast } from '@/commons/toast'
+import { toast } from '~/commons/toast'
 
 export default function OrganizationUser({
   control,

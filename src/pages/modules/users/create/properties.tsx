@@ -20,19 +20,19 @@ import {
 } from 'react-hook-form'
 import { FormValues } from './+page'
 import * as React from 'react'
-import { format } from '@/lib/dayjs'
-import { calendarStrings, CONTACT_TYPES } from '@/const'
+import { format } from '~/lib/dayjs'
+import { calendarStrings, CONTACT_TYPES } from '~/const'
 import {
   AddRegular,
   Dismiss24Regular,
   Mail20Regular,
   Phone20Regular
 } from '@fluentui/react-icons'
-import { ContactType } from '@/types/user'
-import { toast } from '@/commons/toast'
-import { api } from '@/lib/api'
+import { ContactType } from '~/types/user'
+import { toast } from '~/commons/toast'
+import { api } from '~/lib/api'
 import { FaWhatsapp } from 'react-icons/fa'
-import { emailRegex, phoneRegex } from '@/const/regex'
+import { emailRegex, phoneRegex } from '~/const/regex'
 
 export default function PropertiesUser({
   control,

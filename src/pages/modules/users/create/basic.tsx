@@ -16,16 +16,16 @@ import {
   Option,
   Switch
 } from '@fluentui/react-components'
-import { availableDomains } from '@/const'
+import { availableDomains } from '~/const'
 import React from 'react'
 import { Add20Regular, Eye20Filled, Eye20Regular } from '@fluentui/react-icons'
-import { generateRandomPassword } from '@/utils'
+import { generateRandomPassword } from '~/utils'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api'
-import { UserRole } from '@/types/user-role'
-import { useAuth } from '@/store/auth'
-import PrivilegesDrawer from '@/components/privileges-drawer'
-import UserDrawer from '@/components/user-drawer'
+import { api } from '~/lib/api'
+import { UserRole } from '~/types/user-role'
+import { useAuth } from '~/store/auth'
+import PrivilegesDrawer from '~/components/privileges-drawer'
+import UserDrawer from '~/components/user-drawer'
 
 export default function BasicUser({
   control,

@@ -8,27 +8,27 @@ import {
 import React from 'react'
 import { useForm } from 'react-hook-form'
 import PropertiesUser from './properties'
-import { Schedule } from '@/types/schedule'
+import { Schedule } from '~/types/schedule'
 import OrganizationUser from './organization'
 import BasicUser from './basic'
-import { availableDomains } from '@/const'
-import { generateRandomPassword } from '@/utils'
-import { ContactType, User } from '@/types/user'
+import { availableDomains } from '~/const'
+import { generateRandomPassword } from '~/utils'
+import { ContactType, User } from '~/types/user'
 import {
   AddFilled,
   ArrowLeft24Filled,
   ArrowRight24Filled
 } from '@fluentui/react-icons'
 import PreviewUser from './preview'
-import { Role } from '@/types/role'
-import { Job } from '@/types/job'
-import { UserRole } from '@/types/user-role'
-import { ContractType } from '@/types/contract-type'
-import { api } from '@/lib/api'
-import { format } from '@/lib/dayjs'
+import { Role } from '~/types/role'
+import { Job } from '~/types/job'
+import { UserRole } from '~/types/user-role'
+import { ContractType } from '~/types/contract-type'
+import { api } from '~/lib/api'
+import { format } from '~/lib/dayjs'
 import { useNavigate } from 'react-router'
-import { toast } from '@/commons/toast'
-import { useAuth } from '@/store/auth'
+import { toast } from '~/commons/toast'
+import { useAuth } from '~/store/auth'
 
 export type FormValues = {
   documentId: string
