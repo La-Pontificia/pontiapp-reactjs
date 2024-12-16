@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ERRORS } from '@/const/errors'
+import { ERRORS } from '~/const/errors'
 
 import clsx, { type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
