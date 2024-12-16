@@ -20,7 +20,9 @@ export default {
         },
         'scale-pulse': {
           '0%, 100%': { transform: 'scale(1)' },
-          '50%': { transform: 'scale(1.1)' }
+          '35%': { transform: 'scale(1.03)' },
+          '54%': { transform: 'scale(1)' },
+          '75%': { transform: 'scale(1.15)' }
         }
       },
       animation: {
@@ -28,7 +30,7 @@ export default {
         slideIn: 'slideIn 200ms cubic-bezier(0.16, 1, 0.3, 1)',
         slideOut: 'slideOut 200ms cubic-bezier(0.16, 1, 0.3, 1)',
         swipeOut: 'swipeOut 200ms ease-out',
-        'scale-pulse': 'scale-pulse 1.5s infinite ease-in-out'
+        'scale-pulse': 'scale-pulse 1.2s infinite ease-in-out'
       }
     }
   },
