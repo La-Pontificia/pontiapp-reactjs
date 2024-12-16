@@ -1,6 +1,6 @@
-import { api } from '@/lib/api'
-import { useAuth } from '@/store/auth'
-import { Job } from '@/types/job'
+import { api } from '~/lib/api'
+import { useAuth } from '~/store/auth'
+import { Job } from '~/types/job'
 import {
   Button,
   Combobox,
@@ -15,8 +15,8 @@ import { Broom20Filled, Dismiss24Regular } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
 import { FiltersValues } from './+page'
 import React from 'react'
-import { Area } from '@/types/area'
-import { UserRole } from '@/types/user-role'
+import { Area } from '~/types/area'
+import { UserRole } from '~/types/user-role'
 
 const managers = {
   has: 'Con jefes',
