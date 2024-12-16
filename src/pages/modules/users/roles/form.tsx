@@ -1,10 +1,10 @@
-import { toast } from '@/commons/toast'
-import { api } from '@/lib/api'
-import { useAuth } from '@/store/auth'
-import { Department } from '@/types/department'
-import { Job } from '@/types/job'
-import { Role } from '@/types/role'
-import { handleError } from '@/utils'
+import { toast } from '~/commons/toast'
+import { api } from '~/lib/api'
+import { useAuth } from '~/store/auth'
+import { Department } from '~/types/department'
+import { Job } from '~/types/job'
+import { Role } from '~/types/role'
+import { handleError } from '~/utils'
 import {
   Button,
   ButtonProps,

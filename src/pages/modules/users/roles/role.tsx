@@ -21,15 +21,15 @@ import {
   ShareRegular
 } from '@fluentui/react-icons'
 import React from 'react'
-import { format, timeAgo } from '@/lib/dayjs'
-import { api } from '@/lib/api'
-import { handleError } from '@/utils'
-import { toast } from '@/commons/toast'
+import { format, timeAgo } from '~/lib/dayjs'
+import { api } from '~/lib/api'
+import { handleError } from '~/utils'
+import { toast } from '~/commons/toast'
 
-import { Role } from '@/types/role'
+import { Role } from '~/types/role'
 import Form from './form'
 import { useQuery } from '@tanstack/react-query'
-import { useAuth } from '@/store/auth'
+import { useAuth } from '~/store/auth'
 
 export default function Item({
   item,
