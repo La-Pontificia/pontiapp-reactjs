@@ -1,12 +1,12 @@
-import { api } from '@/lib/api'
-import { Area } from '@/types/area'
+import { api } from '~/lib/api'
+import { Area } from '~/types/area'
 import { useQuery } from '@tanstack/react-query'
 import { AddFilled, Search20Regular } from '@fluentui/react-icons'
 import AreaForm from './form'
 import AreaItem from './area'
 import { SearchBox, Spinner } from '@fluentui/react-components'
 import React from 'react'
-import { useDebounced } from '@/hooks/use-debounced'
+import { useDebounced } from '~/hooks/use-debounced'
 
 export default function CollaboratorsAreasPage() {
   const [q, setQ] = React.useState<string>()

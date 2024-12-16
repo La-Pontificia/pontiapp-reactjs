@@ -1,7 +1,7 @@
-import { toast } from '@/commons/toast'
-import { api } from '@/lib/api'
-import { Area } from '@/types/area'
-import { handleError } from '@/utils'
+import { toast } from '~/commons/toast'
+import { api } from '~/lib/api'
+import { Area } from '~/types/area'
+import { handleError } from '~/utils'
 import {
   Button,
   ButtonProps,
