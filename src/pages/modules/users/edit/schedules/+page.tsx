@@ -1,10 +1,10 @@
 import { Helmet } from 'react-helmet'
 import { useEditUser } from '../+layout'
 import { useParams } from 'react-router'
-import { Schedule } from '@/types/schedule'
+import { Schedule } from '~/types/schedule'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api'
-import { cn, handleError } from '@/utils'
+import { api } from '~/lib/api'
+import { cn, handleError } from '~/utils'
 import { ScheduleItem } from './schedule'
 import { Spinner } from '@fluentui/react-components'
 import {
@@ -23,16 +23,16 @@ import {
   Option
 } from '@fluentui/react-components'
 import { Controller, useForm } from 'react-hook-form'
-import { toast } from '@/commons/toast'
+import { toast } from '~/commons/toast'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { calendarStrings, days } from '@/const'
+import { calendarStrings, days } from '~/const'
 import {
   formatDateToTimeString,
   TimePicker
 } from '@fluentui/react-timepicker-compat'
-import { createDateByTime, format } from '@/lib/dayjs'
+import { createDateByTime, format } from '~/lib/dayjs'
 import React from 'react'
-import { AssistTerminal } from '@/types/assist-terminal'
+import { AssistTerminal } from '~/types/assist-terminal'
 import { AddRegular } from '@fluentui/react-icons'
 
 export default function UsersEditSchedulesPage() {

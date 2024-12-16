@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { UserRole } from '@/types/user-role'
+import { UserRole } from '~/types/user-role'
 import { Controller, useForm } from 'react-hook-form'
 import { useEditUser } from './+layout'
 import {
@@ -13,17 +13,17 @@ import {
   Spinner,
   Switch
 } from '@fluentui/react-components'
-import { availableDomains } from '@/const'
-import { api } from '@/lib/api'
+import { availableDomains } from '~/const'
+import { api } from '~/lib/api'
 import { useQuery } from '@tanstack/react-query'
-import { useAuth } from '@/store/auth'
-import PrivilegesDrawer from '@/components/privileges-drawer'
+import { useAuth } from '~/store/auth'
+import PrivilegesDrawer from '~/components/privileges-drawer'
 import { Add20Regular } from '@fluentui/react-icons'
-import UserDrawer from '@/components/user-drawer'
-import { User } from '@/types/user'
+import UserDrawer from '~/components/user-drawer'
+import { User } from '~/types/user'
 import React from 'react'
-import { toast } from '@/commons/toast'
-import { handleError } from '@/utils'
+import { toast } from '~/commons/toast'
+import { handleError } from '~/utils'
 
 export type FormValues = {
   displayName: string

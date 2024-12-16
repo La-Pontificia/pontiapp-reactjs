@@ -1,9 +1,9 @@
-import { toast } from '@/commons/toast'
-import { calendarStrings, days } from '@/const'
-import { api } from '@/lib/api'
-import { countRangeMinutes, format, formatTime } from '@/lib/dayjs'
-import { Schedule } from '@/types/schedule'
-import { handleError } from '@/utils'
+import { toast } from '~/commons/toast'
+import { calendarStrings, days } from '~/const'
+import { api } from '~/lib/api'
+import { countRangeMinutes, format, formatTime } from '~/lib/dayjs'
+import { Schedule } from '~/types/schedule'
+import { handleError } from '~/utils'
 import {
   Badge,
   Button,
