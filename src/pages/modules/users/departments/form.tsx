@@ -1,9 +1,9 @@
-import { toast } from '@/commons/toast'
-import { api } from '@/lib/api'
-import { useAuth } from '@/store/auth'
-import { Area } from '@/types/area'
-import { Department } from '@/types/department'
-import { handleError } from '@/utils'
+import { toast } from '~/commons/toast'
+import { api } from '~/lib/api'
+import { useAuth } from '~/store/auth'
+import { Area } from '~/types/area'
+import { Department } from '~/types/department'
+import { handleError } from '~/utils'
 import {
   Button,
   ButtonProps,
