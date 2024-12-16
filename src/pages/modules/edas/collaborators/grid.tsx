@@ -1,6 +1,6 @@
-import { User } from '@/types/user'
+import { User } from '~/types/user'
 import UserGrid from './user-grid'
-import { cn } from '@/utils'
+import { cn } from '~/utils'
 
 export default function UsersGrid({
   users,

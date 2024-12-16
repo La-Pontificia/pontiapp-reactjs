@@ -1,4 +1,4 @@
-// import { useAuth } from '@/store/auth'
+// import { useAuth } from '~/store/auth'
 import {
   Accordion,
   AccordionHeader,

@@ -1,9 +1,9 @@
-import { toast } from '@/commons/toast'
-import UserDrawer from '@/components/user-drawer'
-import { api } from '@/lib/api'
-import { useAuth } from '@/store/auth'
-import { User } from '@/types/user'
-import { handleAuthError } from '@/utils'
+import { toast } from '~/commons/toast'
+import UserDrawer from '~/components/user-drawer'
+import { api } from '~/lib/api'
+import { useAuth } from '~/store/auth'
+import { User } from '~/types/user'
+import { handleAuthError } from '~/utils'
 import {
   Avatar,
   Badge,

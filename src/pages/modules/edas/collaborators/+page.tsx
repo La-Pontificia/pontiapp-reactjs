@@ -1,7 +1,7 @@
-import { toast } from '@/commons/toast'
-import { api } from '@/lib/api'
-import { ResponsePaginate } from '@/types/paginate-response'
-import { User } from '@/types/user'
+import { toast } from '~/commons/toast'
+import { api } from '~/lib/api'
+import { ResponsePaginate } from '~/types/paginate-response'
+import { User } from '~/types/user'
 import * as React from 'react'
 import { Button, SearchBox, Spinner } from '@fluentui/react-components'
 import {
@@ -10,11 +10,11 @@ import {
   TableSearch20Regular
 } from '@fluentui/react-icons'
 import CollaboratorsGrid from './grid'
-import { useDebounced } from '@/hooks/use-debounced'
+import { useDebounced } from '~/hooks/use-debounced'
 import CollaboratorsFilters from './filters'
 import { useQuery } from '@tanstack/react-query'
 // import { Link } from 'react-router'
-// import { useAuth } from '@/store/auth'
+// import { useAuth } from '~/store/auth'
 
 export type FiltersValues = {
   q: string | null
