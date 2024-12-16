@@ -1,7 +1,8 @@
 import { Outlet } from 'react-router'
-import RootHeader from './header'
-import RootSidebar from './sidebar'
-import { useUi } from '@/store/ui'
+import { useUi } from '~/store/ui'
+import RootSidebar from './_components/sidebar'
+import RootHeader from './_components/header'
+import UserNotices from './_components/outsides/notices'
 
 export default function RootLayout() {
   const isModuleMaximized = useUi((s) => s.isModuleMaximized)
@@ -9,6 +10,7 @@ export default function RootLayout() {
   return (
     <main className="h-svh flex overflow-y-auto dark:bg-[#1c1d23]">
       <RootSidebar />
+      <UserNotices />
       <div className="w-full h-full overflow-auto flex-grow flex p-1 pl-0">
         <div
           aria-hidden
@@ -16,7 +18,7 @@ export default function RootLayout() {
         />
         <div
           data-maximized={isModuleMaximized ? '' : undefined}
-          className="flex-grow relative border border-stone-500/10 overflow-auto data-[maximized]:absolute transition-all data-[maximized]:z-[999] data-[maximized]:inset-0 shadow-sm dark:shadow-blue-950/50 rounded-xl flex-col h-full flex overflow-y-auto w-full bg-[#f1f1f2] dark:bg-[#11110f] data-[maximized]:dark:bg-[#11110f]"
+          className="flex-grow relative border border-stone-500/10 overflow-auto data-[maximized]:absolute transition-all data-[maximized]:z-[999] data-[maximized]:inset-0 shadow-sm dark:shadow-blue-950/50 data-[maximized]:border-0 data-[maximized]:rounded-none rounded-xl flex-col h-full flex overflow-y-auto w-full bg-[#f1f1f2] dark:bg-[#11110f] data-[maximized]:dark:bg-[#11110f]"
         >
           <RootHeader />
           <Outlet />
