@@ -1,11 +1,11 @@
 import { Controller, useForm } from 'react-hook-form'
 import { useEditUser } from '../+layout'
-import { useAuth } from '@/store/auth'
-import { Job } from '@/types/job'
-import { Role } from '@/types/role'
-import { ContractType } from '@/types/contract-type'
+import { useAuth } from '~/store/auth'
+import { Job } from '~/types/job'
+import { Role } from '~/types/role'
+import { ContractType } from '~/types/contract-type'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api'
+import { api } from '~/lib/api'
 import {
   Button,
   Combobox,
@@ -14,11 +14,11 @@ import {
   Spinner
 } from '@fluentui/react-components'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { format } from '@/lib/dayjs'
-import { calendarStrings } from '@/const'
+import { format } from '~/lib/dayjs'
+import { calendarStrings } from '~/const'
 import React from 'react'
-import { toast } from '@/commons/toast'
-import { handleError } from '@/utils'
+import { toast } from '~/commons/toast'
+import { handleError } from '~/utils'
 
 type FormValues = {
   job: Job | null
