@@ -1,4 +1,4 @@
-import { User } from '@/types/user'
+import { User } from '~/types/user'
 import { Avatar, Tooltip } from '@fluentui/react-components'
 import { ArrowRightRegular } from '@fluentui/react-icons'
 import { useNavigate } from 'react-router'

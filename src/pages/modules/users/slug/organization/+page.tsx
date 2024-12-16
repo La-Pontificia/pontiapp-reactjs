@@ -1,10 +1,10 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useSlugUser } from '../+layout'
-import { User } from '@/types/user'
+import { User } from '~/types/user'
 import { useParams } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '@/lib/api'
+import { api } from '~/lib/api'
 import { Badge } from '@fluentui/react-components'
 import { PersonItem } from './person'
 
