@@ -1,5 +1,5 @@
-// import { useAuth } from '@/store/auth'
-import { ReusableSidebar } from '@/components/reusable-sidebar'
+// import { useAuth } from '~/store/auth'
+import { ReusableSidebar } from '~/components/reusable-sidebar'
 import {
   Accordion,
   AccordionHeader,

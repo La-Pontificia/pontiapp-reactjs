@@ -1,10 +1,10 @@
-import { toast } from '@/commons/toast'
-import { Listeng } from '@/components/listeng'
-import { useQrCodeReader } from '@/hooks/use-qr-reader'
-import { api } from '@/lib/api'
-import { useUi } from '@/store/ui'
-import { BusinessUnit } from '@/types/business-unit'
-import { Event } from '@/types/event'
+import { toast } from '~/commons/toast'
+import { Listeng } from '~/components/listeng'
+import { useQrCodeReader } from '~/hooks/use-qr-reader'
+import { api } from '~/lib/api'
+import { useUi } from '~/store/ui'
+import { BusinessUnit } from '~/types/business-unit'
+import { Event } from '~/types/event'
 import { Combobox, Option, Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
@@ -61,7 +61,7 @@ export default function EventsRegister() {
       ) : (
         <div className="h-full flex flex-col w-full">
           <div className="text-center flex-grow flex-col items-center flex justify-center">
-            <Listeng disabled={!(selectedEvent && selectedBusinessUnit)} />
+            <Listeng />
             <p className="pt-10 opacity-70">
               {selectedBusinessUnit && selectedEvent
                 ? 'Escuchando el lector de barras...'

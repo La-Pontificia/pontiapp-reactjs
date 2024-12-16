@@ -1,10 +1,10 @@
-import { toast } from '@/commons/toast'
-import { calendarStrings } from '@/const'
-import { api } from '@/lib/api'
-import { format } from '@/lib/dayjs'
-import { useAuth } from '@/store/auth'
-import { Event } from '@/types/event'
-import { handleError } from '@/utils'
+import { toast } from '~/commons/toast'
+import { calendarStrings } from '~/const'
+import { api } from '~/lib/api'
+import { format } from '~/lib/dayjs'
+import { useAuth } from '~/store/auth'
+import { Event } from '~/types/event'
+import { handleError } from '~/utils'
 import {
   Button,
   ButtonProps,

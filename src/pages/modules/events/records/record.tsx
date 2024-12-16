@@ -12,13 +12,13 @@ import {
 } from '@fluentui/react-components'
 import { DeleteRegular, GuestRegular } from '@fluentui/react-icons'
 import React from 'react'
-import { format } from '@/lib/dayjs'
-import { api } from '@/lib/api'
-import { handleError } from '@/utils'
-import { toast } from '@/commons/toast'
+import { format } from '~/lib/dayjs'
+import { api } from '~/lib/api'
+import { handleError } from '~/utils'
+import { toast } from '~/commons/toast'
 
-import { useAuth } from '@/store/auth'
-import { EventRecord } from '@/types/event-record'
+import { useAuth } from '~/store/auth'
+import { EventRecord } from '~/types/event-record'
 
 export default function Item({
   item,

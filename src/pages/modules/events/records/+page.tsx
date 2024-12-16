@@ -1,4 +1,4 @@
-import { api } from '@/lib/api'
+import { api } from '~/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { DockRegular, Search20Regular } from '@fluentui/react-icons'
 // import Form from './form'
@@ -10,15 +10,15 @@ import {
   Spinner
 } from '@fluentui/react-components'
 import React from 'react'
-import { useDebounced } from '@/hooks/use-debounced'
-import { ResponsePaginate } from '@/types/paginate-response'
-import { toast } from '@/commons/toast'
-import { handleError } from '@/utils'
+import { useDebounced } from '~/hooks/use-debounced'
+import { ResponsePaginate } from '~/types/paginate-response'
+import { toast } from '~/commons/toast'
+import { handleError } from '~/utils'
 import Item from './record'
-import { EventRecord } from '@/types/event-record'
-import { BusinessUnit } from '@/types/business-unit'
-import { Event } from '@/types/event'
-// import { useAuth } from '@/store/auth'
+import { EventRecord } from '~/types/event-record'
+import { BusinessUnit } from '~/types/business-unit'
+import { Event } from '~/types/event'
+// import { useAuth } from '~/store/auth'
 
 export default function EventsRecordsPage() {
   //   const { user: authUser } = useAuth()
