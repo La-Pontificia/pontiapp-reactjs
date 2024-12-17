@@ -50,6 +50,9 @@ importers:
       dayjs:
         specifier: ^1.11.13
         version: 1.11.13
+      laravel-echo:
+        specifier: ^1.17.1
+        version: 1.17.1
       lucide-react:
         specifier: ^0.462.0
         version: 0.462.0(react@18.3.1)
@@ -2054,6 +2057,10 @@ packages:
 
   keyv@4.5.4:
     resolution: {integrity: sha512-oxVHkHR/EJf2CNXnWxRLW6mg7JyCCUcG0DtEGmL2ctUo1PNTin1PUil+r/+4r5MpVgC/fn1kjsx7mjSujKqIpw==}
+
+  laravel-echo@1.17.1:
+    resolution: {integrity: sha512-ORWc4vDfnBj/Oe5ThZ5kYyGItRjLDqAQUyhD/7UhehUOqc+s5x9HEBjtMVludNMP6VuXw6t7Uxt8bp63kaTofg==}
+    engines: {node: '>=10'}
 
   levn@0.4.1:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
@@ -5171,6 +5178,8 @@ snapshots:
   keyv@4.5.4:
     dependencies:
       json-buffer: 3.0.1
+
+  laravel-echo@1.17.1: {}
 
   levn@0.4.1:
     dependencies:
