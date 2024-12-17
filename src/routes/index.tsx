@@ -10,7 +10,6 @@ import UsersLayout from '~/pages/modules/users/+layout'
 import UsersPage from '~/pages/modules/users/+page'
 import EdasLayout from '~/pages/modules/edas/+layout'
 import EdasPage from '~/pages/modules/edas/+page'
-import AssistsPage from '~/pages/modules/assists/+page'
 import AssistsLayout from '~/pages/modules/assists/+layout'
 import EventsLayout from '~/pages/modules/events/+layout'
 import EventsPage from '~/pages/modules/events/+page'
@@ -43,7 +42,7 @@ import ProtectedModule from '~/protected/module'
 import CollaboratorsPage from '~/pages/modules/edas/collaborators/+page'
 import NotFounPage from '~/pages/not-fount'
 import AssistsReportFilesPage from '~/pages/modules/assists/report-files/+page'
-import AssistTerminalsPage from '~/pages/modules/assists/assist-terminals/+page'
+import AssistTerminalsPage from '~/pages/modules/assists/terminals/+page'
 import AssistsWithoutUsersPage from '~/pages/modules/assists/without-users/+page'
 import AssistsSummaryPage from '~/pages/modules/assists/summary/+page'
 import AssistsDatabasesPage from '~/pages/modules/assists/databases/+page'
@@ -214,10 +213,10 @@ export default function MainRoutes() {
             <Route path="collaborators" element={<CollaboratorsPage />} />
           </Route>
           <Route path="assists" element={<AssistsLayout />}>
-            <Route index element={<AssistsPage />} />
+            <Route index element={<AssistsWithUsersPage />} />
             <Route path="my" element={<AssistsMyPage />} />
             <Route path="report-files" element={<AssistsReportFilesPage />} />
-            <Route path="assist-terminals" element={<AssistTerminalsPage />} />
+            <Route path="terminals" element={<AssistTerminalsPage />} />
             <Route path="without-users" element={<AssistsWithoutUsersPage />} />
             <Route path="with-users" element={<AssistsWithUsersPage />} />
             <Route path="summary" element={<AssistsSummaryPage />} />
