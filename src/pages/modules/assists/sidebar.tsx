@@ -8,8 +8,8 @@ import {
   Avatar
 } from '@fluentui/react-components'
 import {
-  ClockFilled,
-  ClockRegular,
+  // ClockFilled,
+  // ClockRegular,
   CloudDatabaseFilled,
   CloudDatabaseRegular,
   DocumentPersonFilled,
@@ -19,8 +19,8 @@ import {
   type FluentIcon,
   FolderFilled,
   FolderRegular,
-  PersonCircleFilled,
-  PersonCircleRegular,
+  // PersonCircleFilled,
+  // PersonCircleRegular,
   PersonDeleteFilled,
   PersonDeleteRegular,
   TextBulletListSquareClockFilled,
@@ -85,7 +85,7 @@ export const AssistsSidebar = () => {
         <h2 className="text-sm opacity-70">Asistencias</h2>
       </nav>
       <nav className="pr-2 py-2 px-3">
-        <ItemNav
+        {/* <ItemNav
           icon={PersonCircleRegular}
           iconActive={PersonCircleFilled}
           href="/m/assists/my"
@@ -94,7 +94,7 @@ export const AssistsSidebar = () => {
         </ItemNav>
         <ItemNav icon={ClockRegular} iconActive={ClockFilled} href="/m/assists">
           Asistencias
-        </ItemNav>
+        </ItemNav> */}
         {/* <ItemNav
           icon={PersonClockRegular}
           iconActive={PersonClockFilled}
@@ -147,7 +147,7 @@ export const AssistsSidebar = () => {
               <ItemNav
                 icon={FolderRegular}
                 iconActive={FolderFilled}
-                href="/m/assists/assist-terminals"
+                href="/m/assists/terminals"
               >
                 Biometricos
               </ItemNav>

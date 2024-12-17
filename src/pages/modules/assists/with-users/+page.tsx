@@ -77,6 +77,7 @@ export default function AssistsWithUsersPage() {
         uri += `&assistTerminals=${filters.terminalsIds.join(',')}`
       if (filters.areaId) uri += `&areaId=${filters.areaId}`
       if (filters.jobId) uri += `&jobId=${filters.jobId}`
+
       const res = await api.get<AssistWithUser[]>(uri)
       if (!res.ok) return []
       return res.data.map((assist) => new AssistWithUser(assist))

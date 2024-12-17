@@ -179,7 +179,7 @@ export default function AssistFilters({
             <Option text={terminal.name} key={terminal.id} value={terminal.id}>
               <div className="block">
                 <p>{terminal.name}</p>
-                <p className="text-xs opacity-50">{terminal.databaseName}</p>
+                <p className="text-xs opacity-50">{terminal.database}</p>
               </div>
             </Option>
           ))}

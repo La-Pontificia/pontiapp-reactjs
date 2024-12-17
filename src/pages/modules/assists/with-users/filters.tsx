@@ -72,12 +72,14 @@ export default function AssistFilters({
 
   const handleReport = async () => {
     setReporting(true)
-    let uri = 'assists/withoutUsers/report?tm=true'
+    let uri = 'assists/withUsers/report?tm=true'
     if (startDate) uri += `&startDate=${format(startDate, 'YYYY-MM-DD')}`
     if (endDate) uri += `&endDate=${format(endDate, 'YYYY-MM-DD')}`
     if (q) uri += `&q=${q}`
     if (selectedTerminals.length > 0)
       uri += `&assistTerminals=${selectedTerminals.map((e) => e.id).join(',')}`
+    if (area) uri += `&areaId=${area.id}`
+    if (job) uri += `&jobId=${job.id}`
     const res = await api.get(uri)
     if (!res.ok) {
       toast('Error al generar el reporte')
@@ -241,7 +243,7 @@ export default function AssistFilters({
             <Option text={terminal.name} key={terminal.id} value={terminal.id}>
               <div className="block">
                 <p>{terminal.name}</p>
-                <p className="text-xs opacity-50">{terminal.databaseName}</p>
+                <p className="text-xs opacity-50">{terminal.database}</p>
               </div>
             </Option>
           ))}
