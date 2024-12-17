@@ -38,19 +38,9 @@ async function fetchCore<T>(
 
   const URL = api ? `${API_HOST}/api/${pathname}` : `${API_HOST}/${pathname}`
 
-  const getTokenFromCookies = () => {
-    return document.cookie
-      .split('; ')
-      .find((row) => row.startsWith('XSRF-TOKEN='))
-      ?.split('=')[1]
-  }
-
-  const csrfToken = getTokenFromCookies()
-
   const res = await fetch(URL, {
     ...ops,
     headers: {
-      ...(csrfToken ? { 'X-XSRF-TOKEN': decodeURIComponent(csrfToken) } : {}),
       ...ops.headers
     },
 

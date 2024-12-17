@@ -21,7 +21,6 @@ export default function LoginPage() {
     const uri = new URL(`${apiHost}/api/auth/login/id`)
     uri.searchParams.set('redirectURL', `${host}`)
     uri.searchParams.set('redirectErrorURL', `${host}/login`)
-    await api('auth/sanctum/csrf-cookie')
     window.location.href = uri.href
   }
 
@@ -29,7 +28,6 @@ export default function LoginPage() {
     e.preventDefault()
     setLoadingCredential(true)
     const form = new FormData(e.currentTarget)
-    await api('auth/sanctum/csrf-cookie')
     const res = await api.post('auth/login/credentials', {
       data: JSON.stringify({
         username: form.get('username'),
