@@ -1,0 +1,6 @@
+
+GET https://dev.lapontificia.edu.pe/api
+
+
+###
+GET https://dev.lapontificia.edu.pe/api/auth/login/id?redirectURL=https%3A%2F%2Fdev.lapontificia.edu.pe&redirectErrorURL=https%3A%2F%2Fdev.lapontificia.edu.pe%2Flogin
