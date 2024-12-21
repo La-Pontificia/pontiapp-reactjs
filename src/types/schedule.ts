@@ -1,11 +1,10 @@
-import { Time } from '.'
 import { AssistTerminal } from './assist-terminal'
 import { User } from './user'
 
 export class Schedule {
   id: string
-  from: Time
-  to: Time
+  from: Date
+  to: Date
   title: string
   days?: string[]
   startDate: Date
