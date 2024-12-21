@@ -61,7 +61,15 @@ export default function UserMenu() {
       <Popover>
         <PopoverTrigger disableButtonEnhancement>
           <Tooltip content="David Bendezu" relationship="label">
-            <button>
+            <button className="text-right flex items-center gap-2 dark:text-white">
+              <div className="md:block hidden">
+                <p className="font-semibold leading-4 tracking-tight text-sm">
+                  {user.displayName}
+                </p>
+                <p className="text-xs leading-4 opacity-50 max-w-[20ch] text-ellipsis overflow-hidden">
+                  {user.email}
+                </p>
+              </div>
               <Avatar
                 image={{
                   src: user.photoURL

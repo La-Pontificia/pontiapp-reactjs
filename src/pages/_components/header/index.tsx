@@ -25,7 +25,7 @@ const Toggles = () => {
   const locaction = useLocation()
 
   const isHome = locaction.pathname === '/'
-
+  const isModules = locaction.pathname.includes('/m')
   return (
     <div className="flex items-center">
       {!isHome && (
@@ -50,26 +50,28 @@ const Toggles = () => {
           </button>
         </Tooltip>
       )}
-      <Tooltip
-        content={
-          isModuleMaximized ? 'Restaurar tamaño' : 'Maximizar módulo actual'
-        }
-        relationship="label"
-      >
-        <button
-          onClick={toggleModuleMaximized}
-          className="p-2 px-2.5 dark:text-stone-400 hover:bg-stone-500/20 transition-all rounded-lg"
+      {isModules && (
+        <Tooltip
+          content={
+            isModuleMaximized ? 'Restaurar tamaño' : 'Maximizar módulo actual'
+          }
+          relationship="label"
         >
-          {isModuleMaximized ? (
-            <ArrowMinimizeRegular
-              className="dark:text-blue-500"
-              fontSize={20}
-            />
-          ) : (
-            <ArrowMaximizeRegular fontSize={20} />
-          )}
-        </button>
-      </Tooltip>
+          <button
+            onClick={toggleModuleMaximized}
+            className="p-2 px-2.5 dark:text-stone-400 hover:bg-stone-500/20 transition-all rounded-lg"
+          >
+            {isModuleMaximized ? (
+              <ArrowMinimizeRegular
+                className="dark:text-blue-500"
+                fontSize={20}
+              />
+            ) : (
+              <ArrowMaximizeRegular fontSize={20} />
+            )}
+          </button>
+        </Tooltip>
+      )}
     </div>
   )
 }
@@ -83,7 +85,7 @@ export default function RootHeader() {
         marginTop: isHeaderOpen ? '0' : '-56px'
       }}
       data-hidden={!isHeaderOpen ? '' : undefined}
-      className="h-14 min-h-[56px] transition-all relative border-b border-stone-500/20 dark:text-blue-500 shadow-md shadow-black/20 justify-between gap-4 dark:bg-[#131210]/30 text-blue-600 w-full z-20 flex items-center px-2"
+      className="h-14 min-h-[56px] transition-all relative dark:text-blue-500 shadow-xl shadow-black/30 justify-between gap-4 text-blue-600 w-full z-20 flex items-center px-2"
     >
       <nav className="flex flex-grow gap-2 items-center basis-0">
         <Toggles />
@@ -96,7 +98,9 @@ export default function RootHeader() {
             alt='Logo Lettras "La Pontificia"'
           />
         </Link>
-        <h1 className="font-semibold text-base hidden md:block">Ponti App</h1>
+        <h1 className="font-semibold text-base hidden md:block pl-2">
+          Ponti App
+        </h1>
       </nav>
       <nav className="relative">
         <div className="hidden lg:block">
