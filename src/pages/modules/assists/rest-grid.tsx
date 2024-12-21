@@ -4,9 +4,13 @@ import React from 'react'
 import { Link } from 'react-router'
 import UserHoverInfo from '~/components/user-hover-info'
 import { format } from '~/lib/dayjs'
-import { Assist } from '~/types/assist'
+import { RestAssist } from '~/types/assist'
 
-export default function AssistsGrid({ assists }: { assists: Assist[] }) {
+export default function RestAssistsGrid({
+  assists
+}: {
+  assists: RestAssist[]
+}) {
   const [startSlice] = React.useState(0)
   const [endSlice, setEndSlice] = React.useState(15)
 
@@ -14,6 +18,9 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
 
   return (
     <div className="overflow-auto">
+      <p className="px-2 pb-1 text-xs text-yellow-500">
+        Registros de asistencias que el sistema no pudo procesar.
+      </p>
       <table className="w-full relative">
         <thead className="">
           <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
@@ -21,22 +28,12 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
             <td>Terminal</td>
             <td>Fecha</td>
             <td>Dia</td>
-            <td>Horario</td>
-            <td>Entró</td>
-            <td>Salió</td>
+            <td>Hora</td>
           </tr>
         </thead>
 
         <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
           {assists.slice(startSlice, endSlice).map((assist, key) => {
-            const arriveLate =
-              assist.markedIn &&
-              new Date(assist.markedIn) > new Date(assist.from)
-
-            const outBefore =
-              assist.markedOut &&
-              new Date(assist.markedOut) < new Date(assist.to)
-
             return (
               <tr
                 key={key}
@@ -71,53 +68,22 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                 <td>
                   <div className="flex items-center capitalize gap-2">
                     <CalendarRegular fontSize={20} />
-                    {format(assist.date, 'MMMM D, YYYY')}
+                    {format(assist.datetime, 'MMMM D, YYYY')}
                   </div>
                 </td>
                 <td>
-                  <p className="capitalize">{format(assist.from, 'dddd')} </p>
+                  <p className="capitalize">
+                    {format(assist.datetime, 'dddd')}{' '}
+                  </p>
                 </td>
                 <td>
                   <div className="flex gap-2 items-center">
                     <ClockRegular fontSize={20} />
-                    <p>
-                      {format(assist.from, 'h:mm A')}
-                      {' - '}
-                      {format(assist.to, 'h:mm A')}
-                    </p>
+                    <p>{format(assist.datetime, 'h:mm A')}</p>
                   </div>
                 </td>
                 <td>
-                  <Badge
-                    color={
-                      assist.markedIn
-                        ? arriveLate
-                          ? 'warning'
-                          : 'success'
-                        : 'danger'
-                    }
-                    appearance="filled"
-                  >
-                    {assist.markedIn
-                      ? format(assist.markedIn, 'h:mm A')
-                      : 'N/A'}
-                  </Badge>
-                </td>
-                <td>
-                  <Badge
-                    color={
-                      assist.markedOut
-                        ? outBefore
-                          ? 'warning'
-                          : 'success'
-                        : 'danger'
-                    }
-                    appearance="filled"
-                  >
-                    {assist.markedOut
-                      ? format(assist.markedOut, 'h:mm A')
-                      : 'N/A'}
-                  </Badge>
+                  <Badge color="warning">Sin procesar</Badge>
                 </td>
               </tr>
             )

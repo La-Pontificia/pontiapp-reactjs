@@ -8,6 +8,8 @@ import {
   Avatar
 } from '@fluentui/react-components'
 import {
+  ClockFilled,
+  ClockRegular,
   // ClockFilled,
   // ClockRegular,
   CloudDatabaseFilled,
@@ -91,10 +93,10 @@ export const AssistsSidebar = () => {
           href="/m/assists/my"
         >
           Mis asistencias
-        </ItemNav>
+        </ItemNav> */}
         <ItemNav icon={ClockRegular} iconActive={ClockFilled} href="/m/assists">
           Asistencias
-        </ItemNav> */}
+        </ItemNav>
         {/* <ItemNav
           icon={PersonClockRegular}
           iconActive={PersonClockFilled}
