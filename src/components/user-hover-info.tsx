@@ -30,7 +30,7 @@ export default function UserHoverInfo({
   return (
     <HoverCard openDelay={300} open={open} onOpenChange={setOpen}>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
-      <HoverCardContent className="p-0">
+      <HoverCardContent className="p-0 max-w-[450px]">
         {open && <UserHoverInfoContent slug={slug} />}
       </HoverCardContent>
     </HoverCard>
@@ -74,7 +74,7 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
 
   return (
     <div>
-      <header className="flex p-3 items-center gap-2">
+      <header className="flex  p-3 items-center gap-2">
         <Avatar
           image={{
             src: user?.photoURL
@@ -90,7 +90,7 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
           <h2 className="font-bold tracking-tight text-xl">
             {user?.displayName}
           </h2>
-          <p className="pb-2">
+          <p className="pb-2 text-wrap">
             {user?.role?.name} • {user?.role?.department?.name}
           </p>
           <div className="space-x-1">
@@ -185,7 +185,7 @@ export const InfoItem = ({
     <div className="flex rounded-lg group transition-colors hover:bg-stone-500/10 p-1 items-center gap-3">
       <Icon fontSize={20} className="opacity-60" />
       <div className="flex-grow">
-        <p className="text-xs dark:text-neutral-400">{title}</p>
+        <p className="text-xs text-wrap dark:text-neutral-400">{title}</p>
         {children}
       </div>
       <button
