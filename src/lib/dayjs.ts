@@ -30,15 +30,9 @@ export const formatTime = (time: any, format?: string): string => {
   return dayjs(newDate).locale('es').format(format)
 }
 
-export const countRangeMinutes = (start: Time, end: Time): string => {
-  const startDate = new Date()
-  const endDate = new Date()
-  const [startHours, startMinutes] = start.split(':')
-  const [endHours, endMinutes] = end.split(':')
-
-  startDate.setHours(Number(startHours), Number(startMinutes), 0, 0)
-  endDate.setHours(Number(endHours), Number(endMinutes), 0, 0)
-
+export const countRangeMinutes = (start: Date, end: Date): string => {
+  const startDate = new Date(start)
+  const endDate = new Date(end)
   const diff = endDate.getTime() - startDate.getTime()
 
   if (diff < 0) {
