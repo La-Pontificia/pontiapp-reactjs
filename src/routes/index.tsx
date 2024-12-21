@@ -58,6 +58,7 @@ import AttentionsServicesPage from '~/pages/modules/attentions/services/+page'
 import AttentionsReportFilesPage from '~/pages/modules/attentions/report-files/+page'
 import AttentionsTicketsPage from '~/pages/modules/attentions/tickets/+page'
 import AssistsWithUsersPage from '~/pages/modules/assists/with-users/+page'
+import AssistsPage from '~/pages/modules/assists/+page'
 
 export default function MainRoutes() {
   return (
@@ -213,7 +214,7 @@ export default function MainRoutes() {
             <Route path="collaborators" element={<CollaboratorsPage />} />
           </Route>
           <Route path="assists" element={<AssistsLayout />}>
-            <Route index element={<AssistsWithUsersPage />} />
+            <Route index element={<AssistsPage />} />
             <Route path="my" element={<AssistsMyPage />} />
             <Route path="report-files" element={<AssistsReportFilesPage />} />
             <Route path="terminals" element={<AssistTerminalsPage />} />
