@@ -1,7 +1,7 @@
 import { toast } from '~/commons/toast'
 import { calendarStrings, days } from '~/const'
 import { api } from '~/lib/api'
-import { countRangeMinutes, format, formatTime } from '~/lib/dayjs'
+import { countRangeMinutes, format } from '~/lib/dayjs'
 import { Schedule } from '~/types/schedule'
 import { handleError } from '~/utils'
 import {
@@ -163,9 +163,8 @@ export const ScheduleItem = ({
         <ClockRegular fontSize={22} className="opacity-60" />
         <div className="flex-grow">
           <p className="text-xs">
-            {formatTime(schedule.from, 'h:mm A')} -{' '}
-            {formatTime(schedule.to, 'h:mm A')} (
-            {countRangeMinutes(schedule.from, schedule.to)})
+            {format(schedule.from, 'h:mm A')} - {format(schedule.to, 'h:mm A')}{' '}
+            ({countRangeMinutes(schedule.from, schedule.to)})
           </p>
         </div>
       </div>

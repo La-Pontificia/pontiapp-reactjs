@@ -30,10 +30,10 @@ import {
   formatDateToTimeString,
   TimePicker
 } from '@fluentui/react-timepicker-compat'
-import { createDateByTime, format } from '~/lib/dayjs'
 import React from 'react'
 import { AssistTerminal } from '~/types/assist-terminal'
 import { AddRegular } from '@fluentui/react-icons'
+import { format } from '~/lib/dayjs'
 
 export default function UsersEditSchedulesPage() {
   const params = useParams<{
@@ -226,8 +226,8 @@ export function ScheduleForm(props: {
     useForm<ScheduleFormValue>({
       defaultValues: {
         days: props.default?.days ?? [],
-        from: props.default?.from && createDateByTime(props.default?.from),
-        to: props.default?.to && createDateByTime(props.default?.to),
+        from: props.default?.from && props.default?.from,
+        to: props.default?.to && props.default?.to,
         startDate: props.default?.startDate
           ? (format(props.default?.startDate, 'YYYY/MM/DD') as unknown as Date)
           : new Date(),
@@ -246,8 +246,8 @@ export function ScheduleForm(props: {
     setFetching(true)
     const res = await api.post(URL, {
       data: JSON.stringify({
-        from: format(values.from, 'HH:mm:ss'),
-        to: format(values.to, 'HH:mm:ss'),
+        from: format(values.from),
+        to: format(values.to),
         userId: user?.id,
         days: values.days,
         assistTerminalId: values.terminal?.id,
