@@ -142,12 +142,12 @@ export const PRIVILEGES = {
   'users:contractTypes': 'Tipos de contratos de usuarios',
 
   // Assistances management
-  'assists:centralized': 'Asistencias centralizadas',
-  'assists:centralizedWithoutCalculating':
-    'Asistencias centralizadas sin calcular',
-  'assists:withoutCalculating': 'Asistencias sin calcular',
-  'assists:singleSummary': 'Resumen único de asistencias',
+  'assists:schedules': 'Asistencias con horarios',
+  'assists:withUsers': 'Asistencias con usuarios del sistema',
+  'assists:withoutUsers': 'Asistencias sin usuarios',
+  'assists:summary': 'Resumen único de asistencias',
   'assists:report': 'Generar reportes de asistencias',
+  'assists:databases': 'Bases de datos de asistencias',
   'assists:assistTerminals': 'Terminales de asistencias',
 
   // Edas management
@@ -167,13 +167,14 @@ export const PRIVILEGES = {
   'edas:questionnaireTemplates': 'Plantillas de cuestionarios',
 
   // Events management
-  'events:show': 'Ver eventos',
+  'events:show': 'Eventos',
+  'events:create': 'Registrar eventos',
   'events:edit': 'Editar eventos',
-  'events:create': 'Crear eventos',
   'events:delete': 'Eliminar eventos',
-  'events:assists:register': 'Registrar asistencias a eventos',
-  'events:assists:view': 'Ver asistencias a eventos',
-  'events:assists:report': 'Generar reportes de asistencias a eventos',
+  'events:records:register': 'Registrar asistencias a eventos',
+  'events:records:view': 'Ver asistencias a eventos',
+  'events:records:reportFiles': 'Visualizar reportes de registros de eventos',
+  'events:records:report': 'Generar reportes de registros de eventos',
 
   // Audits management
   audits: 'Auditoria del sistema',
