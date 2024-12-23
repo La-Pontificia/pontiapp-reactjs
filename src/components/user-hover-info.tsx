@@ -24,9 +24,11 @@ export default function UserHoverInfo({
   slug
 }: {
   children: React.ReactNode
-  slug: string
+  slug?: string | null | undefined
 }) {
   const [open, setOpen] = React.useState(false)
+
+  if (!slug) return <>{children}</>
   return (
     <HoverCard openDelay={300} open={open} onOpenChange={setOpen}>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
@@ -134,32 +136,34 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
           title="Cargo"
         />
       </div>
-      <div className="border-t border-stone-500/20 p-2">
-        <h2 className="opacity-60 font-semibold text-xs">Reportando a</h2>
-        <Link
-          target="_blank"
-          to={`/${user.manager?.username}`}
-          className="flex p-1 mt-1 hover:underline text-left items-center gap-2"
-        >
-          <Avatar
-            image={{
-              src: user.manager?.photoURL
-            }}
-            badge={{
-              status: user.manager?.status ? 'available' : 'blocked'
-            }}
-            size={36}
-            color="colorful"
-            name={user.manager?.displayName}
-          />
-          <div className="flex items-center gap-2">
-            <h2 className="font-bold tracking-tight text-sm">
-              {user.manager?.displayName}
-            </h2>
-            <OpenRegular fontSize={15} />
-          </div>
-        </Link>
-      </div>
+      {user.manager && (
+        <div className="border-t border-stone-500/20 p-2">
+          <h2 className="opacity-60 font-semibold text-xs">Reportando a</h2>
+          <Link
+            target="_blank"
+            to={`/${user.manager?.username}`}
+            className="flex p-1 mt-1 hover:underline text-left items-center gap-2"
+          >
+            <Avatar
+              image={{
+                src: user.manager?.photoURL
+              }}
+              badge={{
+                status: user.manager?.status ? 'available' : 'blocked'
+              }}
+              size={36}
+              color="colorful"
+              name={user.manager?.displayName}
+            />
+            <div className="flex items-center gap-2">
+              <h2 className="font-bold tracking-tight text-sm">
+                {user.manager?.displayName}
+              </h2>
+              <OpenRegular fontSize={15} />
+            </div>
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
