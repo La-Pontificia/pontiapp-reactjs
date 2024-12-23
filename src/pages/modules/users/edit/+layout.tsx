@@ -29,7 +29,7 @@ import { useQuery } from '@tanstack/react-query'
 import React, { createContext } from 'react'
 import { Helmet } from 'react-helmet'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
-import { IoIosGitMerge } from 'react-icons/io'
+// import { IoIosGitMerge } from 'react-icons/io'
 import { useAuth } from '~/store/auth'
 
 type AuthState = {
@@ -114,7 +114,7 @@ export default function CollaboratorsEditLayout(): JSX.Element {
           />
           <div>
             <h1 className="font-bold text-lg tracking-tight text-nowrap">
-              {user.fullName}
+              {user.displayName}
             </h1>
             <p className="text-xs opacity-60">
               {user.role?.name} {user.role?.department?.name}
@@ -161,6 +161,7 @@ export const UserOptions = ({
   user: User
   refetch: () => void
 }) => {
+  const { user: authUser } = useAuth()
   const [isResetAlertOpen, setIsResetAlertOpen] = React.useState(false)
   const [resetingPassword, setResetingPassword] = React.useState(false)
 
@@ -202,17 +203,23 @@ export const UserOptions = ({
 
   return (
     <div className="flex ml-auto items-center gap-1 dark:text-stone-300">
-      <button
-        onClick={() => setIsResetAlertOpen(true)}
-        className="flex flex-col text-nowrap items-center gap-1 text-xs rounded-md p-2 hover:bg-stone-500/10"
+      {authUser.hasPrivilege('users:resetPassword') && (
+        <button
+          onClick={() => setIsResetAlertOpen(true)}
+          className="flex flex-col text-nowrap items-center gap-1 text-xs rounded-md p-2 hover:bg-stone-500/10"
+        >
+          <PersonPasskeyRegular fontSize={20} className="dark:text-blue-600" />
+          <span className="max-lg:hidden"> Restablecer contraseña</span>
+        </button>
+      )}
+      {/* <Button
+        appearance="outline"
+        disabled
+        className="flex disabled:grayscale disabled:opacity-50 flex-col text-nowrap items-center gap-1 text-xs rounded-md p-2 hover:bg-stone-500/10"
       >
-        <PersonPasskeyRegular fontSize={20} className="dark:text-blue-600" />
-        <span className="max-lg:hidden"> Restablecer contraseña</span>
-      </button>
-      <button className="flex flex-col text-nowrap items-center gap-1 text-xs rounded-md p-2 hover:bg-stone-500/10">
         <IoIosGitMerge size={20} className="dark:text-blue-600" />
         <span className="max-lg:hidden">Crear versión</span>
-      </button>
+      </Button> */}
       <Menu positioning={{ autoSize: true }}>
         <MenuTrigger disableButtonEnhancement>
           <button className="relative p-0 opacity-60">
@@ -262,38 +269,41 @@ export const UserOptions = ({
         </Dialog>
       )}
 
-      <Dialog
-        open={isToggleStatusOpen}
-        onOpenChange={(_, e) => setIsToggleStatusOpen(e.open)}
-        modalType="alert"
-      >
-        <DialogSurface>
-          <DialogBody>
-            <DialogTitle>
-              ¿Estás seguro que deseas{' '}
-              {user.status ? 'deshabilitar' : 'habilitar'} a {user.displayName}?
-            </DialogTitle>
-            <DialogContent>
-              {user.status
-                ? 'El usuario no podrá acceder a la plataforma.'
-                : 'El usuario podrá acceder a la plataforma.'}
-            </DialogContent>
-            <DialogActions>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary">Cancelar</Button>
-              </DialogTrigger>
-              <Button
-                onClick={handleToogleStatus}
-                disabled={toglingStatus}
-                icon={toglingStatus ? <Spinner size="tiny" /> : undefined}
-                appearance="primary"
-              >
-                {user.status ? 'Deshabilitar' : 'Habilitar'}
-              </Button>
-            </DialogActions>
-          </DialogBody>
-        </DialogSurface>
-      </Dialog>
+      {isToggleStatusOpen && (
+        <Dialog
+          open={isToggleStatusOpen}
+          onOpenChange={(_, e) => setIsToggleStatusOpen(e.open)}
+          modalType="alert"
+        >
+          <DialogSurface>
+            <DialogBody>
+              <DialogTitle>
+                ¿Estás seguro que deseas{' '}
+                {user.status ? 'deshabilitar' : 'habilitar'} a{' '}
+                {user.displayName}?
+              </DialogTitle>
+              <DialogContent>
+                {user.status
+                  ? 'El usuario no podrá acceder a la plataforma.'
+                  : 'El usuario podrá acceder a la plataforma.'}
+              </DialogContent>
+              <DialogActions>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button appearance="secondary">Cancelar</Button>
+                </DialogTrigger>
+                <Button
+                  onClick={handleToogleStatus}
+                  disabled={toglingStatus}
+                  icon={toglingStatus ? <Spinner size="tiny" /> : undefined}
+                  appearance="primary"
+                >
+                  {user.status ? 'Deshabilitar' : 'Habilitar'}
+                </Button>
+              </DialogActions>
+            </DialogBody>
+          </DialogSurface>
+        </Dialog>
+      )}
     </div>
   )
 }

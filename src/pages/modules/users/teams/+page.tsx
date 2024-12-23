@@ -29,15 +29,19 @@ export default function CollaboratorsTeamsPage() {
         <title>Equípos - Ponti App</title>
       </Helmet>
       <nav className="p-4">
-        <Button
-          onClick={() => setOpenForm(true)}
-          disabled={!authUser.hasPrivilege('users:teams:create')}
-          appearance="outline"
-          className="gap-2"
-        >
-          <PeopleTeamAddRegular fontSize={20} className="dark:text-blue-500" />
-          <span>Crear equipo</span>
-        </Button>
+        {authUser.hasPrivilege('users:teams:create') && (
+          <Button
+            onClick={() => setOpenForm(true)}
+            appearance="outline"
+            className="gap-2"
+          >
+            <PeopleTeamAddRegular
+              fontSize={20}
+              className="dark:text-blue-500"
+            />
+            <span>Crear equipo</span>
+          </Button>
+        )}
         {openForm && (
           <Dialog
             open={openForm}

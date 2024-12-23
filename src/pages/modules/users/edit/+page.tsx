@@ -194,7 +194,9 @@ export default function CollaboratorsEditPage() {
                 validationMessage={error?.message}
               >
                 <Switch
-                  disabled={updating}
+                  disabled={
+                    updating || !authUser.hasPrivilege('users:toggleStatus')
+                  }
                   onChange={(_, d) => {
                     field.onChange(d.checked)
                   }}
@@ -260,8 +262,10 @@ export default function CollaboratorsEditPage() {
               onSubmitTitle="Guardar"
               asignedPrivileges={customPrivileges}
               triggerProps={{
-                icon: <Add20Regular className="dark:text-blue-500" />,
-                disabled: updating,
+                icon: <Add20Regular />,
+                disabled:
+                  updating ||
+                  !authUser.hasPrivilege('users:asignCustomPrivileges'),
                 children:
                   customPrivileges && customPrivileges?.length > 0 ? (
                     <>{customPrivileges?.length} Privilegios adicionales</>
@@ -293,8 +297,9 @@ export default function CollaboratorsEditPage() {
                   title="Seleccionar adminitrador (Jefe inmediato)"
                   onSubmitTitle="Seleccionar"
                   triggerProps={{
-                    icon: <Add20Regular className="dark:text-blue-500" />,
-                    disabled: updating,
+                    icon: <Add20Regular />,
+                    disabled:
+                      updating || !authUser.hasPrivilege('users:asignManager'),
                     children: manager ? (
                       <div className="flex items-center gap-1">
                         <Avatar

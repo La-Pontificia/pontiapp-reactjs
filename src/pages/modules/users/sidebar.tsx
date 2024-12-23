@@ -80,20 +80,19 @@ export const UsersSidebar = () => {
       <nav className="px-7 pt-4 pb-1">
         <h2 className="text-sm opacity-70">Usuarios</h2>
       </nav>
-      <nav className="w-full px-5 pt-4">
-        <Tooltip relationship="label" content="Nuevo usuario">
-          <Link
-            data-disabled={
-              !authUser.hasPrivilege('users:create') ? '' : undefined
-            }
-            to="/m/users/create"
-            className="flex text-sm rounded-full data-[disabled]:pointer-events-none data-[disabled]:grayscale data-[disabled]:select-none dark:text-white p-1.5 px-4 w-fit hover:scale-110 transition-transform justify-center bg-gradient-to-r dark:from-blue-600 dark:to-violet-600 hover:dark:bg-blue-500 items-center gap-1 font-semibold"
-          >
-            <Add20Regular />
-            Nuevo
-          </Link>
-        </Tooltip>
-      </nav>
+      {authUser.hasPrivilege('users:create') && (
+        <nav className="w-full px-5 pt-4">
+          <Tooltip relationship="label" content="Nuevo usuario">
+            <Link
+              to="/m/users/create"
+              className="flex text-sm rounded-full dark:text-white p-1.5 px-4 w-fit hover:scale-110 transition-transform justify-center bg-gradient-to-r dark:from-blue-600 dark:to-violet-600 hover:dark:bg-blue-500 items-center gap-1 font-semibold"
+            >
+              <Add20Regular />
+              Nuevo
+            </Link>
+          </Tooltip>
+        </nav>
+      )}
       <nav className="pr-2 py-2 px-3">
         {/* <ItemNav icon={InfoRegular} iconActive={InfoFilled} href="/m/users">
           Overview

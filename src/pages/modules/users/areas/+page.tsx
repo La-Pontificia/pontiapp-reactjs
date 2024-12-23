@@ -62,10 +62,22 @@ export default function CollaboratorsAreasPage() {
           {areas && areas.length > 1 ? 's' : ''}
         </p>
       </nav>
-      <div className="overflow-auto rounded-xl pt-2 h-full">
+      <div className="overflow-auto flex flex-col rounded-xl pt-2 h-full">
         {isLoading ? (
           <div className="h-full grid place-content-center">
             <Spinner size="huge" />
+          </div>
+        ) : areas && areas?.length < 1 ? (
+          <div className="grid place-content-center flex-grow">
+            <img
+              src="/search.webp"
+              width={130}
+              alt="No se encontraron resultados"
+              className="mx-auto"
+            />
+            <p className="text-xs opacity-60 pt-5">
+              No se encontraron resultados para la búsqueda
+            </p>
           </div>
         ) : (
           <table className="w-full relative">

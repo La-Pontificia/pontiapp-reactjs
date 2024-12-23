@@ -1,8 +1,9 @@
 import { User } from '~/types/user'
-import { Avatar, Tooltip } from '@fluentui/react-components'
+import { Avatar } from '@fluentui/react-components'
 import { ArrowRightRegular } from '@fluentui/react-icons'
 import { useNavigate } from 'react-router'
 import { useSlugUser } from '../+layout'
+import UserHoverInfo from '~/components/user-hover-info'
 
 export const PersonItem = ({
   person,
@@ -36,24 +37,7 @@ export const PersonItem = ({
       {!single && person.manager && (
         <div className="h-[20px] mx-auto w-[1px] bg-stone-500/20"></div>
       )}
-      <Tooltip
-        positioning="after-bottom"
-        withArrow
-        content={
-          <div className="p-2">
-            <div>
-              {person.lastNames}, {person.firstNames}
-            </div>
-            <a
-              href={`mailto:${person.email}`}
-              className="dark:text-blue-400 hover:underline"
-            >
-              {person.email}
-            </a>
-          </div>
-        }
-        relationship="description"
-      >
+      <UserHoverInfo slug={person.username}>
         <button
           onClick={handleSlug}
           data-current={person.id === slugUser?.id ? '' : undefined}
@@ -80,7 +64,7 @@ export const PersonItem = ({
             </div>
           )}
         </button>
-      </Tooltip>
+      </UserHoverInfo>
     </>
   )
 }

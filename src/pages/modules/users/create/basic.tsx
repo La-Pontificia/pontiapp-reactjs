@@ -260,7 +260,8 @@ export default function BasicUser({
             onSubmitTitle="Guardar"
             asignedPrivileges={customPrivileges}
             triggerProps={{
-              icon: <Add20Regular className="dark:text-blue-500" />,
+              disabled: !user.hasPrivilege('users:asignCustomPrivileges'),
+              icon: <Add20Regular />,
               children:
                 customPrivileges?.length > 0 ? (
                   <>{customPrivileges?.length} Privilegios adicionales</>
@@ -292,7 +293,8 @@ export default function BasicUser({
                 title="Seleccionar adminitrador (Jefe inmediato)"
                 onSubmitTitle="Seleccionar"
                 triggerProps={{
-                  icon: <Add20Regular className="dark:text-blue-500" />,
+                  disabled: !user.hasPrivilege('users:asignManager'),
+                  icon: <Add20Regular />,
                   children: field.value ? (
                     <div className="flex items-center gap-1">
                       <Avatar

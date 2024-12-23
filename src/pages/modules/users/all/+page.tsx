@@ -107,16 +107,15 @@ export default function AllUsersPage() {
   return (
     <div className="flex flex-col flex-grow overflow-y-auto">
       <nav className="flex items-center w-full gap-4 py-4">
-        <Link
-          data-disabled={
-            !authUser.hasPrivilege('users:create') ? '' : undefined
-          }
-          to="/m/users/create"
-          className="flex data-[disabled]:pointer-events-none data-[disabled]:opacity-50 data-[disabled]:grayscale data-[disabled]:select-none items-center gap-2 rounded-md hover:bg-stone-500/20 p-1.5"
-        >
-          <AddFilled fontSize={20} className="dark:text-blue-500" />
-          Crear usuario
-        </Link>
+        {authUser.hasPrivilege('users:create') && (
+          <Link
+            to="/m/users/create"
+            className="flex items-center gap-2 rounded-md hover:bg-stone-500/20 p-1.5"
+          >
+            <AddFilled fontSize={20} className="dark:text-blue-500" />
+            Crear usuario
+          </Link>
+        )}
         <SearchBox
           value={searchValue}
           dismiss={{
@@ -150,14 +149,28 @@ export default function AllUsersPage() {
         )}
       </nav>
       <div className="w-full h-full flex-col flex flex-grow overflow-auto">
-        <div className="flex-grow rounded-xl overflow-y-auto">
-          <CollaboratorsGrid
-            refetch={refetch}
-            isLoadingMore={loadingMore}
-            users={users}
-            isLoading={loading}
-          />
-        </div>
+        {users?.length < 1 ? (
+          <div className="grid place-content-center flex-grow">
+            <img
+              src="/search.webp"
+              width={130}
+              alt="No se encontraron resultados"
+              className="mx-auto"
+            />
+            <p className="text-xs opacity-60 pt-5">
+              No se encontraron resultados para la búsqueda
+            </p>
+          </div>
+        ) : (
+          <div className="flex-grow rounded-xl overflow-y-auto">
+            <CollaboratorsGrid
+              refetch={refetch}
+              isLoadingMore={loadingMore}
+              users={users}
+              isLoading={loading}
+            />
+          </div>
+        )}
         {info && (
           <footer className="flex p-5 justify-center">
             <div className="flex justify-between w-full">

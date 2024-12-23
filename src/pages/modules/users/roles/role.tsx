@@ -68,7 +68,9 @@ export default function Item({
               name={item.name}
               aria-label={item.name}
             />
-            <p className="line-clamp-3">{item.name}</p>
+            <p className="line-clamp-1  max-w-[40ch] text-ellipsis overflow-hidden">
+              {item.name}
+            </p>
           </div>
         </td>
         <td>

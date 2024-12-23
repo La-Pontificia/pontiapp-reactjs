@@ -25,6 +25,7 @@ import {
 import { MoreHorizontal20Filled } from '@fluentui/react-icons'
 import React from 'react'
 import { Link, useNavigate } from 'react-router'
+import UserHoverInfo from '~/components/user-hover-info'
 
 export default function UserGrid({
   user: userProp,
@@ -65,26 +66,28 @@ export default function UserGrid({
         <label></label>
       </td>
       <td>
-        <div className="flex items-center gap-2">
-          <Avatar
-            badge={{
-              status: user.status ? 'available' : 'blocked'
-            }}
-            size={40}
-            color="colorful"
-            name={user.displayName}
-            aria-label={user.displayName}
-            image={{
-              src: user.photoURL
-            }}
-          />
-          <Link
-            className="hover:underline hover:dark:text-blue-500 relative"
-            to={`/m/users/${user.username}`}
-          >
-            {user.displayName}
-          </Link>
-        </div>
+        <UserHoverInfo slug={user.username}>
+          <div className="flex items-center gap-2">
+            <Avatar
+              badge={{
+                status: user.status ? 'available' : 'blocked'
+              }}
+              size={40}
+              color="colorful"
+              name={user.displayName}
+              aria-label={user.displayName}
+              image={{
+                src: user.photoURL
+              }}
+            />
+            <Link
+              className="hover:underline hover:dark:text-blue-500 relative"
+              to={`/m/users/${user.username}`}
+            >
+              {user.displayName}
+            </Link>
+          </div>
+        </UserHoverInfo>
       </td>
       <td>
         <div className="max-w-[30ch] opacity-70 text-ellipsis overflow-hidden">
@@ -114,19 +117,21 @@ export default function UserGrid({
             disabled:
               !!managerUpdating || !authUser.hasPrivilege('users:asignManager'),
             children: (
-              <Badge
-                appearance="tint"
-                color={user.manager ? 'brand' : 'subtle'}
-              >
-                {managerUpdating && <Spinner size="extra-tiny" />}
-                {managerUpdating ? (
-                  'Actualizando...'
-                ) : (
-                  <span className="px-1">
-                    {user.manager ? user.manager?.displayName : 'Sin jefe'}
-                  </span>
-                )}
-              </Badge>
+              <UserHoverInfo slug={user.manager?.username}>
+                <Badge
+                  appearance="tint"
+                  color={user.manager ? 'brand' : 'subtle'}
+                >
+                  {managerUpdating && <Spinner size="extra-tiny" />}
+                  {managerUpdating ? (
+                    'Actualizando...'
+                  ) : (
+                    <span className="px-1">
+                      {user.manager ? user.manager?.displayName : 'Sin jefe'}
+                    </span>
+                  )}
+                </Badge>
+              </UserHoverInfo>
             )
           }}
         />

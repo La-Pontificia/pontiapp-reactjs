@@ -20,6 +20,7 @@ import { calendarStrings } from '~/const'
 import { FaWhatsapp } from 'react-icons/fa'
 import { handleError } from '~/utils'
 import { UserContacts } from '../../create/properties'
+import { getPersonByDocumentId } from '~/utils/fetch'
 
 type FormValues = {
   documentId: string
@@ -35,6 +36,7 @@ export default function UsersEditPropertiesPage() {
   const imageRef = React.useRef<HTMLInputElement>(null)
   const [updating, setUpdating] = React.useState(false)
   const { user: authUser } = useAuth()
+  const [searching, setSearching] = React.useState(false)
 
   const { setValue, control, watch, handleSubmit } = useForm<FormValues>({
     values: {
@@ -72,7 +74,7 @@ export default function UsersEditPropertiesPage() {
     setValue('photoURL', res.data)
   }
 
-  const { photoURL, contacts } = watch()
+  const { photoURL, contacts, documentId } = watch()
 
   const onSubmit = handleSubmit(async (values) => {
     setUpdating(true)
@@ -95,6 +97,27 @@ export default function UsersEditPropertiesPage() {
     }
     setUpdating(false)
   })
+
+  React.useEffect(() => {
+    const getPerson = async () => {
+      setSearching(true)
+      try {
+        const person = await getPersonByDocumentId(documentId)
+        if (!person) return
+        setValue('firstNames', person.firstNames)
+        setValue('lastNames', person.lastNames)
+        setSearching(false)
+      } catch (error) {
+        console.log(error)
+        toast('No se pudo obtener la información del colaborador')
+      } finally {
+        setSearching(false)
+      }
+    }
+    if (documentId && documentId.length === 8) {
+      void getPerson()
+    }
+  }, [documentId, setValue])
 
   return (
     <div className="flex flex-col flex-grow h-full px-4 w-full">
@@ -147,6 +170,7 @@ export default function UsersEditPropertiesPage() {
                 required
               >
                 <Input
+                  contentAfter={searching ? <Spinner size="tiny" /> : <></>}
                   disabled={updating || !authUser.hasPrivilege('users:edit')}
                   {...field}
                 />
