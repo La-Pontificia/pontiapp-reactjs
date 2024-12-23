@@ -21,6 +21,7 @@ import { useAuth } from '~/store/auth'
 import { Event } from '~/types/event'
 import { Link } from 'react-router'
 import Form from './form'
+import UserHoverInfo from '~/components/user-hover-info'
 
 export default function Item({
   item,
@@ -75,13 +76,15 @@ export default function Item({
           </Link>
         </td>
         <td>
-          <a
-            target="_blank"
-            href={`/${item.creator.username}`}
-            className="hover:underline text-nowrap dark:text-blue-600"
-          >
-            {item.creator?.displayName}
-          </a>
+          <UserHoverInfo slug={item.creator.username}>
+            <a
+              target="_blank"
+              href={`/${item.creator.username}`}
+              className="hover:underline text-nowrap dark:text-blue-600"
+            >
+              {item.creator?.displayName}
+            </a>
+          </UserHoverInfo>
         </td>
         <td>
           <div className="flex items-center gap-2">
@@ -96,7 +99,7 @@ export default function Item({
                     <Badge
                       icon={<PenFilled fontSize={15} />}
                       appearance="tint"
-                      color="success"
+                      color="important"
                     >
                       Editar
                     </Badge>
@@ -109,7 +112,7 @@ export default function Item({
                 <Badge
                   icon={<DeleteFilled fontSize={15} />}
                   appearance="tint"
-                  color="danger"
+                  color="informative"
                 >
                   Eliminar
                 </Badge>

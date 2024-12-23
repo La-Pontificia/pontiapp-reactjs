@@ -21,6 +21,7 @@ import {
   TaskListSquarePersonRegular
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
+import { useAuth } from '~/store/auth'
 
 type ItemNav = {
   icon?: FluentIcon
@@ -72,7 +73,7 @@ const ItemNav = (props: ItemNav) => {
 }
 
 export default function AssistsEvents() {
-  // const { user: authUser } = useAuth()
+  const { user: authUser } = useAuth()
   return (
     <ReusableSidebar>
       <nav className="px-7 pt-4 pb-1">
@@ -86,28 +87,35 @@ export default function AssistsEvents() {
         >
           Eventos
         </ItemNav>
-        <ItemNav
-          icon={GuestAddRegular}
-          iconActive={GuestAddFilled}
-          href="/m/events/register"
-        >
-          Registrar asistencia
-        </ItemNav>
-        <ItemNav
-          icon={TaskListSquarePersonRegular}
-          iconActive={TaskListSquarePersonFilled}
-          href="/m/events/records"
-        >
-          Registros
-        </ItemNav>
+        {authUser.hasPrivilege('events:records:register') && (
+          <ItemNav
+            icon={GuestAddRegular}
+            iconActive={GuestAddFilled}
+            href="/m/events/register"
+          >
+            Registrar asistencia
+          </ItemNav>
+        )}
+        {authUser.hasPrivilege('events:records:view') && (
+          <ItemNav
+            icon={TaskListSquarePersonRegular}
+            iconActive={TaskListSquarePersonFilled}
+            href="/m/events/records"
+          >
+            Registros
+          </ItemNav>
+        )}
 
-        <ItemNav
-          icon={DocumentTableRegular}
-          iconActive={DocumentTableFilled}
-          href="/m/events/report-files"
-        >
-          Archivos de reportes
-        </ItemNav>
+        {authUser.hasPrivilege('events:records:reportFiles') && (
+          <ItemNav
+            icon={DocumentTableRegular}
+            iconActive={DocumentTableFilled}
+            href="/m/events/report-files"
+          >
+            Archivos de reportes
+          </ItemNav>
+        )}
+
         <Accordion multiple defaultOpenItems={['1']} collapsible>
           <AccordionItem value="1">
             <AccordionHeader expandIconPosition="end" className="pl-4">

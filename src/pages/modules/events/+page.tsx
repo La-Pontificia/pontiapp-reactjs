@@ -70,15 +70,17 @@ export default function EventsPage() {
   return (
     <div className="flex flex-col w-full pb-3 overflow-auto h-full">
       <nav className="pb-3 pt-4 flex border-b border-neutral-500/30 items-center gap-4">
-        <Form
-          refetch={refetch}
-          triggerProps={{
-            disabled: isLoading || !authUser.hasPrivilege('events:create'),
-            appearance: 'primary',
-            icon: <AddFilled />,
-            children: <span>Nuevo</span>
-          }}
-        />
+        {authUser.hasPrivilege('events:create') && (
+          <Form
+            refetch={refetch}
+            triggerProps={{
+              disabled: isLoading,
+              appearance: 'primary',
+              icon: <AddFilled />,
+              children: <span>Nuevo</span>
+            }}
+          />
+        )}
         <SearchBox
           appearance="filled-lighter-shadow"
           disabled={isLoading}
@@ -98,10 +100,22 @@ export default function EventsPage() {
           {items.length > 1 ? 's' : ''}
         </p>
       </nav>
-      <div className="overflow-auto flex-grow rounded-xl pt-2 h-full">
+      <div className="overflow-auto flex flex-col flex-grow rounded-xl pt-2 h-full">
         {isLoading ? (
           <div className="h-full grid place-content-center">
             <Spinner size="huge" />
+          </div>
+        ) : items && items?.length < 1 ? (
+          <div className="grid place-content-center flex-grow">
+            <img
+              src="/search.webp"
+              width={80}
+              alt="No se encontraron resultados"
+              className="mx-auto"
+            />
+            <p className="text-xs opacity-60 pt-5">
+              No se encontraron resultados para la búsqueda
+            </p>
           </div>
         ) : (
           <table className="w-full relative">
