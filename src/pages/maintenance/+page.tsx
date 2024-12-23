@@ -6,8 +6,8 @@ export default function MaintenancePage() {
           Estamos actualizando la plataforma
         </h1>
         <p className="text-xs opacity-50">
-          Por favor, vuelve a intentar en unos minutos. Gracias por tu
-          comprensión.
+          Por favor, inténtelo nuevamente en unos minutos. Gracias. Atte., el
+          equipo de desarrollo La Pontificia.
         </p>
       </div>
     </div>
