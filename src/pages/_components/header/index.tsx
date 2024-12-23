@@ -14,6 +14,7 @@ import {
 import { Link, useLocation } from 'react-router'
 import UserMenu from './menu'
 import UserFeedback from './feedback'
+import { useAuth } from '~/store/auth'
 
 const Toggles = () => {
   const toggleSidebar = useUi((s) => s.toggleSidebar)
@@ -79,6 +80,7 @@ const Toggles = () => {
 export default function RootHeader() {
   const isHeaderOpen = useUi((s) => s.isHeaderOpen)
   const toggleHeader = useUi((s) => s.toggleHeader)
+  const { user } = useAuth()
   return (
     <header
       style={{
@@ -89,7 +91,7 @@ export default function RootHeader() {
     >
       <nav className="flex flex-grow gap-2 items-center basis-0">
         <Toggles />
-        <Link to="/" className="flex items-center gap-1">
+        <Link to={`/${user.username}`} className="flex items-center gap-1">
           <img src="/_lp-only-logo.webp" className="" width={25} alt="" />
           <img
             src="/_lp_only-letters.webp"
