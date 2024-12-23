@@ -27,12 +27,6 @@ export default function AssistsReportFilesPage() {
         <Spinner size="huge" />
       </div>
     )
-  if (!reports && !isLoading)
-    return (
-      <div className="h-full w-full grid place-content-center">
-        No hay archivos de reportes
-      </div>
-    )
 
   // "created_at": "2024-11-18T08:51:18.000000Z",
 

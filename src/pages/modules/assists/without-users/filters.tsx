@@ -31,6 +31,7 @@ import { format } from '~/lib/dayjs'
 import { Link } from 'react-router'
 import { api } from '~/lib/api'
 import { toast } from '~/commons/toast'
+import { useAuth } from '~/store/auth'
 
 export default function AssistFilters({
   isTerminalsLoading,
@@ -48,6 +49,7 @@ export default function AssistFilters({
   const [q, setQ] = React.useState<string | null>(null)
   const [openReport, setOpenReport] = React.useState(false)
   const [reporting, setReporting] = React.useState(false)
+  const { user: authUser } = useAuth()
 
   const [selectedTerminals, setSelectedTerminals] = React.useState<
     AssistTerminal[]
@@ -203,21 +205,23 @@ export default function AssistFilters({
         >
           Filtrar
         </Button>
-        <div className="ml-auto">
-          <Button
-            disabled={
-              isLoading || !endDate || !startDate || !selectedTerminals.length
-            }
-            icon={<DockRegular />}
-            appearance="secondary"
-            onClick={() => setOpenReport(true)}
-            style={{
-              border: 0
-            }}
-          >
-            <span className="hidden xl:block">Generar reporte</span>
-          </Button>
-        </div>
+        {authUser.hasPrivilege('assists:report') && (
+          <div className="ml-auto">
+            <Button
+              disabled={
+                isLoading || !endDate || !startDate || !selectedTerminals.length
+              }
+              icon={<DockRegular />}
+              appearance="secondary"
+              onClick={() => setOpenReport(true)}
+              style={{
+                border: 0
+              }}
+            >
+              <span className="hidden xl:block">Generar reporte</span>
+            </Button>
+          </div>
+        )}
       </nav>
       <nav className="pt-3 flex gap-2 flex-wrap">
         {selectedTerminals.map((terminal) => (

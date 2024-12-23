@@ -33,6 +33,7 @@ import { api } from '~/lib/api'
 import { toast } from '~/commons/toast'
 import { Job } from '~/types/job'
 import { Area } from '~/types/area'
+import { useAuth } from '~/store/auth'
 
 export default function AssistFilters({
   isTerminalsLoading,
@@ -53,6 +54,7 @@ export default function AssistFilters({
   jobs: Job[]
   isJobsLoading: boolean
 }) {
+  const { user: authUser } = useAuth()
   const [startDate, setStartDate] = React.useState<Date | null>(null)
   const [endDate, setEndDate] = React.useState<Date | null>(null)
   const [q, setQ] = React.useState<string | null>(null)
@@ -271,21 +273,23 @@ export default function AssistFilters({
         >
           Filtrar
         </Button>
-        <div className="ml-auto">
-          <Button
-            disabled={
-              isLoading || !endDate || !startDate || !selectedTerminals.length
-            }
-            icon={<DockRegular />}
-            appearance="secondary"
-            onClick={() => setOpenReport(true)}
-            style={{
-              border: 0
-            }}
-          >
-            <span className="hidden xl:block">Generar reporte</span>
-          </Button>
-        </div>
+        {authUser.hasPrivilege('assists:report') && (
+          <div className="ml-auto">
+            <Button
+              disabled={
+                isLoading || !endDate || !startDate || !selectedTerminals.length
+              }
+              icon={<DockRegular />}
+              appearance="secondary"
+              onClick={() => setOpenReport(true)}
+              style={{
+                border: 0
+              }}
+            >
+              <span className="hidden xl:block">Generar reporte</span>
+            </Button>
+          </div>
+        )}
       </nav>
       <nav className="pt-3 flex gap-2 flex-wrap">
         {selectedTerminals.map((terminal) => (

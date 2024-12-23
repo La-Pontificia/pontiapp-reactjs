@@ -22,6 +22,8 @@ import {
   type FluentIcon,
   FolderFilled,
   FolderRegular,
+  PersonCircleFilled,
+  PersonCircleRegular,
   // PersonCircleFilled,
   // PersonCircleRegular,
   PersonDeleteFilled,
@@ -30,6 +32,7 @@ import {
   TextBulletListSquareClockRegular
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
+import { useAuth } from '~/store/auth'
 
 type ItemNav = {
   icon?: FluentIcon
@@ -87,91 +90,93 @@ const ItemNav = (props: ItemNav) => {
 }
 
 export const AssistsSidebar = () => {
-  // const { user: authUser } = useAuth()
+  const { user: authUser } = useAuth()
   return (
     <ReusableSidebar>
       <nav className="px-7 pt-4 pb-1">
         <h2 className="text-sm opacity-70">Asistencias</h2>
       </nav>
       <nav className="pr-2 py-2 px-3">
-        {/* <ItemNav
-          icon={PersonCircleRegular}
-          iconActive={PersonCircleFilled}
-          href="/m/assists/my"
-        >
-          Mis asistencias
-        </ItemNav> */}
-        <ItemNav
-          badge="Preview"
-          icon={ClockRegular}
-          iconActive={ClockFilled}
-          href="/m/assists"
-        >
-          Asistencias
-        </ItemNav>
-        {/* <ItemNav
-          icon={PersonClockRegular}
-          iconActive={PersonClockFilled}
-          href="/m/assists/per-user"
-        >
-          Por usuario
-        </ItemNav>
-        <ItemNav
-          icon={PeopleTeamRegular}
-          iconActive={PeopleTeamRegular}
-          href="/m/assists/per-team"
-        >
-          Por grupo
-        </ItemNav> */}
-        <ItemNav
-          icon={DocumentPersonRegular}
-          iconActive={DocumentPersonFilled}
-          href="/m/assists/with-users"
-        >
-          Con usuarios
-        </ItemNav>
-        <ItemNav
-          icon={PersonDeleteRegular}
-          iconActive={PersonDeleteFilled}
-          href="/m/assists/without-users"
-        >
-          Sin usuarios
-        </ItemNav>
-        <ItemNav
-          icon={TextBulletListSquareClockRegular}
-          iconActive={TextBulletListSquareClockFilled}
-          href="/m/assists/summary"
-        >
-          Resumen único
-        </ItemNav>
+        {authUser.hasPrivilege('assists:my') && (
+          <ItemNav
+            icon={PersonCircleRegular}
+            iconActive={PersonCircleFilled}
+            href="/m/assists/my"
+          >
+            Mis asistencias
+          </ItemNav>
+        )}
+        {authUser.hasPrivilege('assists:schedules') && (
+          <ItemNav
+            badge="Preview"
+            icon={ClockRegular}
+            iconActive={ClockFilled}
+            href="/m/assists"
+          >
+            Asistencias
+          </ItemNav>
+        )}
+        {authUser.hasPrivilege('assists:withUsers') && (
+          <ItemNav
+            icon={DocumentPersonRegular}
+            iconActive={DocumentPersonFilled}
+            href="/m/assists/with-users"
+          >
+            Con usuarios
+          </ItemNav>
+        )}
+        {authUser.hasPrivilege('assists:withoutUsers') && (
+          <ItemNav
+            icon={PersonDeleteRegular}
+            iconActive={PersonDeleteFilled}
+            href="/m/assists/without-users"
+          >
+            Sin usuarios
+          </ItemNav>
+        )}
+        {authUser.hasPrivilege('assists:summary') && (
+          <ItemNav
+            icon={TextBulletListSquareClockRegular}
+            iconActive={TextBulletListSquareClockFilled}
+            href="/m/assists/summary"
+          >
+            Resumen único
+          </ItemNav>
+        )}
 
-        <ItemNav
-          icon={DocumentTableRegular}
-          iconActive={DocumentTableFilled}
-          href="/m/assists/report-files"
-        >
-          Archivos de reportes
-        </ItemNav>
+        {authUser.hasPrivilege('assists:reportFiles') && (
+          <ItemNav
+            icon={DocumentTableRegular}
+            iconActive={DocumentTableFilled}
+            href="/m/assists/report-files"
+          >
+            Archivos de reportes
+          </ItemNav>
+        )}
         <Accordion multiple defaultOpenItems={['1']} collapsible>
           <AccordionItem value="1">
             <AccordionHeader expandIconPosition="end" className="pl-4">
               <span className="font-semibold">Ajustes</span>
             </AccordionHeader>
             <AccordionPanel className="p-0 !mx-5">
-              <ItemNav
-                icon={FolderRegular}
-                iconActive={FolderFilled}
-                href="/m/assists/terminals"
-              >
-                Biometricos
-              </ItemNav>
-              <ItemNav
-                icon={CloudDatabaseRegular}
-                iconActive={CloudDatabaseFilled}
-                href="/m/assists/databases"
-              >
-                Bases de datos
-              </ItemNav>
+              {authUser.hasPrivilege('assists:assistTerminals') && (
+                <ItemNav
+                  icon={FolderRegular}
+                  iconActive={FolderFilled}
+                  href="/m/assists/terminals"
+                >
+                  Biometricos
+                </ItemNav>
+              )}
+              {authUser.hasPrivilege('assists:databases') && (
+                <ItemNav
+                  icon={CloudDatabaseRegular}
+                  iconActive={CloudDatabaseFilled}
+                  href="/m/assists/databases"
+                >
+                  Bases de datos
+                </ItemNav>
+              )}
             </AccordionPanel>
           </AccordionItem>
         </Accordion>
