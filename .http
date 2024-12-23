@@ -1,5 +1,19 @@
 
-GET https://dev.lapontificia.edu.pe/api
+GET http://dev.lapontificia.edu.pe:8000
+
+###
+GET https://dev.lapontificia.edu.pe
+
+###
+GET https://dev.lapontificia.edu.pe:8000
+
+
+ return 200 'API location test successful!'; 
+ add_header Content-Type text/plain;
+
+
+return 200 'API location test successful!';
+add_header Content-Type text/plain;
 
 
 ###
