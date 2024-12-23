@@ -16,12 +16,7 @@ import { api } from '~/lib/api'
 import { handleError } from '~/utils'
 import { toast } from '~/commons/toast'
 
-import {
-  DeleteFilled,
-  PenFilled,
-  TicketDiagonalRegular
-} from '@fluentui/react-icons'
-import Form from './form'
+import { DeleteFilled, TicketDiagonalRegular } from '@fluentui/react-icons'
 import { useAuth } from '~/store/auth'
 import { AttentionTicket } from '~/types/attention-ticket'
 import { timeAgoShort } from '~/lib/dayjs'
