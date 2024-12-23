@@ -213,21 +213,123 @@ export default function MainRoutes() {
             <Route index element={<EdasPage />} />
             <Route path="collaborators" element={<CollaboratorsPage />} />
           </Route>
-          <Route path="assists" element={<AssistsLayout />}>
-            <Route index element={<AssistsPage />} />
-            <Route path="my" element={<AssistsMyPage />} />
-            <Route path="report-files" element={<AssistsReportFilesPage />} />
-            <Route path="terminals" element={<AssistTerminalsPage />} />
-            <Route path="without-users" element={<AssistsWithoutUsersPage />} />
-            <Route path="with-users" element={<AssistsWithUsersPage />} />
-            <Route path="summary" element={<AssistsSummaryPage />} />
-            <Route path="databases" element={<AssistsDatabasesPage />} />
+          <Route
+            path="assists"
+            element={
+              <ProtectedModule navigate="/" has="assists">
+                <AssistsLayout />
+              </ProtectedModule>
+            }
+          >
+            <Route
+              index
+              element={
+                <Protected has="assists:schedules" navigate="/">
+                  <AssistsPage />
+                </Protected>
+              }
+            />
+            <Route
+              path="my"
+              element={
+                <Protected has="assists:my" navigate="/m/assists">
+                  <AssistsMyPage />
+                </Protected>
+              }
+            />
+            <Route
+              path="report-files"
+              element={
+                <Protected has="assists:reportFiles" navigate="/m/assists">
+                  <AssistsReportFilesPage />
+                </Protected>
+              }
+            />
+
+            <Route
+              path="without-users"
+              element={
+                <Protected has="assists:withoutUsers" navigate="/m/assists">
+                  <AssistsWithoutUsersPage />
+                </Protected>
+              }
+            />
+            <Route
+              path="with-users"
+              element={
+                <Protected has="assists:withUsers" navigate="/m/assists">
+                  <AssistsWithUsersPage />
+                </Protected>
+              }
+            />
+            <Route
+              path="summary"
+              element={
+                <Protected has="assists:summary" navigate="/m/assists">
+                  <AssistsSummaryPage />
+                </Protected>
+              }
+            />
+            <Route
+              path="terminals"
+              element={
+                <Protected has="assists:assistTerminals" navigate="/m/assists">
+                  <AssistTerminalsPage />
+                </Protected>
+              }
+            />
+            <Route
+              path="databases"
+              element={
+                <Protected has="assists:databases" navigate="/m/assists">
+                  <AssistsDatabasesPage />
+                </Protected>
+              }
+            />
           </Route>
-          <Route path="events" element={<EventsLayout />}>
-            <Route index element={<EventsPage />} />
-            <Route path="register" element={<EventsRegister />} />
-            <Route path="records" element={<EventsRecordsPage />} />
-            <Route path="report-files" element={<EventsReportFilesPage />} />
+          <Route
+            path="events"
+            element={
+              <ProtectedModule navigate="/" has="events">
+                <EventsLayout />
+              </ProtectedModule>
+            }
+          >
+            <Route
+              index
+              element={
+                <ProtectedModule has="events" navigate="/">
+                  <EventsPage />
+                </ProtectedModule>
+              }
+            />
+            <Route
+              path="register"
+              element={
+                <Protected has="events:records:register" navigate="/m/events">
+                  <EventsRegister />
+                </Protected>
+              }
+            />
+            <Route
+              path="records"
+              element={
+                <Protected has="events:records:view" navigate="/m/events">
+                  <EventsRecordsPage />
+                </Protected>
+              }
+            />
+            <Route
+              path="report-files"
+              element={
+                <Protected
+                  has="events:records:reportFiles"
+                  navigate="/m/events"
+                >
+                  <EventsReportFilesPage />
+                </Protected>
+              }
+            />
           </Route>
           <Route path="attentions" element={<AttentionsLayout />}>
             <Route index element={<AttentionsPage />} />

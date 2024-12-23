@@ -1,8 +1,12 @@
 import { useAuth } from '~/store/auth'
 import { Helmet } from 'react-helmet'
+import { Navigate } from 'react-router'
 
 export default function HomePage() {
   const { user } = useAuth()
+
+  return <Navigate to={`/${user.username}`} />
+
   const now = new Date()
   const hours = now.getHours()
 
