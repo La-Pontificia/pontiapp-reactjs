@@ -1,5 +1,5 @@
 import { useAuth } from '~/store/auth'
-import { Tooltip } from '@fluentui/react-components'
+import { Avatar, Tooltip } from '@fluentui/react-components'
 import {
   ClockBillFilled,
   ClockBillRegular,
@@ -21,6 +21,7 @@ type ItemNav = {
   icon: FluentIcon
   activeIcon: FluentIcon
   href: string
+  image?: string
   tooltip: string
   text: string
 }
@@ -49,8 +50,19 @@ const ItemNav = (props: ItemNav) => {
         <div className="absolute inset-y-0 group-hover:py-4 group-data-[active]:py-4 py-6 transition-all left-0">
           <div className="h-full w-[3px] group-hover:bg-stone-500/50 transition-all group-data-[active]:dark:bg-[#1e38e2] rounded-xl"></div>
         </div>
-        <div className="w-[55px] flex items-center flex-col justify-center aspect-[10/8] py-0.5 text-center rounded-[14px] group-hover:dark:bg-[#0c0b0d] transition-all group-data-[active]:dark:bg-[#0d0d0f] border group-data-[active]:dark:border-violet-300/20 border-transparent">
-          <Icon fontSize={25} />
+        <div className="w-[55px] flex items-center flex-col justify-center aspect-[10/9] py-0.5 text-center rounded-[14px] group-hover:dark:bg-[#0c0b0d] transition-all group-data-[active]:dark:bg-[#0d0d0f] border group-data-[active]:dark:border-violet-300/20 border-transparent">
+          {props.image ? (
+            <Avatar
+              name={props.text}
+              color="colorful"
+              size={24}
+              image={{
+                src: props.image
+              }}
+            />
+          ) : (
+            <Icon fontSize={25} />
+          )}
           <p className="text-[10px] pt-0.5 leading-4 line-clamp-1">
             {props.text}
           </p>
@@ -65,11 +77,12 @@ export const RootSidebar = () => {
   return (
     <nav className="flex pl-1 relative z-[1] flex-col space-y-2 justify-center">
       <ItemNav
-        tooltip="Ponti App"
-        text="Inicio"
+        tooltip={authUser.displayName}
+        text={authUser.displayName}
+        image={authUser.photoURL}
         icon={HomeRegular}
         activeIcon={HomeFilled}
-        href="/"
+        href={`/${authUser.username}`}
       />
 
       {authUser.hasModule('users') && (
