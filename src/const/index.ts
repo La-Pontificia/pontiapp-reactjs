@@ -147,6 +147,7 @@ export const PRIVILEGES = {
   'assists:withoutUsers': 'Asistencias sin usuarios',
   'assists:summary': 'Resumen único de asistencias',
   'assists:report': 'Generar reportes de asistencias',
+  'assists:reportFiles': 'Ver reportes de asistencias',
   'assists:databases': 'Bases de datos de asistencias',
   'assists:assistTerminals': 'Terminales de asistencias',
 
