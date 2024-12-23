@@ -15,7 +15,9 @@ export default function EventsReportFilesPage() {
   const { data: reports, isLoading } = useQuery<Report[]>({
     queryKey: ['sssists', 'report-files'],
     queryFn: async () => {
-      const res = await api.get<Report[]>('partials/reports/all')
+      const res = await api.get<Report[]>(
+        'partials/reports/all?module=events-records'
+      )
       if (!res.ok) return []
       return res.data.map((d) => new Report(d))
     }

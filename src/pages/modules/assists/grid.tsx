@@ -66,7 +66,7 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                   </UserHoverInfo>
                 </td>
                 <td>
-                  <p>{assist.terminal.name}</p>
+                  <p>{assist.terminal?.name}</p>
                 </td>
                 <td>
                   <div className="flex items-center capitalize gap-2">

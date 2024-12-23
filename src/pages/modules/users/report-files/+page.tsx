@@ -15,7 +15,7 @@ export default function UsersReportFilesPage() {
   const { data: reports, isLoading } = useQuery<Report[]>({
     queryKey: ['users', 'report-files'],
     queryFn: async () => {
-      const res = await api.get<Report[]>('partials/reports/all')
+      const res = await api.get<Report[]>('partials/reports/all?module=users')
       if (!res.ok) return []
       return res.data.map((d) => new Report(d))
     }

@@ -1,5 +1,5 @@
 import { days } from '~/const'
-import { countRangeMinutes, format, formatTime } from '~/lib/dayjs'
+import { countRangeMinutes, format } from '~/lib/dayjs'
 import { Schedule } from '~/types/schedule'
 import { Badge } from '@fluentui/react-components'
 import { CalendarRegular, ClockRegular } from '@fluentui/react-icons'
@@ -27,9 +27,8 @@ export const ScheduleItem = ({ schedule }: { schedule: Schedule }) => {
         <ClockRegular fontSize={22} className="opacity-60" />
         <div className="flex-grow">
           <p className="text-xs">
-            {formatTime(schedule.from, 'h:mm A')} -{' '}
-            {formatTime(schedule.to, 'h:mm A')} (
-            {countRangeMinutes(schedule.from, schedule.to)})
+            {format(schedule.from, 'h:mm A')} - {format(schedule.to, 'h:mm A')}{' '}
+            ({countRangeMinutes(schedule.from, schedule.to)})
           </p>
         </div>
       </div>

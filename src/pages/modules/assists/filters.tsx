@@ -263,7 +263,7 @@ export default function AssistFilters({
               startDate,
               endDate,
               q,
-              terminalsIds: selectedTerminals.map((o) => o.id),
+              terminalsIds: selectedTerminals.map((o) => o.id).join(','),
               areaId: area?.id ?? null,
               jobId: job?.id ?? null
             })

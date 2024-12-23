@@ -50,6 +50,7 @@ export default function BasicUser({
   })
   const [showPassword, setShowPassword] = React.useState(false)
   const [autoGeneratePassword, setAutoGeneratePassword] = React.useState(true)
+
   return (
     <div className="space-y-5">
       <div className="flex items-center gap-1">

@@ -15,7 +15,7 @@ export type Filter = {
   startDate: Date | null
   endDate: Date | null
   q: string | null
-  terminalsIds: string[]
+  terminalsIds: string | null
   areaId: string | null
   jobId: string | null
 }
@@ -25,7 +25,7 @@ export default function AssistsPage() {
     startDate: null,
     endDate: null,
     q: null,
-    terminalsIds: [],
+    terminalsIds: null,
     areaId: null,
     jobId: null
   })
@@ -64,8 +64,9 @@ export default function AssistsPage() {
   })
 
   const { data, isLoading: isAssistsLoading } = useQuery<{
-    matchedAssists: Assist[]
-    restAssists: RestAssist[]
+    schedules: Assist[]
+    remainingRecords: RestAssist[]
+    allRecords: number
   }>({
     queryKey: ['assists', 'centralized', filters],
     queryFn: async () => {
@@ -75,27 +76,28 @@ export default function AssistsPage() {
       if (filters.endDate)
         uri += `&endDate=${format(filters.endDate, 'YYYY-MM-DD')}`
       if (filters.q) uri += `&q=${filters.q}`
-      if (filters.terminalsIds.length > 0)
-        uri += `&assistTerminals=${filters.terminalsIds.join(',')}`
+      if (filters.terminalsIds)
+        uri += `&assistTerminals=${filters.terminalsIds}`
       if (filters.areaId) uri += `&areaId=${filters.areaId}`
       if (filters.jobId) uri += `&jobId=${filters.jobId}`
 
       const res = await api.get<{
-        matchedAssists: Assist[]
-        restAssists: RestAssist[]
+        schedules: Assist[]
+        remainingRecords: RestAssist[]
+        allRecords: number
       }>(uri)
       if (!res.ok)
         return {
-          matchedAssists: [],
-          restAssists: []
+          schedules: [],
+          remainingRecords: [],
+          allRecords: 0
         }
       return {
-        matchedAssists: res.data.matchedAssists.map(
-          (assist) => new Assist(assist)
-        ),
-        restAssists: res.data.restAssists.map(
+        schedules: res.data.schedules.map((assist) => new Assist(assist)),
+        remainingRecords: res.data.remainingRecords.map(
           (assist) => new RestAssist(assist)
-        )
+        ),
+        allRecords: res.data.allRecords
       }
     }
   })
@@ -105,8 +107,10 @@ export default function AssistsPage() {
   }
 
   const tabs = {
-    matched: 'Asistencias con horarios calculados',
-    rest: `Sin procesadas (${data?.restAssists.length ?? 0})`
+    matched: `(${
+      (data?.allRecords ?? 0) - (data?.remainingRecords.length ?? 0)
+    }) procesadas en (${data?.schedules.length ?? 0}) horarios`,
+    rest: `Sin procesadas (${data?.remainingRecords.length ?? 0})`
   }
 
   return (
@@ -131,8 +135,7 @@ export default function AssistsPage() {
       </header>
 
       <div className="overflow-auto flex flex-col flex-grow rounded-xl">
-        {(!filters.endDate && !filters.startDate) ||
-        !filters.terminalsIds.length ? (
+        {(!filters.endDate && !filters.startDate) || !filters.terminalsIds ? (
           <div className="flex-grow grid place-content-center h-full">
             <p className="text-xs text-center opacity-60">
               Por favor, selecciona un rango de fechas y terminales para filtrar
@@ -168,10 +171,10 @@ export default function AssistsPage() {
                 </div>
                 <div className="overflow-auto">
                   {tab === 'matched' && (
-                    <AssistsGrid assists={data?.matchedAssists ?? []} />
+                    <AssistsGrid assists={data?.schedules ?? []} />
                   )}
                   {tab === 'rest' && (
-                    <RestAssistsGrid assists={data?.restAssists ?? []} />
+                    <RestAssistsGrid assists={data?.remainingRecords ?? []} />
                   )}
                 </div>
               </div>

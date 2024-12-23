@@ -25,6 +25,7 @@ import {
 import {
   CopyRegular,
   MoreHorizontal20Filled,
+  PenRegular,
   SendFilled
 } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
@@ -45,6 +46,8 @@ const UserSlugContext = createContext<AuthState>({} as AuthState)
 export const useSlugUser = () => React.useContext(UserSlugContext)
 
 export default function CollaboratorsSlugLayout(): JSX.Element {
+  const { user: authUser } = useAuth()
+
   const params = useParams<{
     slug: string
   }>()
@@ -171,8 +174,26 @@ export default function CollaboratorsSlugLayout(): JSX.Element {
                           WhatsApp
                         </button>
                       )}
+                      {authUser.hasPrivilege('users:edit') && (
+                        <div className="max-lg:hidden">
+                          <Button
+                            onClick={() =>
+                              navigate(`/m/users/edit/${user.username}`)
+                            }
+                            appearance="secondary"
+                            icon={<PenRegular />}
+                          >
+                            Editar
+                          </Button>
+                        </div>
+                      )}
                       {user && <UserOptions refetch={refetch} user={user} />}
                     </div>
+                    {!user?.status && (
+                      <p className="dark:text-red-500 text-sm">
+                        Sin acceso a la aplicación.
+                      </p>
+                    )}
                   </div>
                 </>
               )

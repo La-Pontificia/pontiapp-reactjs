@@ -24,7 +24,7 @@ import {
 import Form from './form'
 import { useAuth } from '~/store/auth'
 import { AttentionTicket } from '~/types/attention-ticket'
-import { timeAgo } from '~/lib/dayjs'
+import { timeAgoShort } from '~/lib/dayjs'
 
 const Status = {
   1: {
@@ -75,6 +75,15 @@ export default function Item({
   }
 
   const state = Status[item.state as keyof typeof Status]
+
+  const [timeAgo, setTimeAgo] = React.useState(timeAgoShort(item.created_at))
+
+  React.useEffect(() => {
+    const interval = setInterval(() => {
+      setTimeAgo(timeAgoShort(item.created_at))
+    }, 10000)
+    return () => clearInterval(interval)
+  }, [item.created_at])
 
   return (
     <>
@@ -140,13 +149,11 @@ export default function Item({
           </Badge>
         </td>
         <td>
-          <p className="text-xs text-nowrap dark:text-blue-500">
-            {timeAgo(item.created_at)}
-          </p>
+          <p className="text-xs text-nowrap dark:text-blue-500">{timeAgo}</p>
         </td>
         <td>
           <div className="flex items-center gap-2">
-            {authUser.hasPrivilege('events:positions:edit') && (
+            {/* {authUser.hasPrivilege('events:positions:edit') && (
               <Form
                 // defaultValues={item}
                 refetch={refetch}
@@ -164,7 +171,7 @@ export default function Item({
                   )
                 }}
               />
-            )}
+            )} */}
             {authUser.hasPrivilege('events:positions:delete') && (
               <button onClick={() => setOpenDelete(true)}>
                 <Badge
@@ -188,7 +195,7 @@ export default function Item({
           <DialogSurface>
             <DialogBody>
               <DialogTitle>
-                ¿Estás seguro de eliminar el ticket: {item.personFirstNames}?
+                ¿Estás seguro de eliminar el ticket de: {item.personFirstNames}?
               </DialogTitle>
               <DialogActions>
                 <DialogTrigger disableButtonEnhancement>

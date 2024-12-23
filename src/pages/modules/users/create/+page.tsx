@@ -186,7 +186,7 @@ export default function CreateCollaboratorPage() {
       data: JSON.stringify(newData)
     })
     if (res.ok) {
-      return navigate(`/modules/collaborators/${res.data.username}`)
+      return navigate(`/m/users/${res.data.username}`)
     }
     toast(res.error)
 

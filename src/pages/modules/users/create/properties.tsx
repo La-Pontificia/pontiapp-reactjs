@@ -9,7 +9,8 @@ import {
   DrawerHeaderTitle,
   Field,
   Input,
-  Select
+  Select,
+  Spinner
 } from '@fluentui/react-components'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import {
@@ -33,6 +34,7 @@ import { toast } from '~/commons/toast'
 import { api } from '~/lib/api'
 import { FaWhatsapp } from 'react-icons/fa'
 import { emailRegex, phoneRegex } from '~/const/regex'
+import { getPersonByDocumentId } from '~/utils/fetch'
 
 export default function PropertiesUser({
   control,
@@ -43,9 +45,10 @@ export default function PropertiesUser({
   watch: UseFormWatch<FormValues>
   setValue: UseFormSetValue<FormValues>
 }) {
-  const { photoURL, contacts } = watch()
+  const { photoURL, contacts, documentId } = watch()
   const imageRef = React.useRef<HTMLInputElement>(null)
 
+  const [searching, setSearching] = React.useState(false)
   const handeImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0]
     if (!file) return
@@ -70,6 +73,27 @@ export default function PropertiesUser({
 
     setValue('photoURL', res.data)
   }
+
+  React.useEffect(() => {
+    const getPerson = async () => {
+      setSearching(true)
+      try {
+        const person = await getPersonByDocumentId(documentId)
+        if (!person) return
+        setValue('firstNames', person.firstNames)
+        setValue('lastNames', person.lastNames)
+        setSearching(false)
+      } catch (error) {
+        console.log(error)
+        toast('No se pudo obtener la información del colaborador')
+      } finally {
+        setSearching(false)
+      }
+    }
+    if (documentId && documentId.length === 8) {
+      void getPerson()
+    }
+  }, [documentId, setValue])
 
   return (
     <div className="grid grid-cols-2 gap-5">
@@ -100,11 +124,15 @@ export default function PropertiesUser({
             label="Documento de identidad"
             required
           >
-            <Input {...field} />
+            <Input
+              contentAfter={searching ? <Spinner size="tiny" /> : <></>}
+              {...field}
+            />
           </Field>
         )}
         name="documentId"
       />
+
       <div className="grid grid-cols-2 gap-4 col-span-2">
         <Controller
           control={control}

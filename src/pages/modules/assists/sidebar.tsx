@@ -5,7 +5,8 @@ import {
   AccordionHeader,
   AccordionItem,
   AccordionPanel,
-  Avatar
+  Avatar,
+  Badge
 } from '@fluentui/react-components'
 import {
   ClockFilled,
@@ -37,6 +38,7 @@ type ItemNav = {
   avatar?: string
   children?: React.ReactNode
   emptyIcon?: boolean
+  badge?: string
 }
 const ItemNav = (props: ItemNav) => {
   const { pathname } = useLocation()
@@ -74,6 +76,11 @@ const ItemNav = (props: ItemNav) => {
           />
         )}
         {props.children}
+        {props.badge && (
+          <Badge appearance="tint" color="brand">
+            {props.badge}
+          </Badge>
+        )}
       </div>
     </Link>
   )
@@ -94,7 +101,12 @@ export const AssistsSidebar = () => {
         >
           Mis asistencias
         </ItemNav> */}
-        <ItemNav icon={ClockRegular} iconActive={ClockFilled} href="/m/assists">
+        <ItemNav
+          badge="Preview"
+          icon={ClockRegular}
+          iconActive={ClockFilled}
+          href="/m/assists"
+        >
           Asistencias
         </ItemNav>
         {/* <ItemNav
