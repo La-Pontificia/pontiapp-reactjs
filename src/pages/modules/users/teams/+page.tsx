@@ -1,4 +1,9 @@
-import { Button, Dialog, DialogSurface } from '@fluentui/react-components'
+import {
+  Button,
+  Dialog,
+  DialogSurface,
+  Spinner
+} from '@fluentui/react-components'
 import { PeopleTeamAddRegular } from '@fluentui/react-icons'
 import TeamForm from './form'
 import React from 'react'
@@ -13,7 +18,11 @@ export default function CollaboratorsTeamsPage() {
   const [openForm, setOpenForm] = React.useState(false)
   const { user: authUser } = useAuth()
 
-  const { data, isLoading, refetch } = useQuery<UserTeam[]>({
+  const {
+    data: teams,
+    isLoading,
+    refetch
+  } = useQuery<UserTeam[]>({
     queryKey: ['teams'],
     queryFn: async () => {
       const res = await api.get<UserTeam[]>(
@@ -55,7 +64,29 @@ export default function CollaboratorsTeamsPage() {
         )}
       </nav>
       <div>
-        <GridTeams isLoading={isLoading} refetch={refetch} teams={data || []} />
+        {isLoading && (
+          <div className="flex-grow grid place-content-center">
+            <Spinner size="large" />
+          </div>
+        )}
+
+        {!isLoading && teams && teams?.length < 1 && (
+          <div className="grid place-content-center flex-grow">
+            <img
+              src="/search.webp"
+              width={90}
+              alt="No se encontraron resultados"
+              className="mx-auto"
+            />
+            <p className="text-xs opacity-60 pt-5">
+              No se encontraron resultados para la búsqueda
+            </p>
+          </div>
+        )}
+
+        {!isLoading && teams && teams?.length > 0 && (
+          <GridTeams refetch={refetch} teams={teams || []} />
+        )}
       </div>
     </div>
   )

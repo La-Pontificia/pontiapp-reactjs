@@ -150,30 +150,57 @@ export default function CollaboratorsTeamSlugPage() {
               placeholder="Buscar colaborador"
             />
           </nav>
-          <div className="flex-grow h-full overflow-y-auto">
-            <UserTeamsMemersGrid />
-          </div>
-          {info && (
-            <footer className="flex p-5 justify-center">
-              <div className="flex justify-between w-full">
-                <p className="flex basis-0 flex-grow">
-                  Mostrando {info.from} - {info.to} de {info.total} resultados
-                </p>
-                {info.next_page_url && (
-                  <button
-                    disabled={loadingMore}
-                    onClick={nextPage}
-                    className="dark:text-blue-500 hover:underline"
-                  >
-                    {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
-                  </button>
-                )}
-                <p className="flex basis-0 flex-grow justify-end">
-                  Página {info.current_page} de {info.last_page}
+          <div className="flex-grow flex flex-col h-full overflow-y-auto">
+            {isMemberLoading && (
+              <div className="flex-grow grid place-content-center">
+                <Spinner size="large" />
+              </div>
+            )}
+
+            {!isMemberLoading && members.length < 1 && (
+              <div className="grid place-content-center flex-grow">
+                <img
+                  src="/search.webp"
+                  width={90}
+                  alt="No se encontraron resultados"
+                  className="mx-auto"
+                />
+                <p className="text-xs opacity-60 pt-5">
+                  No se encontraron resultados para la búsqueda
                 </p>
               </div>
-            </footer>
-          )}
+            )}
+
+            {!isMemberLoading && members.length > 0 && (
+              <>
+                <div className="flex flex-grow items-start">
+                  <UserTeamsMemersGrid />
+                </div>
+                {info && (
+                  <footer className="flex p-5 justify-center">
+                    <div className="flex justify-between w-full">
+                      <p className="flex basis-0 flex-grow">
+                        Mostrando {info.from} - {info.to} de {info.total}{' '}
+                        resultados
+                      </p>
+                      {info.next_page_url && (
+                        <button
+                          disabled={loadingMore}
+                          onClick={nextPage}
+                          className="dark:text-blue-500 hover:underline"
+                        >
+                          {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
+                        </button>
+                      )}
+                      <p className="flex basis-0 flex-grow justify-end">
+                        Página {info.current_page} de {info.last_page}
+                      </p>
+                    </div>
+                  </footer>
+                )}
+              </>
+            )}
+          </div>
         </div>
       </div>
     </TeamSlugContext.Provider>

@@ -3,7 +3,7 @@ import UserTeamMemberItem from './member'
 import { useTeamSlug } from './+page'
 
 export default function UserTeamsMemersGrid() {
-  const { isLoading, isLoadingMore, members } = useTeamSlug()
+  const { isLoadingMore, members } = useTeamSlug()
   return (
     <table className="w-full relative">
       <thead className="">
@@ -18,11 +18,10 @@ export default function UserTeamsMemersGrid() {
         </tr>
       </thead>
       <tbody>
-        {!isLoading &&
-          members.map((member) => (
-            <UserTeamMemberItem member={member} key={member.id} />
-          ))}
-        {(isLoadingMore || isLoading) && (
+        {members.map((member) => (
+          <UserTeamMemberItem member={member} key={member.id} />
+        ))}
+        {isLoadingMore && (
           <>
             <SkeletonUserItem />
             <SkeletonUserItem className="opacity-70" />
