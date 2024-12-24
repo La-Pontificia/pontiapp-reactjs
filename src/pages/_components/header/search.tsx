@@ -91,7 +91,7 @@ export default function RootSearch() {
         }
       return {
         files: res.data.files.map((file) => new Report(file)),
-        modules: modulesFiltered,
+        modules: modulesFiltered.filter((module) => !module.disabled),
         users: res.data.users.map((user) => new User(user))
       }
     }
@@ -153,7 +153,7 @@ export default function RootSearch() {
                   Modulos
                 </h2>
                 {/* modules */}
-                <div className="flex justify-between py-2 items-center gap-4 px-7">
+                <div className="flex justify-start py-2 items-center gap-4 px-7">
                   {items?.modules.map((module) => (
                     <button
                       onClick={() => {
