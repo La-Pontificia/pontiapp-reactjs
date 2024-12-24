@@ -14,45 +14,54 @@ import { useDebounced } from '~/hooks/use-debounced'
 import { ExcelColored } from '~/icons'
 import { api } from '~/lib/api'
 import { timeAgo } from '~/lib/dayjs'
+import { useAuth } from '~/store/auth'
 import { Report } from '~/types/report'
 import { User } from '~/types/user'
 
-const modules = [
-  {
-    text: 'Usuarios',
-    icon: PeopleEditRegular,
-    href: '/m/users',
-    className:
-      'group-hover:dark:text-violet-500 group-hover:dark:hover:text-violet-400'
-  },
-  {
-    text: 'Edas',
-    icon: DataHistogramRegular,
-    href: '/m/edas',
-    className:
-      'group-hover:dark:text-green-500 group-hover:dark:hover:text-green-400'
-  },
-  {
-    text: 'Asistencias',
-    icon: ClockBillRegular,
-    href: '/m/assists',
-    className: 'group-hover:dark:text-blue-500 group-hover:dark:text-blue-400'
-  },
-  {
-    text: 'Eventos',
-    icon: MegaphoneLoudRegular,
-    href: '/m/events',
-    className:
-      'group-hover:dark:text-yellow-500 group-hover:dark:text-yellow-400'
-  },
-  {
-    text: 'Atención',
-    icon: TabletSpeakerRegular,
-    href: '/m/attentions',
-    className: 'group-hover:dark:text-red-500 group-hover:dark:text-red-400'
-  }
-]
 export default function RootSearch() {
+  const { user: authUser } = useAuth()
+  const modules = [
+    {
+      text: 'Usuarios',
+      icon: PeopleEditRegular,
+      href: '/m/users',
+      className:
+        'group-hover:dark:text-violet-500 group-hover:dark:hover:text-violet-400',
+      disabled: !authUser?.hasModule('users')
+    },
+    {
+      text: 'Edas',
+      icon: DataHistogramRegular,
+      href: '/m/edas',
+      className:
+        'group-hover:dark:text-green-500 group-hover:dark:hover:text-green-400',
+      disabled: !authUser?.hasModule('edas')
+    },
+    {
+      text: 'Asistencias',
+      icon: ClockBillRegular,
+      href: '/m/assists',
+      className:
+        'group-hover:dark:text-blue-500 group-hover:dark:text-blue-400',
+      disabled: !authUser?.hasModule('assists')
+    },
+    {
+      text: 'Eventos',
+      icon: MegaphoneLoudRegular,
+      href: '/m/events',
+      className:
+        'group-hover:dark:text-yellow-500 group-hover:dark:text-yellow-400',
+      disabled: !authUser?.hasModule('events')
+    },
+    {
+      text: 'Atención',
+      icon: TabletSpeakerRegular,
+      href: '/m/attentions',
+      className: 'group-hover:dark:text-red-500 group-hover:dark:text-red-400',
+      disabled: !authUser?.hasModule('attentions')
+    }
+  ]
+
   const [open, setOpen] = React.useState(false)
   const [q, setQ] = React.useState<string | null>(null)
   const navigate = useNavigate()
@@ -69,8 +78,10 @@ export default function RootSearch() {
       }>(`global/search?q=${q ? q : ''}`)
 
       const modulesFiltered = q
-        ? modules.filter((module) =>
-            module.text.toLowerCase().includes(q.toLowerCase())
+        ? modules.filter(
+            (module) =>
+              module.text.toLowerCase().includes(q.toLowerCase()) &&
+              !module.disabled
           )
         : modules
 
@@ -111,7 +122,8 @@ export default function RootSearch() {
       <div className="z-[99] relative flex flex-col">
         <SearchBox
           input={{
-            onFocus: () => setOpen(true)
+            onFocus: () => setOpen(true),
+            autoComplete: 'off'
           }}
           value={value}
           onChange={(_, e) => {
