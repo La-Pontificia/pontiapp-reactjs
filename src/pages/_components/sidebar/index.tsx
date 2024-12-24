@@ -45,12 +45,12 @@ const ItemNav = (props: ItemNav) => {
       <Link
         data-active={isActive ? '' : undefined}
         to={props.href}
-        className="relative px-1.5 group dark:text-stone-400 hover:dark:text-stone-50 data-[active]:dark:text-[#6e7aff] flex justify-center items-center"
+        className="relative px-1.5 group dark:text-stone-400 hover:dark:text-stone-50 data-[active]:dark:text-[#381aff] flex justify-center items-center"
       >
-        <div className="absolute inset-y-0 group-hover:py-4 group-data-[active]:py-4 py-6 transition-all left-0">
-          <div className="h-full w-[3px] group-hover:bg-stone-500/50 transition-all group-data-[active]:dark:bg-[#1e38e2] rounded-xl"></div>
+        <div className="absolute inset-y-0 group-hover:py-6 group-data-[active]:py-4 py-7 transition-all left-0">
+          <div className="h-full w-[3px] group-hover:dark:bg-[#1e38e2] transition-all group-data-[active]:dark:bg-[#1e38e2] rounded-xl"></div>
         </div>
-        <div className="w-[55px] flex items-center flex-col justify-center aspect-[10/10] py-0.5 text-center rounded-[14px] group-hover:dark:bg-[#0c0b0d] transition-all group-data-[active]:dark:bg-[#0d0d0f] border group-data-[active]:dark:border-violet-300/20 border-transparent">
+        <div className="w-[55px] flex items-center flex-col justify-center aspect-[10/10] py-0.5 text-center rounded-[14px] group-hover:dark:bg-[#0c0b0d] transition-all group-data-[active]:dark:bg-[#0d0d0f] border-transparent">
           {props.image ? (
             <Avatar
               name={props.text}

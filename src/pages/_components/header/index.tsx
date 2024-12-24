@@ -1,13 +1,12 @@
 import { useUi } from '~/store/ui'
 
-import { SearchBox, Tooltip } from '@fluentui/react-components'
+import { Tooltip } from '@fluentui/react-components'
 import {
   ArrowMaximizeRegular,
   ArrowMinimizeRegular,
   CaretDownFilled,
   PanelLeftContractRegular,
   PanelLeftExpandFilled,
-  Search20Regular,
   SearchRegular,
   SettingsRegular
 } from '@fluentui/react-icons'
@@ -15,6 +14,7 @@ import { Link, useLocation } from 'react-router'
 import UserMenu from './menu'
 import UserFeedback from './feedback'
 import { useAuth } from '~/store/auth'
+import RootSearch from './search'
 
 const Toggles = () => {
   const toggleSidebar = useUi((s) => s.toggleSidebar)
@@ -87,9 +87,9 @@ export default function RootHeader() {
         marginTop: isHeaderOpen ? '0' : '-56px'
       }}
       data-hidden={!isHeaderOpen ? '' : undefined}
-      className="h-14 min-h-[56px] transition-all relative dark:text-blue-500 shadow-xl shadow-black/30 justify-between gap-4 text-blue-600 w-full z-20 flex items-center px-2"
+      className="h-14 min-h-[56px] relative transition-all dark:text-blue-500 shadow-xl shadow-black/30 justify-between gap-4 text-blue-600 w-full z-20 flex items-center px-2"
     >
-      <nav className="flex flex-grow gap-2 items-center basis-0">
+      <nav className="flex relative flex-grow gap-2 items-center basis-0">
         <Toggles />
         <Link to={`/${user.username}`} className="flex items-center gap-1">
           <img src="/_lp-only-logo.webp" className="" width={25} alt="" />
@@ -104,22 +104,8 @@ export default function RootHeader() {
           Ponti App
         </h1>
       </nav>
-      <nav className="relative">
-        <div className="hidden lg:block">
-          <SearchBox
-            appearance="filled-lighter-shadow"
-            type="search"
-            autoComplete="off"
-            placeholder="Buscar"
-            className="w-[500px]"
-            style={{
-              borderRadius: '7px',
-              height: '35px'
-            }}
-            contentBefore={<Search20Regular className="text-blue-500" />}
-            size="medium"
-          />
-        </div>
+      <nav className="">
+        <RootSearch />
       </nav>
       <nav className="flex flex-grow basis-0 gap-5 justify-end">
         <Tooltip content="Buscar" relationship="label">
