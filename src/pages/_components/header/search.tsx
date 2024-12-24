@@ -78,17 +78,15 @@ export default function RootSearch() {
       }>(`global/search?q=${q ? q : ''}`)
 
       const modulesFiltered = q
-        ? modules.filter(
-            (module) =>
-              module.text.toLowerCase().includes(q.toLowerCase()) &&
-              !module.disabled
+        ? modules.filter((module) =>
+            module.text.toLowerCase().includes(q.toLowerCase())
           )
         : modules
 
       if (!res.ok)
         return {
           files: [],
-          modules: modulesFiltered,
+          modules: modulesFiltered.filter((module) => !module.disabled),
           users: []
         }
       return {
