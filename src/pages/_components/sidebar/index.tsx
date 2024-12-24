@@ -50,7 +50,7 @@ const ItemNav = (props: ItemNav) => {
         <div className="absolute inset-y-0 group-hover:py-4 group-data-[active]:py-4 py-6 transition-all left-0">
           <div className="h-full w-[3px] group-hover:bg-stone-500/50 transition-all group-data-[active]:dark:bg-[#1e38e2] rounded-xl"></div>
         </div>
-        <div className="w-[55px] flex items-center flex-col justify-center aspect-[10/9] py-0.5 text-center rounded-[14px] group-hover:dark:bg-[#0c0b0d] transition-all group-data-[active]:dark:bg-[#0d0d0f] border group-data-[active]:dark:border-violet-300/20 border-transparent">
+        <div className="w-[55px] flex items-center flex-col justify-center aspect-[10/10] py-0.5 text-center rounded-[14px] group-hover:dark:bg-[#0c0b0d] transition-all group-data-[active]:dark:bg-[#0d0d0f] border group-data-[active]:dark:border-violet-300/20 border-transparent">
           {props.image ? (
             <Avatar
               name={props.text}
@@ -75,7 +75,7 @@ const ItemNav = (props: ItemNav) => {
 export const RootSidebar = () => {
   const { user: authUser } = useAuth()
   return (
-    <nav className="flex pl-1 relative z-[1] flex-col space-y-2 justify-center">
+    <nav className="flex pl-1 relative z-[1] flex-col space-y-1 justify-center">
       <ItemNav
         tooltip={authUser.displayName}
         text={authUser.displayName}
@@ -84,7 +84,6 @@ export const RootSidebar = () => {
         activeIcon={HomeFilled}
         href={`/${authUser.username}`}
       />
-
       {authUser.hasModule('users') && (
         <ItemNav
           tooltip="Gestión de usuarios"
@@ -94,7 +93,6 @@ export const RootSidebar = () => {
           href="/m/users"
         />
       )}
-
       {authUser.hasModule('edas') && (
         <ItemNav
           tooltip="Gestión de Edas"
@@ -104,7 +102,6 @@ export const RootSidebar = () => {
           href="/m/edas"
         />
       )}
-
       {authUser.hasModule('assists') && (
         <ItemNav
           tooltip="Gestión de asistencias"
