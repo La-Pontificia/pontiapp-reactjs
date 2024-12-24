@@ -149,11 +149,17 @@ export default function AllUsersPage() {
         )}
       </nav>
       <div className="w-full h-full flex-col flex flex-grow overflow-auto">
-        {users?.length < 1 ? (
+        {loading && (
+          <div className="flex-grow grid place-content-center">
+            <Spinner size="large" />
+          </div>
+        )}
+
+        {!loading && users?.length < 1 && (
           <div className="grid place-content-center flex-grow">
             <img
               src="/search.webp"
-              width={130}
+              width={90}
               alt="No se encontraron resultados"
               className="mx-auto"
             />
@@ -161,36 +167,39 @@ export default function AllUsersPage() {
               No se encontraron resultados para la búsqueda
             </p>
           </div>
-        ) : (
-          <div className="flex-grow rounded-xl overflow-y-auto">
-            <CollaboratorsGrid
-              refetch={refetch}
-              isLoadingMore={loadingMore}
-              users={users}
-              isLoading={loading}
-            />
-          </div>
         )}
-        {info && (
-          <footer className="flex p-5 justify-center">
-            <div className="flex justify-between w-full">
-              <p className="flex basis-0 flex-grow">
-                Mostrando {info.from} - {info.to} de {info.total} resultados
-              </p>
-              {info.next_page_url && (
-                <button
-                  disabled={loadingMore}
-                  onClick={nextPage}
-                  className="dark:text-blue-500 hover:underline"
-                >
-                  {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
-                </button>
-              )}
-              <p className="flex basis-0 flex-grow justify-end">
-                Página {info.current_page} de {info.last_page}
-              </p>
+
+        {!loading && users?.length > 0 && (
+          <>
+            <div className="flex-grow rounded-xl overflow-y-auto">
+              <CollaboratorsGrid
+                refetch={refetch}
+                isLoadingMore={loadingMore}
+                users={users}
+              />
             </div>
-          </footer>
+            {info && (
+              <footer className="flex p-5 justify-center">
+                <div className="flex justify-between w-full">
+                  <p className="flex basis-0 flex-grow">
+                    Mostrando {info.from} - {info.to} de {info.total} resultados
+                  </p>
+                  {info.next_page_url && (
+                    <button
+                      disabled={loadingMore}
+                      onClick={nextPage}
+                      className="dark:text-blue-500 hover:underline"
+                    >
+                      {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
+                    </button>
+                  )}
+                  <p className="flex basis-0 flex-grow justify-end">
+                    Página {info.current_page} de {info.last_page}
+                  </p>
+                </div>
+              </footer>
+            )}
+          </>
         )}
       </div>
     </div>

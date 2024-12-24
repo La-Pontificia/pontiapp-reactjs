@@ -4,12 +4,10 @@ import { cn } from '~/utils'
 
 export default function UsersGrid({
   users,
-  isLoading,
   isLoadingMore,
   refetch
 }: {
   users: User[]
-  isLoading: boolean
   isLoadingMore: boolean
   refetch: () => void
 }) {
@@ -27,11 +25,10 @@ export default function UsersGrid({
         </tr>
       </thead>
       <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
-        {!isLoading &&
-          users.map((user) => (
-            <UserGrid refetch={refetch} user={user} key={user.id} />
-          ))}
-        {(isLoadingMore || isLoading) && (
+        {users.map((user) => (
+          <UserGrid refetch={refetch} user={user} key={user.id} />
+        ))}
+        {isLoadingMore && (
           <>
             <SkeletonUserItem />
             <SkeletonUserItem className="opacity-70" />
