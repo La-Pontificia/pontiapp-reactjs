@@ -328,7 +328,7 @@ export default function CollaboratorsEditPage() {
           disabled={
             Object.keys(errors).length > 0 ||
             updating ||
-            !authUser.hasPrivilege('users.edit')
+            !authUser.hasPrivilege('users:edit')
           }
           onClick={onSubmit}
         >
