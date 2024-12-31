@@ -27,7 +27,7 @@ export default function LandingLayout() {
               className="group"
             >
               <img
-                className="w-[100%] invert group-hover:invert-0 group-hover:scale-105 grayscale group-hover:grayscale-0 transition-all md:h-[25px] h-[15px]"
+                className="w-[100%] invert group-hover:invert-0 group-hover:scale-105 grayscale group-hover:grayscale-0  md:h-[25px] h-[15px]"
                 src={logo}
                 loading="lazy"
                 alt={acronym + ' Logo' + name}
