@@ -29,7 +29,7 @@ export default function Selection({
               onClick={() => setSelectedService(service)}
               data-selected={selected ? '' : undefined}
               key={service.id}
-              className="p-0.5 text-base transition-all rounded-xl group data-[selected]:bg-gradient-to-tl data-[selected]:from-blue-600 data-[selected]:via-violet-600 data-[selected]:to-lime-600"
+              className="p-0.5 text-base  rounded-xl group data-[selected]:bg-gradient-to-tl data-[selected]:from-blue-600 data-[selected]:via-violet-600 data-[selected]:to-lime-600"
             >
               <div className="dark:bg-neutral-800 rounded-[11px]">
                 <div className="p-4 flex justify-start font-medium">

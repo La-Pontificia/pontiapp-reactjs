@@ -183,7 +183,7 @@ export default function AttentionsRegisterPage() {
             style={{
               marginBottom: isHeaderOpen ? '20px' : '-100px'
             }}
-            className="transition-all absolute bottom-0 inset-x-0 flex justify-center"
+            className=" absolute bottom-0 inset-x-0 flex justify-center"
           >
             <div className="dark:bg-stone-800 gap-1.5 flex p-1 shadow-md shadow-black/40 border rounded-xl border-stone-500/10">
               <Combobox

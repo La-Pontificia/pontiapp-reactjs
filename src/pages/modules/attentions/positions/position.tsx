@@ -53,7 +53,7 @@ export default function Item({
     <>
       <tr
         key={item.id}
-        className="bg-stone-900 [&>td]:px-4 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+        className="bg-stone-100 dark:bg-stone-900 [&>td]:px-4 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
       >
         <td>{item.shortName}</td>
         <td>
