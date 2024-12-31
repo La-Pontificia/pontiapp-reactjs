@@ -60,7 +60,7 @@ export default function UserGrid({
     toast('Jefe actualizado correctamente.')
   }
   return (
-    <tr className="relative even:bg-stone-500/20 [&>td]:text-nowrap transition-colors group [&>td]:p-2.5 [&>td]:px-3 bg-stone-900 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
+    <tr className="relative bg-stone-50/40 dark:bg-stone-900 odd:bg-stone-500/10 dark:even:bg-stone-500/20 [&>td]:text-nowrap  group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
       <td className=" pl-4">
         <label></label>
       </td>
