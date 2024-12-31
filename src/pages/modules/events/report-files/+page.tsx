@@ -42,7 +42,7 @@ export default function EventsReportFilesPage() {
 
   return (
     <div className="w-full h-full flex flex-col">
-      <p className="p-3 text-xs dark:text-blue-500">
+      <p className="p-3 text-xs dark:text-blue-500 text-blue-700">
         Archivos de reportes de registros a eventos.
       </p>
       {reports && reports?.length < 1 ? (
@@ -84,7 +84,7 @@ export default function EventsReportFilesPage() {
                         {items.map((item) => (
                           <tr
                             key={item.id}
-                            className="bg-stone-900 [&>td]:px-4 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+                            className="bg-stone-100 dark:bg-stone-900 [&>td]:px-4 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
                           >
                             <td>
                               <div className="flex items-center gap-2 py-3">
