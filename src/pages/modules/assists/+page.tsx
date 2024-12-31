@@ -117,7 +117,7 @@ export default function AssistsPage() {
     <div className="w-full flex overflow-auto flex-col flex-grow h-full p-3">
       <header>
         <nav className="pb-2">
-          <p className="text-xs dark:text-blue-600">
+          <p className="text-xs dark:text-blue-600 text-blue-700">
             En este apartado podrás visualizar las asistencias de los
             colaboradores calculados con sus horarios respectivos.
           </p>

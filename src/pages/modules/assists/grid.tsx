@@ -40,7 +40,7 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
             return (
               <tr
                 key={key}
-                className="relative [&>td]:py-2 even:bg-stone-500/20 [&>td]:text-nowrap transition-colors [&>td]:px-3 bg-stone-900 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+                className="relative [&>td]:py-2 even:bg-stone-500/20 [&>td]:text-nowrap  [&>td]:px-3 bg-stone-900 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
               >
                 <td>
                   <UserHoverInfo slug={assist.user.username}>

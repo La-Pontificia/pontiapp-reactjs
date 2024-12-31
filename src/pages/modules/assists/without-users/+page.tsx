@@ -72,7 +72,7 @@ export default function AssistsWithoutUsersPage() {
     <div className="w-full flex overflow-auto flex-col flex-grow h-full p-3">
       <header className="pb-3">
         <nav className="pb-2">
-          <p className="text-xs dark:text-blue-600">
+          <p className="text-xs dark:text-blue-600 text-blue-700">
             Aquí podrás ver los registros de asistencias en las bases de datos,
             exactamente como se registraron.
           </p>

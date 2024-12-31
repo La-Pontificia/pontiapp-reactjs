@@ -92,7 +92,7 @@ export default function AssistsWithUsersPage() {
     <div className="w-full flex overflow-auto flex-col flex-grow h-full p-3">
       <header className="pb-3">
         <nav className="pb-2">
-          <p className="text-xs dark:text-blue-600">
+          <p className="text-xs dark:text-blue-600 text-blue-700">
             Asistencias con información de los colaboradores, "solo de los
             usuarios registrados en el sistema".
           </p>

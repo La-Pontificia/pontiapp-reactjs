@@ -32,7 +32,7 @@ export default function AssistsGrid({
           {assists.slice(startSlice, endSlice).map((assist, key) => (
             <tr
               key={key}
-              className="relative [&>td]:py-2 even:bg-stone-500/20 [&>td]:text-nowrap transition-colors [&>td]:px-3 bg-stone-900 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+              className="relative bg-stone-50/40 dark:bg-stone-900 odd:bg-stone-500/10 dark:even:bg-stone-500/20 [&>td]:text-nowrap  group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
             >
               <td>
                 <UserHoverInfo slug={assist.user.username}>
