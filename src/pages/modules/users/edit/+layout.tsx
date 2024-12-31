@@ -113,7 +113,7 @@ export default function CollaboratorsEditLayout(): JSX.Element {
             }}
           />
           <div>
-            <h1 className="font-bold text-lg tracking-tight text-nowrap">
+            <h1 className="dark:font-bold font-semibold text-lg tracking-tight text-nowrap">
               {user.displayName}
             </h1>
             <p className="text-xs opacity-60">
@@ -208,7 +208,10 @@ export const UserOptions = ({
           onClick={() => setIsResetAlertOpen(true)}
           className="flex flex-col text-nowrap items-center gap-1 text-xs rounded-md p-2 hover:bg-stone-500/10"
         >
-          <PersonPasskeyRegular fontSize={20} className="dark:text-blue-600" />
+          <PersonPasskeyRegular
+            fontSize={20}
+            className="dark:text-blue-600 text-blue-700"
+          />
           <span className="max-lg:hidden"> Restablecer contraseña</span>
         </button>
       )}
@@ -217,7 +220,7 @@ export const UserOptions = ({
         disabled
         className="flex disabled:grayscale disabled:opacity-50 flex-col text-nowrap items-center gap-1 text-xs rounded-md p-2 hover:bg-stone-500/10"
       >
-        <IoIosGitMerge size={20} className="dark:text-blue-600" />
+        <IoIosGitMerge size={20} className="dark:text-blue-600 text-blue-700" />
         <span className="max-lg:hidden">Crear versión</span>
       </Button> */}
       <Menu positioning={{ autoSize: true }}>

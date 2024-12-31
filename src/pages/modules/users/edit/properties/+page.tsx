@@ -276,7 +276,7 @@ export default function UsersEditPropertiesPage() {
                   appearance: 'transparent',
                   disabled: updating || !authUser.hasPrivilege('users:edit'),
                   children: (
-                    <span className="dark:text-blue-500">
+                    <span className="dark:text-blue-500 text-blue-700">
                       Agregar o editar contactos
                     </span>
                   )

@@ -53,12 +53,12 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
 
   return (
     <div className="flex flex-col border-t overflow-auto border-neutral-500/30">
-      <h2 className="text-neutral-400 py-2 text-lg">Organización</h2>
+      <h2 className="dark:dark:text-neutral-400 pb-2 text-lg">Organización</h2>
       <div className="flex divide-x max-md:divide-y max-md:flex-col max-md:gap-y-5 max-md:divide-x-0 overflow-auto md:first:[&>div]:pl-0 md:[&>div]:px-3 md:last:[&>div]:pr-0 divide-neutral-500/30">
         {data?.manager && (
           <div className="">
             <h2 className="text-xs pb-2 max-md:pt-2">Jefe (Manager)</h2>
-            <div className="bg-stone-500/10 overflow-hidden rounded-lg shadow-sm dark:shadow-black">
+            <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-hidden rounded-lg shadow-sm dark:shadow-black">
               <PersonItem appearance="vertical" person={data?.manager} />
             </div>
           </div>
@@ -68,7 +68,7 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
             <h2 className="text-xs pb-2 max-md:pt-2">
               Personas reportando a {user?.displayName}
             </h2>
-            <div className="bg-stone-500/10 overflow-auto flex gap-4 rounded-lg shadow-sm dark:shadow-black">
+            <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-auto flex gap-4 rounded-lg shadow-sm dark:shadow-black">
               {data?.subordinates.map((subordinate) => (
                 <PersonItem
                   key={subordinate.id}
@@ -84,7 +84,7 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
             <h2 className="text-xs pb-2 max-md:pt-2">
               {user?.displayName} trabaja con
             </h2>
-            <div className="bg-stone-500/10 overflow-auto flex gap-4 rounded-lg shadow-sm dark:shadow-black">
+            <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-auto flex gap-4 rounded-lg shadow-sm dark:shadow-black">
               {data?.coworkers.map((coworker) => (
                 <PersonItem
                   key={coworker.id}
@@ -126,7 +126,7 @@ const PersonItem = ({
           </div>
           <a
             href={`mailto:${person.email}`}
-            className="dark:text-blue-400 hover:underline"
+            className="dark:text-blue-400 text-blue-700 hover:underline"
           >
             {person.email}
           </a>
@@ -136,7 +136,7 @@ const PersonItem = ({
     >
       <Link
         to={`${rootURL}/${person.username}`}
-        className="flex justify-center space-y-2 w-[150px] min-h-[165px] min-w-[150px] text-center dark:text-neutral-300 hover:bg-stone-500/20 py-3 flex-col items-center px-2"
+        className="flex justify-center space-y-2 w-[150px] min-h-[165px] min-w-[150px] text-center dark:text-neutral-300 hover:bg-stone-500/5 dark:hover:bg-stone-500/20 py-3 flex-col items-center px-2"
       >
         <Avatar
           size={64}

@@ -43,7 +43,7 @@ export default function UsersGrid({
 const SkeletonUserItem = ({ className }: { className?: string }) => (
   <tr
     className={cn(
-      'relative transition-colors group border-b dark:border-neutral-700 [&>td]:p-3',
+      'relative  group border-b dark:border-neutral-700 [&>td]:p-3',
       className
     )}
   >

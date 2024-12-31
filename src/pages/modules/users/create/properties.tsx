@@ -210,7 +210,7 @@ export default function PropertiesUser({
             triggerProps={{
               appearance: 'transparent',
               children: (
-                <span className="dark:text-blue-500">
+                <span className="dark:text-blue-500 text-blue-700">
                   Agregar o editar contactos
                 </span>
               )

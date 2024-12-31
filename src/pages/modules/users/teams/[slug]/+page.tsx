@@ -12,6 +12,7 @@ import { toast } from '~/commons/toast'
 import { useDebounced } from '~/hooks/use-debounced'
 import CollaboratorsTeamSlugNav from './nav'
 import { handleError } from '~/utils'
+import { useAuth } from '~/store/auth'
 
 type State = {
   team?: UserTeam
@@ -28,6 +29,7 @@ const TeamSlugContext = React.createContext<State>({} as State)
 export const useTeamSlug = () => React.useContext(TeamSlugContext)
 
 export default function CollaboratorsTeamSlugPage() {
+  const { user: authUser } = useAuth()
   const [loadingMore, setLoadingMore] = React.useState(false)
   const params = useParams<{
     slug: string
@@ -123,7 +125,7 @@ export default function CollaboratorsTeamSlugPage() {
       value={{
         refetch: refetchTeam,
         isOwnerLoading,
-        isOwner,
+        isOwner: isOwner || authUser.isDeveloper,
         team,
         refetchMembers,
         isLoading,

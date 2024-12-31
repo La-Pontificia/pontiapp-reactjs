@@ -15,7 +15,9 @@ export default function QuickContactInformation() {
 
   return (
     <div className="flex flex-col">
-      <h2 className="text-neutral-400 pb-2 text-lg">Información de contacto</h2>
+      <h2 className="dark:dark:text-neutral-400 pb-2 text-lg">
+        Información de contacto
+      </h2>
       <div className="grid grid-cols-2 gap-x-10 gap-y-3">
         {isLoading ? (
           <>
@@ -30,7 +32,7 @@ export default function QuickContactInformation() {
               children={
                 <a
                   href={`mailto:${user?.email}`}
-                  className="dark:text-blue-500"
+                  className="dark:text-blue-500 text-blue-700"
                 >
                   {user?.email}
                 </a>
@@ -90,7 +92,7 @@ export const InfoItem = ({
     toast('Copiado al portapapeles')
   }
   return (
-    <div className="flex rounded-lg group transition-colors hover:bg-stone-500/10 p-1.5 items-center gap-4">
+    <div className="flex rounded-lg group  hover:bg-stone-500/10 p-1.5 items-center gap-4">
       <Icon fontSize={22} className="opacity-60" />
       <div className="flex-grow">
         <p className="text-xs dark:text-neutral-400">{title}</p>

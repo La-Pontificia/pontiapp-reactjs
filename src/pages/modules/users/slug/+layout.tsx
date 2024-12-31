@@ -169,7 +169,7 @@ export default function CollaboratorsSlugLayout(): JSX.Element {
                         >
                           <FaWhatsapp
                             size={25}
-                            className="dark:text-green-500"
+                            className="dark:text-green-500 text-green-600"
                           />
                           WhatsApp
                         </button>
@@ -190,7 +190,7 @@ export default function CollaboratorsSlugLayout(): JSX.Element {
                       {user && <UserOptions refetch={refetch} user={user} />}
                     </div>
                     {!user?.status && (
-                      <p className="dark:text-red-500 text-sm">
+                      <p className="dark:text-red-500 text-red-700 text-sm">
                         Sin acceso a la aplicación.
                       </p>
                     )}

@@ -95,7 +95,7 @@ export default function CollaboratorsTeamSlugNav() {
             }}
           />
           <div className="space-y-1.5 flex-grow">
-            <h2 className="font-bold leading-4 tracking-tight text-lg line-clamp-1">
+            <h2 className="dark:font-bold font-semibold leading-4 tracking-tight text-lg line-clamp-1">
               {team.name}
             </h2>
             <p className="text-xs opacity-60 line-clamp-1">

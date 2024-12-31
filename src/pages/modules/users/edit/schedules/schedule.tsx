@@ -95,16 +95,23 @@ export const ScheduleItem = ({
     setArchiving(false)
   })
 
+  const turn = () => {
+    const start = new Date(schedule.from)
+    if (start.getHours() >= 6 && start.getHours() < 12) return 'Mañana'
+    if (start.getHours() >= 12 && start.getHours() < 18) return 'Tarde'
+    return 'Noche'
+  }
+
   return (
     <div
       data-archived={schedule.archived ? '' : undefined}
-      className="relative data-[archived]:grayscale data-[archived]:opacity-60 data-[archived]:pointer-events-none group divide-stone-500/30 dark:text-stone-300 bg-stone-500/10 shadow-sm border-stone-500/40 rounded-lg"
+      className="relative data-[archived]:grayscale data-[archived]:opacity-60 data-[archived]:pointer-events-none group divide-stone-500/30 dark:text-stone-300 bg-stone-500/5 dark:bg-stone-500/10 shadow-sm border-stone-500/40 rounded-lg"
     >
       {!schedule.archived && (
         <div className="absolute inset-y-0 flex items-center z-[1] px-3 pointer-events-none">
           <Menu hasIcons positioning={{ autoSize: true }}>
             <MenuTrigger disableButtonEnhancement>
-              <button className="dark:bg-stone-700 opacity-0 group-hover:opacity-100 aria-expanded:opacity-100 shadow-xl shadow-black pointer-events-auto rounded-full">
+              <button className="dark:bg-stone-700 bg-white opacity-0 group-hover:opacity-100 aria-expanded:opacity-100 shadow-xl dark:shadow-black shadow-black/20 pointer-events-auto rounded-full">
                 <MoreHorizontalRegular fontSize={30} />
               </button>
             </MenuTrigger>
@@ -156,7 +163,7 @@ export const ScheduleItem = ({
           </p>
         </div>
         <Badge appearance="tint" color="brand">
-          {schedule.terminal.name}
+          {turn()}
         </Badge>
       </div>
       <div className="py-3 px-4 flex items-center gap-3">

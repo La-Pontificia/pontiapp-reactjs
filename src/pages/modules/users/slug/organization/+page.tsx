@@ -68,7 +68,7 @@ export default function UsersSlugOrganizationPage() {
                 <h2 className="text-xs pb-2 max-md:pt-2">
                   Personas reportando a {data?.displayName}
                 </h2>
-                <div className="grid p-2 rounded-xl bg-stone-500/10 grid-cols-3 gap-3">
+                <div className="grid p-2 rounded-xl bg-stone-50 dark:bg-stone-500/10 grid-cols-3 gap-3">
                   {data?.subordinates?.map((person, index) => (
                     <PersonItem
                       key={person.id}

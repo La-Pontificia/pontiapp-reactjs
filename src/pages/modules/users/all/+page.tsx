@@ -112,7 +112,10 @@ export default function AllUsersPage() {
             to="/m/users/create"
             className="flex items-center gap-2 rounded-md hover:bg-stone-500/20 p-1.5"
           >
-            <AddFilled fontSize={20} className="dark:text-blue-500" />
+            <AddFilled
+              fontSize={20}
+              className="dark:text-blue-500 text-blue-600"
+            />
             Crear usuario
           </Link>
         )}

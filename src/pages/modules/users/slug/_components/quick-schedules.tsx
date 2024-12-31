@@ -28,7 +28,7 @@ export default function QuickSchedules({ slug }: { slug?: string }) {
   if (!isLoading && countSchedules === 0) return null
   return (
     <div className="flex flex-col border-b pb-4 border-neutral-500/30">
-      <h2 className="text-neutral-400 py-2 text-lg">Horarios</h2>
+      <h2 className="dark:dark:text-neutral-400 pb-2 text-lg">Horarios</h2>
       <div>
         <div
           className={cn(
@@ -64,8 +64,15 @@ export default function QuickSchedules({ slug }: { slug?: string }) {
 }
 
 const ScheduleItem = ({ schedule }: { schedule: Schedule }) => {
+  const turn = () => {
+    const start = new Date(schedule.from)
+    if (start.getHours() >= 6 && start.getHours() < 12) return 'Mañana'
+    if (start.getHours() >= 12 && start.getHours() < 18) return 'Tarde'
+    return 'Noche'
+  }
+
   return (
-    <div className="schedule-item divide-y divide-neutral-500/30 dark:text-neutral-300 bg-stone-500/10 shadow-sm border-neutral-500/40 px-4 rounded-lg">
+    <div className="schedule-item divide-y divide-neutral-500/30 dark:text-neutral-300 bg-stone-500/5 dark:bg-stone-500/10 shadow-sm border-neutral-500/40 px-4 rounded-lg">
       <div className="py-2 flex items-center gap-3">
         <CalendarRegular fontSize={22} className="opacity-60" />
         <div className="justify-between flex-grow font-semibold">
@@ -79,7 +86,7 @@ const ScheduleItem = ({ schedule }: { schedule: Schedule }) => {
           </p>
         </div>
         <Badge appearance="tint" color="brand">
-          {schedule.terminal.name}
+          {turn().toString()}
         </Badge>
       </div>
       <div className="py-3 flex items-center gap-3">

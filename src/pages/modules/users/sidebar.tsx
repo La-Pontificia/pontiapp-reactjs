@@ -46,18 +46,18 @@ const ItemNav = (props: ItemNav) => {
     <Link
       data-active={isActive ? '' : undefined}
       to={props.href}
-      className="block relative dark:text-neutral-300 text-neutral-700 data-[active]:font-semibold group pl-3"
+      className="block relative dark:text-neutral-300 text-neutral-900 data-[active]:font-semibold group pl-3"
     >
       <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center">
         <span className="h-[20px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-stone-500/30 group-hover:opacity-100 opacity-0" />
       </div>
-      <div className="flex items-center group-data-[active]:dark:text-white transition-all gap-2 px-2 py-2 rounded-lg group-hover:bg-stone-200 dark:group-hover:bg-stone-500/20">
+      <div className="flex items-center group-data-[active]:dark:text-white  gap-2 px-2 py-2 rounded-lg group-hover:bg-stone-100 dark:group-hover:bg-stone-200 dark:group-hover:bg-stone-500/20">
         {props.emptyIcon ? (
           <span className="w-[24px] aspect-square"></span>
         ) : Icon ? (
           <Icon
             fontSize={24}
-            className="group-data-[active]:text-blue-500 dark:text-stone-400 group-data-[active]:dark:text-blue-500"
+            className="dark:text-stone-400 group-data-[active]:dark:text-blue-500 group-data-[active]:text-blue-800"
           />
         ) : (
           <Avatar
@@ -78,14 +78,14 @@ export const UsersSidebar = () => {
   return (
     <ReusableSidebar>
       <nav className="px-7 pt-4 pb-1">
-        <h2 className="text-sm opacity-70">Usuarios</h2>
+        <h2 className="text-sm opacity-70 font-semibold">Usuarios</h2>
       </nav>
       {authUser.hasPrivilege('users:create') && (
         <nav className="w-full px-5 pt-4">
           <Tooltip relationship="label" content="Nuevo usuario">
             <Link
               to="/m/users/create"
-              className="flex text-sm rounded-full dark:text-white p-1.5 px-4 w-fit hover:scale-110 transition-transform justify-center bg-gradient-to-r dark:from-blue-600 dark:to-violet-600 hover:dark:bg-blue-500 items-center gap-1 font-semibold"
+              className="flex text-sm rounded-full dark:text-white p-1.5 px-4 w-fit hover:scale-110 transition-transform justify-center bg-gradient-to-r text-white from-blue-600 to-violet-600 hover:bg-blue-500 dark:from-blue-600 dark:to-violet-600 hover:dark:bg-blue-500 items-center gap-1 font-semibold"
             >
               <Add20Regular />
               Nuevo

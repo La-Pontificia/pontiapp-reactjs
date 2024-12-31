@@ -92,7 +92,7 @@ export default function UsersPropertiesSlugPage() {
           loading={isLoading}
           children={
             <Link
-              className="hover:underline dark:text-blue-500"
+              className="hover:underline dark:text-blue-500 text-blue-700"
               to={`${rootURL}/${user?.username}`}
             >
               @{user?.username}{' '}
@@ -115,7 +115,7 @@ export default function UsersPropertiesSlugPage() {
           children={
             aditional?.manager && (
               <Link
-                className="hover:underline dark:text-blue-500"
+                className="hover:underline dark:text-blue-500 text-blue-700"
                 to={`${rootURL}/${aditional?.manager.username}`}
               >
                 {aditional?.manager.displayName}

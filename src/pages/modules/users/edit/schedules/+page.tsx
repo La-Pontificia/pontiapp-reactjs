@@ -131,7 +131,7 @@ export default function UsersEditSchedulesPage() {
           {!showArchived && (
             <button
               onClick={() => setShowArchived(!showArchived)}
-              className="dark:text-blue-500 hover:underline"
+              className="dark:text-blue-500 text-blue-700 hover:underline"
             >
               Ver horarios archivados
             </button>
