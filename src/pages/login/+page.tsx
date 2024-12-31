@@ -57,7 +57,7 @@ export default function LoginPage() {
       <Helmet>
         <title>Ponti App | Login</title>
       </Helmet>
-      <div className="w-full h-full flex-col flex flex-grow bg-gradient-to-b from-stone-950/95 via-stone-950/90 to-stone-950/80">
+      <div className="w-full h-full text-white flex-col flex flex-grow bg-gradient-to-b from-stone-950/95 via-stone-950/90 to-stone-950/80">
         <div className="flex-grow flex-col px-10 w-full max-w-xl mx-auto flex items-center justify-center">
           <h1 className="text-yellow-50 py-8 font-medium tracking-tight text-2xl text-center">
             Ponti App
@@ -107,7 +107,7 @@ export default function LoginPage() {
                   <div className="absolute inset-y-0 right-0 px-3 flex items-center">
                     <button
                       disabled={!!loadingCredential}
-                      className="aspect-square dark:text-blue-500 hover:scale-110 transition-all rounded-full"
+                      className="aspect-square dark:text-blue-500 text-blue-500 hover:scale-110  rounded-full"
                     >
                       {loadingCredential ? (
                         <Spinner size="medium" />
@@ -121,7 +121,7 @@ export default function LoginPage() {
             ) : (
               <button
                 onClick={() => setCredentialLogin(true)}
-                className="dark:text-blue-500 hover:underline font-semibold"
+                className="dark:text-blue-500 text-blue-500 hover:underline font-semibold"
               >
                 Utilizar correo y contraseña
               </button>
