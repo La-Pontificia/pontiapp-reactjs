@@ -66,7 +66,7 @@ export default function UserMenu() {
                 <p className="font-semibold leading-4 tracking-tight text-sm">
                   {user.displayName}
                 </p>
-                <p className="text-xs leading-4 opacity-50 max-w-[20ch] text-ellipsis overflow-hidden">
+                <p className="text-xs leading-4 dark:opacity-50 opacity-80 max-w-[20ch] text-ellipsis overflow-hidden">
                   {user.email}
                 </p>
               </div>
@@ -124,7 +124,7 @@ export default function UserMenu() {
                 />
                 <button
                   onClick={() => imageRef.current?.click()}
-                  className="absolute group-hover:opacity-100 transition-all opacity-0 rounded-full inset-0 z-[1] bg-stone-500/50 grid place-content-center"
+                  className="absolute group-hover:opacity-100  opacity-0 rounded-full inset-0 z-[1] bg-stone-500/50 grid place-content-center"
                 >
                   <CameraRegular fontSize={30} />
                 </button>

@@ -10,11 +10,12 @@ import {
   SearchRegular,
   SettingsRegular
 } from '@fluentui/react-icons'
-import { Link, useLocation } from 'react-router'
+import { useLocation } from 'react-router'
 import UserMenu from './menu'
 import UserFeedback from './feedback'
 import { useAuth } from '~/store/auth'
 import RootSearch from './search'
+import ThemeToggle from './theme-toggle'
 
 const Toggles = () => {
   const toggleSidebar = useUi((s) => s.toggleSidebar)
@@ -24,9 +25,13 @@ const Toggles = () => {
   const isModuleMaximized = useUi((s) => s.isModuleMaximized)
 
   const locaction = useLocation()
+  const { user: authUser } = useAuth()
 
-  const isHome = locaction.pathname === '/'
+  const isHome =
+    locaction.pathname === '/' || locaction.pathname === `/${authUser.username}`
+
   const isModules = locaction.pathname.includes('/m')
+
   return (
     <div className="flex items-center">
       {!isHome && (
@@ -38,7 +43,7 @@ const Toggles = () => {
         >
           <button
             onClick={toggleSidebar}
-            className="p-2 px-2.5 dark:text-stone-400 hover:bg-stone-500/20 transition-all rounded-lg"
+            className="p-2 px-2.5 dark:text-stone-400 hover:bg-stone-500/20  rounded-lg"
           >
             {isSidebarOpen ? (
               <PanelLeftContractRegular fontSize={25} />
@@ -60,7 +65,7 @@ const Toggles = () => {
         >
           <button
             onClick={toggleModuleMaximized}
-            className="p-2 px-2.5 dark:text-stone-400 hover:bg-stone-500/20 transition-all rounded-lg"
+            className="p-2 px-2.5 dark:text-stone-400 hover:bg-stone-500/20  rounded-lg"
           >
             {isModuleMaximized ? (
               <ArrowMinimizeRegular
@@ -80,34 +85,23 @@ const Toggles = () => {
 export default function RootHeader() {
   const isHeaderOpen = useUi((s) => s.isHeaderOpen)
   const toggleHeader = useUi((s) => s.toggleHeader)
-  const { user } = useAuth()
   return (
     <header
       style={{
         marginTop: isHeaderOpen ? '0' : '-56px'
       }}
       data-hidden={!isHeaderOpen ? '' : undefined}
-      className="h-14 min-h-[56px] relative transition-all dark:text-blue-500 shadow-xl shadow-black/30 justify-between gap-4 text-blue-600 w-full z-20 flex items-center px-2"
+      className="h-14 min-h-[56px] relative  dark:text-blue-500 dark:shadow-xl border-b dark:border-transparent dark:shadow-black/30 justify-between gap-4 text-blue-700 w-full z-20 flex items-center px-2"
     >
-      <nav className="flex relative flex-grow gap-2 items-center basis-0">
+      <nav className="flex relative flex-grow items-center basis-0">
         <Toggles />
-        <Link to={`/${user.username}`} className="flex items-center gap-1">
-          <img src="/_lp-only-logo.webp" className="" width={25} alt="" />
-          <img
-            src="/_lp_only-letters.webp"
-            className="dark:invert grayscale"
-            width={70}
-            alt='Logo Lettras "La Pontificia"'
-          />
-        </Link>
-        <h1 className="font-semibold text-base hidden md:block pl-2">
-          Ponti App
-        </h1>
+        <h1 className="font-semibold text-base pl-2">Ponti App</h1>
       </nav>
       <nav className="">
         <RootSearch />
       </nav>
       <nav className="flex flex-grow basis-0 gap-5 justify-end">
+        <ThemeToggle />
         <Tooltip content="Buscar" relationship="label">
           <button className="block lg:hidden">
             <SearchRegular fontSize={22} />

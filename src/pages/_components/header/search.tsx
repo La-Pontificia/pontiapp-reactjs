@@ -111,11 +111,11 @@ export default function RootSearch() {
     !isLoading
 
   return (
-    <div className="hidden dark:text-neutral-300 lg:block">
+    <div className="hidden dark:text-neutral-300 text-stone-800 lg:block">
       <div
         onClick={() => setOpen(false)}
         data-open={open ? '' : undefined}
-        className="data-[open]:opacity-100 pointer-events-none data-[open]:pointer-events-auto transition-all fixed opacity-0 z-[99] dark:bg-neutral-950/90 inset-0"
+        className="data-[open]:opacity-100 pointer-events-none data-[open]:pointer-events-auto  fixed opacity-0 z-[99] dark:bg-neutral-950/90 bg-stone-950/20 inset-0"
       />
       <div className="z-[99] relative flex flex-col">
         <SearchBox
@@ -146,7 +146,7 @@ export default function RootSearch() {
           size="medium"
         />
         {open && (
-          <div className="dark:bg-[#202020] w-full rounded-lg top-10 absolute">
+          <div className="dark:bg-[#202020] bg-white w-full rounded-lg top-10 absolute">
             {items?.modules && items.modules.length > 0 && (
               <>
                 <h2 className="p-2 px-3 tracking-tight flex items-center gap-1">
