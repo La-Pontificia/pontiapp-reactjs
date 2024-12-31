@@ -89,7 +89,7 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
           name={user?.displayName}
         />
         <div className="">
-          <h2 className="font-bold tracking-tight text-xl">
+          <h2 className="dark:font-bold font-medium tracking-tight text-xl">
             {user?.displayName}
           </h2>
           <p className="pb-2 text-wrap">
@@ -121,7 +121,10 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
       <div className="border-t border-stone-500/20 p-2">
         <InfoItem
           children={
-            <a href={`mailto:${user?.email}`} className="dark:text-blue-500">
+            <a
+              href={`mailto:${user?.email}`}
+              className="dark:text-blue-500 text-blue-700"
+            >
               {user?.email}
             </a>
           }
@@ -138,7 +141,9 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
       </div>
       {user.manager && (
         <div className="border-t border-stone-500/20 p-2">
-          <h2 className="opacity-60 font-semibold text-xs">Reportando a</h2>
+          <h2 className="opacity-60 dark:font-semibold font-medium text-xs">
+            Reportando a
+          </h2>
           <Link
             target="_blank"
             to={`/${user.manager?.username}`}
@@ -156,7 +161,7 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
               name={user.manager?.displayName}
             />
             <div className="flex items-center gap-2">
-              <h2 className="font-bold tracking-tight text-sm">
+              <h2 className="dark:font-bold font-medium tracking-tight text-sm">
                 {user.manager?.displayName}
               </h2>
               <OpenRegular fontSize={15} />
@@ -186,7 +191,7 @@ export const InfoItem = ({
     toast('Copiado al portapapeles')
   }
   return (
-    <div className="flex rounded-lg group transition-colors hover:bg-stone-500/10 p-1 items-center gap-3">
+    <div className="flex rounded-lg group  hover:bg-stone-500/10 p-1 items-center gap-3">
       <Icon fontSize={20} className="opacity-60" />
       <div className="flex-grow">
         <p className="text-xs text-wrap dark:text-neutral-400">{title}</p>

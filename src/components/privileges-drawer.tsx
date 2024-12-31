@@ -105,7 +105,7 @@ export default function PrivilegesDrawer(props: PrivilegesDrawerProps) {
               Privilegios seleccionados: {asignedPrivileges.length}
             </Badge>
           </nav>
-          <div className="px-1 flex-grow h-full divide-y bg-black/50 rounded-2xl overflow-y-auto divide-neutral-500/20">
+          <div className="px-1 flex-grow h-full divide-y bg-slate-100 dark:bg-black/50 rounded-2xl overflow-y-auto divide-neutral-500/20">
             {Object.entries(privileges).map(([key, value]) => {
               const hasAsigned = asignedPrivileges.includes(key)
 

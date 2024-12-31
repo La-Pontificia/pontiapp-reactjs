@@ -31,7 +31,7 @@ export const ReusableSidebar = React.forwardRef<
       }}
       ref={ref}
       className={cn(
-        'h-full transition-all overflow-y-auto w-[280px] min-w-[280px]',
+        'h-full  overflow-y-auto transition-all w-[280px] min-w-[280px]',
         className
       )}
     >
