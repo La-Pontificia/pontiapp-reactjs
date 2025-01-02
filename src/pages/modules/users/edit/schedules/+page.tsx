@@ -246,8 +246,8 @@ export function ScheduleForm(props: {
     setFetching(true)
     const res = await api.post(URL, {
       data: JSON.stringify({
-        from: format(values.from),
-        to: format(values.to),
+        from: format(values.from, 'YYYY-MM-DD HH:mm:ss'),
+        to: format(values.to, 'YYYY-MM-DD HH:mm:ss'),
         userId: user?.id,
         days: values.days,
         assistTerminalId: values.terminal?.id,
