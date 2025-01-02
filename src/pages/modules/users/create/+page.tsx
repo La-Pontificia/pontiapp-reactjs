@@ -168,8 +168,8 @@ export default function CreateCollaboratorPage() {
       contractTypeId: data.contractType!.id as string,
       schedules: data.schedules.map((s) => ({
         ...s,
-        from: format(s.from, 'HH:mm:ss'),
-        to: format(s.to, 'HH:mm:ss'),
+        from: format(s.from, 'YYYY-MM-DD HH:mm:ss'),
+        to: format(s.to, 'YYYY-MM-DD HH:mm:ss'),
         startDate: format(s.startDate, 'YYYY-MM-DD'),
         assistTerminalId: s.terminal?.id
       })),
