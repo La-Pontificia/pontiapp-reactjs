@@ -1,11 +1,11 @@
+import { VITE_API_HOST } from '~/config/env'
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type ExtendedRequestInit = RequestInit & {
   data?: any
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
   api?: boolean
 }
-
-const API_HOST = import.meta.env.VITE_API_HOST
 
 type ErrorResponse = {
   ok: false
@@ -36,7 +36,9 @@ async function fetchCore<T>(
 ): Promise<ApiReturnType<T>> {
   const { api = true, ...ops } = options ?? {}
 
-  const URL = api ? `${API_HOST}/api/${pathname}` : `${API_HOST}/${pathname}`
+  const URL = api
+    ? `${VITE_API_HOST}/api/${pathname}`
+    : `${VITE_API_HOST}/${pathname}`
 
   const getTokenFromCookies = () => {
     return document.cookie

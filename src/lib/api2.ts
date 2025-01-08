@@ -1,3 +1,5 @@
+import { VITE_API_HOST2 } from '~/config/env'
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type ExtendedRequestInit = RequestInit & {
   data?: any
@@ -5,7 +7,7 @@ export type ExtendedRequestInit = RequestInit & {
   api?: boolean
 }
 
-const API_HOST = import.meta.env.VITE_API_HOST2
+const API_HOST = VITE_API_HOST2
 
 type ErrorResponse = {
   ok: false

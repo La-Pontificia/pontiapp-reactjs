@@ -5,6 +5,10 @@ import dayjs from 'dayjs'
 import 'dayjs/locale/es'
 dayjs.extend(relativeTime)
 
+export const parse = (date: any): Date => {
+  return dayjs(date).toDate()
+}
+
 export const format = (date: any, format?: string): string => {
   if (!format) {
     return dayjs(date).locale('es').format()
@@ -30,7 +34,7 @@ export const formatTime = (time: any, format?: string): string => {
   return dayjs(newDate).locale('es').format(format)
 }
 
-export const countRangeMinutes = (start: Date, end: Date): string => {
+export const countRangeMinutes = (start: any, end: any): string => {
   const startDate = new Date(start)
   const endDate = new Date(end)
   const diff = endDate.getTime() - startDate.getTime()
