@@ -61,7 +61,8 @@ export default function UserSlugAssistsFilter({
       {authUser.hasPrivilege('assists:report') && (
         <div className="ml-auto">
           <Button
-            disabled={isLoading || !endDate || !startDate}
+            disabled
+            // disabled={isLoading || !endDate || !startDate}
             icon={<ExcelColored size={20} />}
             appearance="secondary"
             // onClick={() => setOpenReport(true)}

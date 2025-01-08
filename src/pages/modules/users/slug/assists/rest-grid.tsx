@@ -22,11 +22,11 @@ export default function RestAssistsGrid({
       <table className="w-full relative">
         <thead className="">
           <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
-            <td>Persona</td>
-            <td>Terminal</td>
+            <td>Biométrico</td>
             <td>Fecha</td>
-            <td>Dia</td>
+            <td>Día</td>
             <td>Hora</td>
+            <td></td>
           </tr>
         </thead>
 
@@ -43,7 +43,7 @@ export default function RestAssistsGrid({
                 <td>
                   <div className="flex items-center capitalize gap-2">
                     <CalendarRegular fontSize={20} />
-                    {format(assist.datetime, 'MMMM D, YYYY')}
+                    {format(assist.datetime, 'dddd, DD [de] MMMM')}
                   </div>
                 </td>
                 <td>
