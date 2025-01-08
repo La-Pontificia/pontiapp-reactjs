@@ -55,7 +55,7 @@ export default function UsersSlugSchedulesPage() {
       </div>
       <div>
         {!isLoading && countSchedules === 0 && (
-          <div className="p-10 bg-stone-500/10 rounded-lg">
+          <div className="p-10 bg-neutral-500/10 rounded-lg">
             <p className="text-center">No hay horarios activos</p>
           </div>
         )}
@@ -69,9 +69,9 @@ export default function UsersSlugSchedulesPage() {
         >
           {isLoading ? (
             <>
-              <div className="min-h-[99px] w-full bg-stone-500/10 animate-pulse rounded-lg" />
-              <div className="min-h-[99px] w-full bg-stone-500/10 animate-pulse rounded-lg" />
-              <div className="min-h-[99px] w-full bg-stone-500/10 animate-pulse rounded-lg" />
+              <div className="min-h-[99px] w-full bg-neutral-500/10 animate-pulse rounded-lg" />
+              <div className="min-h-[99px] w-full bg-neutral-500/10 animate-pulse rounded-lg" />
+              <div className="min-h-[99px] w-full bg-neutral-500/10 animate-pulse rounded-lg" />
             </>
           ) : (
             schedules?.map((schedule) => (

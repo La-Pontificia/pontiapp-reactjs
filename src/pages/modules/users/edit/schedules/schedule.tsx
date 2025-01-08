@@ -105,13 +105,13 @@ export const ScheduleItem = ({
   return (
     <div
       data-archived={schedule.archived ? '' : undefined}
-      className="relative data-[archived]:grayscale data-[archived]:opacity-60 data-[archived]:pointer-events-none group divide-stone-500/30 dark:text-stone-300 bg-stone-500/5 dark:bg-stone-500/10 shadow-sm border-stone-500/40 rounded-lg"
+      className="relative data-[archived]:grayscale data-[archived]:opacity-60 data-[archived]:pointer-events-none group divide-neutral-500/30 dark:text-neutral-300 bg-neutral-500/5 dark:bg-neutral-500/10 shadow-sm border-neutral-500/40 rounded-lg"
     >
       {!schedule.archived && (
         <div className="absolute inset-y-0 flex items-center z-[1] px-3 pointer-events-none">
           <Menu hasIcons positioning={{ autoSize: true }}>
             <MenuTrigger disableButtonEnhancement>
-              <button className="dark:bg-stone-700 bg-white opacity-0 group-hover:opacity-100 aria-expanded:opacity-100 shadow-xl dark:shadow-black shadow-black/20 pointer-events-auto rounded-full">
+              <button className="dark:bg-neutral-700 bg-white opacity-0 group-hover:opacity-100 aria-expanded:opacity-100 shadow-xl dark:shadow-black shadow-black/20 pointer-events-auto rounded-full">
                 <MoreHorizontalRegular fontSize={30} />
               </button>
             </MenuTrigger>
@@ -145,7 +145,7 @@ export const ScheduleItem = ({
           </Menu>
         </div>
       )}
-      <div className="py-2 px-4 border-b border-stone-500/40 flex items-center gap-3">
+      <div className="py-2 px-4 border-b border-neutral-500/40 flex items-center gap-3">
         <CalendarRegular fontSize={22} className="opacity-60" />
         <div className="justify-between flex-grow font-semibold">
           <span>
@@ -245,7 +245,6 @@ export const ScheduleItem = ({
                           onSelectDate={(date) => {
                             field.onChange(date)
                           }}
-                          appearance="filled-darker"
                           formatDate={(date) => format(date, 'DD/MM/YYYY')}
                           strings={calendarStrings}
                           placeholder="Selecciona una fecha"

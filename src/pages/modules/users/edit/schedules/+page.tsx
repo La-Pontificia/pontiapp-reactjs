@@ -97,7 +97,7 @@ export default function UsersEditSchedulesPage() {
           />
         </div>
         {!isLoading && countSchedules === 0 && (
-          <div className="p-10 bg-stone-500/10 rounded-lg">
+          <div className="p-10 bg-neutral-500/10 rounded-lg">
             <p className="text-center">No hay horarios activos</p>
           </div>
         )}
@@ -111,9 +111,9 @@ export default function UsersEditSchedulesPage() {
         >
           {isLoading ? (
             <>
-              <div className="min-h-[99px] w-full bg-stone-500/10 animate-pulse rounded-lg" />
-              <div className="min-h-[99px] w-full bg-stone-500/10 animate-pulse rounded-lg" />
-              <div className="min-h-[99px] w-full bg-stone-500/10 animate-pulse rounded-lg" />
+              <div className="min-h-[99px] w-full bg-neutral-500/10 animate-pulse rounded-lg" />
+              <div className="min-h-[99px] w-full bg-neutral-500/10 animate-pulse rounded-lg" />
+              <div className="min-h-[99px] w-full bg-neutral-500/10 animate-pulse rounded-lg" />
             </>
           ) : (
             schedules?.map((schedule) => (
@@ -126,7 +126,7 @@ export default function UsersEditSchedulesPage() {
             ))
           )}
         </div>
-        <div className="py-4 px-1 dark:text-stone-300 text-xs">
+        <div className="py-4 px-1 dark:text-neutral-300 text-xs">
           Solo son visibles los horarios activos{' '}
           {!showArchived && (
             <button
@@ -139,7 +139,7 @@ export default function UsersEditSchedulesPage() {
         </div>
 
         {showArchived && (
-          <div className="border-t pt-2 border-stone-500/20">
+          <div className="border-t pt-2 border-neutral-500/20">
             {isLoadingArchivedSchedules ? (
               <div className="flex justify-center p-10">
                 <Spinner size="huge" />
@@ -164,9 +164,9 @@ export default function UsersEditSchedulesPage() {
                 >
                   {isLoading ? (
                     <>
-                      <div className="min-h-[99px] w-full bg-stone-500/10 animate-pulse rounded-lg" />
-                      <div className="min-h-[99px] w-full bg-stone-500/10 animate-pulse rounded-lg" />
-                      <div className="min-h-[99px] w-full bg-stone-500/10 animate-pulse rounded-lg" />
+                      <div className="min-h-[99px] w-full bg-neutral-500/10 animate-pulse rounded-lg" />
+                      <div className="min-h-[99px] w-full bg-neutral-500/10 animate-pulse rounded-lg" />
+                      <div className="min-h-[99px] w-full bg-neutral-500/10 animate-pulse rounded-lg" />
                     </>
                   ) : (
                     archivedSchedules?.map((schedule) => (
@@ -299,7 +299,6 @@ export function ScheduleForm(props: {
                         onSelectDate={(date) => {
                           field.onChange(date)
                         }}
-                        appearance="filled-darker"
                         formatDate={(date) => format(date, 'DD/MM/YYYY')}
                         strings={calendarStrings}
                         placeholder="Selecciona una fecha"

@@ -4,6 +4,7 @@ import { User } from '~/types/user'
 import { handleAuthError } from '~/utils'
 import {
   Avatar,
+  Badge,
   Button,
   Dialog,
   DialogActions,
@@ -34,6 +35,7 @@ import { Helmet } from 'react-helmet'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
 import { FaWhatsapp } from 'react-icons/fa'
 import { useAuth } from '~/store/auth'
+import ExpiryStatusRenderer from '~/components/expiry-status-renderer'
 
 type AuthState = {
   user?: User | null
@@ -52,11 +54,31 @@ export default function CollaboratorsSlugLayout(): JSX.Element {
     slug: string
   }>()
 
-  const TABS = {
-    '': 'Overview',
-    organization: 'Organización',
-    properties: 'Propiedades',
-    schedules: 'Horarios'
+  const TABS: Record<
+    string,
+    {
+      label: string
+      badge?: string
+      fromBadge?: Date
+    }
+  > = {
+    '': {
+      label: 'Descripción general'
+    },
+    organization: {
+      label: 'Organización'
+    },
+    properties: {
+      label: 'Propiedades'
+    },
+    schedules: {
+      label: 'Horarios'
+    },
+    assists: {
+      label: 'Asistencias',
+      badge: 'Nuevo',
+      fromBadge: new Date('2025-01-04')
+    }
     // history: 'Historial'
   }
 
@@ -109,10 +131,10 @@ export default function CollaboratorsSlugLayout(): JSX.Element {
           <div className="flex flex-grow h-full items-center gap-5 py-5 pl-5">
             {isLoading ? (
               <>
-                <div className="aspect-square w-[128px] bg-stone-500/20 animate-pulse rounded-full"></div>
+                <div className="aspect-square w-[128px] bg-neutral-500/20 animate-pulse rounded-full"></div>
                 <div className="space-y-4">
-                  <div className="w-[128px] h-[20px] bg-stone-500/20 animate-pulse rounded-full"></div>
-                  <div className="w-[200px] h-[10px] bg-stone-500/20 animate-pulse rounded-full"></div>
+                  <div className="w-[128px] h-[20px] bg-neutral-500/20 animate-pulse rounded-full"></div>
+                  <div className="w-[200px] h-[10px] bg-neutral-500/20 animate-pulse rounded-full"></div>
                 </div>
               </>
             ) : (
@@ -205,10 +227,10 @@ export default function CollaboratorsSlugLayout(): JSX.Element {
         <div className="max-w-5xl mx-auto w-full">
           {isLoading ? (
             <div className="my-3 flex gap-10 px-4">
-              <div className="w-[50px] h-[20px] bg-stone-500/20 animate-pulse rounded-full"></div>
-              <div className="w-[50px] h-[20px] bg-stone-500/20 animate-pulse rounded-full"></div>
-              <div className="w-[50px] h-[20px] bg-stone-500/20 animate-pulse rounded-full"></div>
-              <div className="w-[50px] h-[20px] bg-stone-500/20 animate-pulse rounded-full"></div>
+              <div className="w-[50px] h-[20px] bg-neutral-500/20 animate-pulse rounded-full"></div>
+              <div className="w-[50px] h-[20px] bg-neutral-500/20 animate-pulse rounded-full"></div>
+              <div className="w-[50px] h-[20px] bg-neutral-500/20 animate-pulse rounded-full"></div>
+              <div className="w-[50px] h-[20px] bg-neutral-500/20 animate-pulse rounded-full"></div>
             </div>
           ) : (
             <TabList
@@ -220,7 +242,14 @@ export default function CollaboratorsSlugLayout(): JSX.Element {
             >
               {Object.entries(TABS).map(([key, value]) => (
                 <Tab key={key} value={key}>
-                  {value}
+                  {value.label}
+                  {value.badge && (
+                    <ExpiryStatusRenderer from={value.fromBadge!}>
+                      <Badge className="ml-1" appearance="tint">
+                        {value.badge}
+                      </Badge>
+                    </ExpiryStatusRenderer>
+                  )}
                 </Tab>
               ))}
             </TabList>

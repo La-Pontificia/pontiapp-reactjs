@@ -45,7 +45,6 @@ export default function CollaboratorsAreasPage() {
         <SearchBox
           disabled={isLoading}
           value={searchValue}
-          appearance="filled-lighter-shadow"
           dismiss={{
             onClick: () => setQ('')
           }}

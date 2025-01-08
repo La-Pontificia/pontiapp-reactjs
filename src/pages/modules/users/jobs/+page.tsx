@@ -48,7 +48,6 @@ export default function CollaboratorsJobsPage() {
           }}
         />
         <SearchBox
-          appearance="filled-lighter-shadow"
           disabled={isLoading}
           value={searchValue}
           dismiss={{

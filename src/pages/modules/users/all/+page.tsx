@@ -110,7 +110,7 @@ export default function AllUsersPage() {
         {authUser.hasPrivilege('users:create') && (
           <Link
             to="/m/users/create"
-            className="flex items-center gap-2 rounded-md hover:bg-stone-500/20 p-1.5"
+            className="flex items-center gap-2 rounded-md hover:bg-neutral-500/20 p-1.5"
           >
             <AddFilled
               fontSize={20}
@@ -126,7 +126,6 @@ export default function AllUsersPage() {
               setFilters((prev) => ({ ...prev, q: null }))
             }
           }}
-          appearance="filled-lighter-shadow"
           onChange={(_, e) => {
             if (e.value === '') setFilters((prev) => ({ ...prev, q: null }))
             handleChange(e.value)

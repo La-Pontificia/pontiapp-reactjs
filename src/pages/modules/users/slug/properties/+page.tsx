@@ -21,13 +21,11 @@ export default function UsersPropertiesSlugPage() {
   const { user, isLoading, rootURL } = useSlugUser()
   const slug = params.slug
 
-  const { data: aditional, isLoading: aditionalIsLoading } =
+  const { data: properties, isLoading: aditionalIsLoading } =
     useQuery<User | null>({
       queryKey: ['slugAditionUserInfo', slug],
       queryFn: async () => {
-        const res = await api.get<User>(
-          'users/' + slug + '?relationship=manager,userRole,role.job'
-        )
+        const res = await api.get<User>('users/' + slug + '/getProperties')
         if (!res.ok) return null
         return new User(res.data)
       },
@@ -55,7 +53,7 @@ export default function UsersPropertiesSlugPage() {
           {title}
         </p>
         {loading ? (
-          <div className="h-4 w-16 rounded-full bg-stone-500/30 animate-pulse" />
+          <div className="h-4 w-16 rounded-full bg-neutral-500/30 animate-pulse" />
         ) : (
           <div>{children || '-'}</div>
         )}
@@ -107,18 +105,18 @@ export default function UsersPropertiesSlugPage() {
         <Lazy
           title="Rol"
           loading={aditionalIsLoading}
-          children={aditional?.userRole?.title}
+          children={properties?.userRole?.title}
         />
         <Lazy
           title="Jefe (Manager)"
           loading={aditionalIsLoading}
           children={
-            aditional?.manager && (
+            properties?.manager && (
               <Link
                 className="hover:underline dark:text-blue-500 text-blue-700"
-                to={`${rootURL}/${aditional?.manager.username}`}
+                to={`${rootURL}/${properties?.manager.username}`}
               >
-                {aditional?.manager.displayName}
+                {properties?.manager.displayName}
               </Link>
             )
           }
@@ -142,8 +140,8 @@ export default function UsersPropertiesSlugPage() {
         </div>
         <Lazy
           title="Documento"
-          loading={isLoading}
-          children={user?.documentId}
+          loading={aditionalIsLoading}
+          children={properties?.documentId}
         />
         <Lazy title="Nombres" loading={isLoading} children={user?.firstNames} />
         <Lazy
@@ -153,9 +151,11 @@ export default function UsersPropertiesSlugPage() {
         />
         <Lazy
           title="Fecha de nacimiento"
-          loading={isLoading}
+          loading={aditionalIsLoading}
           children={
-            user?.birthdate ? format(user?.birthdate, 'DD/MM/YYYY') : '-'
+            properties?.birthdate
+              ? format(properties?.birthdate, 'DD/MM/YYYY')
+              : '-'
           }
         />
         <Lazy
@@ -184,8 +184,8 @@ export default function UsersPropertiesSlugPage() {
         <h2 className="font-semibold">Organización</h2>
         <Lazy
           title="Puesto de trabajo"
-          loading={aditionalIsLoading}
-          children={aditional?.role.job?.name}
+          loading={isLoading}
+          children={user?.role.job?.name}
         />
         <Lazy title="Cargo" loading={isLoading} children={user?.role?.name} />
         <Lazy
@@ -200,8 +200,10 @@ export default function UsersPropertiesSlugPage() {
         />
         <Lazy
           title="Fecha de ingreso"
-          loading={isLoading}
-          children={user?.entryDate && format(user.entryDate, 'DD/MM/YYYY')}
+          loading={aditionalIsLoading}
+          children={
+            properties?.entryDate && format(properties.entryDate, 'DD/MM/YYYY')
+          }
         />
         <Lazy title="ID" loading={isLoading} children={user?.id} />
         <Lazy

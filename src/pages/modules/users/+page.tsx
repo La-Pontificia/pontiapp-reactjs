@@ -17,7 +17,7 @@ const CollaboratorsPage = (): JSX.Element => {
         <Tooltip relationship="label" content="Nuevo colaborador">
           <Link
             to="/modules/collaborators/create"
-            className="flex text-sm hover:bg-stone-500/10 rounded-md p-1.5 px-4 w-fit justify-center dark:[&>svg]:text-blue-600 items-center gap-1"
+            className="flex text-sm hover:bg-neutral-500/10 rounded-md p-1.5 px-4 w-fit justify-center dark:[&>svg]:text-blue-600 items-center gap-1"
           >
             <Add20Regular />
             Nuevo

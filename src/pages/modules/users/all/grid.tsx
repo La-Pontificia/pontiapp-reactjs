@@ -50,19 +50,19 @@ const SkeletonUserItem = ({ className }: { className?: string }) => (
     <td></td>
     <td>
       <div className="flex items-center gap-2">
-        <div className="w-[40px] aspect-square rounded-full animate-pulse bg-stone-500/50" />
-        <div className="w-full h-[15px] rounded-full animate-pulse bg-stone-500/50" />
+        <div className="w-[40px] aspect-square rounded-full animate-pulse bg-neutral-500/50" />
+        <div className="w-full h-[15px] rounded-full animate-pulse bg-neutral-500/50" />
       </div>
     </td>
     <td>
-      <div className="w-[100px] h-[15px] rounded-full animate-pulse bg-stone-500/50" />
+      <div className="w-[100px] h-[15px] rounded-full animate-pulse bg-neutral-500/50" />
     </td>
     <td>
-      <div className="w-full h-[15px] rounded-full animate-pulse bg-stone-500/50" />
+      <div className="w-full h-[15px] rounded-full animate-pulse bg-neutral-500/50" />
     </td>
     <td></td>
     <td>
-      <div className="w-[110px] h-[15px] rounded-full animate-pulse bg-stone-500/50" />
+      <div className="w-[110px] h-[15px] rounded-full animate-pulse bg-neutral-500/50" />
     </td>
   </tr>
 )

@@ -239,7 +239,7 @@ export default function UsersEditPropertiesPage() {
             />
           </div>
           <div className="col-span-2 pb-5">
-            <h2 className="text-sm border-b pb-3 border-stone-500/40">
+            <h2 className="text-sm border-b pb-3 border-neutral-500/40">
               Contactos
             </h2>
             <div className="space-y-3">

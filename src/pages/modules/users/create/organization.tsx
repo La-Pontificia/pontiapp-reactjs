@@ -347,7 +347,6 @@ function FormSchedule(props: {
                         onSelectDate={(date) => {
                           field.onChange(date)
                         }}
-                        appearance="filled-darker"
                         formatDate={(date) => format(date, 'DD/MM/YYYY')}
                         strings={calendarStrings}
                         placeholder="Selecciona una fecha"

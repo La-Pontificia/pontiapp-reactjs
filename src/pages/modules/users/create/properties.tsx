@@ -180,7 +180,9 @@ export default function PropertiesUser({
         />
       </div>
       <div className="col-span-2">
-        <h2 className="text-sm border-b pb-3 border-stone-500/40">Contacto</h2>
+        <h2 className="text-sm border-b pb-3 border-neutral-500/40">
+          Contacto
+        </h2>
         <div className="space-y-3">
           {contacts?.length > 0 && (
             <div className="pt-4 px-2 space-y-3">
@@ -360,7 +362,7 @@ export function UserContacts(props: {
                 </Button>
               </div>
             </div>
-            <footer className="border-t py-4 flex gap-3 border-stone-500">
+            <footer className="border-t py-4 flex gap-3 border-neutral-500">
               <Button onClick={handleSubmit} appearance="primary">
                 Aceptar
               </Button>

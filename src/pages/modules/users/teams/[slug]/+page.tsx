@@ -140,7 +140,6 @@ export default function CollaboratorsTeamSlugPage() {
             <SearchBox
               disabled={isMemberLoading}
               value={searchValue}
-              appearance="filled-lighter-shadow"
               dismiss={{
                 onClick: () => setQ('')
               }}

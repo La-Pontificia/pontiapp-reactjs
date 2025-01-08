@@ -98,7 +98,7 @@ export default function CollaboratorsEditLayout(): JSX.Element {
       <Helmet>
         <title>{user ? user.displayName : ''} - Editar | PontiApp</title>
       </Helmet>
-      <nav className="flex flex-none gap-3 py-3 border-b border-stone-500/20 w-full overflow-x-auto px-2">
+      <nav className="flex flex-none gap-3 py-3 border-b border-neutral-500/20 w-full overflow-x-auto px-2">
         <div className="flex items-center gap-3">
           <Avatar
             size={48}
@@ -202,11 +202,11 @@ export const UserOptions = ({
   }
 
   return (
-    <div className="flex ml-auto items-center gap-1 dark:text-stone-300">
+    <div className="flex ml-auto items-center gap-1 dark:text-neutral-300">
       {authUser.hasPrivilege('users:resetPassword') && (
         <button
           onClick={() => setIsResetAlertOpen(true)}
-          className="flex flex-col text-nowrap items-center gap-1 text-xs rounded-md p-2 hover:bg-stone-500/10"
+          className="flex flex-col text-nowrap items-center gap-1 text-xs rounded-md p-2 hover:bg-neutral-500/10"
         >
           <PersonPasskeyRegular
             fontSize={20}
@@ -218,7 +218,7 @@ export const UserOptions = ({
       {/* <Button
         appearance="outline"
         disabled
-        className="flex disabled:grayscale disabled:opacity-50 flex-col text-nowrap items-center gap-1 text-xs rounded-md p-2 hover:bg-stone-500/10"
+        className="flex disabled:grayscale disabled:opacity-50 flex-col text-nowrap items-center gap-1 text-xs rounded-md p-2 hover:bg-neutral-500/10"
       >
         <IoIosGitMerge size={20} className="dark:text-blue-600 text-blue-700" />
         <span className="max-lg:hidden">Crear versión</span>

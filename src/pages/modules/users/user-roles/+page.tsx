@@ -78,7 +78,6 @@ export default function CollaboratorsUserRolesPage() {
         />
         <SearchBox
           disabled={isLoading}
-          appearance="filled-lighter-shadow"
           value={searchValue}
           dismiss={{
             onClick: () => setQ('')

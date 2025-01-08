@@ -22,6 +22,7 @@ export default function CollaboratorsRolesPage() {
   const query = `partials/roles/all?paginate=true&relationship=job,usersCount,department${
     q ? `&q=${q}` : ''
   }`
+
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
     Role[]
   > | null>({
@@ -77,7 +78,6 @@ export default function CollaboratorsRolesPage() {
           }}
         />
         <SearchBox
-          appearance="filled-lighter-shadow"
           disabled={isLoading}
           value={searchValue}
           dismiss={{

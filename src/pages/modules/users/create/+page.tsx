@@ -195,7 +195,7 @@ export default function CreateCollaboratorPage() {
 
   return (
     <div className="h-full w-full flex-grow flex flex-col overflow-y-auto">
-      <nav className="flex items-center border-b border-stone-500/10 gap-2 px-2">
+      <nav className="flex items-center border-b border-neutral-500/10 gap-2 px-2">
         <TabList
           className="flex-grow"
           selectedValue={tab}
@@ -251,7 +251,7 @@ export default function CreateCollaboratorPage() {
           )}
         </div>
       </div>
-      <footer className="border-t gap-24 flex dark:border-stone-700 p-4">
+      <footer className="border-t gap-24 flex dark:border-neutral-700 p-4">
         <Button
           appearance="primary"
           icon={saving ? <Spinner size="extra-tiny" /> : null}
