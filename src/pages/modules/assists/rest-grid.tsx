@@ -66,9 +66,9 @@ export default function RestAssistsGrid({
                   <p>{assist.terminal.name}</p>
                 </td>
                 <td>
-                  <div className="flex items-center capitalize gap-2">
+                  <div className="flex items-center gap-2">
                     <CalendarRegular fontSize={20} />
-                    {format(assist.datetime, 'MMMM D, YYYY')}
+                    {format(assist.datetime, 'dddd, DD [de] MMMM')}
                   </div>
                 </td>
                 <td>

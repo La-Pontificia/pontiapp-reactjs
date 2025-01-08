@@ -78,12 +78,12 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                   </UserHoverInfo>
                 </td>
                 <td>
-                  <div className="flex items-center capitalize">
+                  <div className="flex items-center">
                     <CalendarRegular
                       fontSize={23}
                       className="mr-1 opacity-60"
                     />
-                    {format(assist.date, 'dddd, MMMM D, YYYY')}
+                    {format(assist.date, 'dddd, DD [de] MMMM')}
                   </div>
                 </td>
                 <td className="border-l border-neutral-500/30 text-center">
@@ -91,11 +91,11 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                     <p className="font-medium">
                       <ClockRegular fontSize={23} className="mr-1 opacity-60" />
                       {assist.morningFrom
-                        ? format(assist.morningFrom, 'h:mm A')
+                        ? format(assist.morningFrom.replace('Z', ''), 'h:mm A')
                         : 'N/A'}
                       {' - '}
                       {assist.morningTo
-                        ? format(assist.morningTo, 'h:mm A')
+                        ? format(assist.morningTo.replace('Z', ''), 'h:mm A')
                         : 'N/A'}
                     </p>
                   )}
@@ -113,7 +113,10 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                         }
                       >
                         {assist.morningMarkedIn
-                          ? format(assist.morningMarkedIn, 'h:mm A')
+                          ? format(
+                              assist.morningMarkedIn.replace('Z', ''),
+                              'h:mm A'
+                            )
                           : 'N/A'}
                       </Badge>
 
@@ -127,7 +130,10 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                         }
                       >
                         {assist.morningMarkedOut
-                          ? format(assist.morningMarkedOut, 'h:mm A')
+                          ? format(
+                              assist.morningMarkedOut.replace('Z', ''),
+                              'h:mm A'
+                            )
                           : 'N/A'}
                       </Badge>
                     </div>
@@ -138,11 +144,14 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                     <p className="font-medium text-center">
                       <ClockRegular fontSize={23} className="mr-1 opacity-60" />
                       {assist.afternoonFrom
-                        ? format(assist.afternoonFrom, 'h:mm A')
+                        ? format(
+                            assist.afternoonFrom.replace('Z', ''),
+                            'h:mm A'
+                          )
                         : 'N/A'}
                       {' - '}
                       {assist.afternoonTo
-                        ? format(assist.afternoonTo, 'h:mm A')
+                        ? format(assist.afternoonTo.replace('Z', ''), 'h:mm A')
                         : 'N/A'}
                     </p>
                   )}
@@ -160,7 +169,10 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                         }
                       >
                         {assist.afternoonMarkedIn
-                          ? format(assist.afternoonMarkedIn, 'h:mm A')
+                          ? format(
+                              assist.afternoonMarkedIn.replace('Z', ''),
+                              'h:mm A'
+                            )
                           : 'N/A'}
                       </Badge>
 
@@ -174,7 +186,10 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                         }
                       >
                         {assist.afternoonMarkedOut
-                          ? format(assist.afternoonMarkedOut, 'h:mm A')
+                          ? format(
+                              assist.afternoonMarkedOut.replace('Z', ''),
+                              'h:mm A'
+                            )
                           : 'N/A'}
                       </Badge>
                     </div>
