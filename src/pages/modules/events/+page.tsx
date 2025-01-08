@@ -82,7 +82,6 @@ export default function EventsPage() {
           />
         )}
         <SearchBox
-          appearance="filled-lighter-shadow"
           disabled={isLoading}
           value={searchValue}
           dismiss={{

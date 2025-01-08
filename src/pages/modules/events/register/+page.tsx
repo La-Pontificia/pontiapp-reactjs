@@ -69,12 +69,11 @@ export default function EventsRegister() {
             </p>
           </div>
           <div className="pb-5 max-w-xl mx-auto">
-            <div className="dark:bg-stone-800 gap-2 flex p-1 shadow-md shadow-black/40 border rounded-xl border-stone-500/10">
+            <div className="dark:bg-neutral-800 gap-2 flex p-1 shadow-md shadow-black/40 border rounded-xl border-neutral-500/10">
               <Combobox
                 input={{
                   autoComplete: 'off'
                 }}
-                appearance="filled-darker"
                 style={{
                   borderRadius: 7
                 }}
@@ -96,7 +95,6 @@ export default function EventsRegister() {
                 input={{
                   autoComplete: 'off'
                 }}
-                appearance="filled-darker"
                 disabled={isLoadingBusinessUnits}
                 onOptionSelect={(_, data) => {
                   const b = businessUnits?.find(

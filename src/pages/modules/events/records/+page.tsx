@@ -105,7 +105,6 @@ export default function EventsRecordsPage() {
     <div className="flex flex-col w-full pb-3 overflow-auto h-full">
       <nav className="pb-3 pt-4 flex-wrap flex border-b border-neutral-500/30 items-center gap-2">
         <SearchBox
-          appearance="filled-lighter-shadow"
           disabled={isLoading}
           value={searchValue}
           dismiss={{
@@ -122,7 +121,6 @@ export default function EventsRecordsPage() {
           input={{
             autoComplete: 'off'
           }}
-          appearance="filled-lighter"
           style={{
             borderRadius: 7
           }}
@@ -144,7 +142,6 @@ export default function EventsRecordsPage() {
           input={{
             autoComplete: 'off'
           }}
-          appearance="filled-lighter"
           disabled={isLoadingBusinessUnits || isLoading}
           onOptionSelect={(_, data) => {
             const b = businessUnits?.find((b) => b.id === data.optionValue)
@@ -164,13 +161,7 @@ export default function EventsRecordsPage() {
         </Combobox>
         {authUser.hasPrivilege('events:records:report') && (
           <div className="ml-auto">
-            <Button
-              icon={<DockRegular />}
-              appearance="secondary"
-              style={{
-                border: 0
-              }}
-            >
+            <Button icon={<DockRegular />} appearance="secondary" style={{}}>
               <span className="hidden xl:block">Generar reporte</span>
             </Button>
           </div>

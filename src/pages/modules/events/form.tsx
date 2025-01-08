@@ -107,11 +107,7 @@ export default function Form({
                         label="Nombre del evento"
                         required
                       >
-                        <Input
-                          appearance="filled-darker"
-                          disabled={fetching}
-                          {...field}
-                        />
+                        <Input disabled={fetching} {...field} />
                       </Field>
                     )}
                   />
@@ -123,12 +119,7 @@ export default function Form({
                         validationMessage={fieldState.error?.message}
                         label="Descripcion"
                       >
-                        <Textarea
-                          appearance="filled-darker"
-                          disabled={fetching}
-                          rows={5}
-                          {...field}
-                        />
+                        <Textarea disabled={fetching} rows={5} {...field} />
                       </Field>
                     )}
                   />
@@ -148,7 +139,6 @@ export default function Form({
                           onSelectDate={(date) => {
                             field.onChange(date)
                           }}
-                          appearance="filled-darker"
                           formatDate={(date) => format(date, 'MMMM D, YYYY')}
                           strings={calendarStrings}
                           placeholder="Selecciona una fecha"
