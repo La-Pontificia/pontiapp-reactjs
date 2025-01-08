@@ -91,7 +91,7 @@ export default function RootHeader() {
         marginTop: isHeaderOpen ? '0' : '-56px'
       }}
       data-hidden={!isHeaderOpen ? '' : undefined}
-      className="h-14 min-h-[56px] relative  dark:text-blue-500 dark:shadow-xl border-b dark:border-transparent dark:shadow-black/30 justify-between gap-4 text-blue-700 w-full z-20 flex items-center px-2"
+      className="h-14 min-h-[56px] relative  dark:text-blue-500 dark:shadow-sm border-b dark:border-stone-700 dark:shadow-black/10 justify-between gap-4 text-blue-700 w-full z-20 flex items-center px-2"
     >
       <nav className="flex relative flex-grow items-center basis-0">
         <Toggles />

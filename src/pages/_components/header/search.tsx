@@ -2,6 +2,7 @@ import { Avatar, SearchBox, Spinner } from '@fluentui/react-components'
 import {
   ClockBillRegular,
   DataHistogramRegular,
+  FluentIcon,
   MegaphoneLoudRegular,
   PeopleEditRegular,
   Search20Regular,
@@ -18,8 +19,77 @@ import { useAuth } from '~/store/auth'
 import { Report } from '~/types/report'
 import { User } from '~/types/user'
 
+type State = {
+  users: User[]
+  modules: Array<{
+    text: string
+    icon: FluentIcon
+    href: string
+    className: string
+    disabled: boolean
+  }>
+  files: Report[]
+}
+
 export default function RootSearch() {
+  const [open, setOpen] = React.useState(false)
+  const [q, setQ] = React.useState<string | null>(null)
+
+  const { value, handleChange } = useDebounced({
+    onCompleted: (v: string) => setQ(v)
+  })
+
+  return (
+    <div className="hidden dark:text-neutral-300 text-stone-800 lg:block">
+      <div
+        onClick={() => setOpen(false)}
+        data-open={open ? '' : undefined}
+        className="data-[open]:opacity-100 pointer-events-none data-[open]:pointer-events-auto  fixed opacity-0 z-[99] dark:bg-neutral-950/90 bg-stone-950/20 inset-0"
+      />
+      <div className="z-[99] relative flex flex-col">
+        <SearchBox
+          input={{
+            onFocus: () => setOpen(true),
+            autoComplete: 'off'
+          }}
+          value={value}
+          onChange={(_, e) => {
+            handleChange(e.value)
+            if (!e.value) setQ(null)
+          }}
+          dismiss={{
+            onClick: () => {
+              setQ(null)
+            }
+          }}
+          appearance="filled-lighter-shadow"
+          type="search"
+          autoComplete="off"
+          placeholder="Buscar"
+          className="w-[500px]"
+          style={{
+            borderRadius: '7px',
+            height: '35px'
+          }}
+          contentBefore={<Search20Regular className="text-blue-500" />}
+          size="medium"
+        />
+        {open && <SearchContent q={q} setOpen={setOpen} />}
+      </div>
+    </div>
+  )
+}
+
+const SearchContent = ({
+  setOpen,
+  q
+}: {
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>
+  q: string | null
+}) => {
+  const navigate = useNavigate()
   const { user: authUser } = useAuth()
+
   const modules = [
     {
       text: 'Usuarios',
@@ -62,14 +132,7 @@ export default function RootSearch() {
     }
   ]
 
-  const [open, setOpen] = React.useState(false)
-  const [q, setQ] = React.useState<string | null>(null)
-  const navigate = useNavigate()
-  const { data: items, isLoading } = useQuery<{
-    users: User[]
-    modules: typeof modules
-    files: Report[]
-  }>({
+  const { data: items, isLoading } = useQuery<State>({
     queryKey: ['global', 'search', q],
     queryFn: async () => {
       const res = await api.get<{
@@ -97,10 +160,6 @@ export default function RootSearch() {
     }
   })
 
-  const { value, handleChange } = useDebounced({
-    onCompleted: (v: string) => setQ(v)
-  })
-
   const isEmpty =
     items?.modules &&
     items.modules.length < 1 &&
@@ -111,158 +170,113 @@ export default function RootSearch() {
     !isLoading
 
   return (
-    <div className="hidden dark:text-neutral-300 text-stone-800 lg:block">
-      <div
-        onClick={() => setOpen(false)}
-        data-open={open ? '' : undefined}
-        className="data-[open]:opacity-100 pointer-events-none data-[open]:pointer-events-auto  fixed opacity-0 z-[99] dark:bg-neutral-950/90 bg-stone-950/20 inset-0"
-      />
-      <div className="z-[99] relative flex flex-col">
-        <SearchBox
-          input={{
-            onFocus: () => setOpen(true),
-            autoComplete: 'off'
-          }}
-          value={value}
-          onChange={(_, e) => {
-            handleChange(e.value)
-            if (!e.value) setQ(null)
-          }}
-          dismiss={{
-            onClick: () => {
-              setQ(null)
-            }
-          }}
-          appearance="filled-lighter-shadow"
-          type="search"
-          autoComplete="off"
-          placeholder="Buscar"
-          className="w-[500px]"
-          style={{
-            borderRadius: '7px',
-            height: '35px'
-          }}
-          contentBefore={<Search20Regular className="text-blue-500" />}
-          size="medium"
-        />
-        {open && (
-          <div className="dark:bg-[#202020] bg-white w-full rounded-lg top-10 absolute">
-            {items?.modules && items.modules.length > 0 && (
-              <>
-                <h2 className="p-2 px-3 tracking-tight flex items-center gap-1">
-                  Modulos
-                </h2>
-                {/* modules */}
-                <div className="flex justify-start py-2 items-center gap-4 px-7">
-                  {items?.modules.map((module) => (
-                    <button
-                      onClick={() => {
-                        navigate(module.href)
-                        setOpen(false)
-                      }}
-                      key={module.href}
-                      className="group text-center"
-                    >
-                      <div className="aspect-square mx-auto w-[60px] grid place-content-center rounded-2xl border-2 group-hover:border-neutral-500/50 border-neutral-500/20">
-                        <module.icon
-                          fontSize={25}
-                          className={module.className}
-                        />
-                      </div>
-                      <span className="text-xs opacity-80">{module.text}</span>
-                    </button>
-                  ))}
+    <div className="dark:bg-[#202020] bg-white w-full rounded-lg top-10 absolute">
+      {items?.modules && items.modules.length > 0 && (
+        <>
+          <h2 className="p-2 px-3 tracking-tight flex items-center gap-1">
+            Modulos
+          </h2>
+          {/* modules */}
+          <div className="flex justify-start py-2 items-center gap-4 px-7">
+            {items?.modules.map((module) => (
+              <button
+                onClick={() => {
+                  navigate(module.href)
+                  setOpen(false)
+                }}
+                key={module.href}
+                className="group text-center"
+              >
+                <div className="aspect-square mx-auto w-[60px] grid place-content-center rounded-2xl border-2 group-hover:border-neutral-500/50 border-neutral-500/20">
+                  <module.icon fontSize={25} className={module.className} />
                 </div>
-              </>
-            )}
-
-            {items?.users && items.users.length > 0 && (
-              <>
-                <h2 className="p-2 px-3 tracking-tight flex items-center gap-1">
-                  Personas
-                </h2>
-                <div className="flex flex-col">
-                  {items?.users.map((user) => {
-                    return (
-                      <button
-                        onClick={() => {
-                          navigate(`/${user.username}`)
-                          setOpen(false)
-                        }}
-                        className="flex p-2 gap-2 hover:bg-neutral-500/10 items-center text-left"
-                      >
-                        <Avatar
-                          size={36}
-                          image={{
-                            src: user.photoURL
-                          }}
-                          color="colorful"
-                          name={user.displayName}
-                        />
-                        <div>
-                          <h1 className="font-medium">{user.displayName}</h1>
-                          <p className="text-xs opacity-70 line-clamp-1">
-                            {user.role?.name}
-                          </p>
-                        </div>
-                      </button>
-                    )
-                  })}
-                </div>
-              </>
-            )}
-
-            {items?.files && items.files.length > 0 && (
-              <>
-                <h2 className="p-2 px-3 tracking-tight flex items-center gap-1">
-                  Archivos
-                </h2>
-                <div className="py-2 items-center">
-                  {items?.files.map((file) => {
-                    return (
-                      <a
-                        href={file.downloadLink}
-                        target="_blank"
-                        className="flex p-2 gap-2 hover:bg-neutral-500/10 items-center text-left"
-                      >
-                        <ExcelColored size={30} />
-                        <div>
-                          <h1 className="font-medium line-clamp-1">
-                            {file.title}
-                          </h1>
-                          <p className="text-xs opacity-80 line-clamp-1">
-                            Generado por <b>{file.user.displayName}</b>{' '}
-                            {timeAgo(file.created_at)}
-                          </p>
-                        </div>
-                      </a>
-                    )
-                  })}
-                </div>
-              </>
-            )}
-
-            {isEmpty && (
-              <div className="p-20 dark:text-blue-500 text-center">
-                <p>
-                  No se encontraron resultados para la busqueda <b>"{q}"</b>
-                </p>
-              </div>
-            )}
-
-            {isLoading && (
-              <div className="py-10">
-                <Spinner />
-              </div>
-            )}
-
-            <div className="py-2">
-              <p className="px-2 text-xs opacity-50">
-                Busqueda indexada de PontiApp
-              </p>
-            </div>
+                <span className="text-xs opacity-80">{module.text}</span>
+              </button>
+            ))}
           </div>
-        )}
+        </>
+      )}
+
+      {items?.users && items.users.length > 0 && (
+        <>
+          <h2 className="p-2 px-3 tracking-tight flex items-center gap-1">
+            Personas
+          </h2>
+          <div className="flex flex-col">
+            {items?.users.map((user) => {
+              return (
+                <button
+                  onClick={() => {
+                    navigate(`/${user.username}`)
+                    setOpen(false)
+                  }}
+                  className="flex p-2 gap-2 hover:bg-neutral-500/10 items-center text-left"
+                >
+                  <Avatar
+                    size={36}
+                    image={{
+                      src: user.photoURL
+                    }}
+                    color="colorful"
+                    name={user.displayName}
+                  />
+                  <div>
+                    <h1 className="font-medium">{user.displayName}</h1>
+                    <p className="text-xs opacity-70 line-clamp-1">
+                      {user.role?.name}
+                    </p>
+                  </div>
+                </button>
+              )
+            })}
+          </div>
+        </>
+      )}
+
+      {items?.files && items.files.length > 0 && (
+        <>
+          <h2 className="p-2 px-3 tracking-tight flex items-center gap-1">
+            Archivos
+          </h2>
+          <div className="py-2 items-center">
+            {items?.files.map((file) => {
+              return (
+                <a
+                  href={file.downloadLink}
+                  target="_blank"
+                  className="flex p-2 gap-2 hover:bg-neutral-500/10 items-center text-left"
+                >
+                  <ExcelColored size={30} />
+                  <div>
+                    <h1 className="font-medium line-clamp-1">{file.title}</h1>
+                    <p className="text-xs opacity-80 line-clamp-1">
+                      Generado por <b>{file.user.displayName}</b>{' '}
+                      {timeAgo(file.created_at)}
+                    </p>
+                  </div>
+                </a>
+              )
+            })}
+          </div>
+        </>
+      )}
+
+      {isEmpty && (
+        <div className="p-20 dark:text-blue-500 text-center">
+          <p>
+            No se encontraron resultados para la busqueda <b>"{q}"</b>
+          </p>
+        </div>
+      )}
+
+      {isLoading && (
+        <div className="py-10">
+          <Spinner />
+        </div>
+      )}
+
+      <div className="py-2">
+        <p className="px-2 text-xs opacity-50">Busqueda indexada de PontiApp</p>
       </div>
     </div>
   )

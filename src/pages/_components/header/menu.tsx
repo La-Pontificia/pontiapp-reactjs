@@ -88,7 +88,7 @@ export default function UserMenu() {
             overflow: 'hidden'
           }}
         >
-          <div className="overflow-hidden min-w-[360px]">
+          <div className="overflow-hidden min-w-[320px]">
             <header className="flex justify-between items-center">
               <Text
                 as="h1"
@@ -151,15 +151,13 @@ export default function UserMenu() {
                 </Link>
               </div>
             </div>
-            <div className="border-t divide-y divide-stone-500/30 border-stone-500/30">
+            <div className="border-t p-2 space-y-2 border-stone-500/30">
               <ChangePassword />
               <button
                 onClick={signOut}
-                className="flex items-center gap-3 p-2 hover:bg-stone-500/20 w-full"
+                className="flex items-center gap-1 text-blue-600 dark:text-blue-500 font-semibold hover:underline w-full"
               >
-                <div className="rounded-full p-2 border border-stone-500/40 bg-stone-500/20">
-                  <SignOutRegular fontSize={20} />
-                </div>
+                <SignOutRegular fontSize={20} />
                 Cerrar sesión
               </button>
             </div>
@@ -204,11 +202,9 @@ export const ChangePassword = () => {
     <>
       <button
         onClick={() => setOpenDialog(true)}
-        className="flex items-center gap-3 p-2 hover:bg-stone-500/20 w-full"
+        className="flex items-center gap-1 text-blue-600 dark:text-blue-500 font-semibold hover:underline w-full"
       >
-        <div className="rounded-full p-2 border border-stone-500/40 bg-stone-500/20">
-          <PersonPasskeyRegular fontSize={20} />
-        </div>
+        <PersonPasskeyRegular fontSize={18} />
         Cambiar contraseña
       </button>
       {openDialog && (
