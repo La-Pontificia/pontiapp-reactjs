@@ -127,13 +127,13 @@ export default function PrivilegesDrawer(props: PrivilegesDrawerProps) {
                   <GlobeSearch24Regular className="text-blue-500" />
                   <div className="flex-grow">
                     <p>{value}</p>
-                    <span className="text-xs dark:text-stone-400">{key}</span>
+                    <span className="text-xs dark:text-neutral-400">{key}</span>
                   </div>
                 </button>
               )
             })}
           </div>
-          <footer className="py-4 flex gap-3 border-stone-500">
+          <footer className="py-4 flex gap-3 border-neutral-500">
             <Button onClick={handSubmit} appearance="primary">
               {props.onSubmitTitle}
             </Button>

@@ -83,7 +83,7 @@ export default function UserDrawer(props: UserDrawerProps) {
                 setSelectedUsers={setSelectedUsers}
               />
             )}
-            <footer className="border-t py-4 flex gap-3 dark:border-stone-500">
+            <footer className="border-t py-4 flex gap-3 dark:border-neutral-500">
               <Button onClick={handleSubmit} appearance="primary">
                 {props.onSubmitTitle}
               </Button>
@@ -206,7 +206,7 @@ export function Users(
               </div>
             </div>
           ) : (
-            <div className="overflow-y-auto divide-y dark:divide-black divide-stone-200">
+            <div className="overflow-y-auto divide-y dark:divide-black divide-neutral-200">
               {users?.map((u) => {
                 const selected = selectedUsers.find((user) => user.id === u.id)
                 if (!includeCurrentUser && u.id === user.id) return null
@@ -251,7 +251,7 @@ export function Users(
           )}
         </div>
         {max > 1 && (
-          <div className="ml-2 rounded-xl flex flex-col bg-stone-100 dark:bg-black/50 py-3 overflow-y-auto">
+          <div className="ml-2 rounded-xl flex flex-col bg-neutral-100 dark:bg-black/50 py-3 overflow-y-auto">
             <h2 className="px-3">
               Personas seleccionadas ({selectedUsers.length} / {max})
             </h2>

@@ -118,7 +118,7 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
           </div>
         </div>
       </header>
-      <div className="border-t border-stone-500/20 p-2">
+      <div className="border-t border-neutral-500/20 p-2">
         <InfoItem
           children={
             <a
@@ -140,7 +140,7 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
         />
       </div>
       {user.manager && (
-        <div className="border-t border-stone-500/20 p-2">
+        <div className="border-t border-neutral-500/20 p-2">
           <h2 className="opacity-60 dark:font-semibold font-medium text-xs">
             Reportando a
           </h2>
@@ -191,7 +191,7 @@ export const InfoItem = ({
     toast('Copiado al portapapeles')
   }
   return (
-    <div className="flex rounded-lg group  hover:bg-stone-500/10 p-1 items-center gap-3">
+    <div className="flex rounded-lg group  hover:bg-neutral-500/10 p-1 items-center gap-3">
       <Icon fontSize={20} className="opacity-60" />
       <div className="flex-grow">
         <p className="text-xs text-wrap dark:text-neutral-400">{title}</p>
@@ -199,7 +199,7 @@ export const InfoItem = ({
       </div>
       <button
         onClick={handleCopy}
-        className="h-full opacity-0 group-hover:opacity-100 hover:bg-stone-500/20 p-0.5 rounded-md"
+        className="h-full opacity-0 group-hover:opacity-100 hover:bg-neutral-500/20 p-0.5 rounded-md"
       >
         <CopyRegular fontSize={20} className="dark:text-neutral-400" />
       </button>
