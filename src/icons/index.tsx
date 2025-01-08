@@ -12,35 +12,60 @@ export const ExcelColored = React.forwardRef<SVGSVGElement, IconProps>(
         ref={forwardRef}
         width={size}
         height={size}
+        viewBox="0 0 32 28"
         fill="none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <path
-          d="M9.5 29h19c.275 0 .5-.225.5-.5V9h-4.5c-.827 0-1.5-.673-1.5-1.5V3H9.5c-.275 0-.5.225-.5.5v25c0 .275.225.5.5.5z"
-          fill="#fff"
-        />
-        <path d="M28.293 8 24 3.707V7.5c0 .275.225.5.5.5h3.793z" fill="#fff" />
-        <path
-          opacity=".67"
-          fill-rule="evenodd"
-          clip-rule="evenodd"
-          d="m29.56 7.854-5.414-5.415A1.51 1.51 0 0 0 23.086 2H9.5C8.673 2 8 2.673 8 3.5v25c0 .827.673 1.5 1.5 1.5h19c.827 0 1.5-.673 1.5-1.5V8.914c0-.4-.156-.777-.44-1.06zM24 3.707 28.293 8H24.5a.501.501 0 0 1-.5-.5V3.707zM9.5 29h19c.275 0 .5-.225.5-.5V9h-4.5c-.827 0-1.5-.673-1.5-1.5V3H9.5c-.275 0-.5.225-.5.5v25c0 .276.224.5.5.5z"
-          fill="#605E5C"
-        />
-        <path d="M25 23h-2a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2z" fill="#134A2C" />
-        <path d="M20 23h-2a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2z" fill="#185C37" />
-        <path d="M25 19h-2a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2z" fill="#21A366" />
-        <path d="M20 19h-2a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2z" fill="#107C41" />
-        <path d="M25 15h-2a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2z" fill="#33C481" />
-        <path d="M20 15h-2a1 1 0 1 1 0-2h2a1 1 0 1 1 0 2z" fill="#21A366" />
-        <path
-          d="M3.5 25h11a1.5 1.5 0 0 0 1.5-1.5v-11a1.5 1.5 0 0 0-1.5-1.5h-11A1.5 1.5 0 0 0 2 12.5v11A1.5 1.5 0 0 0 3.5 25z"
-          fill="#107C41"
+          d="M30 0H10C8.89543 0 8 0.89543 8 2V26C8 27.1046 8.89543 28 10 28H30C31.1046 28 32 27.1046 32 26V2C32 0.89543 31.1046 0 30 0Z"
+          fill="#2FB776"
         />
         <path
-          d="m6 22 2.174-4.01L6.182 14h1.602l1.087 2.549c.1.242.169.423.206.542h.015c.071-.194.146-.382.224-.564L10.478 14h1.47l-2.042 3.967L12 22h-1.565L9.18 19.2c-.06-.12-.11-.246-.15-.375h-.018a1.93 1.93 0 0 1-.145.363L7.574 22H6z"
-          fill="#F9F7F7"
+          d="M8 21H32V26C32 27.1046 31.1046 28 30 28H10C8.89543 28 8 27.1046 8 26V21Z"
+          fill="url(#paint0_linear_322_3)"
         />
+        <path d="M32 14H20V21H32V14Z" fill="#229C5B" />
+        <path d="M32 7H20V14H32V7Z" fill="#27AE68" />
+        <path d="M8 2C8 0.89543 8.89543 0 10 0H20V7H8V2Z" fill="#1D854F" />
+        <path d="M20 7H8V14H20V7Z" fill="#197B43" />
+        <path d="M20 14H8V21H20V14Z" fill="#1B5B38" />
+        <path
+          d="M8 10C8 8.3431 9.34315 7 11 7H17C18.6569 7 20 8.3431 20 10V22C20 23.6569 18.6569 25 17 25H8V10Z"
+          fill="black"
+          fill-opacity="0.3"
+        />
+        <path
+          d="M16 5H2C0.89543 5 0 5.89543 0 7V21C0 22.1046 0.89543 23 2 23H16C17.1046 23 18 22.1046 18 21V7C18 5.89543 17.1046 5 16 5Z"
+          fill="url(#paint1_linear_322_3)"
+        />
+        <path
+          d="M13 19L10.1821 13.9L12.8763 9H10.677L9.01375 12.1286L7.37801 9H5.10997L7.81787 13.9L5 19H7.19931L8.97251 15.6857L10.732 19H13Z"
+          fill="white"
+        />
+        <defs>
+          <linearGradient
+            id="paint0_linear_322_3"
+            x1="8"
+            y1="24.5"
+            x2="32"
+            y2="24.5"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#163C27" />
+            <stop offset="1" stop-color="#2A6043" />
+          </linearGradient>
+          <linearGradient
+            id="paint1_linear_322_3"
+            x1="0"
+            y1="14"
+            x2="18"
+            y2="14"
+            gradientUnits="userSpaceOnUse"
+          >
+            <stop stop-color="#185A30" />
+            <stop offset="1" stop-color="#176F3D" />
+          </linearGradient>
+        </defs>
       </svg>
     )
   }
