@@ -13,7 +13,7 @@ import { fdb } from '~/lib/firebase'
 import { FirebaseAttentionTicket, TicketState } from '~/types/attention-ticket'
 import Tickets from './tickets'
 import SlotSlugTicket from './slot'
-import { Helmet } from 'react-helmet'
+// import { Helmet } from 'react-helmet'
 
 export type TicketExtend = {
   ticket: FirebaseAttentionTicket
