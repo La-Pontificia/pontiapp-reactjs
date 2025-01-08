@@ -1,6 +1,10 @@
 import { BusinessUnit } from './business-unit'
 import { User } from './user'
 
+type AttentionUi = {
+  x: number
+  y: number
+}
 export class AttentionPosition {
   id: string
   name: string
@@ -9,6 +13,8 @@ export class AttentionPosition {
   businessId: string
   available: boolean
   current: User
+  ui: AttentionUi
+  background: string
   created_at: Date
   updated_at: Date
   creator: User
@@ -25,6 +31,8 @@ export class AttentionPosition {
     this.updater = data.updater
     this.available = data.available
     this.current = data.current
+    this.background = data.background
+    this.ui = data.ui
 
     if (data.business) this.business = new BusinessUnit(data.business)
     if (data.current) this.current = new User(data.current)

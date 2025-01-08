@@ -59,6 +59,11 @@ import AttentionsReportFilesPage from '~/pages/modules/attentions/report-files/+
 import AttentionsTicketsPage from '~/pages/modules/attentions/tickets/+page'
 import AssistsWithUsersPage from '~/pages/modules/assists/with-users/+page'
 import AssistsPage from '~/pages/modules/assists/+page'
+import UsersSlugAssistsPage from '~/pages/modules/users/slug/assists/+page'
+import AttentionsBusinessUnitsPage from '~/pages/modules/attentions/business-units/+page'
+import AttentionsAnswerTickets from '~/pages/modules/attentions/answer-tickets/page'
+import AttentionsSlugAnswerTicket from '~/pages/modules/attentions/answer-tickets/slug/page'
+import AttentionsShiftScreen from '~/pages/modules/attentions/shift-screen/+page'
 
 export default function MainRoutes() {
   return (
@@ -203,6 +208,7 @@ export default function MainRoutes() {
                   element={<UsersSlugPropertiesPage />}
                 />
                 <Route path="schedules" element={<UsersSlugSchedulesPage />} />
+                <Route path="assists" element={<UsersSlugAssistsPage />} />
                 <Route path="history" element={<UsersSlugHistoryPage />} />
               </Route>
               <Route path="*" element={<UsersPage />} />
@@ -331,11 +337,27 @@ export default function MainRoutes() {
               }
             />
           </Route>
-          <Route path="attentions" element={<AttentionsLayout />}>
+          <Route
+            path="attentions"
+            element={
+              <ProtectedModule has="attentions" navigate="/">
+                <AttentionsLayout />
+              </ProtectedModule>
+            }
+          >
             <Route index element={<AttentionsPage />} />
             <Route path="register" element={<AttentionsRegisterPage />} />
+            <Route path="answer-tickets">
+              <Route index element={<AttentionsAnswerTickets />} />
+              <Route path=":slug" element={<AttentionsSlugAnswerTicket />} />
+            </Route>
+            <Route path="shift-screen" element={<AttentionsShiftScreen />} />
             <Route path="positions" element={<AttentionsPositionsPage />} />
             <Route path="services" element={<AttentionsServicesPage />} />
+            <Route
+              path="business-units"
+              element={<AttentionsBusinessUnitsPage />}
+            />
             <Route path="tickets" element={<AttentionsTicketsPage />} />
             <Route
               path="report-files"
@@ -353,6 +375,7 @@ export default function MainRoutes() {
             />
             <Route path="properties" element={<UsersSlugPropertiesPage />} />
             <Route path="schedules" element={<UsersSlugSchedulesPage />} />
+            <Route path="assists" element={<UsersSlugAssistsPage />} />
           </Route>
         </Route>
       </Route>

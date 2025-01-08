@@ -3,24 +3,29 @@ import { User } from './user'
 
 export class Assist {
   date: string
-  from: string
-  to: string
   user: User
-  terminal: AssistTerminal
-  markedIn: string | null
-  markedOut: string | null
+  morningFrom: Date
+  morningTo: Date
+  afternoonFrom: Date
+  afternoonTo: Date
+  morningMarkedIn: Date | null
+  morningMarkedOut: Date | null
+  afternoonMarkedIn: Date | null
+  afternoonMarkedOut: Date | null
 
   constructor(data: Assist) {
     this.date = data.date
-    this.from = data.from
-    this.to = data.to
     this.user = data.user
-    this.terminal = data.terminal
-    this.markedIn = data.markedIn
-    this.markedOut = data.markedOut
+    this.morningFrom = data.morningFrom
+    this.morningTo = data.morningTo
+    this.afternoonFrom = data.afternoonFrom
+    this.afternoonTo = data.afternoonTo
+    this.morningMarkedIn = data.morningMarkedIn
+    this.morningMarkedOut = data.morningMarkedOut
+    this.afternoonMarkedIn = data.afternoonMarkedIn
+    this.afternoonMarkedOut = data.afternoonMarkedOut
 
     if (data.user) this.user = new User(data.user)
-    if (data.terminal) this.terminal = new AssistTerminal(data.terminal)
   }
 }
 

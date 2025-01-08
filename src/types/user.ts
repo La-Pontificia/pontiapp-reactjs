@@ -18,14 +18,14 @@ export class User {
   userRole: UserRole
   status: boolean
   email: string
-  manager?: User
+  manager: User
   username: string
   entryDate?: Date
   birthdate?: Date
   fullName: string
   contractType: ContractType
   contacts?: ContactType[]
-  displayName: string
+  internalDisplayName: string
   customPrivileges: string[]
   subordinates: User[]
   coworkers: User[]
@@ -38,8 +38,8 @@ export class User {
 
   constructor(
     data: User & {
-      user_role?: UserRole
       contract_type?: ContractType
+      user_role?: UserRole
     }
   ) {
     this.id = data.id
@@ -64,34 +64,41 @@ export class User {
     this.createdBy = data.createdBy
     this.updatedBy = data.updatedBy
     this.createdUser = data.createdUser
-    this.updatedUser = data.updatedUser
-    this.role = data.role
     this.subordinates = data.subordinates
     this.coworkers = data.coworkers
+    this.updatedUser = data.updatedUser
+    this.role = data.role
     this.customPrivileges = data.customPrivileges
-    this.userRole = data.user_role as UserRole
-    this.contractType = data.contract_type as ContractType
+    this.internalDisplayName = data.displayName
 
+    if (data.contract_type)
+      this.contractType = new ContractType(data.contract_type)
+    if (data.user_role) this.userRole = new UserRole(data.user_role)
     if (data.manager) this.manager = new User(data.manager)
     if (data.role) this.role = new Role(data.role)
     if (data.userRole) this.userRole = new UserRole(data.userRole)
-    if (data.subordinates)
-      this.subordinates = data.subordinates.map((s) => new User(s))
-    if (data.coworkers) this.coworkers = data.coworkers.map((c) => new User(c))
 
-    if (data.displayName) {
-      this.displayName = data.displayName
-    } else {
+    if (data.subordinates)
+      this.subordinates = data.subordinates.map((s: User) => new User(s))
+
+    if (data.coworkers)
+      this.coworkers = data.coworkers.map((c: User) => new User(c))
+  }
+
+  get displayName() {
+    let n = this.internalDisplayName
+
+    if (!this.internalDisplayName) {
       const firstNameParts = this.firstNames?.trim().split(' ')
       const firstName = firstNameParts[0]
       const lastNameParts = this.lastNames?.trim().split(' ')
       let lastName = lastNameParts[0]
-
       if (lastNameParts.length > 1)
         lastName = lastNameParts?.slice(0, -1).join(' ')
-
-      this.displayName = `${firstName} ${lastName}`
+      n = `${firstName} ${lastName}`
     }
+
+    return n
   }
 
   get isDeveloper(): boolean {
