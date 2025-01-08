@@ -8,7 +8,7 @@ export default function RootLayout() {
   const isModuleMaximized = useUi((s) => s.isModuleMaximized)
 
   return (
-    <main className="h-svh flex overflow-y-auto bg-gradient-to-t from-[#f7f9fb] via-[#f7f9fb] to-[#f7f9fb] dark:from-[rgb(28,31,29)] dark:via-[rgb(30,28,33)] dark:to-[rgb(34,32,30)]">
+    <main className="h-svh flex overflow-y-auto bg-gradient-to-t from-[#f7f9fb] via-[#f7f9fb] to-[#f7f9fb] dark:from-[#20232b] dark:via-[#20232b] dark:to-[#20232b]">
       <RootSidebar />
       <UserNotices />
       <div
@@ -18,12 +18,12 @@ export default function RootLayout() {
         {!isModuleMaximized && (
           <span
             aria-hidden
-            className="block inset-x-0 border dark:border-stone-800 inset-y-[4px] shadow-md shadow-black/10 pointer-events-none select-none rounded-xl z-10 absolute"
+            className="block inset-x-0 border dark:border-neutral-800 inset-y-[4px] shadow-md shadow-black/10 pointer-events-none select-none rounded-xl z-10 absolute"
           />
         )}
         <div
           data-maximized={isModuleMaximized ? '' : undefined}
-          className="flex-grow relative overflow-auto data-[maximized]:absolute  data-[maximized]:z-[999] data-[maximized]:inset-0 rounded-xl data-[maximized]:rounded-none flex-col h-full flex overflow-y-auto w-full bg-gradient-to-t from-[#ffffff] via-[#ffffff] to-[#ffffff] text-black dark:text-stone-100 dark:from-[#11110f] dark:via-[#11110f] dark:to-[#11110f]"
+          className="flex-grow relative overflow-auto data-[maximized]:absolute data-[maximized]:z-[999] data-[maximized]:inset-0 rounded-xl data-[maximized]:rounded-none flex-col h-full flex overflow-y-auto w-full bg-gradient-to-t from-[#ffffff] via-[#ffffff] to-[#ffffff] text-black dark:text-neutral-100 dark:from-[#121212] dark:via-[#121212] dark:to-[#121212]"
         >
           <RootHeader />
           <Outlet />
