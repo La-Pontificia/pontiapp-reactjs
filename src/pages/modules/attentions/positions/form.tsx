@@ -25,9 +25,20 @@ import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
+const optionColors = [
+  '#479ef5',
+  '#f14c4c',
+  '#006f39',
+  '#f5a623',
+  '#fde300',
+  '#cfa27e',
+  '#a5a5a5'
+]
+
 type FormValues = {
   name: string
   shortName?: string
+  background?: string
   businessUnit?: BusinessUnit
   available?: boolean
 }
@@ -48,7 +59,8 @@ export default function Form({
       name: defaultValues?.name ?? '',
       shortName: defaultValues?.shortName ?? '',
       businessUnit: defaultValues?.business,
-      available: defaultValues?.available ?? true
+      available: defaultValues?.available ?? true,
+      background: defaultValues?.background ?? '#479ef5'
     }
   })
 
@@ -63,7 +75,8 @@ export default function Form({
         name: values.name,
         shortName: values.shortName,
         businessUnitId: values.businessUnit?.id,
-        available: values.available
+        available: values.available,
+        background: values.background
       })
     })
 
@@ -86,9 +99,11 @@ export default function Form({
   const { data: businessUnits, isLoading: isLoadingBusinessUnits } = useQuery<
     BusinessUnit[] | null
   >({
-    queryKey: ['partials/businessUnits/all'],
+    queryKey: ['attentions/businessUnits'],
     queryFn: async () => {
-      const res = await api.get<[]>('partials/businessUnits/all')
+      const res = await api.get<[]>(
+        'attentions/businessUnits?onlyAttentions=true'
+      )
       if (!res.ok) return null
       return res.data.map((event) => new BusinessUnit(event))
     }
@@ -126,11 +141,7 @@ export default function Form({
                         label="Nombre del puesto"
                         required
                       >
-                        <Input
-                          appearance="filled-darker"
-                          disabled={fetching}
-                          {...field}
-                        />
+                        <Input disabled={fetching} {...field} />
                       </Field>
                     )}
                   />
@@ -146,11 +157,36 @@ export default function Form({
                       >
                         <Input
                           placeholder="Ejemplo: #1, #2, #3"
-                          appearance="filled-darker"
                           disabled={fetching}
                           {...field}
                         />
                       </Field>
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="background"
+                    render={({ field }) => (
+                      <div>
+                        <Field label="Color">
+                          <div className="flex gap-1">
+                            {optionColors.map((color) => (
+                              <button
+                                key={color}
+                                data-selected={
+                                  field.value === color ? '' : undefined
+                                }
+                                type="button"
+                                onClick={() => field.onChange(color)}
+                                className="w-8 h-8 rounded-full border-4 data-[selected]:scale-105 dark:border-[#292929] border-[#ffffff] data-[selected]:dark:border-black  data-[selected]:border-black focus:outline-none"
+                                style={{
+                                  backgroundColor: color
+                                }}
+                              />
+                            ))}
+                          </div>
+                        </Field>
+                      </div>
                     )}
                   />
 

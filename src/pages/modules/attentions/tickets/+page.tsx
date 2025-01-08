@@ -1,148 +1,236 @@
-import { api } from '~/lib/api'
-import { useQuery } from '@tanstack/react-query'
-import { AddFilled, Search20Regular } from '@fluentui/react-icons'
-import { SearchBox, Spinner } from '@fluentui/react-components'
+// import { api } from '~/lib/api'
+// import { useQuery } from '@tanstack/react-query'
+// import { AddFilled, Search20Regular } from '@fluentui/react-icons'
+// import { SearchBox, Spinner } from '@fluentui/react-components'
+import { Combobox, Option, Spinner } from '@fluentui/react-components'
+import {
+  collection,
+  onSnapshot,
+  orderBy,
+  query,
+  where
+} from 'firebase/firestore'
 import React from 'react'
-import { useDebounced } from '~/hooks/use-debounced'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { toast } from '~/commons/toast'
-import { handleError } from '~/utils'
-import { useAuth } from '~/store/auth'
-import Form from './form'
-import Item from './position'
-import { AttentionTicket } from '~/types/attention-ticket'
+import { fdb } from '~/lib/firebase'
+import { FirebaseAttentionTicket } from '~/types/attention-ticket'
+import Item from './ticket'
+import { useQuery } from '@tanstack/react-query'
+import { BusinessUnit } from '~/types/business-unit'
+import { api } from '~/lib/api'
+import { DatePicker } from '@fluentui/react-datepicker-compat'
+import { format } from '~/lib/dayjs'
+import { localizedStrings } from '~/const'
+import { Helmet } from 'react-helmet'
+// import { useDebounced } from '~/hooks/use-debounced'
+// import { ResponsePaginate } from '~/types/paginate-response'
+// import { toast } from '~/commons/toast'
+// import { handleError } from '~/utils'
+// import { useAuth } from '~/store/auth'
+// import Form from './form'
+// import Item from './ticket'
+// import { AttentionTicket } from '~/types/attention-ticket'
 
 export default function AttentionsTicketsPage() {
-  const { user: authUser } = useAuth()
-  const [items, setItems] = React.useState<AttentionTicket[]>([])
-  const [info, setInfo] = React.useState<ResponsePaginate<AttentionTicket[]>>(
-    {} as ResponsePaginate<AttentionTicket[]>
-  )
-  const [loadingMore, setLoadingMore] = React.useState(false)
-  const [q, setQ] = React.useState<string>()
-
-  const query = `attentions/tickets/all?paginate=true&relationship=service.position.business${
-    q ? `&q=${q}` : ''
-  }`
-  const { data, isLoading, refetch } = useQuery<ResponsePaginate<
-    AttentionTicket[]
-  > | null>({
-    queryKey: ['attentions/tickets/all/relationship', q],
-    queryFn: async () => {
-      const res = await api.get<ResponsePaginate<AttentionTicket[]>>(query)
-      if (!res.ok) return null
-      return res.data
-    },
-    refetchInterval: 10000
+  const [tickets, setTickets] = React.useState<FirebaseAttentionTicket[]>([])
+  const [isLoading, setIsLoading] = React.useState(true)
+  const [filters, setFilters] = React.useState<{
+    attentionPositionBusinessId: string | null
+    startDate: string | null
+    endDate: string | null
+  }>({
+    attentionPositionBusinessId: null,
+    startDate: format(new Date(), 'MM/DD/YYYY'),
+    endDate: format(new Date(), 'MM/DD/YYYY')
   })
 
-  const nextPage = async () => {
-    setLoadingMore(true)
-    const res = await api.get<ResponsePaginate<AttentionTicket[]>>(
-      `${query}&page=${info.current_page + 1}`
-    )
-    if (res.ok) {
-      setItems((prev) => [
-        ...prev,
-        ...res.data.data.map((user) => new AttentionTicket(user))
-      ])
-      setInfo({
-        ...res.data,
-        data: []
-      })
-    } else {
-      toast(handleError(res.error))
+  const args = React.useMemo(() => {
+    const cnd = []
+    if (filters.attentionPositionBusinessId) {
+      cnd.push(
+        where(
+          'attentionPositionBusinessId',
+          '==',
+          filters.attentionPositionBusinessId
+        )
+      )
     }
-    setLoadingMore(false)
-  }
+
+    if (filters.startDate) {
+      cnd.push(where('created_at_date', '>=', filters.startDate))
+    }
+
+    if (filters.endDate) {
+      cnd.push(where('created_at_date', '<=', filters.endDate))
+    }
+
+    return cnd
+  }, [filters])
 
   React.useEffect(() => {
-    if (!data) return
-    setItems(data.data.map((team) => new AttentionTicket(team)))
-    setInfo(data)
-  }, [data])
+    const q = query(
+      collection(fdb, 'tickets'),
+      orderBy('created_at', 'asc'),
+      ...args
+    )
 
-  const { handleChange, value: searchValue } = useDebounced({
-    delay: 300,
-    onCompleted: (value) => setQ(value)
+    const unsubscribe = onSnapshot(q, (querySnapshot) => {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const tickets: Array<any> = []
+      querySnapshot.forEach((doc) => {
+        tickets.push({
+          ...doc.data(),
+          id: doc.id
+        })
+      })
+      setTickets(tickets.map((ticket) => new FirebaseAttentionTicket(ticket)))
+      setIsLoading(false)
+    })
+
+    return () => unsubscribe()
+  }, [args])
+
+  const { data: businessUnits, isLoading: isLoadingBusinessUnits } = useQuery<
+    BusinessUnit[] | null
+  >({
+    queryKey: ['attentions/businessUnits'],
+    queryFn: async () => {
+      const res = await api.get<[]>(
+        'attentions/businessUnits?onlyAttentions=true'
+      )
+      if (!res.ok) return null
+      return res.data.map((a) => new BusinessUnit(a))
+    }
+  })
+
+  const orderedByState = tickets.sort((a, b) => {
+    const states: Record<string, number> = {
+      transferred: 1,
+      calling: 2,
+      pending: 3,
+      attending: 4,
+      attended: 5,
+      cancelled: 6
+    }
+
+    return states[a.state] - states[b.state]
   })
 
   return (
     <div className="flex px-3 flex-col w-full pb-3 overflow-auto h-full">
+      <Helmet>
+        <title>Tickets generados | PontiApp</title>
+      </Helmet>
       <nav className="pb-3 pt-4 flex border-b border-neutral-500/30 items-center gap-4">
-        <Form
-          refetch={refetch}
-          triggerProps={{
-            disabled: isLoading || !authUser.hasPrivilege('events:create'),
-            appearance: 'primary',
-            icon: <AddFilled />,
-            children: <span>Nuevo</span>
+        <Combobox
+          input={{
+            autoComplete: 'off'
           }}
-        />
-        <SearchBox
-          appearance="filled-lighter-shadow"
+          disabled={isLoadingBusinessUnits}
+          onOptionSelect={(_, data) => {
+            const b = businessUnits?.find((b) => b.id === data.optionValue)
+            setFilters({
+              ...filters,
+              attentionPositionBusinessId: b ? b.id : null
+            })
+          }}
+          style={{
+            borderRadius: 7
+          }}
+          selectedOptions={
+            filters.attentionPositionBusinessId
+              ? [filters.attentionPositionBusinessId]
+              : []
+          }
+          value={
+            filters.attentionPositionBusinessId
+              ? businessUnits?.find(
+                  (b) => b.id === filters.attentionPositionBusinessId
+                )?.name
+              : ''
+          }
+          placeholder="Unidad de negocio"
+        >
+          {businessUnits?.map((business) => (
+            <Option key={business.id} text={business.name} value={business.id}>
+              {business.name}
+            </Option>
+          ))}
+        </Combobox>
+        <DatePicker
           disabled={isLoading}
-          value={searchValue}
-          dismiss={{
-            onClick: () => setQ('')
+          input={{
+            style: {
+              width: 100
+            }
           }}
-          onChange={(_, e) => {
-            if (e.value === '') setQ(undefined)
-            handleChange(e.value)
+          value={filters.startDate ? new Date(filters.startDate) : null}
+          onSelectDate={(date) => {
+            setFilters((prev) => ({
+              ...prev,
+              startDate: date ? format(date, 'MM/DD/YYYY') : null
+            }))
           }}
-          contentBefore={<Search20Regular className="text-blue-500" />}
-          placeholder="Buscar ticket"
+          formatDate={(date) => format(date, 'DD-MM-YYYY')}
+          strings={localizedStrings}
+          placeholder="Desde"
         />
+        <DatePicker
+          input={{
+            style: {
+              width: 100
+            }
+          }}
+          disabled={isLoading}
+          value={filters.endDate ? new Date(filters.endDate) : null}
+          onSelectDate={(date) => {
+            setFilters((prev) => ({
+              ...prev,
+              endDate: date ? date.toISOString() : null
+            }))
+          }}
+          formatDate={(date) => format(date, 'DD-MM-YYYY')}
+          strings={localizedStrings}
+          placeholder="Hasta"
+        />
+        <div className="flex items-center gap-2 text-xs font-medium">
+          <div className="w-2.5 aspect-square bg-lime-500 rounded-full relative">
+            <div className="w-full h-full animate-ping aspect-square bg-lime-500 rounded-full relative"></div>
+          </div>
+          <p className="text-lime-800 dark:text-lime-100">En tiempo real</p>
+        </div>
       </nav>
       <div className="overflow-auto flex-grow rounded-xl pt-2 h-full">
         {isLoading ? (
           <div className="h-full grid place-content-center">
             <Spinner size="huge" />
           </div>
+        ) : tickets.length < 1 ? (
+          <div className="h-full grid place-content-center">
+            <p className="text-center text-neutral-400 dark:text-neutral-500 font-semibold">
+              No hay tickets que mostrar
+            </p>
+          </div>
         ) : (
           <table className="w-full">
             <thead>
               <tr className="dark:text-neutral-400 font-semibold [&>td]:py-2 [&>td]:px-2">
+                <td className="text-nowrap">Ticket</td>
                 <td className="text-nowrap">Persona</td>
                 <td className="text-nowrap">Puesto</td>
                 <td className="text-nowrap">Negocio</td>
                 <td className="text-nowrap">Estado</td>
-                <td className="text-nowrap">Tiempo</td>
+                <td className="text-nowrap">Esperando</td>
                 <td className="text-nowrap"></td>
-                {/* <td className="text-nowrap">Atendiendo ahora</td>
-                <td className="text-nowrap">Disponible</td>
-                <td></td> */}
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-500/20">
-              {items.map((ticket) => (
-                <Item key={ticket.id} item={ticket} refetch={refetch} />
+              {orderedByState.map((ticket) => (
+                <Item key={ticket.id} item={ticket} />
               ))}
             </tbody>
           </table>
         )}
       </div>
-      {info && (
-        <footer className="flex p-5 justify-center">
-          <div className="flex justify-between w-full">
-            <p className="flex basis-0 flex-grow">
-              Mostrando {info.from} - {info.to} de {info.total} resultados
-            </p>
-            {info.next_page_url && (
-              <button
-                disabled={loadingMore}
-                onClick={nextPage}
-                className="dark:text-blue-500 hover:underline"
-              >
-                {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
-              </button>
-            )}
-            <p className="flex basis-0 flex-grow justify-end">
-              Página {info.current_page} de {info.last_page}
-            </p>
-          </div>
-        </footer>
-      )}
     </div>
   )
 }

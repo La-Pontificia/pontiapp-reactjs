@@ -11,6 +11,7 @@ import { useAuth } from '~/store/auth'
 import Form from './form'
 import { AttentionService } from '~/types/attention-service'
 import Item from './service'
+import { Helmet } from 'react-helmet'
 
 export default function AttentionsServicesPage() {
   const { user: authUser } = useAuth()
@@ -68,6 +69,9 @@ export default function AttentionsServicesPage() {
 
   return (
     <div className="flex px-3 flex-col w-full pb-3 overflow-auto h-full">
+      <Helmet>
+        <title>Servicios/Opciones de atención | PontiApp</title>
+      </Helmet>
       <nav className="pb-3 pt-4 flex border-b border-neutral-500/30 items-center gap-4">
         <Form
           refetch={refetch}
@@ -80,7 +84,6 @@ export default function AttentionsServicesPage() {
           }}
         />
         <SearchBox
-          appearance="filled-lighter-shadow"
           disabled={isLoading}
           value={searchValue}
           dismiss={{

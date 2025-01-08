@@ -23,6 +23,9 @@ import {
 } from '@fluentui/react-icons'
 import Form from './form'
 import { useAuth } from '~/store/auth'
+// import { DraggableData, Rnd } from 'react-rnd'
+// import { useAttentionsUi } from '~/store/attentions'
+// import { DraggableEvent } from 'react-draggable'
 
 export default function Item({
   item,
@@ -49,16 +52,49 @@ export default function Item({
     refetch()
   }
 
+  // const setIsMoveable = useAttentionsUi((store) => store.setIsMoveable)
+  // const isEditing = useAttentionsUi((state) => state.isEditing)
+  // const [internalDisabled, setInternalDisabled] = React.useState(false)
+
+  // const updatePosition = (x: number, y: number) => {
+  //   void api.post(`attentions/positions/${item.id}/ui`, {
+  //     data: JSON.stringify({
+  //       x,
+  //       y
+  //     })
+  //   })
+  //   refetch()
+  // }
+
+  // const onStop = (_: DraggableEvent, data: DraggableData) => {
+  //   updatePosition(data.x, data.y)
+  //   setIsMoveable(true)
+  // }
+
+  // const onDrag = () => {
+  //   setIsMoveable(false)
+  // }
+
+  // const onStart = () => {
+  //   setIsMoveable(false)
+  // }
+
   return (
     <>
       <tr
         key={item.id}
-        className="bg-stone-100 dark:bg-stone-900 [&>td]:px-4 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+        className="bg-neutral-100 relative dark:bg-neutral-900 [&>td]:px-4 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
       >
-        <td>{item.shortName}</td>
         <td>
-          <div className="flex items-center gap-2 py-3">
-            <Avatar size={40} icon={<PersonDesktopRegular />} />
+          <div
+            className="absolute left-0 inset-y-0 w-[6px] rounded-l-xl"
+            style={{ backgroundColor: item.background }}
+          />
+          <div className="font-semibold opacity-70">{item.shortName}</div>
+        </td>
+        <td>
+          <div className="flex items-center gap-2 py-2">
+            <Avatar size={32} icon={<PersonDesktopRegular />} />
             <p className="text-sm line-clamp-1 opacity-90">{item.name}</p>
           </div>
         </td>
@@ -127,6 +163,7 @@ export default function Item({
           </div>
         </td>
       </tr>
+
       {openDelete && (
         <Dialog
           open={openDelete}
@@ -155,6 +192,67 @@ export default function Item({
           </DialogSurface>
         </Dialog>
       )}
+      {/* <Rnd
+        enableResizing={false}
+        onDragStop={onStop}
+        onDragStart={onStart}
+        dragGrid={[15, 15]}
+        onDrag={onDrag}
+        disableDragging={!isEditing || internalDisabled}
+        default={{
+          x: item.ui?.x ?? 0,
+          y: item.ui?.y ?? 0,
+          width: 90,
+          height: 90
+        }}
+        size={{
+          height: 90,
+          width: 90
+        }}
+        className="cursor-pointer rounded-2xl bg-neutral-800 overflow-hidden"
+      >
+        <div className="w-full h-full relative p-2 flex flex-col">
+          <div
+            style={{
+              backgroundColor: item.background
+            }}
+            className="absolute pointer-events-none right-0 inset-y-0 w-[5px]"
+          />
+          <div className="flex-grow">
+            <h1 className="font-semibold dark:text-blue-500">
+              {item.shortName}
+            </h1>
+            <p className="text-xs opacity-50">{item.name}</p>
+          </div>
+          {isEditing && (
+            <div
+              onMouseEnter={() => setInternalDisabled(true)}
+              onMouseLeave={() => setInternalDisabled(false)}
+              className="flex justify-between"
+            >
+              {authUser.hasPrivilege('events:positions:edit') && (
+                <Form
+                  defaultValues={item}
+                  refetch={refetch}
+                  triggerProps={{
+                    size: 'small',
+                    icon: <PenFilled fontSize={15} />,
+                    appearance: 'subtle'
+                  }}
+                />
+              )}
+              {authUser.hasPrivilege('events:positions:delete') && (
+                <Button
+                  size="small"
+                  onClick={() => setOpenDelete(true)}
+                  icon={<DeleteFilled fontSize={15} />}
+                  appearance="subtle"
+                />
+              )}
+            </div>
+          )}
+        </div>
+      </Rnd> */}
     </>
   )
 }

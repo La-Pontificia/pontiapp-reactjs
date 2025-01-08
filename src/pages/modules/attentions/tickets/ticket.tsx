@@ -12,45 +12,43 @@ import {
   Spinner
 } from '@fluentui/react-components'
 import React from 'react'
-import { api } from '~/lib/api'
 import { handleError } from '~/utils'
 import { toast } from '~/commons/toast'
 
-import { DeleteFilled, TicketDiagonalRegular } from '@fluentui/react-icons'
+import { DeleteFilled, TicketDiagonalFilled } from '@fluentui/react-icons'
 import { useAuth } from '~/store/auth'
-import { AttentionTicket } from '~/types/attention-ticket'
+import { FirebaseAttentionTicket } from '~/types/attention-ticket'
 import { timeAgoShort } from '~/lib/dayjs'
+import { deleteTicket } from '~/services/tickets'
 
 const Status = {
-  1: {
+  pending: {
     color: 'severe',
     text: 'Pendiente'
   },
-  2: {
+  calling: {
     color: 'important',
     text: 'Llamando'
   },
-  3: {
+  attending: {
     color: 'brand',
     text: 'En proceso'
   },
-  4: {
+  attended: {
     color: 'informative',
     text: 'Completado'
   },
-  5: {
+  transferred: {
     color: 'warning',
     text: 'Transferido'
+  },
+  cancelled: {
+    color: 'critical',
+    text: 'Cancelado'
   }
 }
 
-export default function Item({
-  item,
-  refetch
-}: {
-  item: AttentionTicket
-  refetch: () => void
-}) {
+export default function Item({ item }: { item: FirebaseAttentionTicket }) {
   const [openDelete, setOpenDelete] = React.useState(false)
   const [deleting, setDeleting] = React.useState(false)
 
@@ -58,15 +56,18 @@ export default function Item({
 
   const handleDelete = async () => {
     setDeleting(true)
-    const res = await api.post(`attentions/positions/${item?.id}/delete`)
-    if (!res.ok) {
+    const ok = await deleteTicket(item.id)
+    if (!ok) {
       setDeleting(false)
-      return toast(handleError(res.error))
+      return toast(
+        handleError(
+          'Ocurrió un error al eliminar el ticket, por favor intenta de nuevo'
+        )
+      )
     }
     setDeleting(false)
     setOpenDelete(false)
     toast(`Ticket eliminado correctamente`)
-    refetch()
   }
 
   const state = Status[item.state as keyof typeof Status]
@@ -76,7 +77,7 @@ export default function Item({
   React.useEffect(() => {
     const interval = setInterval(() => {
       setTimeAgo(timeAgoShort(item.created_at))
-    }, 10000)
+    }, 5000)
     return () => clearInterval(interval)
   }, [item.created_at])
 
@@ -84,89 +85,42 @@ export default function Item({
     <>
       <tr
         key={item.id}
-        className="bg-stone-900 [&>td]:py-2 [&>td]:px-4 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+        className="bg-neutral-100 dark:bg-neutral-800/80 [&>td]:py-2 [&>td]:px-2 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
       >
         <td>
           <div className="flex items-center gap-2">
-            <Avatar size={32} icon={<TicketDiagonalRegular />} />
-            <p className="text-nowrap">{item.service.name}</p>
+            <Avatar size={32} icon={<TicketDiagonalFilled />} />
+            <p className="text-nowrap">{item.attentionServiceName}</p>
+          </div>
+        </td>
+        <td>
+          <div className="flex items-center gap-2">
+            <p className="text-nowrap">{item.displayName}</p>
           </div>
         </td>
         <td>
           <p className="font-semibold opacity-60 text-nowrap">
-            {item.service.position.shortName}
+            {item.attentionPositionName}
           </p>
         </td>
         <td>
           <div className="flex items-center gap-2 text-nowrap">
-            <p>{item.service.position.business.name}</p>
+            <p>{item.attentionPositionBusinessName}</p>
           </div>
         </td>
-        {/* <td>
-          <div className="flex items-center gap-2 py-3">
-            <Avatar size={40} icon={<PersonDesktopRegular />} />
-            <p className="text-sm line-clamp-1 opacity-90">{item.name}</p>
-          </div>
-        </td>
-        <td>
-          {item.current ? (
-            <div className="flex items-center gap-2 py-3">
-              <Avatar
-                size={24}
-                color="colorful"
-                image={{
-                  src: item.current.displayName
-                }}
-                name={item.current.displayName}
-              />
-              <p className="text-sm line-clamp-1 opacity-90">
-                {item.current.displayName}
-              </p>
-            </div>
-          ) : (
-            <p className="text-sm line-clamp-1 opacity-90">-</p>
-          )}
-        </td>
-        <td>
-          {item.available ? (
-            <Badge color="success" appearance="tint">
-              Disponible
-            </Badge>
-          ) : (
-            <Badge color="subtle" appearance="tint">
-              Inactivo
-            </Badge>
-          )}
-        </td>*/}
         <td>
           <Badge color={state.color as any} appearance="filled">
             {state.text}
           </Badge>
         </td>
         <td>
-          <p className="text-xs text-nowrap dark:text-blue-500">{timeAgo}</p>
+          <p className="text-xs text-nowrap dark:text-blue-500 text-blue-500 font-medium">
+            {(item.state === 'pending' || item.state === 'attending') &&
+              timeAgo}
+          </p>
         </td>
         <td>
           <div className="flex items-center gap-2">
-            {/* {authUser.hasPrivilege('events:positions:edit') && (
-              <Form
-                // defaultValues={item}
-                refetch={refetch}
-                triggerProps={{
-                  size: 'small',
-                  appearance: 'transparent',
-                  children: (
-                    <Badge
-                      icon={<PenFilled fontSize={15} />}
-                      appearance="tint"
-                      color="informative"
-                    >
-                      Editar
-                    </Badge>
-                  )
-                }}
-              />
-            )} */}
             {authUser.hasPrivilege('events:positions:delete') && (
               <button onClick={() => setOpenDelete(true)}>
                 <Badge

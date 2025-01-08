@@ -126,11 +126,7 @@ export default function Form({
                         label="Nombre del puesto"
                         required
                       >
-                        <Input
-                          appearance="filled-darker"
-                          disabled={fetching}
-                          {...field}
-                        />
+                        <Input disabled={fetching} {...field} />
                       </Field>
                     )}
                   />
@@ -146,7 +142,6 @@ export default function Form({
                       >
                         <Input
                           placeholder="Ejemplo: #1, #2, #3"
-                          appearance="filled-darker"
                           disabled={fetching}
                           {...field}
                         />

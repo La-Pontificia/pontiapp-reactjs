@@ -1,5 +1,5 @@
 import { AttentionService } from '~/types/attention-service'
-import { Button, Spinner } from '@fluentui/react-components'
+import { Spinner } from '@fluentui/react-components'
 export default function Selection({
   person,
   setSelectedService,
@@ -17,11 +17,15 @@ export default function Selection({
   creating: boolean
 }) {
   return (
-    <div className="w-full max-w-lg px-3 mx-auto">
-      <h2 className="font-semibold text-2xl tracking-tight pb-5 opacity-60">
-        Hola {person?.firstNames}, ¿En que te ayudamos?
+    <div className="w-full max-w-2xl h-full px-3 flex pt-6 flex-col mx-auto">
+      <h2 className="font-semibold text-lg tracking-tight pb-10">
+        Hola{' '}
+        <span className="dark:text-yellow-500 text-yellow-500">
+          {person?.firstNames}
+        </span>
+        , ¿En que te ayudamos?
       </h2>
-      <div className="max-h-[60vh] overflow-auto space-y-2 flex flex-col">
+      <div className="flex-grow overflow-auto space-y-2 flex flex-col">
         {services.map((service) => {
           const selected = selectedService?.id === service.id
           return (
@@ -29,31 +33,30 @@ export default function Selection({
               onClick={() => setSelectedService(service)}
               data-selected={selected ? '' : undefined}
               key={service.id}
-              className="p-0.5 text-base  rounded-xl group data-[selected]:bg-gradient-to-tl data-[selected]:from-blue-600 data-[selected]:via-violet-600 data-[selected]:to-lime-600"
+              className="p-3 text-base data-[selected]:bg-yellow-300 dark:data-[selected]:bg-yellow-500 data-[selected]:border-black data-[selected]:text-black data-[selected]:dark:border-black font-bold border-4 border-[#e8e8e8] dark:border-[#262626] rounded-2xl group"
             >
-              <div className="dark:bg-neutral-800 rounded-[11px]">
-                <div className="p-4 flex justify-start font-medium">
-                  <p>{service.name}</p>
-                </div>
-              </div>
+              <p>{service.name}</p>
             </button>
           )
         })}
       </div>
-      <footer className="pt-5">
-        <Button
+      <footer className="pt-4">
+        {!selectedService && (
+          <p className="pb-2 text-xs dark:text-yellow-400 text-left px-2">
+            Selecciona un servicio para continuar
+          </p>
+        )}
+        <button
           onClick={onSubmit}
-          appearance="primary"
           disabled={!selectedService || creating}
-          style={{
-            width: '100%',
-            borderRadius: 10,
-            padding: '1rem'
-          }}
-          icon={creating ? <Spinner size="tiny" /> : null}
+          className="bg-[#ff947f] h-14 disabled:grayscale disabled:opacity-70 dark:bg-[#ff5734] p-3 dark:text-black font-bold tracking-tight text-base w-full rounded-2xl border-4 border-black"
         >
-          Crear mi ticket
-        </Button>
+          {creating ? (
+            <Spinner size="small" appearance="inverted" />
+          ) : (
+            'Crear mi ticket'
+          )}
+        </button>
       </footer>
     </div>
   )

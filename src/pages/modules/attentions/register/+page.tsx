@@ -10,16 +10,20 @@ import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import Selection from './selection'
 import { AddRegular } from '@fluentui/react-icons'
+import { getPersonByDocumentId } from '~/utils/fetch'
+import { createTicket } from '~/services/tickets'
+import { handleError } from '~/utils'
+import { Helmet } from 'react-helmet'
 
-const personMockup = {
-  documentId: '72377685',
-  firstNames: 'liz Anali',
-  lastNames: 'Araujo Quispw',
-  email: '71636724@elp.edu.pe',
-  career: 'Contabilidad',
-  gender: 'F',
-  periodName: '2025-II',
-  business: 'Escuela Superior La Pontificia'
+type Person = {
+  documentId: string
+  firstNames: string
+  lastNames: string
+  email: string | null
+  career: string | null
+  gender: string | null
+  periodName: string | null
+  business: string | null
 }
 
 export default function AttentionsRegisterPage() {
@@ -34,55 +38,58 @@ export default function AttentionsRegisterPage() {
   const [services, setServices] = React.useState<AttentionService[]>([])
   const [selectedService, setSelectedService] =
     React.useState<AttentionService | null>(null)
-  const [person, setPerson] = React.useState<typeof personMockup | null>(null)
-  const [selectedBusinessUnit, setSelectedBusinessUnit] =
-    React.useState<BusinessUnit | null>(null)
+  const [person, setPerson] = React.useState<Person | null>(null)
+
+  const [selectedBusinessUnits, setSelectedBusinessUnits] = React.useState<
+    BusinessUnit[]
+  >([])
 
   const [creating, setCreating] = React.useState(false)
 
   const { data: businessUnits, isLoading: isLoadingBusinessUnits } = useQuery<
     BusinessUnit[] | null
   >({
-    queryKey: ['partials/businessUnits/all'],
+    queryKey: ['attentions/businessUnits'],
     queryFn: async () => {
-      const res = await api.get<[]>('partials/businessUnits/all')
+      const res = await api.get<[]>(
+        'attentions/businessUnits?onlyAttentions=true'
+      )
       if (!res.ok) return null
       return res.data.map((event) => new BusinessUnit(event))
     }
   })
 
-  React.useEffect(() => {
-    if (selectedBusinessUnit) {
-      if (isOpenSidebar) toggleSidebar()
-      if (!isModuleMaximized) toggleModuleMaximized()
-      if (isHeaderOpen) toggleHeader()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedBusinessUnit])
-
-  const handleServices = async () => {
-    const res = await api.get<AttentionService[]>(
-      `attentions/services/business/${selectedBusinessUnit?.id}`
-    )
-
-    if (res.ok) {
-      setServices(res.data.map((service) => new AttentionService(service)))
-    } else {
-      toast('No se encontraron servicios disponibles')
-    }
-  }
-
   const handleSearchPerson = async (documentId: string) => {
     try {
       setWainting(true)
-      await handleServices()
+      const res = await api.get<AttentionService[]>(
+        `attentions/services?ids=${selectedBusinessUnits
+          .map((e) => e.id)
+          .join(',')}&relationship=position,position.business`
+      )
 
-      // simulate 2s of waiting
-      await new Promise((resolve) => setTimeout(resolve, 2000))
-      if (documentId !== personMockup.documentId)
-        throw new Error('Lo siento, no pudimos encontrarte.')
+      if (res.ok) {
+        setServices(res.data.map((service) => new AttentionService(service)))
+      } else {
+        throw new Error('No se pudo obtener los servicios')
+      }
 
-      setPerson(personMockup)
+      const person = await getPersonByDocumentId(documentId, false)
+
+      if (!person) {
+        throw new Error('No se encontró la persona')
+      }
+
+      setPerson({
+        documentId: person.documentId,
+        firstNames: person.firstNames,
+        lastNames: person.lastNames,
+        business: null,
+        career: null,
+        email: null,
+        gender: null,
+        periodName: null
+      })
     } catch (error) {
       console.error(error)
       if (error instanceof Error) {
@@ -100,7 +107,7 @@ export default function AttentionsRegisterPage() {
       if (!t) return
       handleSearchPerson(t)
     },
-    disabled: !selectedBusinessUnit
+    disabled: selectedBusinessUnits.length < 1 || !!person
   })
 
   const handleHidden = () => {
@@ -110,41 +117,60 @@ export default function AttentionsRegisterPage() {
   }
 
   const onSubmit = async () => {
-    setCreating(true)
-    const res = await api.post('attentions/tickets', {
-      data: JSON.stringify({
-        personDocumentId: person?.documentId,
-        personEmail: person?.email,
-        personFirstNames: person?.firstNames,
-        personLastNames: person?.lastNames,
-        personCareer: person?.career,
-        personGender: person?.gender,
-        personPeriodName: person?.periodName,
-        attentionServiceId: selectedService?.id
+    try {
+      setCreating(true)
+      if (!person || !selectedService) {
+        return toast('No se ha encontrado la persona')
+      }
+      const ok = await createTicket({
+        personDocumentId: person.documentId,
+        personFirstNames: person.firstNames,
+        personLastNames: person.lastNames,
+
+        personBusiness: person?.business ?? null,
+        personCareer: person?.career ?? null,
+        personEmail: person?.email ?? null,
+        personGender: person?.gender ?? null,
+        personPeriodName: person?.periodName ?? null,
+
+        attentionPositionBusinessId: selectedService.position.business.id,
+        attentionPositionBusinessName: selectedService.position.business.name,
+        attentionPositionId: selectedService.position.id,
+        attentionPositionName: selectedService.position.name,
+        attentionPositionShortName: selectedService.position.shortName ?? null,
+        attentionserviceId: selectedService.id,
+        attentionServiceName: selectedService.name
       })
-    })
 
-    if (!res.ok) {
-      toast('No se pudo registrar la atención')
-    } else {
+      if (!ok) {
+        throw new Error('No se pudo generar el ticket')
+      }
       toast('Ticket generado correctamente')
+    } catch (error) {
+      console.error(error)
+      toast('Ops! Algo salió mal', {
+        description: handleError(error)
+      })
+    } finally {
+      setCreating(false)
+      setPerson(null)
+      setServices([])
+      setSelectedService(null)
     }
-
-    setCreating(false)
-    setPerson(null)
-    setServices([])
-    setSelectedService(null)
   }
 
   return (
     <div className="w-full h-full flex-grow">
+      <Helmet>
+        <title>Registro rápido de tickets | PontiApp</title>
+      </Helmet>
       {isLoadingBusinessUnits ? (
         <div className="h-full w-full grid place-content-center">
           <Spinner size="huge" />
         </div>
       ) : (
-        <div className="h-full overflow-hidden relative w-full">
-          <div className="text-center py-10 items-center h-full mx-auto flex">
+        <div className="h-full overflow-hidden flex flex-col relative w-full">
+          <div className="text-center py-10 pb-3 items-center h-full mx-auto flex">
             {!person && (
               <div className="flex relative flex-col items-center w-full">
                 <Listeng
@@ -153,16 +179,18 @@ export default function AttentionsRegisterPage() {
                   grayScale={!wainting}
                   className="mx-auto"
                 />
-                <div className="absolute -bottom-10">
-                  {!selectedBusinessUnit ? (
-                    <p className="pt-10 opacity-70">
-                      Selecciona una unidad de negocio para comenzar
+                <div className="absolute -bottom-20">
+                  {selectedBusinessUnits.length < 1 ? (
+                    <p className="pt-10 text-xs opacity-70">
+                      Selecciona al menos una unidad de negocio para comenzar
                     </p>
                   ) : (
                     !wainting && (
-                      <p className="pt-10 font-semibold text-base tracking-tight opacity-70">
-                        Escanea tu Carnet o DNI.
-                      </p>
+                      <div className="">
+                        <p className="font-semibold text-sm tracking-tight opacity-70">
+                          Escanea tu Carnet o DNI.
+                        </p>
+                      </div>
                     )
                   )}
                 </div>
@@ -181,28 +209,41 @@ export default function AttentionsRegisterPage() {
           </div>
           <div
             style={{
-              marginBottom: isHeaderOpen ? '20px' : '-100px'
+              display: isHeaderOpen ? 'flex' : 'none'
             }}
-            className=" absolute bottom-0 inset-x-0 flex justify-center"
+            className="p-3 justify-center"
           >
-            <div className="dark:bg-stone-800 gap-1.5 flex p-1 shadow-md shadow-black/40 border rounded-xl border-stone-500/10">
+            <div className="dark:bg-neutral-800 bg-white flex gap-1.5 p-1 shadow-md dark:shadow-black/40 border rounded-xl border-neutral-500/10">
               <Combobox
                 input={{
-                  autoComplete: 'off'
+                  autoComplete: 'off',
+                  style: {
+                    width: 500
+                  }
                 }}
-                appearance="filled-darker"
+                multiple={true}
                 disabled={isLoadingBusinessUnits}
                 onOptionSelect={(_, data) => {
                   const b = businessUnits?.find(
                     (b) => b.id === data.optionValue
                   )
-                  if (b) setSelectedBusinessUnit(b)
+                  if (!b) return
+                  setSelectedBusinessUnits((prev) => {
+                    const index = prev.findIndex((e) => e.id === b.id)
+                    if (index === -1) return [...prev, b]
+                    return prev.filter((e) => e.id !== b.id)
+                  })
                 }}
                 style={{
                   borderRadius: 7
                 }}
-                value={selectedBusinessUnit?.name}
-                placeholder="Unidad de negocio"
+                selectedOptions={selectedBusinessUnits.map((b) => b.id) || []}
+                value={
+                  selectedBusinessUnits.length > 0
+                    ? selectedBusinessUnits.map((b) => b.name).join(', ')
+                    : ''
+                }
+                placeholder="Selecciona una o más unidades de negocio"
               >
                 {businessUnits?.map((business) => (
                   <Option
@@ -220,7 +261,7 @@ export default function AttentionsRegisterPage() {
               >
                 <button
                   onClick={handleHidden}
-                  className="px-2 leading-4 flex items-center hover:bg-stone-500/20 rounded-lg"
+                  className="px-2 leading-4 flex items-center hover:bg-neutral-500/20 rounded-lg"
                 >
                   <AddRegular className="rotate-45" />
                 </button>

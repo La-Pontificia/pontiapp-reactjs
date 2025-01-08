@@ -141,11 +141,7 @@ export default function Form({
                         label="Nombre del servicio"
                         required
                       >
-                        <Input
-                          appearance="filled-darker"
-                          disabled={fetching}
-                          {...field}
-                        />
+                        <Input disabled={fetching} {...field} />
                       </Field>
                     )}
                   />

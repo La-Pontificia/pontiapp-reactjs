@@ -1,80 +1,38 @@
 import { api } from '~/lib/api'
 import { useQuery } from '@tanstack/react-query'
-import { AddFilled, Search20Regular } from '@fluentui/react-icons'
+import { AddFilled } from '@fluentui/react-icons'
 import {
   Accordion,
   AccordionHeader,
   AccordionItem,
   AccordionPanel,
-  SearchBox,
   Spinner
 } from '@fluentui/react-components'
 import React from 'react'
-import { useDebounced } from '~/hooks/use-debounced'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { toast } from '~/commons/toast'
-import { handleError } from '~/utils'
 import { useAuth } from '~/store/auth'
 import Form from './form'
 import Item from './position'
+// import Draggable, { type DraggableData } from 'react-draggable'
 import { AttentionPosition } from '~/types/attention-position'
+// import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
+// import { useAttentionsUi } from '~/store/attentions'
+// import { Rnd } from 'react-rnd'
 
 export default function AttentionsPositionsPage() {
   const { user: authUser } = useAuth()
-  const [items, setItems] = React.useState<AttentionPosition[]>([])
-  const [info, setInfo] = React.useState<ResponsePaginate<AttentionPosition[]>>(
-    {} as ResponsePaginate<AttentionPosition[]>
-  )
-  const [loadingMore, setLoadingMore] = React.useState(false)
-  const [q, setQ] = React.useState<string>()
-
-  const query = `attentions/positions/all?paginate=true&relationship=business,current${
-    q ? `&q=${q}` : ''
-  }`
-  const { data, isLoading, refetch } = useQuery<ResponsePaginate<
-    AttentionPosition[]
-  > | null>({
-    queryKey: ['attentions/positions/all/relationship', q],
+  const { data, isLoading, refetch } = useQuery<AttentionPosition[]>({
+    queryKey: ['attentions/positions/all/relationship'],
     queryFn: async () => {
-      const res = await api.get<ResponsePaginate<AttentionPosition[]>>(query)
-      if (!res.ok) return null
+      const res = await api.get<AttentionPosition[]>(
+        'attentions/positions/all?relationship=business,current'
+      )
+      if (!res.ok) return []
       return res.data
     }
   })
 
-  const nextPage = async () => {
-    setLoadingMore(true)
-    const res = await api.get<ResponsePaginate<AttentionPosition[]>>(
-      `${query}&page=${info.current_page + 1}`
-    )
-    if (res.ok) {
-      setItems((prev) => [
-        ...prev,
-        ...res.data.data.map((user) => new AttentionPosition(user))
-      ])
-      setInfo({
-        ...res.data,
-        data: []
-      })
-    } else {
-      toast(handleError(res.error))
-    }
-    setLoadingMore(false)
-  }
-
-  React.useEffect(() => {
-    if (!data) return
-    setItems(data.data.map((team) => new AttentionPosition(team)))
-    setInfo(data)
-  }, [data])
-
-  const { handleChange, value: searchValue } = useDebounced({
-    delay: 300,
-    onCompleted: (value) => setQ(value)
-  })
-
   const grouped = React.useMemo(() => {
-    const positionMap = items.reduce((acc, item) => {
+    const positionMap = data?.reduce((acc, item) => {
       const businessId = item.business.id
 
       if (!acc[businessId]) {
@@ -86,36 +44,31 @@ export default function AttentionsPositionsPage() {
 
       acc[businessId].positions.push(item)
       return acc
-    }, {} as Record<string, { business: (typeof items)[0]['business']; positions: AttentionPosition[] }>)
+    }, {} as Record<string, { business: (typeof data)[0]['business']; positions: AttentionPosition[] }>)
 
-    return Object.values(positionMap)
-  }, [items])
+    return Object.values(positionMap ?? {})
+  }, [data])
+
+  // const setPinchState = useAttentionsUi((state) => state.setPinchState)
+  // const isMoveable = useAttentionsUi((state) => state.isMoveable)
+  // const pinchState = useAttentionsUi((state) => state.pinchState)
+  // const setIsEditing = useAttentionsUi((state) => state.setIsEditing)
+  // const isEditing = useAttentionsUi((state) => state.isEditing)
+  // const setIsMoveable = useAttentionsUi((store) => store.setIsMoveable)
+  // const isDragging = useAttentionsUi((store) => store.isItemDragging)
 
   return (
-    <div className="flex px-3 flex-col w-full pb-3 overflow-auto h-full">
-      <nav className="pb-3 pt-4 flex border-b border-neutral-500/30 items-center gap-4">
+    <div className="flex px-2 relative flex-col w-full py-3 overflow-hidden h-full">
+      <nav className="flex items-center py-2 border-b border-neutral-500/20">
         <Form
           refetch={refetch}
           triggerProps={{
-            disabled: isLoading || !authUser.hasPrivilege('events:create'),
+            disabled:
+              isLoading || !authUser.hasPrivilege('events:positions:create'),
             appearance: 'primary',
             icon: <AddFilled />,
-            children: <span>Nuevo</span>
+            children: <span>Registrar puesto de atención</span>
           }}
-        />
-        <SearchBox
-          appearance="filled-lighter-shadow"
-          disabled={isLoading}
-          value={searchValue}
-          dismiss={{
-            onClick: () => setQ('')
-          }}
-          onChange={(_, e) => {
-            if (e.value === '') setQ(undefined)
-            handleChange(e.value)
-          }}
-          contentBefore={<Search20Regular className="text-blue-500" />}
-          placeholder="Buscar puesto de atención"
         />
       </nav>
       <div className="overflow-auto flex-grow rounded-xl pt-2 h-full">
@@ -133,7 +86,7 @@ export default function AttentionsPositionsPage() {
                 return (
                   <AccordionItem value={index} key={index}>
                     <AccordionHeader expandIconPosition="end" className="pr-4">
-                      <h1 className="font-semibold capitalize text-base">
+                      <h1 className="font-semibold capitalize text-sm">
                         {item.business.name}{' '}
                         <span className="opacity-60 text-sm">
                           {item.positions.length} puesto
@@ -141,11 +94,11 @@ export default function AttentionsPositionsPage() {
                         </span>
                       </h1>
                     </AccordionHeader>
-                    <AccordionPanel className="lg:pl-14 pb-10">
+                    <AccordionPanel className="lg:pl-14 pb-5">
                       <table className="w-full">
                         <thead>
-                          <tr className="dark:text-neutral-400 font-semibold [&>td]:py-2 [&>td]:px-2">
-                            <td className="max-w-[80px] w-[80px]"></td>
+                          <tr className="dark:text-neutral-400 font-semibold text-xs [&>td]:py-2 [&>td]:px-2">
+                            <td className="max-w-[0px] w-[0px]"></td>
                             <td className="text-nowrap">Puesto de atención</td>
                             <td className="text-nowrap">Atendiendo ahora</td>
                             <td className="text-nowrap">Disponible</td>
@@ -153,7 +106,7 @@ export default function AttentionsPositionsPage() {
                           </tr>
                         </thead>
                         <tbody className="divide-y divide-neutral-500/20">
-                          {positionsOrdered.map((position) => (
+                          {positionsOrdered?.map((position) => (
                             <Item
                               key={position.id}
                               item={position}
@@ -168,37 +121,8 @@ export default function AttentionsPositionsPage() {
               })}
             </Accordion>
           </div>
-          // <table className="w-full relative">
-          //   <tbody>
-          //     {!isLoading &&
-          //       items?.map((item) => (
-          //         <Item refetch={refetch} key={item.id} item={item} />
-          //       ))}
-          //   </tbody>
-          // </table>
         )}
       </div>
-      {info && (
-        <footer className="flex p-5 justify-center">
-          <div className="flex justify-between w-full">
-            <p className="flex basis-0 flex-grow">
-              Mostrando {info.from} - {info.to} de {info.total} resultados
-            </p>
-            {info.next_page_url && (
-              <button
-                disabled={loadingMore}
-                onClick={nextPage}
-                className="dark:text-blue-500 hover:underline"
-              >
-                {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
-              </button>
-            )}
-            <p className="flex basis-0 flex-grow justify-end">
-              Página {info.current_page} de {info.last_page}
-            </p>
-          </div>
-        </footer>
-      )}
     </div>
   )
 }

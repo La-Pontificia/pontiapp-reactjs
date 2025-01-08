@@ -8,10 +8,16 @@ import {
   Avatar
 } from '@fluentui/react-components'
 import {
-  CircleFilled,
-  CircleRegular,
-  DesktopCursorFilled,
-  DesktopCursorRegular,
+  BoardSplitFilled,
+  BoardSplitRegular,
+  BuildingFilled,
+  BuildingRegular,
+  // CircleFilled,
+  // CircleRegular,
+  // DesktopCursorFilled,
+  // DesktopCursorRegular,
+  DeviceMeetingRoomFilled,
+  DeviceMeetingRoomRegular,
   DocumentTableFilled,
   DocumentTableRegular,
   type FluentIcon,
@@ -19,8 +25,10 @@ import {
   FolderRegular,
   PersonSupportFilled,
   PersonSupportRegular,
-  TableSimpleExcludeFilled,
-  TableSimpleExcludeRegular,
+  SparkleFilled,
+  SparkleRegular,
+  // TableSimpleExcludeFilled,
+  // TableSimpleExcludeRegular,
   TaskListSquarePersonFilled,
   TaskListSquarePersonRegular,
   TicketDiagonalFilled,
@@ -53,15 +61,15 @@ const ItemNav = (props: ItemNav) => {
       className="block relative dark:text-neutral-300 text-neutral-900 data-[active]:font-semibold group pl-3"
     >
       <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center">
-        <span className="h-[20px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-stone-500/30 group-hover:opacity-100 opacity-0" />
+        <span className="h-[20px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
       </div>
-      <div className="flex items-center group-data-[active]:dark:text-white  gap-2 px-2 py-2 rounded-lg group-hover:bg-stone-100 dark:group-hover:bg-stone-200 dark:group-hover:bg-stone-500/20">
+      <div className="flex items-center group-data-[active]:dark:text-white  gap-2 px-2 py-2 rounded-lg group-hover:bg-neutral-100 dark:group-hover:bg-neutral-200 dark:group-hover:bg-neutral-500/20">
         {props.emptyIcon ? (
           <span className="w-[24px] aspect-square"></span>
         ) : Icon ? (
           <Icon
             fontSize={24}
-            className="dark:text-stone-400 group-data-[active]:dark:text-blue-500 group-data-[active]:text-blue-800"
+            className="dark:text-neutral-400 group-data-[active]:dark:text-blue-500 group-data-[active]:text-blue-800"
           />
         ) : (
           <Avatar
@@ -86,8 +94,8 @@ export default function AttentionsSidenar() {
       </nav>
       <nav className="pr-2 py-2 px-3">
         <ItemNav
-          icon={CircleRegular}
-          iconActive={CircleFilled}
+          icon={SparkleRegular}
+          iconActive={SparkleFilled}
           href="/m/attentions/register"
         >
           Registro Rápido
@@ -95,14 +103,14 @@ export default function AttentionsSidenar() {
         <ItemNav
           icon={PersonSupportRegular}
           iconActive={PersonSupportFilled}
-          href="/m/attentions/start"
+          href="/m/attentions/answer-tickets"
         >
           Iniciar atención
         </ItemNav>
         <ItemNav
-          icon={DesktopCursorRegular}
-          iconActive={DesktopCursorFilled}
-          href="/m/attentions/start"
+          icon={DeviceMeetingRoomRegular}
+          iconActive={DeviceMeetingRoomFilled}
+          href="/m/attentions/shift-screen"
         >
           Pantalla de Turnos
         </ItemNav>
@@ -134,8 +142,8 @@ export default function AttentionsSidenar() {
             </AccordionHeader>
             <AccordionPanel className="p-0 !mx-5">
               <ItemNav
-                icon={TableSimpleExcludeRegular}
-                iconActive={TableSimpleExcludeFilled}
+                icon={BoardSplitRegular}
+                iconActive={BoardSplitFilled}
                 href="/m/attentions/positions"
               >
                 Puestos de Atención
@@ -146,6 +154,13 @@ export default function AttentionsSidenar() {
                 href="/m/attentions/services"
               >
                 Opciones disponibles
+              </ItemNav>
+              <ItemNav
+                icon={BuildingRegular}
+                iconActive={BuildingFilled}
+                href="/m/attentions/business-units"
+              >
+                Uni. de Negocios
               </ItemNav>
             </AccordionPanel>
           </AccordionItem>
