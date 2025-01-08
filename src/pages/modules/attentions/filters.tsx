@@ -201,8 +201,8 @@ export default function AttentionsFilters({
             disabled={isLoading || !endDate || !startDate}
             onClick={() => {
               onAplyFilters({
-                startDate,
-                endDate,
+                startDate: startDate ? format(startDate, 'YYYY-MM-DD') : null,
+                endDate: endDate ? format(endDate, 'YYYY-MM-DD') : null,
                 q,
                 businessId: businessUnit?.id ?? null,
                 positionId: position?.id ?? null

@@ -10,7 +10,7 @@ import { Helmet } from 'react-helmet'
 import { businesses } from '~/const'
 import { format } from '~/lib/dayjs'
 import { fdb } from '~/lib/firebase'
-import { FirebaseAttentionTicket, TicketState } from '~/types/attention-ticket'
+import { FirebaseAttentionTicket } from '~/types/attention-ticket'
 
 export default function AttentionsShiftScreen() {
   const [realtime, setRealtime] = React.useState<string>(
@@ -26,11 +26,9 @@ export default function AttentionsShiftScreen() {
 
   // datas
   const [tickets, setTickets] = React.useState<FirebaseAttentionTicket[]>([])
-  const [callingTickets, setCallingTickets] = React.useState<
-    FirebaseAttentionTicket[]
-  >([])
-  const [isLoading, setIsLoading] = React.useState(true)
-  const [businessIds, setBusinessIds] = React.useState<string[]>([])
+  const [, setCallingTickets] = React.useState<FirebaseAttentionTicket[]>([])
+  const [, setIsLoading] = React.useState(true)
+  // const [businessIds, setBusinessIds] = React.useState<string[]>([])
 
   const getConditions = React.useMemo(() => {
     const conditions = [
