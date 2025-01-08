@@ -19,6 +19,7 @@ import { calendarStrings } from '~/const'
 import React from 'react'
 import { toast } from '~/commons/toast'
 import { handleError } from '~/utils'
+import { User } from '~/types/user'
 
 type FormValues = {
   job: Job | null
@@ -32,12 +33,24 @@ export default function UsersEditOrganizationPage() {
   const { user: authUser } = useAuth()
   const [updating, setUpdating] = React.useState(false)
 
+  const { data: properties, isLoading: aditionalIsLoading } =
+    useQuery<User | null>({
+      queryKey: ['slugAditionUserInfo', 'organization', user!.username],
+      queryFn: async () => {
+        const res = await api.get<User>(
+          'users/' + user!.username + '/getOrganization'
+        )
+        if (!res.ok) return null
+        return new User(res.data)
+      }
+    })
+
   const { watch, control, setValue, handleSubmit } = useForm<FormValues>({
     values: {
       job: user?.role.job ?? null,
       role: user?.role ?? null,
-      contractType: user?.contractType ?? null,
-      entryDate: user?.entryDate ?? null
+      contractType: properties?.contractType ?? null,
+      entryDate: properties?.entryDate ?? null
     }
   })
 
@@ -199,6 +212,7 @@ export default function UsersEditOrganizationPage() {
                   selectedOptions={[field.value?.id ?? '']}
                   disabled={
                     iscontractTypesLoading ||
+                    aditionalIsLoading ||
                     updating ||
                     !authUser.hasPrivilege('users:edit')
                   }
@@ -238,7 +252,11 @@ export default function UsersEditOrganizationPage() {
                     onSelectDate={(date) => {
                       field.onChange(date)
                     }}
-                    disabled={updating || !authUser.hasPrivilege('users:edit')}
+                    disabled={
+                      updating ||
+                      aditionalIsLoading ||
+                      !authUser.hasPrivilege('users:edit')
+                    }
                     formatDate={(date) => format(date, 'MMMM D, YYYY')}
                     strings={calendarStrings}
                     placeholder="Selecciona una fecha"

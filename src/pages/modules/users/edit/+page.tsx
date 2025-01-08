@@ -39,6 +39,19 @@ export default function CollaboratorsEditPage() {
   const { user, refetch } = useEditUser()
   const { user: authUser } = useAuth()
   const [updating, setUpdating] = React.useState(false)
+
+  const { data: properties, isLoading: aditionalIsLoading } =
+    useQuery<User | null>({
+      queryKey: ['slugAditionUserInfo', 'account', user!.username],
+      queryFn: async () => {
+        const res = await api.get<User>(
+          'users/' + user!.username + '/getAccount'
+        )
+        if (!res.ok) return null
+        return new User(res.data)
+      }
+    })
+
   const {
     control,
     handleSubmit,
@@ -47,11 +60,11 @@ export default function CollaboratorsEditPage() {
     formState: { errors }
   } = useForm<FormValues>({
     values: {
-      customPrivileges: user?.customPrivileges || [],
+      customPrivileges: properties?.customPrivileges || [],
       displayName: user?.displayName || '',
       status: user?.status || false,
-      manager: user?.manager,
-      userRole: user?.userRole || null,
+      manager: properties?.manager,
+      userRole: properties?.userRole || null,
       username: user?.username || '',
       domain: Object.keys(availableDomains)[0]
     }
@@ -223,7 +236,9 @@ export default function CollaboratorsEditPage() {
                   }}
                   {...field}
                   selectedOptions={[field.value?.id ?? ''] as any}
-                  disabled={isUserRolesLoading || updating}
+                  disabled={
+                    isUserRolesLoading || aditionalIsLoading || updating
+                  }
                   onOptionSelect={(_, data) => {
                     const role = userRoles?.find(
                       (ur) => ur.id === data.optionValue

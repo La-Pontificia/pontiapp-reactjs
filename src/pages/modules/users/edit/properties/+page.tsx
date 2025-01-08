@@ -9,7 +9,7 @@ import { Mail20Regular, Phone20Regular } from '@fluentui/react-icons'
 import { toast } from '~/commons/toast'
 import { format } from '~/lib/dayjs'
 import { useEditUser } from '../+layout'
-import { ContactType } from '~/types/user'
+import { ContactType, User } from '~/types/user'
 import { api } from '~/lib/api'
 import { Helmet } from 'react-helmet'
 import { useAuth } from '~/store/auth'
@@ -21,6 +21,7 @@ import { FaWhatsapp } from 'react-icons/fa'
 import { handleError } from '~/utils'
 import { UserContacts } from '../../create/properties'
 import { getPersonByDocumentId } from '~/utils/fetch'
+import { useQuery } from '@tanstack/react-query'
 
 type FormValues = {
   documentId: string
@@ -38,11 +39,23 @@ export default function UsersEditPropertiesPage() {
   const { user: authUser } = useAuth()
   const [searching, setSearching] = React.useState(false)
 
+  const { data: properties, isLoading: aditionalIsLoading } =
+    useQuery<User | null>({
+      queryKey: ['slugAditionUserInfo', 'propertiesEdit', user!.username],
+      queryFn: async () => {
+        const res = await api.get<User>(
+          'users/' + user!.username + '/getPropertiesEdit'
+        )
+        if (!res.ok) return null
+        return new User(res.data)
+      }
+    })
+
   const { setValue, control, watch, handleSubmit } = useForm<FormValues>({
     values: {
-      birthdate: user?.birthdate,
+      birthdate: properties?.birthdate,
       contacts: user?.contacts || [],
-      documentId: user?.documentId || '',
+      documentId: properties?.documentId || '',
       firstNames: user?.firstNames || '',
       lastNames: user?.lastNames || '',
       photoURL: user?.photoURL || ''
@@ -171,7 +184,11 @@ export default function UsersEditPropertiesPage() {
               >
                 <Input
                   contentAfter={searching ? <Spinner size="tiny" /> : <></>}
-                  disabled={updating || !authUser.hasPrivilege('users:edit')}
+                  disabled={
+                    updating ||
+                    aditionalIsLoading ||
+                    !authUser.hasPrivilege('users:edit')
+                  }
                   {...field}
                 />
               </Field>
@@ -224,7 +241,11 @@ export default function UsersEditPropertiesPage() {
                   label="Fecha de nacimiento"
                 >
                   <DatePicker
-                    disabled={updating || !authUser.hasPrivilege('users:edit')}
+                    disabled={
+                      updating ||
+                      aditionalIsLoading ||
+                      !authUser.hasPrivilege('users:edit')
+                    }
                     value={field.value ? new Date(field.value) : null}
                     onSelectDate={(date) => {
                       field.onChange(date)
