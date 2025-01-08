@@ -4,14 +4,14 @@ import { User } from './user'
 export class Assist {
   date: string
   user: User
-  morningFrom: Date
-  morningTo: Date
-  afternoonFrom: Date
-  afternoonTo: Date
-  morningMarkedIn: Date | null
-  morningMarkedOut: Date | null
-  afternoonMarkedIn: Date | null
-  afternoonMarkedOut: Date | null
+  morningFrom: string
+  morningTo: string
+  afternoonFrom: string
+  afternoonTo: string
+  morningMarkedIn: string | null
+  morningMarkedOut: string | null
+  afternoonMarkedIn: string | null
+  afternoonMarkedOut: string | null
 
   constructor(data: Assist) {
     this.date = data.date
