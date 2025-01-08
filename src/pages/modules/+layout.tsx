@@ -122,7 +122,7 @@ export default function ModuleLayout(): JSX.Element {
     //             relationship="label"
     //           >
     //             <button
-    //               className="font-semibold text-xs bg-stone-500/20 rounded-lg p-2 flex items-center gap-2"
+    //               className="font-semibold text-xs bg-neutral-500/20 rounded-lg p-2 flex items-center gap-2"
     //               onClick={() => setFullScreen((prev) => !prev)}
     //             >
     //               {fullScreen ? (
