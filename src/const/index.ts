@@ -1,3 +1,11 @@
+import {
+  VITE_AREA_DEVELOPER_ID,
+  VITE_DEPARTMENT_DEVELOPER_ID,
+  VITE_JOB_DEVELOPER_ID,
+  VITE_PRIVILEGE_DEVELOPER,
+  VITE_ROLE_DEVELOPER_ID
+} from '~/config/env'
+
 export const businesses = {
   'https://www.elp.edu.pe': {
     logo: '/businesses/elp.webp',
@@ -110,12 +118,11 @@ export const availableDomains = {
   'lapontificia.edu.pe': 'La Pontificia'
 } as const
 
-export const AREA_DEVELOPER_ID = import.meta.env.VITE_AREA_DEVELOPER_ID
-export const DEPARTMENT_DEVELOPER_ID = import.meta.env
-  .VITE_DEPARTMENT_DEVELOPER_ID
-export const JOB_DEVELOPER_ID = import.meta.env.VITE_JOB_DEVELOPER_ID
-export const ROLE_DEVELOPER_ID = import.meta.env.VITE_ROLE_DEVELOPER_ID
-export const PRIVILEGE_DEVELOPER = import.meta.env.VITE_PRIVILEGE_DEVELOPER
+export const AREA_DEVELOPER_ID = VITE_AREA_DEVELOPER_ID
+export const DEPARTMENT_DEVELOPER_ID = VITE_DEPARTMENT_DEVELOPER_ID
+export const JOB_DEVELOPER_ID = VITE_JOB_DEVELOPER_ID
+export const ROLE_DEVELOPER_ID = VITE_ROLE_DEVELOPER_ID
+export const PRIVILEGE_DEVELOPER = VITE_PRIVILEGE_DEVELOPER
 
 export const PRIVILEGES = {
   development: 'Development',
