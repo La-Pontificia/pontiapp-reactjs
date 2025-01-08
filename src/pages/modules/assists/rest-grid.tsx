@@ -37,7 +37,7 @@ export default function RestAssistsGrid({
             return (
               <tr
                 key={key}
-                className="relative [&>td]:py-2 even:bg-stone-500/20 [&>td]:text-nowrap  [&>td]:px-3 bg-stone-900 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+                className="relative bg-neutral-50/40 dark:bg-neutral-900 odd:bg-neutral-500/10 dark:even:bg-neutral-500/20 [&>td]:text-nowrap  group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
               >
                 <td>
                   <UserHoverInfo slug={assist.user.username}>
@@ -83,7 +83,7 @@ export default function RestAssistsGrid({
                   </div>
                 </td>
                 <td>
-                  <Badge color="warning">Sin procesar</Badge>
+                  <Badge color="important">Sin procesar</Badge>
                 </td>
               </tr>
             )

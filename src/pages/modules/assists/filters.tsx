@@ -1,5 +1,4 @@
 import {
-  Badge,
   Button,
   Combobox,
   Dialog,
@@ -18,14 +17,9 @@ import {
   Spinner
 } from '@fluentui/react-components'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import {
-  CalendarRtlRegular,
-  Dismiss12Regular,
-  DockRegular
-} from '@fluentui/react-icons'
+import { CalendarRtlRegular, DockRegular } from '@fluentui/react-icons'
 import React from 'react'
 import { localizedStrings } from '~/const'
-import { AssistTerminal } from '~/types/assist-terminal'
 import { Filter } from './+page'
 import { format } from '~/lib/dayjs'
 import { Link } from 'react-router'
@@ -36,8 +30,6 @@ import { Area } from '~/types/area'
 import { useAuth } from '~/store/auth'
 
 export default function AssistFilters({
-  isTerminalsLoading,
-  terminals,
   onAplyFilters,
   isLoading,
   areas,
@@ -45,8 +37,6 @@ export default function AssistFilters({
   // isJobsLoading,
   jobs
 }: {
-  terminals: AssistTerminal[]
-  isTerminalsLoading: boolean
   onAplyFilters: (filters: Filter) => void
   isLoading: boolean
   areas: Area[]
@@ -61,16 +51,8 @@ export default function AssistFilters({
   const [openReport, setOpenReport] = React.useState(false)
   const [reporting, setReporting] = React.useState(false)
 
-  const [selectedTerminals, setSelectedTerminals] = React.useState<
-    AssistTerminal[]
-  >([])
-
   const [job, setJob] = React.useState<Job | null>(null)
   const [area, setArea] = React.useState<Area | null>(null)
-
-  const onTagClick = (id: string) => {
-    setSelectedTerminals(selectedTerminals.filter((o) => o.id !== id))
-  }
 
   const handleReport = async () => {
     setReporting(true)
@@ -78,8 +60,6 @@ export default function AssistFilters({
     if (startDate) uri += `&startDate=${format(startDate, 'YYYY-MM-DD')}`
     if (endDate) uri += `&endDate=${format(endDate, 'YYYY-MM-DD')}`
     if (q) uri += `&q=${q}`
-    if (selectedTerminals.length > 0)
-      uri += `&assistTerminals=${selectedTerminals.map((o) => o.id).join(',')}`
     if (area) uri += `&areaId=${area.id}`
     if (job) uri += `&jobId=${job.id}`
 
@@ -106,7 +86,6 @@ export default function AssistFilters({
             }
           }}
           disabled={isLoading}
-          appearance="filled-lighter-shadow"
           onChange={(_, e) => {
             if (e.value === '') setQ(null)
             setQ(e.value)
@@ -124,9 +103,7 @@ export default function AssistFilters({
                 />
               }
               appearance="secondary"
-              style={{
-                border: 0
-              }}
+              style={{}}
             />
           </PopoverTrigger>
           <PopoverSurface
@@ -146,7 +123,6 @@ export default function AssistFilters({
                       setStartDate(date ? date : null)
                     }}
                     formatDate={(date) => format(date, 'DD-MM-YYYY')}
-                    appearance="filled-darker"
                     strings={localizedStrings}
                     placeholder="Seleccionar fecha"
                   />
@@ -159,7 +135,6 @@ export default function AssistFilters({
                     }}
                     disabled={isLoading}
                     formatDate={(date) => format(date, 'DD-MM-YYYY')}
-                    appearance="filled-darker"
                     strings={localizedStrings}
                     placeholder="Seleccionar fecha"
                   />
@@ -185,7 +160,6 @@ export default function AssistFilters({
             setJob(selected ?? null)
           }}
           value={job?.name ?? ''}
-          appearance="filled-lighter"
         >
           {jobs?.map((job) => (
             <Option text={job.name} key={job.id} value={job.id}>
@@ -210,7 +184,6 @@ export default function AssistFilters({
             setArea(selected ?? null)
           }}
           value={area?.name ?? ''}
-          appearance="filled-lighter"
         >
           {areas?.map((area) => (
             <Option text={area.name} key={area.id} value={area.id}>
@@ -218,54 +191,15 @@ export default function AssistFilters({
             </Option>
           ))}
         </Combobox>
-        <Combobox
-          disabled={isTerminalsLoading || isLoading}
-          multiselect={true}
-          style={{
-            minWidth: '50px'
-          }}
-          input={{
-            style: {
-              width: '100px'
-            }
-          }}
-          selectedOptions={selectedTerminals.map((o) => o.id)}
-          placeholder={`Terminales (${selectedTerminals?.length})`}
-          onOptionSelect={(_, event) => {
-            const selected = selectedTerminals.find(
-              (t) => t.id === event.optionValue
-            )
-            setSelectedTerminals((prev) =>
-              selected
-                ? prev.filter((t) => t.id !== event.optionValue)
-                : [...prev, terminals!.find((t) => t.id === event.optionValue)!]
-            )
-          }}
-          appearance="filled-lighter"
-        >
-          {terminals?.map((terminal) => (
-            <Option text={terminal.name} key={terminal.id} value={terminal.id}>
-              <div className="block">
-                <p>{terminal.name}</p>
-                <p className="text-xs opacity-50">{terminal.database}</p>
-              </div>
-            </Option>
-          ))}
-        </Combobox>
         <Button
           appearance="secondary"
-          style={{
-            border: 0
-          }}
-          disabled={
-            isLoading || !endDate || !startDate || !selectedTerminals.length
-          }
+          style={{}}
+          disabled={isLoading || !endDate || !startDate}
           onClick={() => {
             onAplyFilters({
               startDate,
               endDate,
               q,
-              terminalsIds: selectedTerminals.map((o) => o.id).join(','),
               areaId: area?.id ?? null,
               jobId: job?.id ?? null
             })
@@ -277,39 +211,19 @@ export default function AssistFilters({
           <div className="ml-auto">
             <Button
               disabled={
-                isLoading || !endDate || !startDate || !selectedTerminals.length
+                isLoading || !endDate || !startDate
+                // || !selectedTerminals.length
               }
               icon={<DockRegular />}
               appearance="secondary"
               onClick={() => setOpenReport(true)}
-              style={{
-                border: 0
-              }}
+              style={{}}
             >
               <span className="hidden xl:block">Generar reporte</span>
             </Button>
           </div>
         )}
       </nav>
-      <nav className="pt-3 flex gap-2 flex-wrap">
-        {selectedTerminals.map((terminal) => (
-          <button
-            disabled={isLoading}
-            onClick={() => onTagClick(terminal.id)}
-            key={terminal.id}
-          >
-            <Badge
-              color="success"
-              appearance="tint"
-              className="flex gap-1 items-center"
-            >
-              {terminal.name}
-              <Dismiss12Regular />
-            </Badge>
-          </button>
-        ))}
-      </nav>
-
       {openReport && (
         <Dialog
           open={openReport}

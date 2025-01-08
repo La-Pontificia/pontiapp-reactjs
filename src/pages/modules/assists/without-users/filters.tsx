@@ -89,7 +89,6 @@ export default function AssistFilters({
             }
           }}
           disabled={isLoading}
-          appearance="filled-lighter-shadow"
           onChange={(_, e) => {
             if (e.value === '') setQ(null)
             setQ(e.value)
@@ -107,9 +106,7 @@ export default function AssistFilters({
                 />
               }
               appearance="secondary"
-              style={{
-                border: 0
-              }}
+              style={{}}
             ></Button>
           </PopoverTrigger>
           <PopoverSurface
@@ -129,7 +126,6 @@ export default function AssistFilters({
                       setStartDate(date ? date : null)
                     }}
                     formatDate={(date) => format(date, 'DD-MM-YYYY')}
-                    appearance="filled-darker"
                     strings={localizedStrings}
                     placeholder="Seleccionar fecha"
                   />
@@ -142,7 +138,6 @@ export default function AssistFilters({
                     }}
                     disabled={isLoading}
                     formatDate={(date) => format(date, 'DD-MM-YYYY')}
-                    appearance="filled-darker"
                     strings={localizedStrings}
                     placeholder="Seleccionar fecha"
                   />
@@ -175,7 +170,6 @@ export default function AssistFilters({
                 : [...prev, terminals!.find((t) => t.id === event.optionValue)!]
             )
           }}
-          appearance="filled-lighter"
         >
           {terminals?.map((terminal) => (
             <Option text={terminal.name} key={terminal.id} value={terminal.id}>
@@ -188,9 +182,7 @@ export default function AssistFilters({
         </Combobox>
         <Button
           appearance="secondary"
-          style={{
-            border: 0
-          }}
+          style={{}}
           disabled={
             isLoading || !endDate || !startDate || !selectedTerminals.length
           }
@@ -214,9 +206,7 @@ export default function AssistFilters({
               icon={<DockRegular />}
               appearance="secondary"
               onClick={() => setOpenReport(true)}
-              style={{
-                border: 0
-              }}
+              style={{}}
             >
               <span className="hidden xl:block">Generar reporte</span>
             </Button>

@@ -34,7 +34,6 @@ export default function AssistSummaryFilters({
               setStartDate(date ? date : null)
             }}
             formatDate={(date) => format(date, 'DD-MM-YYYY')}
-            appearance="filled-lighter-shadow"
             strings={localizedStrings}
             placeholder="Seleccionar fecha"
           />
@@ -47,7 +46,6 @@ export default function AssistSummaryFilters({
             }}
             disabled={isLoading}
             formatDate={(date) => format(date, 'DD-MM-YYYY')}
-            appearance="filled-lighter-shadow"
             strings={localizedStrings}
             placeholder="Seleccionar fecha"
           />
@@ -70,7 +68,6 @@ export default function AssistSummaryFilters({
               terminals!.find((t) => t.id === event.optionValue)!
             )
           }}
-          appearance="filled-lighter"
         >
           {terminals?.map((terminal) => (
             <Option text={terminal.name} key={terminal.id} value={terminal.id}>
@@ -83,9 +80,7 @@ export default function AssistSummaryFilters({
         </Combobox>
         <Button
           appearance="secondary"
-          style={{
-            border: 0
-          }}
+          style={{}}
           disabled={isLoading || !endDate || !startDate || !selectedTerminal}
           onClick={() => {
             onAplyFilters({

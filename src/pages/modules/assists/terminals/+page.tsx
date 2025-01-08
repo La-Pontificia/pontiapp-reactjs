@@ -77,7 +77,6 @@ export default function AssistTerminalsPage() {
           }}
         />
         <SearchBox
-          appearance="filled-lighter-shadow"
           disabled={isLoading}
           value={searchValue}
           dismiss={{

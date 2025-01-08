@@ -33,6 +33,7 @@ import {
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
 import { useAuth } from '~/store/auth'
+import ExpiryStatusRenderer from '~/components/expiry-status-renderer'
 
 type ItemNav = {
   icon?: FluentIcon
@@ -41,7 +42,10 @@ type ItemNav = {
   avatar?: string
   children?: React.ReactNode
   emptyIcon?: boolean
-  badge?: string
+  feacture?: {
+    label: string
+    from: Date
+  }
 }
 
 const ItemNav = (props: ItemNav) => {
@@ -61,15 +65,15 @@ const ItemNav = (props: ItemNav) => {
       className="block relative dark:text-neutral-300 text-neutral-900 data-[active]:font-semibold group pl-3"
     >
       <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center">
-        <span className="h-[20px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-stone-500/30 group-hover:opacity-100 opacity-0" />
+        <span className="h-[20px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
       </div>
-      <div className="flex items-center group-data-[active]:dark:text-white  gap-2 px-2 py-2 rounded-lg group-hover:bg-stone-100 dark:group-hover:bg-stone-200 dark:group-hover:bg-stone-500/20">
+      <div className="flex items-center group-data-[active]:dark:text-white  gap-2 px-2 py-2 rounded-lg group-hover:bg-neutral-100 dark:group-hover:bg-neutral-200 dark:group-hover:bg-neutral-500/20">
         {props.emptyIcon ? (
           <span className="w-[24px] aspect-square"></span>
         ) : Icon ? (
           <Icon
             fontSize={24}
-            className="dark:text-stone-400 group-data-[active]:dark:text-blue-500 group-data-[active]:text-blue-800"
+            className="dark:text-neutral-400 group-data-[active]:dark:text-blue-500 group-data-[active]:text-blue-800"
           />
         ) : (
           <Avatar
@@ -80,10 +84,12 @@ const ItemNav = (props: ItemNav) => {
           />
         )}
         {props.children}
-        {props.badge && (
-          <Badge appearance="tint" color="brand">
-            {props.badge}
-          </Badge>
+        {props.feacture && (
+          <ExpiryStatusRenderer from={props.feacture.from}>
+            <Badge appearance="tint" color="brand">
+              {props.feacture.label}
+            </Badge>
+          </ExpiryStatusRenderer>
         )}
       </div>
     </Link>
@@ -109,7 +115,10 @@ export const AssistsSidebar = () => {
         )}
         {authUser.hasPrivilege('assists:schedules') && (
           <ItemNav
-            badge="Preview"
+            feacture={{
+              label: 'Nuevo',
+              from: new Date('2025-01-06')
+            }}
             icon={ClockRegular}
             iconActive={ClockFilled}
             href="/m/assists"
