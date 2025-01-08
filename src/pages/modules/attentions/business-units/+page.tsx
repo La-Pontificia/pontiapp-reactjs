@@ -49,7 +49,7 @@ export default function AttentionsBusinessUnitsPage() {
 
   const onUpdate = async () => {
     setFetching(true)
-    const res = await api.post('attentions/businessUnits', {
+    const res = await api.post('attentions/businessUnits/update', {
       data: JSON.stringify({
         ids: selectedIds
       })
