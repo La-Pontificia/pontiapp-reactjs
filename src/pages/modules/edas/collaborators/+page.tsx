@@ -115,7 +115,6 @@ export default function CollaboratorsPage() {
                 setFilters((prev) => ({ ...prev, q: null }))
               }
             }}
-            appearance="filled-lighter-shadow"
             onChange={(_, e) => {
               if (e.value === '') setFilters((prev) => ({ ...prev, q: null }))
               handleChange(e.value)
