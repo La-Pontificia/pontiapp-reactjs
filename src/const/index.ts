@@ -158,6 +158,17 @@ export const PRIVILEGES = {
   'assists:databases': 'Bases de datos de asistencias',
   'assists:assistTerminals': 'Terminales de asistencias',
 
+  // Attentions management
+  'attentions:tickets': 'Ver tickets',
+  'attentions:tickets:create': 'Registrar tickets',
+  'attentions:shiftScreen': 'Pantalla de turnos',
+  'attentions:answerTicket': 'Atender tickets',
+  'attentions:show': 'Ver atenciones',
+  'attentions:reportFiles': 'Ver reportes de atenciones',
+  'attentions:positions': 'Puestos de atención',
+  'attentions:services': 'Servicios de atención (Opciones)',
+  'attentions:businessUnits': 'Unidades de negocio de atención',
+
   // Edas management
   'edas:showAll': 'Ver todas las edas',
   'edas:show': 'Ver edas que supervisa',
