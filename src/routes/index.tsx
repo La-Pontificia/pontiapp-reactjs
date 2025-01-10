@@ -345,23 +345,105 @@ export default function MainRoutes() {
               </ProtectedModule>
             }
           >
-            <Route index element={<AttentionsPage />} />
-            <Route path="register" element={<AttentionsRegisterPage />} />
+            <Route
+              index
+              element={
+                <Protected has="attentions:show" navigate="/">
+                  <AttentionsPage />
+                </Protected>
+              }
+            />
+            <Route
+              path="register"
+              element={
+                <Protected
+                  has="attentions:tickets:create"
+                  navigate="/m/attentions"
+                >
+                  <AttentionsRegisterPage />
+                </Protected>
+              }
+            />
             <Route path="answer-tickets">
-              <Route index element={<AttentionsAnswerTickets />} />
-              <Route path=":slug" element={<AttentionsSlugAnswerTicket />} />
+              <Route
+                index
+                element={
+                  <Protected
+                    has="attentions:answerTicket"
+                    navigate="/m/attentions"
+                  >
+                    <AttentionsAnswerTickets />
+                  </Protected>
+                }
+              />
+              <Route
+                path=":slug"
+                element={
+                  <Protected
+                    has="attentions:answerTicket"
+                    navigate="/m/attentions"
+                  >
+                    <AttentionsSlugAnswerTicket />
+                  </Protected>
+                }
+              />
             </Route>
-            <Route path="shift-screen" element={<AttentionsShiftScreen />} />
-            <Route path="positions" element={<AttentionsPositionsPage />} />
-            <Route path="services" element={<AttentionsServicesPage />} />
+            <Route
+              path="shift-screen"
+              element={
+                <Protected
+                  has="attentions:shiftScreen"
+                  navigate="/m/attentions"
+                >
+                  <AttentionsShiftScreen />
+                </Protected>
+              }
+            />
+            <Route
+              path="positions"
+              element={
+                <Protected has="attentions:positions" navigate="/m/attentions">
+                  <AttentionsPositionsPage />
+                </Protected>
+              }
+            />
+            <Route
+              path="services"
+              element={
+                <Protected has="attentions:services" navigate="/m/attentions">
+                  <AttentionsServicesPage />
+                </Protected>
+              }
+            />
             <Route
               path="business-units"
-              element={<AttentionsBusinessUnitsPage />}
+              element={
+                <Protected
+                  has="attentions:businessUnits"
+                  navigate="/m/attentions"
+                >
+                  <AttentionsBusinessUnitsPage />
+                </Protected>
+              }
             />
-            <Route path="tickets" element={<AttentionsTicketsPage />} />
+            <Route
+              path="tickets"
+              element={
+                <Protected has="attentions:tickets" navigate="/m/attentions">
+                  <AttentionsTicketsPage />
+                </Protected>
+              }
+            />
             <Route
               path="report-files"
-              element={<AttentionsReportFilesPage />}
+              element={
+                <Protected
+                  has="attentions:reportFiles"
+                  navigate="/m/attentions"
+                >
+                  <AttentionsReportFilesPage />
+                </Protected>
+              }
             />
           </Route>
         </Route>
