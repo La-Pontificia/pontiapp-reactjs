@@ -8,8 +8,8 @@ import {
   type FluentIcon,
   HomeFilled,
   HomeRegular,
-  // MegaphoneLoudFilled,
-  // MegaphoneLoudRegular,
+  MegaphoneLoudFilled,
+  MegaphoneLoudRegular,
   PeopleFilled,
   PeopleRegular,
   TabletFilled,
@@ -131,7 +131,7 @@ export const RootSidebar = () => {
             href="/m/assists"
           />
         )}
-        {/* {authUser.hasModule('events') && (
+        {authUser.hasModule('events') && (
           <ItemNav
             tooltip="Gestión de eventos"
             text="Eventos"
@@ -140,7 +140,7 @@ export const RootSidebar = () => {
             href="/m/events"
           />
         )}
-          */}
+
         {authUser.hasModule('attentions') && (
           <ItemNav
             tooltip="Control de atención de tickets"
