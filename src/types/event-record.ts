@@ -1,39 +1,41 @@
 import { BusinessUnit } from './business-unit'
 import { Event } from './event'
-
 export class EventRecord {
   id: string
   documentId: string
   firstNames: string
   lastNames: string
-  displayName: string
-  career: string
+  fullName: string
+  career: string | null
   event: Event
-  eventId: string
-  gender: string
-  period: string
-  email: string
+  gender: string | null
+  period: string | null
+  email: string | null
   business: BusinessUnit
-  created_at: Date
-  updated_at: Date
+  created_at: string
+  updated_at: string
   constructor(data: EventRecord) {
     this.id = data.id
     this.documentId = data.documentId
     this.firstNames = data.firstNames
     this.lastNames = data.lastNames
+    this.fullName = data.fullName
     this.career = data.career
-    this.event = data.event
-    this.eventId = data.eventId
     this.gender = data.gender
     this.period = data.period
     this.email = data.email
     this.business = data.business
+    this.event = data.event
+
     this.created_at = data.created_at
     this.updated_at = data.updated_at
 
-    this.displayName = `${this.firstNames} ${this.lastNames}`
-
-    if (data.event) this.event = new Event(data.event)
     if (data.business) this.business = new BusinessUnit(data.business)
+    if (data.event) this.event = new Event(data.event)
+  }
+
+  get displayName() {
+    if (this.fullName) return this.fullName
+    return `${this.firstNames} ${this.lastNames}`
   }
 }
