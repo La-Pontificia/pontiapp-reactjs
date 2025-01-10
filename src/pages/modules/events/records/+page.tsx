@@ -5,6 +5,13 @@ import { DockRegular, Search20Regular } from '@fluentui/react-icons'
 import {
   Button,
   Combobox,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger,
   Option,
   SearchBox,
   Spinner
@@ -19,6 +26,7 @@ import { EventRecord } from '~/types/event-record'
 import { BusinessUnit } from '~/types/business-unit'
 import { Event } from '~/types/event'
 import { useAuth } from '~/store/auth'
+import { Link } from 'react-router'
 
 export default function EventsRecordsPage() {
   const { user: authUser } = useAuth()
@@ -30,6 +38,9 @@ export default function EventsRecordsPage() {
   const [business, setBusiness] = React.useState<BusinessUnit>()
   const [event, setEvent] = React.useState<Event>()
   const [q, setQ] = React.useState<string>()
+
+  const [openReport, setOpenReport] = React.useState(false)
+  const [reporting, setReporting] = React.useState(false)
 
   const query = `events/records/all?paginate=true&relationship=event,business${
     q ? `&q=${q}` : ''
@@ -101,6 +112,22 @@ export default function EventsRecordsPage() {
     }
   })
 
+  const handleReport = async () => {
+    setReporting(true)
+    let uri = 'events/records/report?tm=true'
+    if (business) uri += `&businessUnitId=${business.id}`
+    if (event) uri += `&eventId=${event.id}`
+    const res = await api.post(uri)
+    if (!res.ok) {
+      toast('Error al generar el reporte')
+    } else {
+      toast('Reporte en proceso de generación, te notificaremos.')
+    }
+
+    setOpenReport(false)
+    setReporting(false)
+  }
+
   return (
     <div className="flex flex-col w-full pb-3 overflow-auto h-full">
       <nav className="pb-3 pt-4 flex-wrap flex border-b border-neutral-500/30 items-center gap-2">
@@ -161,7 +188,12 @@ export default function EventsRecordsPage() {
         </Combobox>
         {authUser.hasPrivilege('events:records:report') && (
           <div className="ml-auto">
-            <Button icon={<DockRegular />} appearance="secondary" style={{}}>
+            <Button
+              disabled={isLoading || !event}
+              onClick={() => setOpenReport(true)}
+              icon={<DockRegular />}
+              appearance="secondary"
+            >
               <span className="hidden xl:block">Generar reporte</span>
             </Button>
           </div>
@@ -224,6 +256,51 @@ export default function EventsRecordsPage() {
             </p>
           </div>
         </footer>
+      )}
+
+      {/* dialogs */}
+      {openReport && (
+        <Dialog
+          open={openReport}
+          onOpenChange={(_, e) => setOpenReport(e.open)}
+          modalType="alert"
+        >
+          <DialogSurface>
+            <DialogBody>
+              <DialogTitle>
+                Verifica los filtros seleccionados antes de generar el reporte.
+              </DialogTitle>
+              <DialogContent>
+                <p className="w-full">
+                  Puedes seguir usando el sistema mientras se genera el reporte.
+                  enviaremos un correo cuando esté listo o puedes descargarlo
+                  desde la sección de{' '}
+                  <Link
+                    to="/m/events/report-files"
+                    target="_blank"
+                    className="underline"
+                  >
+                    archivo de reportes
+                  </Link>{' '}
+                  del módulo.
+                </p>
+              </DialogContent>
+              <DialogActions>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button appearance="secondary">Cancelar</Button>
+                </DialogTrigger>
+                <Button
+                  onClick={handleReport}
+                  disabled={reporting}
+                  icon={reporting ? <Spinner size="tiny" /> : undefined}
+                  appearance="primary"
+                >
+                  Generar reporte
+                </Button>
+              </DialogActions>
+            </DialogBody>
+          </DialogSurface>
+        </Dialog>
       )}
     </div>
   )

@@ -34,14 +34,14 @@ export default function Item({
 
   const handleDelete = async () => {
     setDeleting(true)
-    const res = await api.post(`events/${item?.id}/delete`)
+    const res = await api.post(`events/records/${item?.id}/delete`)
     if (!res.ok) {
       setDeleting(false)
       return toast(handleError(res.error))
     }
     setDeleting(false)
     setOpenDelete(false)
-    toast(`${item.firstNames} eliminado correctamente`)
+    toast(`Registro de ${item.displayName} eliminado correctamente`)
     refetch()
   }
 

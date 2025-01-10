@@ -10,6 +10,37 @@ import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 
 export default function EventsRegister() {
+  const [people, setPeople] = React.useState<
+    Array<{
+      names: string
+      documentId: string
+      career: string
+    }>
+  >([])
+  const SHEET_URL =
+    'https://docs.google.com/spreadsheets/d/e/2PACX-1vT3NJ2Sdi74uySfutPWUUnFBz-5pI57flWViZKplAo9IdlQ6k_J2KrIp3bcwSMx4OcNQHj1yMkre8pU/pub?output=csv'
+
+  React.useEffect(() => {
+    const fetchData = async () => {
+      const csv = await fetch(SHEET_URL)
+      const text = await csv.text()
+      const people = text
+        .split('\n')
+        .splice(1)
+        .map((row) => {
+          const [, names, documentId, , , career] = row.split(',')
+          return {
+            names,
+            documentId,
+            career
+          }
+        })
+      setPeople(people)
+    }
+
+    fetchData()
+  }, [])
+
   const toggleSidebar = useUi((s) => s.toggleSidebar)
   const isOpenSidebar = useUi((s) => s.isSidebarOpen)
   const isModuleMaximized = useUi((s) => s.isModuleMaximized)
@@ -47,8 +78,38 @@ export default function EventsRegister() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedEvent, selectedBusinessUnit])
 
+  const handleGetPerson = async (documentId: string) => {
+    if (documentId.length < 8) return toast('Documento inválido')
+    const person = people.find((p) => p.documentId === documentId) ?? {
+      documentId,
+      career: '',
+      names: ''
+    }
+
+    const res = await api.post('events/records', {
+      data: JSON.stringify({
+        documentId: person.documentId,
+        firstNames: '',
+        lastNames: '',
+        fullName: person.names,
+        period: '',
+        email: '',
+        gender: '',
+        career: person.career,
+        eventId: selectedEvent!.id,
+        businessUnitId: selectedBusinessUnit!.id
+      })
+    })
+
+    if (res.ok) {
+      toast(`${person.names} registrado`)
+    } else {
+      toast('Error al registrar')
+    }
+  }
+
   useQrCodeReader({
-    onEnter: (t) => t && toast(t),
+    onEnter: (d) => handleGetPerson(d),
     disabled: !selectedEvent || !selectedBusinessUnit
   })
 
@@ -61,7 +122,11 @@ export default function EventsRegister() {
       ) : (
         <div className="h-full flex flex-col w-full">
           <div className="text-center flex-grow flex-col items-center flex justify-center">
-            <Listeng />
+            <Listeng
+              grayScale={!selectedEvent || !selectedBusinessUnit}
+              pulse={!!(selectedEvent && selectedBusinessUnit)}
+              rotate={!!(selectedEvent && selectedBusinessUnit)}
+            />
             <p className="pt-10 opacity-70">
               {selectedBusinessUnit && selectedEvent
                 ? 'Escuchando el lector de barras...'
