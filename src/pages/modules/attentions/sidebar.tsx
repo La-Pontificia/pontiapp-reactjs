@@ -35,6 +35,7 @@ import {
   TicketDiagonalRegular
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
+import { useAuth } from '~/store/auth'
 
 type ItemNav = {
   icon?: FluentIcon
@@ -86,82 +87,106 @@ const ItemNav = (props: ItemNav) => {
 }
 
 export default function AttentionsSidenar() {
-  // const { user: authUser } = useAuth()
+  const { user: authUser } = useAuth()
   return (
     <ReusableSidebar>
       <nav className="px-7 pt-4 pb-1">
         <h2 className="text-sm opacity-70">Atenciones</h2>
       </nav>
       <nav className="pr-2 py-2 px-3">
-        <ItemNav
-          icon={SparkleRegular}
-          iconActive={SparkleFilled}
-          href="/m/attentions/register"
-        >
-          Registro Rápido
-        </ItemNav>
-        <ItemNav
-          icon={PersonSupportRegular}
-          iconActive={PersonSupportFilled}
-          href="/m/attentions/answer-tickets"
-        >
-          Iniciar atención
-        </ItemNav>
-        <ItemNav
-          icon={DeviceMeetingRoomRegular}
-          iconActive={DeviceMeetingRoomFilled}
-          href="/m/attentions/shift-screen"
-        >
-          Pantalla de Turnos
-        </ItemNav>
-        <ItemNav
-          icon={TaskListSquarePersonRegular}
-          iconActive={TaskListSquarePersonFilled}
-          href="/m/attentions"
-        >
-          Atenciones
-        </ItemNav>
-        <ItemNav
-          icon={TicketDiagonalRegular}
-          iconActive={TicketDiagonalFilled}
-          href="/m/attentions/tickets"
-        >
-          Tickets
-        </ItemNav>
-        <ItemNav
-          icon={DocumentTableRegular}
-          iconActive={DocumentTableFilled}
-          href="/m/attentions/report-files"
-        >
-          Archivos de reportes
-        </ItemNav>
+        {authUser.hasPrivilege('attentions.register') && (
+          <ItemNav
+            icon={SparkleRegular}
+            iconActive={SparkleFilled}
+            href="/m/attentions/register"
+          >
+            Registro Rápido
+          </ItemNav>
+        )}
+        {authUser.hasPrivilege('attentions:answer-ticket') && (
+          <ItemNav
+            icon={PersonSupportRegular}
+            iconActive={PersonSupportFilled}
+            href="/m/attentions/answer-tickets"
+          >
+            Iniciar atención
+          </ItemNav>
+        )}
+
+        {authUser.hasPrivilege('attentions:shiftScreen') && (
+          <ItemNav
+            icon={DeviceMeetingRoomRegular}
+            iconActive={DeviceMeetingRoomFilled}
+            href="/m/attentions/shift-screen"
+          >
+            Pantalla de Turnos
+          </ItemNav>
+        )}
+
+        {authUser.hasPrivilege('attentions:show') && (
+          <ItemNav
+            icon={TaskListSquarePersonRegular}
+            iconActive={TaskListSquarePersonFilled}
+            href="/m/attentions"
+          >
+            Atenciones
+          </ItemNav>
+        )}
+
+        {authUser.hasPrivilege('attentions:tickets') && (
+          <ItemNav
+            icon={TicketDiagonalRegular}
+            iconActive={TicketDiagonalFilled}
+            href="/m/attentions/tickets"
+          >
+            Tickets
+          </ItemNav>
+        )}
+
+        {authUser.hasPrivilege('attentions:reportFiles') && (
+          <ItemNav
+            icon={DocumentTableRegular}
+            iconActive={DocumentTableFilled}
+            href="/m/attentions/report-files"
+          >
+            Archivos de reportes
+          </ItemNav>
+        )}
+
         <Accordion multiple defaultOpenItems={['1']} collapsible>
           <AccordionItem value="1">
             <AccordionHeader expandIconPosition="end" className="pl-4">
               <span className="font-semibold">Ajustes</span>
             </AccordionHeader>
             <AccordionPanel className="p-0 !mx-5">
-              <ItemNav
-                icon={BoardSplitRegular}
-                iconActive={BoardSplitFilled}
-                href="/m/attentions/positions"
-              >
-                Puestos de Atención
-              </ItemNav>
-              <ItemNav
-                icon={FolderRegular}
-                iconActive={FolderFilled}
-                href="/m/attentions/services"
-              >
-                Opciones disponibles
-              </ItemNav>
-              <ItemNav
-                icon={BuildingRegular}
-                iconActive={BuildingFilled}
-                href="/m/attentions/business-units"
-              >
-                Uni. de Negocios
-              </ItemNav>
+              {authUser.hasPrivilege('attentions:positions') && (
+                <ItemNav
+                  icon={BoardSplitRegular}
+                  iconActive={BoardSplitFilled}
+                  href="/m/attentions/positions"
+                >
+                  Puestos de Atención
+                </ItemNav>
+              )}
+              {authUser.hasPrivilege('attentions:services') && (
+                <ItemNav
+                  icon={FolderRegular}
+                  iconActive={FolderFilled}
+                  href="/m/attentions/services"
+                >
+                  Opciones disponibles
+                </ItemNav>
+              )}
+
+              {authUser.hasPrivilege('attentions:businessUnits') && (
+                <ItemNav
+                  icon={BuildingRegular}
+                  iconActive={BuildingFilled}
+                  href="/m/attentions/business-units"
+                >
+                  Uni. de Negocios
+                </ItemNav>
+              )}
             </AccordionPanel>
           </AccordionItem>
         </Accordion>

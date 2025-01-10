@@ -1,10 +1,10 @@
 // import { useAuth } from '~/store/auth'
 import { ReusableSidebar } from '~/components/reusable-sidebar'
 import {
-  Accordion,
-  AccordionHeader,
-  AccordionItem,
-  AccordionPanel,
+  // Accordion,
+  // AccordionHeader,
+  // AccordionItem,
+  // AccordionPanel,
   Avatar
 } from '@fluentui/react-components'
 import {
@@ -117,22 +117,22 @@ export default function AssistsEvents() {
           </ItemNav>
         )}
 
-        <Accordion multiple defaultOpenItems={['1']} collapsible>
+        {/* <Accordion multiple defaultOpenItems={['1']} collapsible>
           <AccordionItem value="1">
             <AccordionHeader expandIconPosition="end" className="pl-4">
               <span className="font-semibold">Ajustes</span>
             </AccordionHeader>
             <AccordionPanel className="p-0 !mx-5">
-              {/* <ItemNav
+              <ItemNav
                 icon={BuildingRegular}
                 iconActive={BuildingFilled}
                 href="/m/assists/databases"
               >
                 Unidades de negocio
-              </ItemNav> */}
+              </ItemNav>
             </AccordionPanel>
           </AccordionItem>
-        </Accordion>
+        </Accordion> */}
       </nav>
     </ReusableSidebar>
   )
