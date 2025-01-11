@@ -19,7 +19,7 @@ export const Listeng = React.forwardRef<
         {...props}
         data-grayScale={grayScale ? '' : undefined}
         className={cn(
-          'relative group data-[grayScale]:opacity-40 data-[grayScale]:grayscale aspect-square w-[150px]',
+          'relative group data-[grayScale]:opacity-40 data-[grayScale]:grayscale aspect-square w-[100px]',
           className
         )}
       >
