@@ -1,13 +1,13 @@
 import { toast } from '~/commons/toast'
-import { Listeng } from '~/components/listeng'
 import { useQrCodeReader } from '~/hooks/use-qr-reader'
 import { api } from '~/lib/api'
-import { useUi } from '~/store/ui'
 import { BusinessUnit } from '~/types/business-unit'
 import { Event } from '~/types/event'
-import { Combobox, Option, Spinner } from '@fluentui/react-components'
+import { Avatar, Combobox, Option } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
+import { format } from '~/lib/dayjs'
+import { BarcodeScannerFilled, GuestRegular } from '@fluentui/react-icons'
 
 export default function EventsRegister() {
   const [people, setPeople] = React.useState<
@@ -41,12 +41,15 @@ export default function EventsRegister() {
     fetchData()
   }, [])
 
-  const toggleSidebar = useUi((s) => s.toggleSidebar)
-  const isOpenSidebar = useUi((s) => s.isSidebarOpen)
-  const isModuleMaximized = useUi((s) => s.isModuleMaximized)
-  const toggleModuleMaximized = useUi((s) => s.toggleModuleMaximized)
-
   const [selectedEvent, setSelectedEvent] = React.useState<Event | null>(null)
+  const [records, setRecords] = React.useState<
+    Array<{
+      names: string
+      documentId: string
+      career: string
+      created_at: Date
+    }>
+  >([])
   const [selectedBusinessUnit, setSelectedBusinessUnit] =
     React.useState<BusinessUnit | null>(null)
 
@@ -70,21 +73,31 @@ export default function EventsRegister() {
     }
   })
 
-  React.useEffect(() => {
-    if (selectedEvent && selectedBusinessUnit) {
-      if (isOpenSidebar) toggleSidebar()
-      if (!isModuleMaximized) toggleModuleMaximized()
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedEvent, selectedBusinessUnit])
-
   const handleGetPerson = async (documentId: string) => {
-    if (documentId.length < 8) return toast('Documento inválido')
-    const person = people.find((p) => p.documentId === documentId) ?? {
+    if (documentId.length !== 8) return toast('Documento inválido')
+
+    const resultPerson = people.find((p) => p.documentId === documentId)
+    const person = resultPerson ?? {
       documentId,
       career: '',
       names: ''
     }
+
+    if (!resultPerson) {
+      toast(
+        `El documento ${documentId} no se encuentra en la lista de asistentes`
+      )
+    }
+
+    setRecords((prev) => [
+      {
+        names: person.names || person.documentId,
+        career: person.career,
+        documentId: person.documentId,
+        created_at: new Date()
+      },
+      ...prev
+    ])
 
     const res = await api.post('events/records', {
       data: JSON.stringify({
@@ -101,92 +114,153 @@ export default function EventsRegister() {
       })
     })
 
-    if (res.ok) {
-      toast(`${person.names} registrado`)
-    } else {
+    if (!res.ok) {
       toast('Error al registrar')
+      setRecords((prev) =>
+        prev.filter((r) => r.documentId !== person.documentId)
+      )
     }
   }
 
-  useQrCodeReader({
+  const { capturedText, inputRef, onChange, handleEnter } = useQrCodeReader({
     onEnter: (d) => handleGetPerson(d),
     disabled: !selectedEvent || !selectedBusinessUnit
   })
 
   return (
-    <div className="w-full h-full flex-grow">
-      {isLoading || isLoadingBusinessUnits ? (
-        <div className="h-full w-full grid place-content-center">
-          <Spinner size="huge" />
-        </div>
-      ) : (
-        <div className="h-full flex flex-col w-full">
-          <div className="text-center flex-grow flex-col items-center flex justify-center">
-            <Listeng
-              grayScale={!selectedEvent || !selectedBusinessUnit}
-              pulse={!!(selectedEvent && selectedBusinessUnit)}
-              rotate={!!(selectedEvent && selectedBusinessUnit)}
-            />
-            <p className="pt-10 opacity-70">
-              {selectedBusinessUnit && selectedEvent
-                ? 'Escuchando el lector de barras...'
-                : 'Selecciona un evento y una unidad de negocio para comenzar'}
+    <div className="w-full flex py-2 flex-col overflow-y-auto h-full flex-grow">
+      <div className="flex items-center gap-4 py-4 w-full">
+        <Combobox
+          input={{
+            autoComplete: 'off'
+          }}
+          style={{
+            borderRadius: 7
+          }}
+          disabled={isLoading}
+          onOptionSelect={(_, data) => {
+            const ev = events?.find((e) => e.id === data.optionValue)
+            if (ev) setSelectedEvent(ev)
+          }}
+          value={selectedEvent?.name}
+          placeholder="Selecciona un evento"
+        >
+          {events?.map((event) => (
+            <Option key={event.id} text={event.name} value={event.id}>
+              {event.name}
+            </Option>
+          ))}
+        </Combobox>
+        <Combobox
+          input={{
+            autoComplete: 'off'
+          }}
+          disabled={isLoadingBusinessUnits}
+          onOptionSelect={(_, data) => {
+            const b = businessUnits?.find((b) => b.id === data.optionValue)
+            if (b) setSelectedBusinessUnit(b)
+          }}
+          style={{
+            borderRadius: 7
+          }}
+          value={selectedBusinessUnit?.name}
+          placeholder="Unidad de negocio"
+        >
+          {businessUnits?.map((business) => (
+            <Option key={business.id} text={business.name} value={business.id}>
+              {business.name}
+            </Option>
+          ))}
+        </Combobox>
+      </div>
+      <div className="flex-grow h-full overflow-y-auto flex border-t border-stone-500/40">
+        {!selectedEvent || !selectedBusinessUnit ? (
+          <div className="flex-grow h-full grid place-content-center">
+            <p className=" text-base max-w-[30ch] text-center mx-auto opacity-70">
+              Seleccione un evento y una unidad de negocio para comenzar.
             </p>
           </div>
-          <div className="pb-5 max-w-xl mx-auto">
-            <div className="dark:bg-neutral-800 gap-2 flex p-1 shadow-md shadow-black/40 border rounded-xl border-neutral-500/10">
-              <Combobox
-                input={{
-                  autoComplete: 'off'
-                }}
-                style={{
-                  borderRadius: 7
-                }}
-                disabled={isLoading}
-                onOptionSelect={(_, data) => {
-                  const ev = events?.find((e) => e.id === data.optionValue)
-                  if (ev) setSelectedEvent(ev)
-                }}
-                value={selectedEvent?.name}
-                placeholder="Selecciona un evento"
-              >
-                {events?.map((event) => (
-                  <Option key={event.id} text={event.name} value={event.id}>
-                    {event.name}
-                  </Option>
-                ))}
-              </Combobox>
-              <Combobox
-                input={{
-                  autoComplete: 'off'
-                }}
-                disabled={isLoadingBusinessUnits}
-                onOptionSelect={(_, data) => {
-                  const b = businessUnits?.find(
-                    (b) => b.id === data.optionValue
-                  )
-                  if (b) setSelectedBusinessUnit(b)
-                }}
-                style={{
-                  borderRadius: 7
-                }}
-                value={selectedBusinessUnit?.name}
-                placeholder="Unidad de negocio"
-              >
-                {businessUnits?.map((business) => (
-                  <Option
-                    key={business.id}
-                    text={business.name}
-                    value={business.id}
-                  >
-                    {business.name}
-                  </Option>
-                ))}
-              </Combobox>
+        ) : (
+          <div className="w-full overflow-y-auto flex flex-col">
+            <div className="py-5 px-2">
+              <div className="relative">
+                <div className="absolute pointer-events-none inset-y-0 px-2 flex items-center">
+                  <BarcodeScannerFilled fontSize={25} className="opacity-50" />
+                </div>
+                <input
+                  ref={inputRef}
+                  onChange={onChange}
+                  autoFocus
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter') handleEnter()
+                  }}
+                  placeholder="DNI o código de barras"
+                  className="dark:bg-neutral-800 pl-10 font-semibold outline-2 w-[300px] focus:outline outline-blue-500 text-sm placeholder:text-neutral-400 rounded-lg p-3"
+                  value={capturedText}
+                />
+              </div>
+              <p className="text-xs pt-1 dark:text-yellow-400">
+                Escribe el DNI, o simplemente escanea el código de barras.
+              </p>
+            </div>
+            <div className="w-full overflow-y-auto">
+              <table className="w-full relative">
+                <thead>
+                  <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
+                    <td className="min-w-[300px]">Persona</td>
+                    <td>Unidad</td>
+                    <td>Evento</td>
+                    <td>Ingresó</td>
+                  </tr>
+                </thead>
+                <tbody>
+                  {records?.map((record) => (
+                    <tr className="relative bg-neutral-50/40 dark:bg-neutral-900 odd:bg-neutral-500/10 dark:even:bg-neutral-500/20 [&>td]:text-nowrap  group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
+                      <td>
+                        <div className="flex items-center gap-2">
+                          <Avatar
+                            color="royal-blue"
+                            size={40}
+                            icon={<GuestRegular fontSize={27} />}
+                          />
+                          <div>
+                            <p className="line-clamp-3 capitalize">
+                              {record.names}
+                            </p>
+                            <p className="text-sm capitalize opacity-70">
+                              {record.career}
+                            </p>
+                          </div>
+                        </div>
+                      </td>
+                      <td>
+                        <div>
+                          <p className="capitalize opacity-70 text-nowrap">
+                            {selectedBusinessUnit?.name}
+                          </p>
+                          <p className="text-xs dark:text-cyan-500 ">
+                            {/* {item.period} */}-
+                          </p>
+                        </div>
+                      </td>
+                      <td>
+                        <p className="capitalize opacity-70 text-nowrap">
+                          {selectedEvent.name}
+                        </p>
+                      </td>
+                      <td>
+                        <p className="capitalize opacity-70 text-nowrap">
+                          {format(record.created_at, 'MMMM D, YYYY h:mm A')}
+                        </p>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
     </div>
   )
 }

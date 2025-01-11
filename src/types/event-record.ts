@@ -36,6 +36,11 @@ export class EventRecord {
 
   get displayName() {
     if (this.fullName) return this.fullName
-    return `${this.firstNames} ${this.lastNames}`
+
+    if (this.firstNames && this.lastNames) {
+      return `${this.firstNames} ${this.lastNames}`
+    }
+
+    return this.documentId
   }
 }
