@@ -46,11 +46,11 @@ const Toggles = () => {
             className="p-2 px-2.5 dark:text-stone-400 hover:bg-stone-500/20  rounded-lg"
           >
             {isSidebarOpen ? (
-              <PanelLeftContractRegular fontSize={25} />
+              <PanelLeftContractRegular fontSize={20} />
             ) : (
               <PanelLeftExpandFilled
                 className="dark:text-blue-500"
-                fontSize={25}
+                fontSize={20}
               />
             )}
           </button>
@@ -70,10 +70,10 @@ const Toggles = () => {
             {isModuleMaximized ? (
               <ArrowMinimizeRegular
                 className="dark:text-blue-500"
-                fontSize={20}
+                fontSize={18}
               />
             ) : (
-              <ArrowMaximizeRegular fontSize={20} />
+              <ArrowMaximizeRegular fontSize={18} />
             )}
           </button>
         </Tooltip>
@@ -91,7 +91,7 @@ export default function RootHeader() {
         marginTop: isHeaderOpen ? '0' : '-56px'
       }}
       data-hidden={!isHeaderOpen ? '' : undefined}
-      className="h-14 min-h-[56px] relative  dark:text-blue-500 dark:shadow-sm border-b dark:border-stone-700 dark:shadow-black/10 justify-between gap-4 text-blue-700 w-full z-20 flex items-center px-2"
+      className="h-14 min-h-[56px] dark:bg-[#1b1a19] bg-[#f5f0f0] relative dark:shadow-sm border-b dark:border-stone-700 dark:shadow-black/10 justify-between gap-4 w-full z-10 flex items-center px-2"
     >
       <nav className="flex relative flex-grow items-center basis-0">
         <Toggles />
