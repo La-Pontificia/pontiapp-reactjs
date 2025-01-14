@@ -14,7 +14,7 @@ import {
   HoverCardContent,
   HoverCardTrigger
 } from '~/commons/hover-card'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { api } from '~/lib/api'
 import { useAuth } from '~/store/auth'
 import { User } from '~/types/user'
