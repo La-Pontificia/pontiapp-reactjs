@@ -5,7 +5,7 @@ import { Avatar, Button, Checkbox, Spinner } from '@fluentui/react-components'
 import React from 'react'
 import { BusinessUnit } from '~/types/business-unit'
 import { useAuth } from '~/store/auth'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { handleError } from '~/utils'
 
 export default function AttentionsBusinessUnitsPage() {

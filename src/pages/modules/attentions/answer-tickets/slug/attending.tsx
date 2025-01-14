@@ -19,7 +19,7 @@ import {
 } from '@fluentui/react-components'
 import { cancelTicket, finishTicket, transferTicket } from '~/services/tickets'
 import React from 'react'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '~/lib/api'
 import { AttentionPosition } from '~/types/attention-position'

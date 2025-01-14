@@ -13,7 +13,7 @@ import {
 } from '@fluentui/react-components'
 import React from 'react'
 import { handleError } from '~/utils'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 
 import { DeleteFilled, TicketDiagonalFilled } from '@fluentui/react-icons'
 import { useAuth } from '~/store/auth'

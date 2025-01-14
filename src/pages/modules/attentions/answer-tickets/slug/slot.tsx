@@ -11,7 +11,7 @@ import {
 import { useSlugAttentionTicket } from './page'
 import React from 'react'
 import { attendTicket, cancelTicket } from '~/services/tickets'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import AttendingTicket from './attending'
 import { FirebaseAttentionTicket } from '~/types/attention-ticket'
 import { format } from '~/lib/dayjs'

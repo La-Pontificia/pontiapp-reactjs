@@ -13,7 +13,7 @@ import {
 import React from 'react'
 import { api } from '~/lib/api'
 import { handleError } from '~/utils'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 
 import { DeleteFilled, PenFilled } from '@fluentui/react-icons'
 import Form from './form'

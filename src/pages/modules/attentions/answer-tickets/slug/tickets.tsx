@@ -5,7 +5,7 @@ import { FirebaseAttentionTicket } from '~/types/attention-ticket'
 import { Avatar, Badge } from '@fluentui/react-components'
 import { TicketDiagonalRegular } from '@fluentui/react-icons'
 import { callTicket } from '~/services/tickets'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 
 const states = {
   pending: 'Pendientes',
