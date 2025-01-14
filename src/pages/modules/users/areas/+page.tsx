@@ -89,7 +89,7 @@ export default function CollaboratorsAreasPage() {
                 <td></td>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
               {!isLoading &&
                 areas?.map((area) => (
                   <AreaItem refetch={refetch} key={area.id} area={area} />

@@ -124,7 +124,7 @@ export default function CollaboratorsRolesPage() {
                 <td></td>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
               {!isLoading &&
                 items?.map((item) => (
                   <Item refetch={refetch} key={item.id} item={item} />

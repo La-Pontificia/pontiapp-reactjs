@@ -23,7 +23,7 @@ export default function UsersGrid({
           <td></td>
         </tr>
       </thead>
-      <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
+      <tbody className="divide-y overflow-y-auto divide-neutral-300 dark:divide-neutral-500/30">
         {users.map((user) => (
           <UserGrid refetch={refetch} user={user} key={user.id} />
         ))}

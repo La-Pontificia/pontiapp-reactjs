@@ -11,7 +11,7 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
   const buttonRef = React.useRef<HTMLButtonElement>(null)
 
   return (
-    <div className="">
+    <div className="bg-white dark:bg-transparent p-1 rounded-xl shadow-lg">
       <table className="w-full relative ">
         <thead className="">
           <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
@@ -27,7 +27,7 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
           </tr>
         </thead>
 
-        <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
+        <tbody className="divide-y overflow-y-auto divide-neutral-300 dark:divide-neutral-500/30">
           {assists.slice(startSlice, endSlice).map((assist, key) => {
             const arriveMorningLate =
               assist.morningMarkedIn &&

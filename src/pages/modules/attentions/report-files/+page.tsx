@@ -94,7 +94,7 @@ export default function AttentionsReportFilesPage() {
                         {items.map((item) => (
                           <tr
                             key={item.id}
-                            className="bg-neutral-100 dark:bg-neutral-900 [&>td]:px-4 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+                            className="bg-neutral-100 dark:bg-[#292827] [&>td]:px-4 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
                           >
                             <td>
                               <div className="flex items-center gap-2 py-3">
