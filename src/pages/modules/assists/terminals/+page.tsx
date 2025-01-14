@@ -7,7 +7,7 @@ import React from 'react'
 import { useDebounced } from '~/hooks/use-debounced'
 import Item from './terminal'
 import { ResponsePaginate } from '~/types/paginate-response'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { handleError } from '~/utils'
 import { AssistTerminal } from '~/types/assist-terminal'
 

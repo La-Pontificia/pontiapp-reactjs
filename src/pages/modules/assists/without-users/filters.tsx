@@ -30,7 +30,7 @@ import { Filter } from './+page'
 import { format } from '~/lib/dayjs'
 import { Link } from 'react-router'
 import { api } from '~/lib/api'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { useAuth } from '~/store/auth'
 
 export default function AssistFilters({
