@@ -37,6 +37,10 @@ export const formatTime = (time: any, format?: string): string => {
 export const countRangeMinutes = (start: any, end: any): string => {
   const startDate = new Date(start)
   const endDate = new Date(end)
+
+  startDate.setDate(new Date('01-01-2000').getDate())
+  endDate.setDate(new Date('01-01-2000').getDate())
+
   const diff = endDate.getTime() - startDate.getTime()
 
   if (diff < 0) {
