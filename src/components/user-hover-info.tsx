@@ -32,7 +32,7 @@ export default function UserHoverInfo({
   return (
     <HoverCard openDelay={300} open={open} onOpenChange={setOpen}>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
-      <HoverCardContent className="p-0 max-w-[450px]">
+      <HoverCardContent className="p-0 min-w-[450px] max-w-[450px]">
         {open && <UserHoverInfoContent slug={slug} />}
       </HoverCardContent>
     </HoverCard>

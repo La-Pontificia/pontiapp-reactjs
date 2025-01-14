@@ -1,4 +1,4 @@
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { useDebounced } from '~/hooks/use-debounced'
 import { api } from '~/lib/api'
 import { useAuth } from '~/store/auth'
@@ -123,7 +123,9 @@ export function Users(
   } = useQuery<User[]>({
     queryKey: ['users/all', query],
     queryFn: async () => {
-      const res = await api.get<User[]>('users/all?limit=15&q=' + query)
+      const res = await api.get<User[]>(
+        'users/all?status=actives&limit=15&q=' + query
+      )
       if (!res.ok) return []
       return res.data.map((u) => new User(u))
     }
@@ -212,9 +214,8 @@ export function Users(
                 if (!includeCurrentUser && u.id === user.id) return null
                 return (
                   <label
-                    data-blocked={!u.status ? '' : undefined}
                     key={u.id}
-                    className="flex data-[blocked]:grayscale data-[blocked]:opacity-90 cursor-pointer items-center gap-2 py-3"
+                    className="flex cursor-pointer items-center gap-2 py-3"
                   >
                     <div>
                       <Checkbox
@@ -223,9 +224,6 @@ export function Users(
                       />
                     </div>
                     <Avatar
-                      badge={{
-                        status: u.status ? 'available' : 'blocked'
-                      }}
                       color="colorful"
                       size={36}
                       name={u.displayName}
