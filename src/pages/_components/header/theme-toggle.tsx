@@ -9,7 +9,6 @@ export default function ThemeToggle() {
         onChange={() => {
           toggleTheme()
         }}
-        disabled
         checked={theme === 'dark'}
         label={<p className="text-xs font-semibold pt-0.5">Oscuro</p>}
       />
