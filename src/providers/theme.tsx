@@ -23,8 +23,7 @@ export default function ThemeProvider({
 }>) {
   const [theme, set] = useLocalStorage<Theme>('theme', 'light')
 
-  // Light mode this is maintained for future use
-  const isDark = true
+  const isDark = theme === 'dark'
 
   React.useEffect(() => {
     document.body.classList.remove('light', 'dark')
