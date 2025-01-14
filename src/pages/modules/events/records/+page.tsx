@@ -19,7 +19,7 @@ import {
 import React from 'react'
 import { useDebounced } from '~/hooks/use-debounced'
 import { ResponsePaginate } from '~/types/paginate-response'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { handleError } from '~/utils'
 import Item from './record'
 import { EventRecord } from '~/types/event-record'

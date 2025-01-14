@@ -30,7 +30,7 @@ import {
   Phone20Regular
 } from '@fluentui/react-icons'
 import { ContactType } from '~/types/user'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { api } from '~/lib/api'
 import { FaWhatsapp } from 'react-icons/fa'
 import { emailRegex, phoneRegex } from '~/const/regex'

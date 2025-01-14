@@ -1,4 +1,4 @@
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { useQrCodeReader } from '~/hooks/use-qr-reader'
 import { api } from '~/lib/api'
 import { BusinessUnit } from '~/types/business-unit'

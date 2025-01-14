@@ -6,7 +6,7 @@ import {
   Spinner
 } from '@fluentui/react-components'
 import { Mail20Regular, Phone20Regular } from '@fluentui/react-icons'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { format } from '~/lib/dayjs'
 import { useEditUser } from '../+layout'
 import { ContactType, User } from '~/types/user'

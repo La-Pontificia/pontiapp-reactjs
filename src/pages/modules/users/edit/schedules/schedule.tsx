@@ -1,4 +1,4 @@
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { calendarStrings, days } from '~/const'
 import { api } from '~/lib/api'
 import { countRangeMinutes, format } from '~/lib/dayjs'
@@ -149,7 +149,7 @@ export const ScheduleItem = ({
         <CalendarRegular fontSize={22} className="opacity-60" />
         <div className="justify-between flex-grow font-semibold">
           <span>
-            Desde {format(schedule.startDate, 'DD/MM/YYYY')}{' '}
+            {format(schedule.startDate, 'DD/MM/YYYY')}{' '}
             {schedule.endDate
               ? `hasta ${format(schedule.endDate, 'DD/MM/YYYY')}`
               : ''}

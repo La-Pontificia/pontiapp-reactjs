@@ -26,7 +26,7 @@ export type FiltersValues = {
   hasSchedules: string | null
 }
 
-export default function AllUsersPage() {
+export default function DisabledUsersPage() {
   const { user: authUser } = useAuth()
   const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
   const [loadingMore, setLoadingMore] = React.useState(false)
@@ -44,7 +44,7 @@ export default function AllUsersPage() {
   })
 
   const getFiltersQuery = () => {
-    let query = '?status=actives&relationship=role,manager'
+    let query = '?status=inactives&relationship=role,manager'
     if (filters.q) query += `&q=${filters.q}`
     if (filters.job) query += `&job=${filters.job}`
     if (filters.department) query += `&department=${filters.department}`
@@ -62,7 +62,7 @@ export default function AllUsersPage() {
     isLoading: loading,
     refetch
   } = useQuery<ResponsePaginate<User[]> | null>({
-    queryKey: ['users/all', getFiltersQuery()],
+    queryKey: ['users/disabled', getFiltersQuery()],
     queryFn: async () => {
       const res = await api.get<ResponsePaginate<User[]>>(
         'users/all' + getFiltersQuery()

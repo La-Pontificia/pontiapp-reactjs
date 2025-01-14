@@ -75,7 +75,7 @@ export default function UsersSlugAssistsPage() {
   })
 
   return (
-    <div className="max-w-5xl flex flex-col h-full px-4 mx-auto w-full">
+    <div className="max-w-5xl overflow-auto flex flex-col h-full px-4 mx-auto w-full">
       <Helmet>
         <title>
           {user ? user.displayName + ' -' : ''} Assistencias | Ponti App
@@ -90,18 +90,16 @@ export default function UsersSlugAssistsPage() {
           <Spinner size="large" />
         </div>
       ) : (
-        <>
-          <div className="overflow-auto pt-2 space-y-2">
-            <h1 className=" px-1 text-blue-500">
-              {user ? user.displayName + ' -' : ''} Assistencias en base a sus
-              horarios
-            </h1>
-            <AssistsGrid assists={data?.matchedAssists ?? []} />
-            {data?.restAssists && data?.restAssists.length > 0 && (
-              <RestAssistsGrid assists={data?.restAssists ?? []} />
-            )}
-          </div>
-        </>
+        <div className="overflow-auto flex flex-col pt-2 space-y-2">
+          <h1 className=" px-1 text-blue-500">
+            {user ? user.displayName + ' -' : ''} Assistencias en base a sus
+            horarios
+          </h1>
+          <AssistsGrid assists={data?.matchedAssists ?? []} />
+          {data?.restAssists && data?.restAssists.length > 0 && (
+            <RestAssistsGrid assists={data?.restAssists ?? []} />
+          )}
+        </div>
       )}
     </div>
   )

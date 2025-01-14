@@ -22,7 +22,7 @@ import { Add20Regular } from '@fluentui/react-icons'
 import UserDrawer from '~/components/user-drawer'
 import { User } from '~/types/user'
 import React from 'react'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { handleError } from '~/utils'
 
 export type FormValues = {

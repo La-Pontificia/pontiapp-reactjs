@@ -24,7 +24,7 @@ import React from 'react'
 import { format, timeAgo } from '~/lib/dayjs'
 import { api } from '~/lib/api'
 import { handleError } from '~/utils'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from '~/store/auth'

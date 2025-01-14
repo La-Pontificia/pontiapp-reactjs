@@ -1,4 +1,4 @@
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import PrivilegesDrawer from '~/components/privileges-drawer'
 import { api } from '~/lib/api'
 import { UserRole } from '~/types/user-role'

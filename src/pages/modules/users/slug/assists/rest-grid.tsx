@@ -15,7 +15,7 @@ export default function RestAssistsGrid({
   const buttonRef = React.useRef<HTMLButtonElement>(null)
 
   return (
-    <div className="overflow-auto">
+    <div className=" pt-6">
       <p className="px-2 pb-1 text-xs text-yellow-500">
         Registros de asistencias que el sistema no pudo procesar.
       </p>
@@ -35,7 +35,7 @@ export default function RestAssistsGrid({
             return (
               <tr
                 key={key}
-                className="relative bg-neutral-50/40 dark:bg-neutral-900 odd:bg-neutral-500/10 dark:even:bg-neutral-500/20 [&>td]:text-nowrap  group [&>td]:p-4 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+                className="relative bg-neutral-50/40 dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-4 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
               >
                 <td>
                   <p>{assist.terminal.name}</p>

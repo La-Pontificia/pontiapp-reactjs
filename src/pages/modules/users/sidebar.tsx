@@ -10,17 +10,15 @@ import {
 } from '@fluentui/react-components'
 import {
   Add20Regular,
-  DocumentTableFilled,
-  DocumentTableRegular,
+  DocumentFilled,
+  DocumentRegular,
   type FluentIcon,
-  FolderFilled,
-  FolderRegular,
-  // InfoFilled,
-  // InfoRegular,
   PeopleFilled,
   PeopleRegular,
-  PeopleTeamFilled,
-  PeopleTeamRegular
+  PersonDeleteFilled,
+  PersonDeleteRegular,
+  PersonFilled,
+  PersonRegular
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
 
@@ -46,7 +44,7 @@ const ItemNav = (props: ItemNav) => {
     <Link
       data-active={isActive ? '' : undefined}
       to={props.href}
-      className="block relative dark:text-neutral-300 text-neutral-900 data-[active]:font-semibold group pl-3"
+      className="block relative dark:text-white text-neutral-900 data-[active]:font-semibold group pl-3"
     >
       <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center">
         <span className="h-[20px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
@@ -57,7 +55,7 @@ const ItemNav = (props: ItemNav) => {
         ) : Icon ? (
           <Icon
             fontSize={24}
-            className="dark:text-neutral-400 group-data-[active]:dark:text-blue-500 group-data-[active]:text-blue-800"
+            className="dark:text-neutral-100 group-data-[active]:dark:text-blue-500 group-data-[active]:text-blue-800"
           />
         ) : (
           <Avatar
@@ -97,23 +95,35 @@ export const UsersSidebar = () => {
         {/* <ItemNav icon={InfoRegular} iconActive={InfoFilled} href="/m/users">
           Overview
         </ItemNav> */}
-        <ItemNav
-          icon={PeopleRegular}
-          iconActive={PeopleFilled}
-          href="/m/users/all"
-        >
-          Todos
-        </ItemNav>
-        {authUser.hasPrivilege('users:teams') && (
+
+        {authUser.hasPrivilege('users:show') && (
           <ItemNav
-            icon={PeopleTeamRegular}
-            iconActive={PeopleTeamFilled}
-            href="/m/users/teams"
+            icon={PersonRegular}
+            iconActive={PersonFilled}
+            href="/m/users/all"
           >
-            Equipos
+            Todos
           </ItemNav>
         )}
-        {authUser.hasPrivilege('users:reportFiles') && (
+        {authUser.hasPrivilege('users:show') && (
+          <ItemNav
+            icon={PersonDeleteRegular}
+            iconActive={PersonDeleteFilled}
+            href="/m/users/disabled"
+          >
+            Inactivos
+          </ItemNav>
+        )}
+        {authUser.hasPrivilege('users:teams') && (
+          <ItemNav
+            icon={PeopleRegular}
+            iconActive={PeopleFilled}
+            href="/m/users/teams"
+          >
+            Grupos
+          </ItemNav>
+        )}
+        {/* {authUser.hasPrivilege('users:reportFiles') && (
           <ItemNav
             icon={DocumentTableRegular}
             iconActive={DocumentTableFilled}
@@ -121,7 +131,7 @@ export const UsersSidebar = () => {
           >
             Archivos de reportes
           </ItemNav>
-        )}
+        )} */}
         {(authUser.hasPrivilege('users:areas') ||
           authUser.hasPrivilege('users:departments') ||
           authUser.hasPrivilege('users:jobs') ||
@@ -136,8 +146,8 @@ export const UsersSidebar = () => {
               <AccordionPanel className="p-0 !mx-5">
                 {authUser.hasPrivilege('users:areas') && (
                   <ItemNav
-                    icon={FolderRegular}
-                    iconActive={FolderFilled}
+                    icon={DocumentRegular}
+                    iconActive={DocumentFilled}
                     href="/m/users/areas"
                   >
                     Areas de trabajo
@@ -146,8 +156,8 @@ export const UsersSidebar = () => {
 
                 {authUser.hasPrivilege('users:departments') && (
                   <ItemNav
-                    icon={FolderRegular}
-                    iconActive={FolderFilled}
+                    icon={DocumentRegular}
+                    iconActive={DocumentFilled}
                     href="/m/users/departments"
                   >
                     Departamentos
@@ -155,8 +165,8 @@ export const UsersSidebar = () => {
                 )}
                 {authUser.hasPrivilege('users:jobs') && (
                   <ItemNav
-                    icon={FolderRegular}
-                    iconActive={FolderFilled}
+                    icon={DocumentRegular}
+                    iconActive={DocumentFilled}
                     href="/m/users/jobs"
                   >
                     Puestos
@@ -164,8 +174,8 @@ export const UsersSidebar = () => {
                 )}
                 {authUser.hasPrivilege('users:roles') && (
                   <ItemNav
-                    icon={FolderRegular}
-                    iconActive={FolderFilled}
+                    icon={DocumentRegular}
+                    iconActive={DocumentFilled}
                     href="/m/users/roles"
                   >
                     Cargos
@@ -173,8 +183,8 @@ export const UsersSidebar = () => {
                 )}
                 {authUser.hasPrivilege('users:userRoles') && (
                   <ItemNav
-                    icon={FolderRegular}
-                    iconActive={FolderFilled}
+                    icon={DocumentRegular}
+                    iconActive={DocumentFilled}
                     href="/m/users/user-roles"
                   >
                     Privilegios y roles
@@ -182,8 +192,8 @@ export const UsersSidebar = () => {
                 )}
                 {authUser.hasPrivilege('users:contractTypes') && (
                   <ItemNav
-                    icon={FolderRegular}
-                    iconActive={FolderFilled}
+                    icon={DocumentRegular}
+                    iconActive={DocumentFilled}
                     href="/m/users/contract-types"
                   >
                     Tipos de contrato

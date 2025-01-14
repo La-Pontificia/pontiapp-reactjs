@@ -36,7 +36,7 @@ import {
   formatDateToTimeString,
   TimePicker
 } from '@fluentui/react-timepicker-compat'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 
 export default function OrganizationUser({
   control,

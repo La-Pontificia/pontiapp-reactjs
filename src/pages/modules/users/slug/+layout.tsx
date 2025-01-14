@@ -1,4 +1,4 @@
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { api } from '~/lib/api'
 import { User } from '~/types/user'
 import { handleAuthError } from '~/utils'

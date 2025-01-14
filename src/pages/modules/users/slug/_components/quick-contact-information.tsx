@@ -8,7 +8,7 @@ import {
 } from '@fluentui/react-icons'
 import { useSlugUser } from '../+layout'
 import { Link } from 'react-router'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 
 export default function QuickContactInformation() {
   const { user, isLoading, rootURL } = useSlugUser()

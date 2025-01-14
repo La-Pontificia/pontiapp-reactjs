@@ -17,7 +17,7 @@ import {
   Mail20Regular,
   Phone20Regular
 } from '@fluentui/react-icons'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { format } from '~/lib/dayjs'
 
 export default function PreviewUser({

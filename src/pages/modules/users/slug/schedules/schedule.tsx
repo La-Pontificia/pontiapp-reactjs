@@ -17,7 +17,9 @@ export const ScheduleItem = ({ schedule }: { schedule: Schedule }) => {
       <div className="py-2 flex items-center gap-3">
         <CalendarRegular fontSize={22} className="opacity-60" />
         <div className="justify-between flex-grow font-semibold">
-          <span>Desde {format(schedule.startDate, 'DD/MM/YYYY')}</span>
+          <span>
+            {format(schedule.startDate, '[Desde] [el] dddd, DD [de] MMMM YYYY')}
+          </span>
           <p className="text-xs line-clamp-1 overflow-hidden text-ellipsis font-normal dark:text-neutral-400">
             Los días{' '}
             {schedule

@@ -1,4 +1,4 @@
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { api } from '~/lib/api'
 import { ContractType } from '~/types/contract-type'
 import { handleError } from '~/utils'

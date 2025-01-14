@@ -8,7 +8,7 @@ import { useDebounced } from '~/hooks/use-debounced'
 import Item from './role'
 import { Role } from '~/types/role'
 import { ResponsePaginate } from '~/types/paginate-response'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { handleError } from '~/utils'
 
 export default function CollaboratorsRolesPage() {

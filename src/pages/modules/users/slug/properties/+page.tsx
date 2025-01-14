@@ -4,7 +4,7 @@ import {
   Mail20Regular,
   Phone20Regular
 } from '@fluentui/react-icons'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { format, timeAgo } from '~/lib/dayjs'
 import { useSlugUser } from '../+layout'
 import { useQuery } from '@tanstack/react-query'

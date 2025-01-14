@@ -17,7 +17,7 @@ import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { format } from '~/lib/dayjs'
 import { calendarStrings } from '~/const'
 import React from 'react'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { handleError } from '~/utils'
 import { User } from '~/types/user'
 

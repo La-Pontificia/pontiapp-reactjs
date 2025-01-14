@@ -15,7 +15,7 @@ import React from 'react'
 import { format } from '~/lib/dayjs'
 import { api } from '~/lib/api'
 import { handleError } from '~/utils'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 
 import { useAuth } from '~/store/auth'
 import { EventRecord } from '~/types/event-record'

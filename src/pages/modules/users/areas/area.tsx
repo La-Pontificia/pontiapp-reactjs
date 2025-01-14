@@ -21,7 +21,7 @@ import AreaForm from './form'
 import { format, timeAgo } from '~/lib/dayjs'
 import { api } from '~/lib/api'
 import { handleError } from '~/utils'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import {
   HoverCard,
   HoverCardContent,

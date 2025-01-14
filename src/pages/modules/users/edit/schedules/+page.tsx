@@ -23,7 +23,7 @@ import {
   Option
 } from '@fluentui/react-components'
 import { Controller, useForm } from 'react-hook-form'
-import { toast } from '~/commons/toast'
+import { toast } from 'anni'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { calendarStrings, days } from '~/const'
 import {
