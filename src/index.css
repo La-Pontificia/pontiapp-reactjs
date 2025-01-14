@@ -16,6 +16,19 @@ body {
   font-family: 'Roboto', sans-serif;
 }
 
+[data-fillable]:-webkit-autofill,
+[data-fillable]:-webkit-autofill:hover,
+[data-fillable]:-webkit-autofill:focus,
+[data-fillable]:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px black inset !important;
+  -webkit-text-fill-color: white !important;
+  /* Selector or Selection color */
+  &::selection {
+    -webkit-text-fill-color: white !important;
+    background: black !important;
+  }
+}
+
 .grid-background {
   background-image: radial-gradient(
     rgba(128, 128, 128, 0.103) 1px,

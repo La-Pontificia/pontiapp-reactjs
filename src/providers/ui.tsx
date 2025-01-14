@@ -1,4 +1,4 @@
-import { Toaster } from '~/commons/toast'
+import { Toaster } from 'anni'
 import React from 'react'
 
 export default function UiProvider({
@@ -8,7 +8,7 @@ export default function UiProvider({
 }>) {
   return (
     <>
-      <Toaster timeDuration={7000} />
+      <Toaster />
       {children}
     </>
   )

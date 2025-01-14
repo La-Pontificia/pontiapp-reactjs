@@ -17,7 +17,6 @@ export const useAuth = () => React.useContext(AuthContext)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = React.useState<User | null>(null)
-  const [privileges, setPrivileges] = React.useState<string[]>([])
   const [loading, setLoading] = React.useState(true)
 
   const fetchAuth = async () => {
@@ -27,7 +26,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
       const userInstance = new User(res.data)
       setUser(userInstance)
-      setPrivileges(userInstance.userRole.privileges || [])
     } catch (err) {
       console.error(err)
       setUser(null)
@@ -55,7 +53,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   return (
     <AuthContext.Provider
       value={{
-        privileges,
         user: user as User,
         loading,
         signOut,

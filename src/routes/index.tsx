@@ -64,6 +64,7 @@ import AttentionsBusinessUnitsPage from '~/pages/modules/attentions/business-uni
 import AttentionsAnswerTickets from '~/pages/modules/attentions/answer-tickets/page'
 import AttentionsSlugAnswerTicket from '~/pages/modules/attentions/answer-tickets/slug/page'
 import AttentionsShiftScreen from '~/pages/modules/attentions/shift-screen/+page'
+import DisabledUsersPage from '~/pages/modules/users/disabled/+page'
 
 export default function MainRoutes() {
   return (
@@ -94,7 +95,22 @@ export default function MainRoutes() {
               }
             >
               <Route index element={<Navigate to={'/m/users/all'} />} />
-              <Route path="all" element={<AllUsersPage />} />
+              <Route
+                path="all"
+                element={
+                  <Protected has="users:show" navigate="/">
+                    <AllUsersPage />
+                  </Protected>
+                }
+              />
+              <Route
+                path="disabled"
+                element={
+                  <Protected has="users:show" navigate="/m/users/all">
+                    <DisabledUsersPage />
+                  </Protected>
+                }
+              />
               <Route
                 path="create"
                 element={
