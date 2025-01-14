@@ -71,7 +71,7 @@ export default function AssistsSummaryPage() {
           </p>
         </div>
       ) : (
-        <div className="overflow-auto rounded-xl pt-2 h-full">
+        <div className="overflow-auto rounded-xl pt-5 h-full">
           {isLoading ? (
             <div className="h-full grid place-content-center">
               <Spinner size="huge" />
@@ -85,7 +85,7 @@ export default function AssistsSummaryPage() {
                   <td>Cantidad</td>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
                 {items?.map((item) => (
                   <Item key={item.date} item={item} />
                 ))}

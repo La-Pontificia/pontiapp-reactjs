@@ -33,7 +33,7 @@ export default function AssistsGrid({
           {assists.slice(startSlice, endSlice).map((assist, key) => (
             <tr
               key={key}
-              className="relative bg-neutral-50/40 dark:bg-neutral-900 odd:bg-neutral-500/10 dark:even:bg-neutral-500/20 [&>td]:text-nowrap  group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+              className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
             >
               <td>
                 <div className="flex items-center gap-2">
@@ -44,7 +44,7 @@ export default function AssistsGrid({
                     icon={<CalendarRegular />}
                   />
                   <div>
-                    <p>
+                    <p className="font-semibold">
                       {assist.firstNames} {assist.lastNames}
                     </p>
                     <p className="text-xs opacity-60">{assist.documentId}</p>

@@ -32,7 +32,7 @@ export default function AssistsGrid({
           {assists.slice(startSlice, endSlice).map((assist, key) => (
             <tr
               key={key}
-              className="relative bg-neutral-50/40 dark:bg-neutral-900 odd:bg-neutral-500/10 dark:even:bg-neutral-500/20 [&>td]:text-nowrap  group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+              className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
             >
               <td>
                 <UserHoverInfo slug={assist.user.username}>
@@ -46,7 +46,7 @@ export default function AssistsGrid({
                     <div>
                       <Link
                         to={'/' + assist.user.username}
-                        className="hover:underline dark:text-blue-500"
+                        className="hover:underline font-semibold dark:text-white"
                       >
                         {assist.user.displayName}
                       </Link>
