@@ -4,7 +4,7 @@ import { Link, Outlet } from 'react-router'
 export default function LandingLayout() {
   return (
     <div className="min-h-svh flex flex-col">
-      <header className="h-20 px-10 fixed flex text-white items-center justify-between w-full">
+      <header className="h-20 z-[1] px-10 fixed flex text-white items-center justify-between w-full">
         <nav className="flex flex-grow basis-0">
           <Link to="/login" className="flex items-center gap-1">
             <img src="_lp-only-logo.webp" className="" width={25} alt="" />
@@ -27,7 +27,7 @@ export default function LandingLayout() {
               className="group"
             >
               <img
-                className="w-[100%] invert group-hover:invert-0 group-hover:scale-105 grayscale group-hover:grayscale-0  md:h-[25px] h-[15px]"
+                className="w-[100%] invert hover:invert-0 group-hover:scale-105 grayscale group-hover:grayscale-0 md:h-[25px] h-[15px]"
                 src={logo}
                 loading="lazy"
                 alt={acronym + ' Logo' + name}
