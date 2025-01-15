@@ -13,7 +13,7 @@ import { api } from '~/lib/api'
 import { Link, useParams } from 'react-router'
 import { Helmet } from 'react-helmet'
 
-export default function UsersPropertiesSlugPage() {
+export default function UsersSlugPropertiesPage() {
   const params = useParams<{
     slug: string
   }>()

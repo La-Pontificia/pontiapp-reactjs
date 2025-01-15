@@ -1,7 +1,6 @@
 import { api } from '~/lib/api'
 import { useQuery } from '@tanstack/react-query'
-import { DockRegular, Search20Regular } from '@fluentui/react-icons'
-// import Form from './form'
+import { Search20Regular } from '@fluentui/react-icons'
 import {
   Button,
   Combobox,
@@ -27,6 +26,7 @@ import { BusinessUnit } from '~/types/business-unit'
 import { Event } from '~/types/event'
 import { useAuth } from '~/store/auth'
 import { Link } from 'react-router'
+import { ExcelColored } from '~/icons'
 
 export default function EventsRecordsPage() {
   const { user: authUser } = useAuth()
@@ -129,7 +129,7 @@ export default function EventsRecordsPage() {
   }
 
   return (
-    <div className="flex flex-col w-full pb-3 overflow-auto h-full">
+    <div className="flex flex-col w-full overflow-auto h-full">
       <nav className="pb-3 pt-4 flex-wrap flex border-b border-neutral-500/30 items-center gap-2">
         <SearchBox
           disabled={isLoading}
@@ -191,7 +191,7 @@ export default function EventsRecordsPage() {
             <Button
               disabled={isLoading || !event}
               onClick={() => setOpenReport(true)}
-              icon={<DockRegular />}
+              icon={<ExcelColored />}
               appearance="secondary"
             >
               <span className="hidden xl:block">Generar reporte</span>
@@ -227,7 +227,7 @@ export default function EventsRecordsPage() {
                 <td></td>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
               {!isLoading &&
                 items?.map((item) => (
                   <Item refetch={refetch} key={item.id} item={item} />
@@ -237,7 +237,7 @@ export default function EventsRecordsPage() {
         )}
       </div>
       {info && (
-        <footer className="flex p-5 justify-center">
+        <footer className="flex p-3 justify-center">
           <div className="flex justify-between w-full">
             <p className="flex basis-0 flex-grow">
               Mostrando {info.from} - {info.to} de {info.total} resultados
@@ -246,7 +246,7 @@ export default function EventsRecordsPage() {
               <button
                 disabled={loadingMore}
                 onClick={nextPage}
-                className="dark:text-blue-500 hover:underline"
+                className="dark:text-blue-500 font-medium hover:underline"
               >
                 {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
               </button>

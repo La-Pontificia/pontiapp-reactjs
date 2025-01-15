@@ -4,7 +4,7 @@ import QuickContactInformation from './_components/quick-contact-information'
 import QuickOrganization from './_components/quick-organization'
 import QuickInfo from './_components/quick-info'
 
-export default function CollaboratorsSlugPage() {
+export default function UsersSlugPage() {
   const params = useParams<{
     slug: string
   }>()

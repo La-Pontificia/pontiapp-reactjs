@@ -99,7 +99,7 @@ export default function EventsPage() {
           {items.length > 1 ? 's' : ''}
         </p>
       </nav>
-      <div className="overflow-auto flex flex-col flex-grow rounded-xl pt-2 h-full">
+      <div className="overflow-auto flex flex-col flex-grow rounded-xl pt-4 h-full">
         {isLoading ? (
           <div className="h-full grid place-content-center">
             <Spinner size="huge" />
@@ -123,11 +123,11 @@ export default function EventsPage() {
                 <td className="min-w-[400px]">Evento</td>
                 <td>Fecha</td>
                 <td>Registros</td>
-                <td>Creador</td>
+                <td>Registrado por</td>
                 <td></td>
               </tr>
             </thead>
-            <tbody>
+            <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
               {!isLoading &&
                 items?.map((item) => (
                   <Item refetch={refetch} key={item.id} item={item} />

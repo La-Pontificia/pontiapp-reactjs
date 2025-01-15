@@ -15,8 +15,7 @@ export default function UsersGrid({
     <table className="w-full relative">
       <thead className="">
         <tr className="font-semibold [&>td]:p-3 [&>td]:text-nowrap dark:text-neutral-400 text-neutral-500 text-left">
-          <td></td>
-          <td className="w-full">Usuario</td>
+          <td>Usuario</td>
           <td>Cargo</td>
           <td className="max-xl:hidden">Email</td>
           <td className="max-xl:hidden">Jefe (Manager)</td>

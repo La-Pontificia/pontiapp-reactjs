@@ -3,13 +3,38 @@ import { useQrCodeReader } from '~/hooks/use-qr-reader'
 import { api } from '~/lib/api'
 import { BusinessUnit } from '~/types/business-unit'
 import { Event } from '~/types/event'
-import { Avatar, Combobox, Option } from '@fluentui/react-components'
+import {
+  Avatar,
+  Button,
+  Combobox,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger,
+  Option,
+  Spinner
+} from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { format } from '~/lib/dayjs'
-import { BarcodeScannerFilled, GuestRegular } from '@fluentui/react-icons'
+import {
+  ClockRegular,
+  DatabaseWindowRegular,
+  GuestRegular,
+  MegaphoneRegular
+} from '@fluentui/react-icons'
+import { useAuth } from '~/store/auth'
+import { Link } from 'react-router'
+import { ExcelColored } from '~/icons'
 
 export default function EventsRegister() {
+  const { user: authUser } = useAuth()
+  const [openReport, setOpenReport] = React.useState(false)
+  const [reporting, setReporting] = React.useState(false)
+
   const [people, setPeople] = React.useState<
     Array<{
       names: string
@@ -127,6 +152,25 @@ export default function EventsRegister() {
     disabled: !selectedEvent || !selectedBusinessUnit
   })
 
+  // handle report
+
+  const handleReport = async () => {
+    setReporting(true)
+    let uri = 'events/records/report?tm=true'
+    if (selectedBusinessUnit)
+      uri += `&businessUnitId=${selectedBusinessUnit.id}`
+    if (selectedEvent) uri += `&eventId=${selectedEvent.id}`
+    const res = await api.post(uri)
+    if (!res.ok) {
+      toast('Error al generar el reporte')
+    } else {
+      toast('Reporte en proceso de generación, te notificaremos.')
+    }
+
+    setOpenReport(false)
+    setReporting(false)
+  }
+
   return (
     <div className="w-full flex py-2 flex-col overflow-y-auto h-full flex-grow">
       <div className="flex items-center gap-4 py-4 w-full">
@@ -176,17 +220,14 @@ export default function EventsRegister() {
       <div className="flex-grow h-full overflow-y-auto flex border-t border-stone-500/40">
         {!selectedEvent || !selectedBusinessUnit ? (
           <div className="flex-grow h-full grid place-content-center">
-            <p className=" text-base max-w-[30ch] text-center mx-auto opacity-70">
+            <p className="text-sm max-w-[30ch] text-center mx-auto opacity-70">
               Seleccione un evento y una unidad de negocio para comenzar.
             </p>
           </div>
         ) : (
           <div className="w-full overflow-y-auto flex flex-col">
             <div className="py-5 px-2">
-              <div className="relative">
-                <div className="absolute pointer-events-none inset-y-0 px-2 flex items-center">
-                  <BarcodeScannerFilled fontSize={25} className="opacity-50" />
-                </div>
+              <div className="relative flex items-center gap-2">
                 <input
                   ref={inputRef}
                   onChange={onChange}
@@ -195,72 +236,150 @@ export default function EventsRegister() {
                     if (e.key === 'Enter') handleEnter()
                   }}
                   placeholder="DNI o código de barras"
-                  className="dark:bg-neutral-800 pl-10 font-semibold outline-2 w-[300px] focus:outline outline-blue-500 text-sm placeholder:text-neutral-400 rounded-lg p-3"
+                  className="dark:bg-blue-800 shadow-black/60 shadow-lg font-semibold outline-none min-w-[400px] text-sm placeholder:text-blue-400 rounded-lg p-3"
                   value={capturedText}
                 />
+                <div className="flex items-center gap-2">
+                  <DatabaseWindowRegular fontSize={25} />
+                  <input
+                    readOnly
+                    className="line-clamp-1 p-2.5 outline-none rounded-md dark:bg-neutral-700/50 text-white"
+                    value="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3NJ2Sdi74uySfutPWUUnFBz-5pI57flWViZKplAo9IdlQ6k_J2KrIp3bcwSMx4OcNQHj1yMkre8pU/pub?output=csv"
+                  />
+                </div>
               </div>
-              <p className="text-xs pt-1 dark:text-yellow-400">
+              <p className="text-xs pt-1 dark:text-neutral-400">
                 Escribe el DNI, o simplemente escanea el código de barras.
               </p>
             </div>
-            <div className="w-full overflow-y-auto">
-              <table className="w-full relative">
-                <thead>
-                  <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
-                    <td className="min-w-[300px]">Persona</td>
-                    <td>Unidad</td>
-                    <td>Evento</td>
-                    <td>Ingresó</td>
-                  </tr>
-                </thead>
-                <tbody>
-                  {records?.map((record) => (
-                    <tr className="relative bg-neutral-50/40 dark:bg-neutral-900 odd:bg-neutral-500/10 dark:even:bg-neutral-500/20 [&>td]:text-nowrap  group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
-                      <td>
-                        <div className="flex items-center gap-2">
-                          <Avatar
-                            color="royal-blue"
-                            size={40}
-                            icon={<GuestRegular fontSize={27} />}
-                          />
+            {records.length > 0 && (
+              <div className="flex pb-3 items-center justify-between">
+                <h1 className="px-1 font-medium">
+                  Registros{' '}
+                  <span className="text-xs opacity-70">({records.length})</span>
+                </h1>
+                {authUser.hasPrivilege('events:records:report') && (
+                  <div className="ml-auto">
+                    <Button
+                      disabled={isLoading || reporting}
+                      onClick={() => setOpenReport(true)}
+                      icon={<ExcelColored />}
+                      appearance="subtle"
+                    >
+                      <span className="hidden xl:block">Exportar excel</span>
+                    </Button>
+                  </div>
+                )}
+              </div>
+            )}
+            <div className="w-full overflow-y-auto bg-white dark:bg-[#292827] flex-grow rounded-2xl">
+              {records.length > 0 ? (
+                <table className="w-full relative">
+                  <thead>
+                    <tr className="font-semibold [&>td]:px-3 [&>td]:py-3 border-b border-neutral-500/20 [&>td]:text-nowrap dark:text-neutral-400 text-left">
+                      <td className="min-w-[300px]">Persona</td>
+                      <td>Unidad</td>
+                      <td>Evento</td>
+                      <td>Ingresó</td>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
+                    {records?.map((record) => (
+                      <tr className="[&>td]:p-2">
+                        <td>
+                          <div className="flex items-center gap-2">
+                            <Avatar
+                              color="royal-blue"
+                              size={40}
+                              icon={<GuestRegular fontSize={27} />}
+                            />
+                            <div>
+                              <p className="line-clamp-3 font-medium text-base capitalize">
+                                {record.names.toLowerCase()}
+                              </p>
+                              <p className="text-sm capitalize opacity-70">
+                                {record.career}
+                              </p>
+                            </div>
+                          </div>
+                        </td>
+                        <td>
                           <div>
-                            <p className="line-clamp-3 capitalize">
-                              {record.names}
-                            </p>
-                            <p className="text-sm capitalize opacity-70">
-                              {record.career}
+                            <p className="capitalize opacity-80 text-nowrap">
+                              {selectedBusinessUnit?.name}
                             </p>
                           </div>
-                        </div>
-                      </td>
-                      <td>
-                        <div>
-                          <p className="capitalize opacity-70 text-nowrap">
-                            {selectedBusinessUnit?.name}
+                        </td>
+                        <td>
+                          <p className="capitalize opacity-70 flex items-center gap-2">
+                            <MegaphoneRegular fontSize={20} />
+                            {selectedEvent.name}
                           </p>
-                          <p className="text-xs dark:text-cyan-500 ">
-                            {/* {item.period} */}-
+                        </td>
+                        <td>
+                          <p className="capitalize opacity-70 flex items-center gap-2">
+                            <ClockRegular fontSize={20} />
+                            {format(record.created_at, 'MMMM D, YYYY h:mm A')}
                           </p>
-                        </div>
-                      </td>
-                      <td>
-                        <p className="capitalize opacity-70 text-nowrap">
-                          {selectedEvent.name}
-                        </p>
-                      </td>
-                      <td>
-                        <p className="capitalize opacity-70 text-nowrap">
-                          {format(record.created_at, 'MMMM D, YYYY h:mm A')}
-                        </p>
-                      </td>
-                    </tr>
-                  ))}
-                </tbody>
-              </table>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <div className="h-full grid place-content-center text-sm font-medium">
+                  <p>No hay registros aun</p>
+                </div>
+              )}
             </div>
           </div>
         )}
       </div>
+
+      {/* dialogs */}
+      {openReport && (
+        <Dialog
+          open={openReport}
+          onOpenChange={(_, e) => setOpenReport(e.open)}
+          modalType="alert"
+        >
+          <DialogSurface>
+            <DialogBody>
+              <DialogTitle>
+                Verifica los filtros seleccionados antes de generar el reporte.
+              </DialogTitle>
+              <DialogContent>
+                <p className="w-full">
+                  Puedes seguir usando el sistema mientras se genera el reporte.
+                  enviaremos un correo cuando esté listo o puedes descargarlo
+                  desde la sección de{' '}
+                  <Link
+                    to="/m/events/report-files"
+                    target="_blank"
+                    className="underline"
+                  >
+                    archivo de reportes
+                  </Link>{' '}
+                  del módulo.
+                </p>
+              </DialogContent>
+              <DialogActions>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button appearance="secondary">Cancelar</Button>
+                </DialogTrigger>
+                <Button
+                  onClick={handleReport}
+                  disabled={reporting}
+                  icon={reporting ? <Spinner size="tiny" /> : undefined}
+                  appearance="primary"
+                >
+                  Generar reporte
+                </Button>
+              </DialogActions>
+            </DialogBody>
+          </DialogSurface>
+        </Dialog>
+      )}
     </div>
   )
 }

@@ -49,61 +49,74 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
       </div>
     )
   if (!isLoading && !data) return <div>No data</div>
-  if (!data) return <div>No data</div>
+
+  const hasOrganization =
+    data?.coworkers.length || data?.subordinates.length || data?.manager
 
   return (
     <div className="flex flex-col border-t overflow-auto border-neutral-500/30">
       <h2 className="dark:dark:text-neutral-400 pb-2 text-lg">Organización</h2>
-      <div className="flex divide-x max-md:divide-y max-md:flex-col max-md:gap-y-5 max-md:divide-x-0 overflow-auto md:first:[&>div]:pl-0 md:[&>div]:px-3 md:last:[&>div]:pr-0 divide-neutral-500/30">
-        {data?.manager && (
-          <div className="">
-            <h2 className="text-xs pb-2 max-md:pt-2">Jefe (Manager)</h2>
-            <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-hidden rounded-lg shadow-sm dark:shadow-black">
-              <PersonItem appearance="vertical" person={data?.manager} />
-            </div>
+      {!hasOrganization ? (
+        <div className="pt-4">
+          <p className="opacity-70">
+            <span className="font-semibold">{user?.displayName}</span> no tiene
+            organización asignada.
+          </p>
+        </div>
+      ) : (
+        <>
+          <div className="flex divide-x max-md:divide-y max-md:flex-col max-md:gap-y-5 max-md:divide-x-0 overflow-auto md:first:[&>div]:pl-0 md:[&>div]:px-3 md:last:[&>div]:pr-0 divide-neutral-500/30">
+            {data?.manager && (
+              <div className="">
+                <h2 className="text-xs pb-2 max-md:pt-2">Jefe (Manager)</h2>
+                <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-hidden rounded-lg shadow-sm dark:shadow-black">
+                  <PersonItem appearance="vertical" person={data?.manager} />
+                </div>
+              </div>
+            )}
+            {data.subordinates?.length > 0 && (
+              <div className="w-fit max-md:w-full">
+                <h2 className="text-xs pb-2 max-md:pt-2">
+                  Personas reportando a {user?.displayName}
+                </h2>
+                <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-auto flex gap-4 rounded-lg shadow-sm dark:shadow-black">
+                  {data?.subordinates.map((subordinate) => (
+                    <PersonItem
+                      key={subordinate.id}
+                      appearance="vertical"
+                      person={subordinate}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+            {data.coworkers?.length > 0 && (
+              <div className="overflow-auto">
+                <h2 className="text-xs pb-2 max-md:pt-2">
+                  {user?.displayName} trabaja con
+                </h2>
+                <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-auto flex gap-4 rounded-lg shadow-sm dark:shadow-black">
+                  {data?.coworkers.map((coworker) => (
+                    <PersonItem
+                      key={coworker.id}
+                      appearance="vertical"
+                      person={coworker}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
-        )}
-        {data.subordinates?.length > 0 && (
-          <div className="w-fit max-md:w-full">
-            <h2 className="text-xs pb-2 max-md:pt-2">
-              Personas reportando a {user?.displayName}
-            </h2>
-            <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-auto flex gap-4 rounded-lg shadow-sm dark:shadow-black">
-              {data?.subordinates.map((subordinate) => (
-                <PersonItem
-                  key={subordinate.id}
-                  appearance="vertical"
-                  person={subordinate}
-                />
-              ))}
-            </div>
+          <div className="flex justify-start mt-2">
+            <Link
+              to={`${rootURL}/${slug}/organization`}
+              className="text-blue-500 hover:underline"
+            >
+              Ver toda la organización
+            </Link>
           </div>
-        )}
-        {data.coworkers?.length > 0 && (
-          <div className="overflow-auto">
-            <h2 className="text-xs pb-2 max-md:pt-2">
-              {user?.displayName} trabaja con
-            </h2>
-            <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-auto flex gap-4 rounded-lg shadow-sm dark:shadow-black">
-              {data?.coworkers.map((coworker) => (
-                <PersonItem
-                  key={coworker.id}
-                  appearance="vertical"
-                  person={coworker}
-                />
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-      <div className="flex justify-start mt-2">
-        <Link
-          to={`${rootURL}/${slug}/organization`}
-          className="text-blue-500 hover:underline"
-        >
-          Ver toda la organización
-        </Link>
-      </div>
+        </>
+      )}
     </div>
   )
 }

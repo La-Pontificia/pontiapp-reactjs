@@ -61,9 +61,6 @@ export default function UserGrid({
   }
   return (
     <tr className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
-      <td className="pl-4">
-        <label></label>
-      </td>
       <td>
         <UserHoverInfo slug={user.username}>
           <div className="flex items-center gap-2">

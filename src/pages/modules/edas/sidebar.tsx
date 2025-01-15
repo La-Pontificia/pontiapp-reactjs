@@ -1,144 +1,60 @@
-// import { useAuth } from '~/store/auth'
+import { ItemSidebarNav, ReusableSidebar } from '~/components/reusable-sidebar'
 import {
-  Accordion,
-  AccordionHeader,
-  AccordionItem,
-  AccordionPanel,
-  Avatar
-} from '@fluentui/react-components'
-import {
-  DocumentFolderFilled,
-  DocumentFolderRegular,
-  DocumentTableFilled,
-  DocumentTableRegular,
-  type FluentIcon,
+  DocumentFilled,
+  DocumentRegular,
   FolderFilled,
   FolderRegular,
-  InfoFilled,
-  InfoRegular,
-  PeopleEyeFilled,
-  PeopleEyeRegular,
-  PersonStarburstFilled,
-  PersonStarburstRegular
+  PersonFilled,
+  PersonRegular
 } from '@fluentui/react-icons'
-import { Link, useLocation } from 'react-router'
-
-type ItemNav = {
-  icon?: FluentIcon
-  iconActive?: FluentIcon
-  href: string
-  avatar?: string
-  children?: React.ReactNode
-  emptyIcon?: boolean
-}
-const ItemNav = (props: ItemNav) => {
-  const { pathname } = useLocation()
-
-  const isActive =
-    props.href === '/m/edas'
-      ? pathname === props.href
-      : pathname.startsWith(props.href)
-
-  const Icon = isActive ? props.iconActive : props.icon
-
-  return (
-    <Link
-      data-active={isActive ? '' : undefined}
-      to={props.href}
-      className="block relative dark:text-neutral-300 text-neutral-900 data-[active]:font-semibold group pl-3"
-    >
-      <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center">
-        <span className="h-[20px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
-      </div>
-      <div className="flex items-center group-data-[active]:dark:text-white  gap-2 px-2 py-2 rounded-lg group-hover:bg-neutral-100 dark:group-hover:bg-neutral-200 dark:group-hover:bg-neutral-500/20">
-        {props.emptyIcon ? (
-          <span className="w-[24px] aspect-square"></span>
-        ) : Icon ? (
-          <Icon
-            fontSize={24}
-            className="dark:text-neutral-400 group-data-[active]:dark:text-blue-500 group-data-[active]:text-blue-800"
-          />
-        ) : (
-          <Avatar
-            size={24}
-            image={{
-              src: props.avatar
-            }}
-          />
-        )}
-        {props.children}
-      </div>
-    </Link>
-  )
-}
+import { useAuth } from '~/store/auth'
 
 export const EdasSidebar = () => {
-  // const { user: authUser } = useAuth()
+  const { user: authUser } = useAuth()
   return (
-    <aside className="h-full lg:block hidden overflow-y-auto w-[280px] min-w-[280px]">
-      <nav className="px-7 pt-4 pb-1">
-        <h2 className="text-sm opacity-70">Edas</h2>
-      </nav>
+    <ReusableSidebar homePath="/m/edas" title="Edas">
       <nav className="pr-2 py-2 px-3">
-        <ItemNav icon={InfoRegular} iconActive={InfoFilled} href="/m/edas">
-          Overview
-        </ItemNav>
-        <ItemNav
-          icon={PersonStarburstRegular}
-          iconActive={PersonStarburstFilled}
+        <ItemSidebarNav
+          has="edas:my"
+          avatar={authUser.photoURL}
           href="/m/edas/my"
         >
           Mis edas
-        </ItemNav>
-        <ItemNav
-          icon={PeopleEyeRegular}
-          iconActive={PeopleEyeFilled}
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          has="edas:collaborators"
+          icon={PersonRegular}
+          iconActive={PersonFilled}
           href="/m/edas/collaborators"
         >
           Colaboradores
-        </ItemNav>
-        <ItemNav
-          icon={DocumentFolderRegular}
-          iconActive={DocumentFolderFilled}
-          href="/m/edas/all"
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          has="edas:show"
+          icon={FolderRegular}
+          iconActive={FolderFilled}
+          href="/m/edas"
         >
-          Todas las edas
-        </ItemNav>
-
-        <ItemNav
-          icon={DocumentTableRegular}
-          iconActive={DocumentTableFilled}
-          href="/m/edas/report-files"
+          Edas
+        </ItemSidebarNav>
+        <div className="font-semibold px-5 pt-5 pb-2">Ajustes y otros</div>
+        <ItemSidebarNav
+          has="edas:years"
+          icon={DocumentRegular}
+          iconActive={DocumentFilled}
+          href="/m/edas/terminals"
         >
-          Archivos de reportes
-        </ItemNav>
-
-        <Accordion multiple defaultOpenItems={['1']} collapsible>
-          <AccordionItem value="1">
-            <AccordionHeader expandIconPosition="end" className="pl-4">
-              <span className="font-semibold">Ajustes</span>
-            </AccordionHeader>
-            <AccordionPanel className="p-0 !mx-5">
-              <ItemNav
-                icon={FolderRegular}
-                iconActive={FolderFilled}
-                href="/m/users/years"
-              >
-                Años
-              </ItemNav>
-              <ItemNav
-                icon={FolderRegular}
-                iconActive={FolderFilled}
-                href="/m/users/areas"
-              >
-                Plantillas de encuestas
-              </ItemNav>
-            </AccordionPanel>
-          </AccordionItem>
-        </Accordion>
+          Años
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          has="edas:questionnaires"
+          icon={DocumentRegular}
+          iconActive={DocumentFilled}
+          href="/m/edas/questionnaires"
+        >
+          Cuestionarios
+        </ItemSidebarNav>
       </nav>
-    </aside>
+    </ReusableSidebar>
   )
 }
-
-export default EdasSidebar

@@ -50,29 +50,27 @@ export default function Item({
 
   return (
     <>
-      <tr className="relative bg-neutral-50/40 dark:bg-neutral-900 odd:bg-neutral-500/10 dark:even:bg-neutral-500/20 [&>td]:text-nowrap  group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
+      <tr className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
         <td>
           <div className="flex items-center gap-2">
             <Avatar color="colorful" size={40} name={item.name} />
             <div>
-              <p className="line-clamp-3">{item.name}</p>
-              <p className="text-sm opacity-70">{item.description}</p>
+              <p className="line-clamp-3 font-semibold">{item.name}</p>
+              <p className="text-xs opacity-70">{item.description}</p>
             </div>
           </div>
         </td>
         <td>
-          <div className="opacity-70">
-            <p className="overflow-hidden text-nowrap capitalize text-ellipsis">
-              {format(item.date, 'MMMM D, YYYY')}
-            </p>
-          </div>
+          <p className="overflow-hidden font-medium text-nowrap capitalize text-ellipsis">
+            {item.date ? format(item.date, 'MMMM D, YYYY') : 'Sin fecha'}
+          </p>
         </td>
         <td>
           <Link
             to={`/events/records/${item.id}`}
-            className="hover:underline text-nowrap dark:text-cyan-500"
+            className="hover:underline text-nowrap  text-sm font-semibold text-blue-600"
           >
-            {item.recordsCount} registro{item.recordsCount > 1 ? 's' : ''}
+            {item.recordsCount} asistente{item.recordsCount === 1 ? '' : 's'}
           </Link>
         </td>
         <td>
@@ -80,7 +78,7 @@ export default function Item({
             <a
               target="_blank"
               href={`/${item.creator.username}`}
-              className="hover:underline text-nowrap dark:text-blue-600"
+              className="hover:underline text-nowrap font-medium"
             >
               {item.creator?.displayName}
             </a>

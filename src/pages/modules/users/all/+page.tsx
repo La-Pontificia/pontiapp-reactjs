@@ -179,7 +179,7 @@ export default function AllUsersPage() {
 
         {!loading && users?.length > 0 && (
           <>
-            <div className="flex-grow rounded-xl overflow-y-auto">
+            <div className="flex-grow rounded-xl overflow-auto">
               <CollaboratorsGrid
                 refetch={refetch}
                 isLoadingMore={loadingMore}

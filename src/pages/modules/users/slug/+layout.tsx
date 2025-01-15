@@ -24,6 +24,7 @@ import {
   TabList
 } from '@fluentui/react-components'
 import {
+  CameraRegular,
   CopyRegular,
   MoreHorizontal20Filled,
   PenRegular,
@@ -36,6 +37,7 @@ import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
 import { FaWhatsapp } from 'react-icons/fa'
 import { useAuth } from '~/store/auth'
 import ExpiryStatusRenderer from '~/components/expiry-status-renderer'
+import { useUpdateProfile } from '~/hooks/user-update-profile'
 
 type AuthState = {
   user?: User | null
@@ -47,7 +49,7 @@ const UserSlugContext = createContext<AuthState>({} as AuthState)
 // eslint-disable-next-line react-refresh/only-export-components
 export const useSlugUser = () => React.useContext(UserSlugContext)
 
-export default function CollaboratorsSlugLayout(): JSX.Element {
+export default function UsersSlugLayout(): JSX.Element {
   const { user: authUser } = useAuth()
 
   const params = useParams<{
@@ -108,6 +110,16 @@ export default function CollaboratorsSlugLayout(): JSX.Element {
     gcTime: 1000 * 60 * 60 * 5
   })
 
+  const { handleOpenImageDialog, updating, inputProps } = useUpdateProfile(
+    user!,
+    {
+      onCompleted: () => {
+        refetch()
+        toast('Imagen de perfil actualizada.')
+      }
+    }
+  )
+
   if (!isLoading && !user)
     return (
       <div className="p-20 text-center">
@@ -120,6 +132,9 @@ export default function CollaboratorsSlugLayout(): JSX.Element {
   const phoneContact = user?.contacts?.find(
     (c) => c.type === 'phone' || c.type === 'whatsapp'
   )
+
+  const hasEdit =
+    authUser.hasPrivilege('users:edit') || authUser.id === user?.id
 
   return (
     <div className="relative p-2 max-lg:pt-0 h-full w-full flex flex-col overflow-y-auto rounded-0">
@@ -140,18 +155,37 @@ export default function CollaboratorsSlugLayout(): JSX.Element {
             ) : (
               user && (
                 <>
-                  <Avatar
-                    badge={{
-                      status: user.status ? 'available' : 'blocked'
-                    }}
-                    size={128}
-                    color="colorful"
-                    name={user.displayName}
-                    image={{
-                      src: user.photoURL,
-                      alt: user.displayName
-                    }}
-                  />
+                  <div>
+                    <input {...inputProps} />
+                    <Avatar
+                      badge={{
+                        status: updating
+                          ? 'unknown'
+                          : !user.status
+                          ? 'blocked'
+                          : hasEdit
+                          ? 'unknown'
+                          : 'available',
+                        icon: updating ? (
+                          <Spinner size="tiny" />
+                        ) : hasEdit ? (
+                          <button
+                            className="scale-90"
+                            onClick={handleOpenImageDialog}
+                          >
+                            <CameraRegular />
+                          </button>
+                        ) : undefined
+                      }}
+                      size={128}
+                      color="colorful"
+                      name={user.displayName}
+                      image={{
+                        src: user.photoURL,
+                        alt: user.displayName
+                      }}
+                    />
+                  </div>
                   <div className="space-y-2">
                     <h1 className="text-3xl font-bold line-clamp-1">
                       {user.displayName}
