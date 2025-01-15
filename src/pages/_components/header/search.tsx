@@ -40,7 +40,7 @@ export default function RootSearch() {
   })
 
   return (
-    <div className="hidden dark:text-neutral-300 text-stone-800 lg:block">
+    <div className="hidden dark:text-neutral-300 text-stone-800 md:block">
       <div
         onClick={() => setOpen(false)}
         data-open={open ? '' : undefined}
@@ -66,7 +66,7 @@ export default function RootSearch() {
           type="search"
           autoComplete="off"
           placeholder="Buscar"
-          className="w-[500px]"
+          className="lg:w-[500px] md:w-[300px]"
           style={{
             borderRadius: '7px',
             height: '35px'
@@ -171,12 +171,11 @@ const SearchContent = ({
 
   return (
     <div className="dark:bg-[#202020] bg-white w-full rounded-lg top-10 absolute">
-      {items?.modules && items.modules.length > 0 && (
+      {/* {items?.modules && items.modules.length > 0 && (
         <>
           <h2 className="p-2 px-3 tracking-tight flex items-center gap-1">
             Modulos
           </h2>
-          {/* modules */}
           <div className="flex justify-start py-2 items-center gap-4 px-7">
             {items?.modules.map((module) => (
               <button
@@ -195,7 +194,7 @@ const SearchContent = ({
             ))}
           </div>
         </>
-      )}
+      )} */}
 
       {items?.users && items.users.length > 0 && (
         <>

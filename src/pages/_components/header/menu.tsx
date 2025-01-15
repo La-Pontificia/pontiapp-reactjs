@@ -45,7 +45,7 @@ export default function UserMenu() {
     form.append('file', file)
     form.append('path', 'users')
 
-    const res = await api.image<string>('auth/changeProfile', {
+    const res = await api.image<string>('auth/update-profile-photo', {
       data: form
     })
 
@@ -61,8 +61,8 @@ export default function UserMenu() {
       <Popover>
         <PopoverTrigger disableButtonEnhancement>
           <Tooltip content="David Bendezu" relationship="label">
-            <button className="text-right flex items-center gap-2 dark:text-white">
-              <div className="md:block hidden">
+            <button className="text-right flex items-center gap-2 dark:text-white text-black">
+              <div className="xl:block hidden">
                 <p className="font-semibold leading-4 tracking-tight text-sm">
                   {user.displayName}
                 </p>
