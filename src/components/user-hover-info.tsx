@@ -30,7 +30,7 @@ export default function UserHoverInfo({
 
   if (!slug) return <>{children}</>
   return (
-    <HoverCard openDelay={300} open={open} onOpenChange={setOpen}>
+    <HoverCard openDelay={1500} open={open} onOpenChange={setOpen}>
       <HoverCardTrigger asChild>{children}</HoverCardTrigger>
       <HoverCardContent className="p-0 min-w-[450px] max-w-[450px]">
         {open && <UserHoverInfoContent slug={slug} />}
