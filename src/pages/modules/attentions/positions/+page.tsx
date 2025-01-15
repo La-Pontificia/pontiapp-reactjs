@@ -12,11 +12,8 @@ import React from 'react'
 import { useAuth } from '~/store/auth'
 import Form from './form'
 import Item from './position'
-// import Draggable, { type DraggableData } from 'react-draggable'
 import { AttentionPosition } from '~/types/attention-position'
-// import { TransformWrapper, TransformComponent } from 'react-zoom-pan-pinch'
-// import { useAttentionsUi } from '~/store/attentions'
-// import { Rnd } from 'react-rnd'
+import { Helmet } from 'react-helmet'
 
 export default function AttentionsPositionsPage() {
   const { user: authUser } = useAuth()
@@ -49,16 +46,11 @@ export default function AttentionsPositionsPage() {
     return Object.values(positionMap ?? {})
   }, [data])
 
-  // const setPinchState = useAttentionsUi((state) => state.setPinchState)
-  // const isMoveable = useAttentionsUi((state) => state.isMoveable)
-  // const pinchState = useAttentionsUi((state) => state.pinchState)
-  // const setIsEditing = useAttentionsUi((state) => state.setIsEditing)
-  // const isEditing = useAttentionsUi((state) => state.isEditing)
-  // const setIsMoveable = useAttentionsUi((store) => store.setIsMoveable)
-  // const isDragging = useAttentionsUi((store) => store.isItemDragging)
-
   return (
     <div className="flex px-2 relative flex-col w-full py-3 overflow-hidden h-full">
+      <Helmet>
+        <title>Puestos de atenciones | PontiApp</title>
+      </Helmet>
       <nav className="flex items-center py-2 border-b border-neutral-500/20">
         <Form
           refetch={refetch}
@@ -102,10 +94,11 @@ export default function AttentionsPositionsPage() {
                             <td className="text-nowrap">Puesto de atención</td>
                             <td className="text-nowrap">Atendiendo ahora</td>
                             <td className="text-nowrap">Disponible</td>
+                            <td>Servicios </td>
                             <td></td>
                           </tr>
                         </thead>
-                        <tbody className="divide-y divide-neutral-500/20">
+                        <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
                           {positionsOrdered?.map((position) => (
                             <Item
                               key={position.id}

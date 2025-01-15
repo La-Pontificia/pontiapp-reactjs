@@ -63,7 +63,7 @@ export default function SlotSlugTicket() {
   }
 
   return (
-    <div className="flex-grow bg-neutral-500/10 rounded-xl shadow-md dark:shadow-black">
+    <div className="flex-grow bg-neutral-500/10 rounded-xl dark:shadow-[0_0_15px_rgba(0,0,0,.3)]">
       {!callingTicket && !attending && (
         <div className="w-full h-full grid place-content-center">
           <p className="text-sm font-medium opacity-50">

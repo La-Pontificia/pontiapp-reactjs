@@ -5,9 +5,11 @@ import {
   Dialog,
   DialogActions,
   DialogBody,
+  DialogContent,
   DialogSurface,
   DialogTitle,
   DialogTrigger,
+  SearchBox,
   Spinner
 } from '@fluentui/react-components'
 import React from 'react'
@@ -17,15 +19,19 @@ import { toast } from 'anni'
 
 import { AttentionPosition } from '~/types/attention-position'
 import {
+  AddFilled,
   DeleteFilled,
   PenFilled,
-  PersonDesktopRegular
+  PersonDesktopRegular,
+  Search20Regular
 } from '@fluentui/react-icons'
 import Form from './form'
 import { useAuth } from '~/store/auth'
-// import { DraggableData, Rnd } from 'react-rnd'
-// import { useAttentionsUi } from '~/store/attentions'
-// import { DraggableEvent } from 'react-draggable'
+import { useQuery } from '@tanstack/react-query'
+import { AttentionService } from '~/types/attention-service'
+import { useDebounced } from '~/hooks/use-debounced'
+import FormService from './form-service'
+import ServiceItem from './service'
 
 export default function Item({
   item,
@@ -36,6 +42,8 @@ export default function Item({
 }) {
   const [openDelete, setOpenDelete] = React.useState(false)
   const [deleting, setDeleting] = React.useState(false)
+
+  const [openServices, setOpenServices] = React.useState(false)
 
   const { user: authUser } = useAuth()
 
@@ -52,38 +60,11 @@ export default function Item({
     refetch()
   }
 
-  // const setIsMoveable = useAttentionsUi((store) => store.setIsMoveable)
-  // const isEditing = useAttentionsUi((state) => state.isEditing)
-  // const [internalDisabled, setInternalDisabled] = React.useState(false)
-
-  // const updatePosition = (x: number, y: number) => {
-  //   void api.post(`attentions/positions/${item.id}/ui`, {
-  //     data: JSON.stringify({
-  //       x,
-  //       y
-  //     })
-  //   })
-  //   refetch()
-  // }
-
-  // const onStop = (_: DraggableEvent, data: DraggableData) => {
-  //   updatePosition(data.x, data.y)
-  //   setIsMoveable(true)
-  // }
-
-  // const onDrag = () => {
-  //   setIsMoveable(false)
-  // }
-
-  // const onStart = () => {
-  //   setIsMoveable(false)
-  // }
-
   return (
     <>
       <tr
         key={item.id}
-        className="bg-neutral-100 relative dark:bg-neutral-900 [&>td]:px-4 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+        className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-1 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
       >
         <td>
           <div
@@ -129,6 +110,11 @@ export default function Item({
           )}
         </td>
         <td>
+          <Button size="small" onClick={() => setOpenServices(true)}>
+            Servicios
+          </Button>
+        </td>
+        <td>
           <div className="flex items-center gap-2">
             {authUser.hasPrivilege('events:positions:edit') && (
               <Form
@@ -141,7 +127,7 @@ export default function Item({
                     <Badge
                       icon={<PenFilled fontSize={15} />}
                       appearance="tint"
-                      color="success"
+                      color="important"
                     >
                       Editar
                     </Badge>
@@ -154,7 +140,7 @@ export default function Item({
                 <Badge
                   icon={<DeleteFilled fontSize={15} />}
                   appearance="tint"
-                  color="danger"
+                  color="informative"
                 >
                   Eliminar
                 </Badge>
@@ -192,67 +178,136 @@ export default function Item({
           </DialogSurface>
         </Dialog>
       )}
-      {/* <Rnd
-        enableResizing={false}
-        onDragStop={onStop}
-        onDragStart={onStart}
-        dragGrid={[15, 15]}
-        onDrag={onDrag}
-        disableDragging={!isEditing || internalDisabled}
-        default={{
-          x: item.ui?.x ?? 0,
-          y: item.ui?.y ?? 0,
-          width: 90,
-          height: 90
+
+      {openServices && (
+        <Services
+          position={item}
+          openServices={openServices}
+          setOpenServices={setOpenServices}
+        />
+      )}
+    </>
+  )
+}
+
+export const Services = ({
+  openServices,
+  setOpenServices,
+  position
+}: {
+  openServices: boolean
+  setOpenServices: (open: boolean) => void
+  position: AttentionPosition
+}) => {
+  const [q, setQ] = React.useState<string>()
+  const { user: authUser } = useAuth()
+
+  const query = `attentions/services/all?positionId=${position.id}${
+    q ? `&q=${q}` : ''
+  }`
+
+  const {
+    data: services,
+    isLoading,
+    refetch
+  } = useQuery<AttentionService[]>({
+    queryKey: ['attentions/services/all/relationship', q, position.id],
+    queryFn: async () => {
+      const res = await api.get<AttentionService[]>(query)
+      if (!res.ok) return []
+      return res.data
+    }
+  })
+
+  const { handleChange, value: searchValue } = useDebounced({
+    delay: 300,
+    onCompleted: (value) => setQ(value)
+  })
+
+  return (
+    <Dialog
+      open={openServices}
+      onOpenChange={(_, e) => setOpenServices(e.open)}
+      modalType="modal"
+    >
+      <DialogSurface
+        style={{
+          maxWidth: 800
         }}
-        size={{
-          height: 90,
-          width: 90
-        }}
-        className="cursor-pointer rounded-2xl bg-neutral-800 overflow-hidden"
       >
-        <div className="w-full h-full relative p-2 flex flex-col">
-          <div
-            style={{
-              backgroundColor: item.background
-            }}
-            className="absolute pointer-events-none right-0 inset-y-0 w-[5px]"
-          />
-          <div className="flex-grow">
-            <h1 className="font-semibold dark:text-blue-500">
-              {item.shortName}
-            </h1>
-            <p className="text-xs opacity-50">{item.name}</p>
-          </div>
-          {isEditing && (
-            <div
-              onMouseEnter={() => setInternalDisabled(true)}
-              onMouseLeave={() => setInternalDisabled(false)}
-              className="flex justify-between"
-            >
-              {authUser.hasPrivilege('events:positions:edit') && (
-                <Form
-                  defaultValues={item}
+        <DialogBody>
+          <DialogContent>
+            <DialogTitle>Servicios</DialogTitle>
+            <p className="text-xs opacity-70">
+              Servicios del puesto de atención: {position.name}{' '}
+            </p>
+            <div className="py-5">
+              <nav className="flex gap-4 justify-between items-center">
+                <FormService
+                  defaultPosition={position}
                   refetch={refetch}
                   triggerProps={{
-                    size: 'small',
-                    icon: <PenFilled fontSize={15} />,
-                    appearance: 'subtle'
+                    disabled:
+                      isLoading ||
+                      !authUser.hasPrivilege('attentions:services:create'),
+                    appearance: 'primary',
+                    icon: <AddFilled />,
+                    children: <span>Nuevo</span>
                   }}
                 />
-              )}
-              {authUser.hasPrivilege('events:positions:delete') && (
-                <Button
-                  size="small"
-                  onClick={() => setOpenDelete(true)}
-                  icon={<DeleteFilled fontSize={15} />}
-                  appearance="subtle"
+                <SearchBox
+                  disabled={isLoading}
+                  value={searchValue}
+                  style={{
+                    borderRadius: '1rem'
+                  }}
+                  dismiss={{
+                    onClick: () => setQ('')
+                  }}
+                  onChange={(_, e) => {
+                    if (e.value === '') setQ(undefined)
+                    handleChange(e.value)
+                  }}
+                  contentBefore={<Search20Regular className="text-blue-500" />}
+                  placeholder="Filtrar"
                 />
-              )}
+              </nav>
+              <div className="overflow-auto pt-3 flex-grow rounded-xl h-full">
+                {isLoading ? (
+                  <div className="h-full p-10 grid place-content-center">
+                    <Spinner size="small" />
+                  </div>
+                ) : (
+                  <div className="overflow-auto">
+                    <table className="w-full">
+                      <thead>
+                        <tr className="dark:text-neutral-400 border-b border-neutral-500/30 font-semibold [&>td]:py-2 [&>td]:px-2">
+                          <td className="text-nowrap w-full">Nombre</td>
+                          <td></td>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
+                        {services?.map((service) => (
+                          <ServiceItem
+                            key={service.id}
+                            item={service}
+                            refetch={refetch}
+                          />
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
             </div>
-          )}
-        </div>
-      </Rnd> */}
-    </>
+          </DialogContent>
+          <DialogActions>
+            <DialogTrigger disableButtonEnhancement>
+              <Button appearance="secondary">Aceptar</Button>
+            </DialogTrigger>
+          </DialogActions>
+        </DialogBody>
+      </DialogSurface>
+    </Dialog>
   )
 }

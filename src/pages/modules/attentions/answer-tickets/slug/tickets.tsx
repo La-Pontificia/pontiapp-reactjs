@@ -16,7 +16,7 @@ export default function Tickets() {
   const { tickets, setState, state, ticketsTransferred } =
     useSlugAttentionTicket()
   return (
-    <div className="bg-neutral-500/10 shadow-md overflow-y-auto flex flex-col dark:shadow-black w-[380px] rounded-xl">
+    <div className="bg-neutral-500/10 dark:shadow-[0_0_15px_rgba(0,0,0,.3)] overflow-y-auto flex flex-col w-[380px] rounded-xl">
       <nav className="p-2 flex border-b border-slate-500/20 items-center flex-wrap gap-2">
         {Object.entries(states).map(([key, value]) => (
           <button

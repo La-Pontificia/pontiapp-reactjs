@@ -87,7 +87,7 @@ export default function AttentionsBusinessUnitsPage() {
                     <td className="text-nowrap">Dominio</td>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-neutral-500/20">
+                <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
                   {data.businessUnits.map((business) => {
                     const domainURL = business.domain.startsWith('https')
                       ? business.domain
@@ -97,7 +97,7 @@ export default function AttentionsBusinessUnitsPage() {
                     return (
                       <tr
                         key={business.id}
-                        className="relative bg-neutral-50/40 dark:bg-neutral-900 odd:bg-neutral-500/10 dark:even:bg-neutral-500/20 [&>td]:text-nowrap  group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+                        className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
                       >
                         <td>
                           <div>
@@ -122,7 +122,7 @@ export default function AttentionsBusinessUnitsPage() {
                             <Avatar
                               name={business.name}
                               color="colorful"
-                              size={32}
+                              size={40}
                             />
                             <p>{business.name}</p>
                           </div>
