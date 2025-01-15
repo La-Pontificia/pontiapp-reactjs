@@ -21,7 +21,6 @@ import DisabledUsersPage from '~/pages/modules/users/disabled/+page'
 import AllUsersPage from '~/pages/modules/users/all/+page'
 import CreateUserPage from '~/pages/modules/users/create/+page'
 import UsersLayout from '~/pages/modules/users/+layout'
-import UsersPage from '~/pages/modules/users/+page'
 import UsersSlugLayout from './slug/+layout'
 import UsersSlugPage from './slug/+page'
 import UsersSlugOrganizationPage from './slug/organization/+page'
@@ -160,7 +159,7 @@ export default function UsersRoutes() {
           <Route path="assists" element={<UsersSlugAssistsPage />} />
           <Route path="history" element={<UsersSlugHistoryPage />} />
         </Route>
-        <Route path="*" element={<UsersPage />} />
+        {/* <Route path="*" element={<UsersPage />} /> */}
       </Route>
     </Routes>
   )
