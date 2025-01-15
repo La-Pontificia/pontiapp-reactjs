@@ -1,5 +1,5 @@
-import { Toaster } from 'anni'
 import React from 'react'
+import { Toaster } from 'anni'
 
 export default function UiProvider({
   children
