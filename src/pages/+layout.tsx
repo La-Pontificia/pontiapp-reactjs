@@ -3,6 +3,7 @@ import { useUi } from '~/store/ui'
 import RootSidebar from './_components/sidebar'
 import RootHeader from './_components/header'
 import UserNotices from './_components/outsides/notices'
+import BirthdayBoys from '~/components/birthdays'
 
 export default function RootLayout() {
   const isModuleMaximized = useUi((s) => s.isModuleMaximized)
@@ -11,6 +12,7 @@ export default function RootLayout() {
     <main className="h-svh flex overflow-y-auto bg-[#f7f9fb] dark:bg-[#20232b]">
       <RootSidebar />
       <UserNotices />
+      <BirthdayBoys />
       <div
         data-maximized={isModuleMaximized ? '' : undefined}
         className="flex-grow h-full relative data-[maximized]:static flex p-1 pl-0"
