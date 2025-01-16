@@ -123,9 +123,12 @@ export default function UsersSlugLayout(): JSX.Element {
   if (!isLoading && !user)
     return (
       <div className="p-20 text-center">
-        <h1>
+        <h1 className="pb-2 font-medium">
           OPPS! No se ha encontrado el id <code>{slug}</code>
         </h1>
+        <Button size="small" onClick={() => refetch()}>
+          Reintentar
+        </Button>
       </div>
     )
 
