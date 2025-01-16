@@ -124,6 +124,8 @@ export default function BirthdayBoys() {
   const { width, height } = useWindowSize()
   const { birthdayBoys } = useAuth()
 
+  if (birthdayBoys.length === 0) return null
+
   if (date === now && showed) return null
 
   const RenderRandomCard = ({ user }: { user: User }) => {
