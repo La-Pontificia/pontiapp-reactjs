@@ -204,3 +204,16 @@ export const PRIVILEGES = {
   // Settings management
   settings: 'Acceso a configuraciones del sistema'
 }
+
+export const BIRTHDAY_MESSAGE: string[] = [
+  'Que este nuevo año te traiga grandes logros y alegrías.',
+  'Te deseamos un año lleno de éxito y momentos felices.',
+  'Que todos tus sueños y metas se hagan realidad en este nuevo año.',
+  'Que cada día esté lleno de nuevas oportunidades para ti.',
+  'Que este año te traiga todo lo que te mereces y más.',
+  'Feliz cumpleaños, que cada meta que te propongas se haga realidad.',
+  'Que este día marque el comienzo de un año lleno de bendiciones.',
+  'Te deseamos un año increíble lleno de crecimiento y felicidad.',
+  'Que este nuevo ciclo esté lleno de éxitos, salud y felicidad.',
+  'Que cada día del año esté lleno de momentos inolvidables para ti.'
+] as const
