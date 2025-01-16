@@ -8,6 +8,7 @@ interface AuthState {
   privileges?: string[]
   loading?: boolean
   signOut?: () => void
+  birthdayBoys: User[]
 }
 
 const AuthContext = createContext<AuthState>({} as AuthState)
@@ -17,14 +18,23 @@ export const useAuth = () => React.useContext(AuthContext)
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = React.useState<User | null>(null)
+  const [birthdayBoys, setBirthdayBoys] = React.useState<User[]>([])
   const [loading, setLoading] = React.useState(true)
 
   const fetchAuth = async () => {
     try {
-      const res = await api.get<User>('auth/current?relationship=userRole,role')
+      const res = await api.get<{
+        authUser: User
+        birthdayBoys: User[]
+      }>('auth/current?relationship=userRole,role')
+
       if (!res.ok) throw new Error(res.error)
 
-      const userInstance = new User(res.data)
+      const userInstance = new User(res.data.authUser)
+      const birthdayBoysInstances = res.data.birthdayBoys.map(
+        (user) => new User(user)
+      )
+      setBirthdayBoys(birthdayBoysInstances)
       setUser(userInstance)
     } catch (err) {
       console.error(err)
@@ -56,7 +66,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         user: user as User,
         loading,
         signOut,
-        setUser
+        setUser,
+        birthdayBoys
       }}
     >
       {children}
