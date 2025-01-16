@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ERRORS } from '~/const/errors'
+import { BIRTHDAY_MESSAGE } from '~/const/index'
 
 import clsx, { type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -26,4 +27,15 @@ export const generateRandomPassword = () => {
     pass += chars.charAt(i)
   }
   return pass
+}
+
+export const getRandomMessageBirthday = () => {
+  const i = Math.floor(Math.random() * BIRTHDAY_MESSAGE.length)
+  return BIRTHDAY_MESSAGE[i]
+}
+
+export const hashCode = (str: string): number => {
+  return Array.from(str).reduce((hash, char) => {
+    return hash * 31 + char.charCodeAt(0)
+  }, 0)
 }
