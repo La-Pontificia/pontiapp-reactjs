@@ -49,7 +49,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     try {
       await api.post('auth/signout')
       setUser(null)
-      window.location.href = '/login'
+      window.location.href = `/login?redirectURL=${window.location.pathname}`
     } catch (error) {
       console.error(error)
       setLoading(false)
