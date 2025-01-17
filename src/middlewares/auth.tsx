@@ -7,9 +7,10 @@ export default function AuthMiddleware({
 }: Readonly<{
   children?: React.ReactNode
 }>): JSX.Element {
+  const to = `/login?redirectURL=${window.location.pathname}`
   const { loading, user } = useAuth()
   if (loading) return <RootLoading />
-  if (!user && !loading) return <Navigate to="/login" />
-  if (!user) return <Navigate to="/login" />
+  if (!user && !loading) return <Navigate to={to} />
+  if (!user) return <Navigate to={to} />
   return <>{children}</>
 }
