@@ -6,9 +6,10 @@ import { Area } from '~/types/area'
 import { Job } from '~/types/job'
 import React from 'react'
 import { Spinner, Tab, TabList } from '@fluentui/react-components'
-import { Assist, RestAssist } from '~/types/assist'
+import { Assist } from '~/types/assist'
 import AssistsGrid from './grid'
 import RestAssistsGrid from './rest-grid'
+import { RestAssist } from '~/types/rest-assist'
 
 export type Filter = {
   startDate: Date | null
@@ -63,21 +64,11 @@ export default function AssistsPage() {
       if (filters.areaId) uri += `&areaId=${filters.areaId}`
       if (filters.jobId) uri += `&jobId=${filters.jobId}`
 
-      const res =
-        filters.startDate && filters.endDate
-          ? await api.get<{
-              matchedAssists: Assist[]
-              restAssists: RestAssist[]
-              originalResultsCount: number
-            }>(uri)
-          : {
-              ok: false,
-              data: {
-                matchedAssists: [],
-                restAssists: [],
-                originalResultsCount: 0
-              }
-            }
+      const res = await api.get<{
+        matchedAssists: Assist[]
+        restAssists: RestAssist[]
+        originalResultsCount: number
+      }>(uri)
 
       if (!res.ok)
         return {
@@ -86,12 +77,8 @@ export default function AssistsPage() {
           originalResultsCount: 0
         }
       return {
-        matchedAssists: res.data.matchedAssists.map(
-          (assist) => new Assist(assist)
-        ),
-        restAssists: res.data.restAssists.map(
-          (assist) => new RestAssist(assist)
-        ),
+        matchedAssists: res.data.matchedAssists,
+        restAssists: res.data.restAssists,
         originalResultsCount: res.data.originalResultsCount
       }
     }
@@ -162,10 +149,10 @@ export default function AssistsPage() {
                 </div>
                 <div className="overflow-auto">
                   {tab === 'matched' && (
-                    <AssistsGrid assists={data?.matchedAssists ?? []} />
+                    <AssistsGrid data={data?.matchedAssists ?? []} />
                   )}
                   {tab === 'rest' && (
-                    <RestAssistsGrid assists={data?.restAssists ?? []} />
+                    <RestAssistsGrid data={data?.restAssists ?? []} />
                   )}
                 </div>
               </div>
