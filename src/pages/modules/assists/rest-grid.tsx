@@ -4,16 +4,13 @@ import React from 'react'
 import { Link } from 'react-router'
 import UserHoverInfo from '~/components/user-hover-info'
 import { format } from '~/lib/dayjs'
-import { RestAssist } from '~/types/assist'
+import { RestAssist } from '~/types/rest-assist'
 
-export default function RestAssistsGrid({
-  assists
-}: {
-  assists: RestAssist[]
-}) {
+export default function RestAssistsGrid({ data }: { data: RestAssist[] }) {
+  const assists = data.map((item) => new RestAssist(item))
+
   const [startSlice] = React.useState(0)
   const [endSlice, setEndSlice] = React.useState(15)
-
   const buttonRef = React.useRef<HTMLButtonElement>(null)
 
   return (

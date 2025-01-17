@@ -6,10 +6,11 @@ import UserHoverInfo from '~/components/user-hover-info'
 import { format } from '~/lib/dayjs'
 import { Assist } from '~/types/assist'
 
-export default function AssistsGrid({ assists }: { assists: Assist[] }) {
+export default function AssistsGrid({ data }: { data: Assist[] }) {
+  const assists = data.map((item) => new Assist(item))
+
   const [startSlice] = React.useState(0)
   const [endSlice, setEndSlice] = React.useState(15)
-
   const buttonRef = React.useRef<HTMLButtonElement>(null)
 
   return (
