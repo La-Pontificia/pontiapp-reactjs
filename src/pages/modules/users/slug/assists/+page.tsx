@@ -2,13 +2,14 @@ import { Helmet } from 'react-helmet'
 import UserSlugAssistsFilter from './filters'
 import { useSlugUser } from '../+layout'
 import React from 'react'
-import { Assist, RestAssist } from '~/types/assist'
+import { Assist } from '~/types/assist'
 import { useQuery } from '@tanstack/react-query'
 import { format } from '~/lib/dayjs'
 import { api } from '~/lib/api'
 import AssistsGrid from './grid'
 import RestAssistsGrid from './rest-grid'
 import { Spinner } from '@fluentui/react-components'
+import { RestAssist } from '~/types/rest-assist'
 
 export type Filter = {
   startDate: Date | null
@@ -40,21 +41,11 @@ export default function UsersSlugAssistsPage() {
       if (filters.endDate)
         uri += `&endDate=${format(filters.endDate, 'YYYY-MM-DD')}`
 
-      const res =
-        filters.startDate && filters.endDate
-          ? await api.get<{
-              matchedAssists: Assist[]
-              restAssists: RestAssist[]
-              originalResultsCount: number
-            }>(uri)
-          : {
-              ok: false,
-              data: {
-                matchedAssists: [],
-                restAssists: [],
-                originalResultsCount: 0
-              }
-            }
+      const res = await api.get<{
+        matchedAssists: Assist[]
+        restAssists: RestAssist[]
+        originalResultsCount: number
+      }>(uri)
 
       if (!res.ok)
         return {
@@ -66,9 +57,7 @@ export default function UsersSlugAssistsPage() {
         matchedAssists: res.data.matchedAssists.map(
           (assist) => new Assist(assist)
         ),
-        restAssists: res.data.restAssists.map(
-          (assist) => new RestAssist(assist)
-        ),
+        restAssists: res.data.restAssists,
         originalResultsCount: res.data.originalResultsCount
       }
     }
@@ -96,9 +85,7 @@ export default function UsersSlugAssistsPage() {
             horarios
           </h1>
           <AssistsGrid assists={data?.matchedAssists ?? []} />
-          {data?.restAssists && data?.restAssists.length > 0 && (
-            <RestAssistsGrid assists={data?.restAssists ?? []} />
-          )}
+          <RestAssistsGrid data={data?.restAssists ?? []} />
         </div>
       )}
     </div>

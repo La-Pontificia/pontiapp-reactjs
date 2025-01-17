@@ -2,13 +2,10 @@ import { Badge, Button } from '@fluentui/react-components'
 import { CalendarRegular, ClockRegular } from '@fluentui/react-icons'
 import React from 'react'
 import { format } from '~/lib/dayjs'
-import { RestAssist } from '~/types/assist'
+import { RestAssist } from '~/types/rest-assist'
 
-export default function RestAssistsGrid({
-  assists
-}: {
-  assists: RestAssist[]
-}) {
+export default function RestAssistsGrid({ data }: { data: RestAssist[] }) {
+  const assists = data.map((item) => new RestAssist(item))
   const [startSlice] = React.useState(0)
   const [endSlice, setEndSlice] = React.useState(15)
 
