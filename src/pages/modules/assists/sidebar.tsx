@@ -23,14 +23,14 @@ export const AssistsSidebar = () => {
     <ReusableSidebar homePath="/m/assists" title="Asistencias">
       <nav className="pr-2 py-2 px-3">
         <ItemSidebarNav
-          has="assists:my"
+          has={['assists:my']}
           href="/m/assists/my"
           avatar={authUser.photoURL}
         >
           Mis asistencias
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="assists:schedules"
+          has={['assists:schedules']}
           feacture={{
             label: 'Nuevo',
             from: new Date('2025-01-06')
@@ -42,7 +42,7 @@ export const AssistsSidebar = () => {
           Asistencias
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="assists:withUsers"
+          has={['assists:withUsers']}
           icon={DocumentPersonRegular}
           iconActive={DocumentPersonFilled}
           href="/m/assists/with-users"
@@ -50,7 +50,7 @@ export const AssistsSidebar = () => {
           Con usuarios
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="assists:withoutUsers"
+          has={['assists:withoutUsers']}
           icon={PersonDeleteRegular}
           iconActive={PersonDeleteFilled}
           href="/m/assists/without-users"
@@ -58,7 +58,7 @@ export const AssistsSidebar = () => {
           Sin usuarios
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="assists:summary"
+          has={['assists:summary']}
           icon={TextBulletListSquareClockRegular}
           iconActive={TextBulletListSquareClockFilled}
           href="/m/assists/summary"
@@ -67,7 +67,7 @@ export const AssistsSidebar = () => {
         </ItemSidebarNav>
 
         <ItemSidebarNav
-          has="assists:reportFiles"
+          has={['assists:reportFiles']}
           icon={DocumentTableRegular}
           iconActive={DocumentTableFilled}
           href="/m/assists/report-files"
@@ -76,7 +76,7 @@ export const AssistsSidebar = () => {
         </ItemSidebarNav>
         <div className="font-semibold px-5 pt-5 pb-2">Ajustes</div>
         <ItemSidebarNav
-          has="assists:assistTerminals"
+          has={['assists:assistTerminals']}
           icon={FolderRegular}
           iconActive={FolderFilled}
           href="/m/assists/terminals"
@@ -84,7 +84,7 @@ export const AssistsSidebar = () => {
           Biometricos
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="assists:databases"
+          has={['assists:databases']}
           icon={CloudDatabaseRegular}
           iconActive={CloudDatabaseFilled}
           href="/m/assists/databases"
