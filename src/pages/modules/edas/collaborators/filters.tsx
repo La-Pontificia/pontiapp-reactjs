@@ -18,15 +18,15 @@ import React from 'react'
 import { Area } from '~/types/area'
 import { UserRole } from '~/types/user-role'
 
-const managers = {
-  has: 'Con jefes',
-  not: 'Sin jefes'
-}
+// const managers = {
+//   has: 'Con jefes',
+//   not: 'Sin jefes'
+// }
 
-const schedules = {
-  has: 'Con horarios',
-  not: 'Sin horarios'
-}
+// const schedules = {
+//   has: 'Con horarios',
+//   not: 'Sin horarios'
+// }
 
 export default function CollaboratorsFilters({
   sidebarIsOpen,
@@ -49,12 +49,12 @@ export default function CollaboratorsFilters({
   const [jobId, setJobId] = React.useState<string | undefined | null>(
     filters.job
   )
-  const [hasManager, setHasManager] = React.useState<string | undefined | null>(
-    filters.hasManager
-  )
-  const [hasSchedules, setHasSchedules] = React.useState<
-    string | undefined | null
-  >(filters.hasSchedules)
+  // const [hasManager, setHasManager] = React.useState<string | undefined | null>(
+  //   filters.hasManager
+  // )
+  // const [hasSchedules, setHasSchedules] = React.useState<
+  //   string | undefined | null
+  // >(filters.hasSchedules)
 
   const { data: areas, isLoading: isAreasLoading } = useQuery<Area[]>({
     queryKey: ['Allareas'],
@@ -87,18 +87,18 @@ export default function CollaboratorsFilters({
   const roleValue = userRoles?.find((r) => r.id === userRoleId)?.title
   const jobValue = jobs?.find((j) => j.id === jobId)?.name
   const areaValue = areas?.find((a) => a.id === areaId)?.name
-  const hasManagerValue =
-    hasManager === 'has'
-      ? managers.has
-      : hasManager === 'not'
-      ? managers.not
-      : undefined
-  const hasSchedulesValue =
-    hasSchedules === 'has'
-      ? schedules.has
-      : hasSchedules === 'not'
-      ? schedules.not
-      : undefined
+  // const hasManagerValue =
+  //   hasManager === 'has'
+  //     ? managers.has
+  //     : hasManager === 'not'
+  //     ? managers.not
+  //     : undefined
+  // const hasSchedulesValue =
+  //   hasSchedules === 'has'
+  //     ? schedules.has
+  //     : hasSchedules === 'not'
+  //     ? schedules.not
+  //     : undefined
 
   const handleApplyFilters = () => {
     setSidebarIsOpen(false)
@@ -106,9 +106,9 @@ export default function CollaboratorsFilters({
       ...prev,
       role: userRoleId ?? null,
       area: areaId ?? null,
-      job: jobId ?? null,
-      hasManager: hasManager ?? null,
-      hasSchedules: hasSchedules ?? null
+      job: jobId ?? null
+      // hasManager: hasManager ?? null,
+      // hasSchedules: hasSchedules ?? null
     }))
   }
 
@@ -202,7 +202,7 @@ export default function CollaboratorsFilters({
                 )}
               </Combobox>
             </Field>
-            <Field label="Jefes">
+            {/* <Field label="Jefes">
               <Combobox
                 selectedOptions={[hasManager ? hasManager : '']}
                 onOptionSelect={(_, e) => setHasManager(e.optionValue)}
@@ -218,8 +218,8 @@ export default function CollaboratorsFilters({
                   </Option>
                 ))}
               </Combobox>
-            </Field>
-            <Field label="Horarios">
+            </Field> */}
+            {/* <Field label="Horarios">
               <Combobox
                 selectedOptions={[hasSchedules ? hasSchedules : '']}
                 onOptionSelect={(_, e) => setHasSchedules(e.optionValue)}
@@ -235,7 +235,7 @@ export default function CollaboratorsFilters({
                   </Option>
                 ))}
               </Combobox>
-            </Field>
+            </Field> */}
           </div>
         </div>
         <footer className="border-t py-4 flex gap-3 border-neutral-500">

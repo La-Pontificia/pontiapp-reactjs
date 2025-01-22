@@ -1,7 +1,7 @@
-import { toast } from 'anni'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
-import { handleAuthError } from '~/utils'
+// import { toast } from 'anni'
+// import { api } from '~/lib/api'
+// import { useAuth } from '~/store/auth'
+// import { handleAuthError } from '~/utils'
 import { Avatar } from '@fluentui/react-components'
 import React from 'react'
 import { Link } from 'react-router'
@@ -9,38 +9,38 @@ import UserHoverInfo from '~/components/user-hover-info'
 import { Collaborator } from '~/types/collaborator'
 
 export default function UserGrid({
-  user: userProp,
-  refetch
-}: {
+  user: userProp
+}: // refetch
+{
   user: Collaborator
   refetch: () => void
 }) {
-  const [managerUpdating, setManagerUpdating] = React.useState(false)
-  const [user, setUser] = React.useState(new Collaborator(userProp))
-  const { user: authUser } = useAuth()
+  // const [managerUpdating, setManagerUpdating] = React.useState(false)
+  const [user] = React.useState(new Collaborator(userProp))
+  // const { user: authUser } = useAuth()
 
-  const handleManager = async (manager?: Collaborator) => {
-    setManagerUpdating(true)
-    const res = await api.post(`users/${user.id}/manager`, {
-      data: {
-        managerId: manager?.id
-      }
-    })
-    if (!res.ok) {
-      setManagerUpdating(false)
-      return toast(handleAuthError(res.error))
-    }
-    setManagerUpdating(false)
-    setUser(
-      (u) =>
-        new Collaborator({
-          ...u,
-          manager: manager ? new Collaborator(manager) : undefined
-        } as Collaborator)
-    )
-    refetch()
-    toast('Jefe actualizado correctamente.')
-  }
+  // const handleManager = async (manager?: Collaborator) => {
+  //   setManagerUpdating(true)
+  //   const res = await api.post(`users/${user.id}/manager`, {
+  //     data: {
+  //       managerId: manager?.id
+  //     }
+  //   })
+  //   if (!res.ok) {
+  //     setManagerUpdating(false)
+  //     return toast(handleAuthError(res.error))
+  //   }
+  //   setManagerUpdating(false)
+  //   setUser(
+  //     (u) =>
+  //       new Collaborator({
+  //         ...u,
+  //         manager: manager ? new Collaborator(manager) : undefined
+  //       } as Collaborator)
+  //   )
+  //   refetch()
+  //   toast('Jefe actualizado correctamente.')
+  // }
   return (
     <tr className="relative [&>td]:text-nowrap group [&>td]:p-3 bg-white dark:bg-[#272523] [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
       <td>
