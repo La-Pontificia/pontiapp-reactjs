@@ -25,13 +25,13 @@ export default function AttentionsSidenar() {
         <ItemSidebarNav
           icon={SparkleRegular}
           iconActive={SparkleFilled}
-          has="attentions.register"
+          has={['attentions.register']}
           href="/m/attentions/register"
         >
           Registro Rápido
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="attentions:answer-ticket"
+          has={['attentions:answer-ticket']}
           icon={PersonSupportRegular}
           iconActive={PersonSupportFilled}
           href="/m/attentions/answer-tickets"
@@ -39,7 +39,7 @@ export default function AttentionsSidenar() {
           Iniciar atención
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="attentions:shiftScreen"
+          has={['attentions:shiftScreen']}
           icon={DeviceMeetingRoomRegular}
           iconActive={DeviceMeetingRoomFilled}
           href="/m/attentions/shift-screen"
@@ -48,7 +48,7 @@ export default function AttentionsSidenar() {
         </ItemSidebarNav>
 
         <ItemSidebarNav
-          has="attentions:show"
+          has={['attentions:show']}
           icon={TaskListSquarePersonRegular}
           iconActive={TaskListSquarePersonFilled}
           href="/m/attentions"
@@ -57,7 +57,7 @@ export default function AttentionsSidenar() {
         </ItemSidebarNav>
 
         <ItemSidebarNav
-          has="attentions:tickets"
+          has={['attentions:tickets']}
           icon={TicketDiagonalRegular}
           iconActive={TicketDiagonalFilled}
           href="/m/attentions/tickets"
@@ -66,7 +66,7 @@ export default function AttentionsSidenar() {
         </ItemSidebarNav>
 
         <ItemSidebarNav
-          has="attentions:reportFiles"
+          has={['attentions:reportFiles']}
           icon={DocumentTableRegular}
           iconActive={DocumentTableFilled}
           href="/m/attentions/report-files"
@@ -76,7 +76,7 @@ export default function AttentionsSidenar() {
 
         <div className="font-semibold px-5 pt-5 pb-2">Ajustes</div>
         <ItemSidebarNav
-          has="attentions:positions"
+          has={['attentions:positions']}
           icon={BoardSplitRegular}
           iconActive={BoardSplitFilled}
           href="/m/attentions/positions"
@@ -85,7 +85,7 @@ export default function AttentionsSidenar() {
         </ItemSidebarNav>
 
         <ItemSidebarNav
-          has="attentions:businessUnits"
+          has={['attentions:businessUnits']}
           icon={BuildingRegular}
           iconActive={BuildingFilled}
           href="/m/attentions/business-units"
