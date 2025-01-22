@@ -21,7 +21,7 @@ export const ReusableSidebar = React.forwardRef<
   HTMLDivElement,
   React.HTMLProps<HTMLDivElement> & {
     homePath: string
-    title: string
+    title?: string
   }
 >(({ children, className, homePath, title, ...props }, ref) => {
   const isSidebarOpen = useUi((state) => state.isSidebarOpen)
@@ -87,7 +87,7 @@ export const ReusableSidebar = React.forwardRef<
 ReusableSidebar.displayName = 'ReusableSidebar'
 
 type ItemNav = {
-  has: string
+  has: string[]
   icon?: FluentIcon
   iconActive?: FluentIcon
   href: string
@@ -103,10 +103,12 @@ type ItemNav = {
 export const ItemSidebarNav = (props: ItemNav) => {
   const { pathname } = useLocation()
   const { user } = useAuth()
-
+  const privileges = user.allPrivileges
   const ctx = React.useContext(ContextReusableSidebar)
 
-  if (!user.hasPrivilege(props.has)) return null
+  const hasPrivilege = props.has.some((p) => privileges.includes(p))
+
+  if (!hasPrivilege && !user.isDeveloper) return null
 
   const isActive =
     props.href === ctx.homePath
@@ -122,15 +124,15 @@ export const ItemSidebarNav = (props: ItemNav) => {
       className="block relative dark:text-neutral-300 text-neutral-900 data-[active]:font-semibold group pl-3"
     >
       <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center">
-        <span className="h-[10px] group-data-[active]:h-[20px] transition-all group-hover:h-[20px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
+        <span className="h-[10px] group-data-[active]:h-[20px] transition-all group-hover:h-[20px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-600 group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
       </div>
-      <div className="flex items-center transition-colors font-medium group-data-[active]:dark:text-white gap-2 px-2 py-2 rounded-lg group-hover:bg-white dark:group-hover:bg-neutral-700">
+      <div className="flex items-center transition-colors font-medium group-data-[active]:dark:text-white gap-2 px-2 py-2 rounded-lg group-hover:bg-white dark:group-hover:bg-stone-700/50">
         {props.emptyIcon ? (
-          <span className="w-[24px] aspect-square"></span>
+          <span className="w-[23px] aspect-square"></span>
         ) : Icon ? (
           <Icon
             fontSize={23}
-            className="dark:text-neutral-200 group-data-[active]:dark:text-blue-500 group-data-[active]:text-blue-800"
+            className="dark:text-neutral-200 group-data-[active]:dark:text-blue-600 group-data-[active]:text-blue-800"
           />
         ) : (
           <Avatar
