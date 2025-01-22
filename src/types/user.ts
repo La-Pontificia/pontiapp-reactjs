@@ -101,6 +101,13 @@ export class User {
     return n
   }
 
+  get allPrivileges(): string[] {
+    return [
+      ...(this.userRole.privileges || []),
+      ...(this.customPrivileges || [])
+    ]
+  }
+
   get isDeveloper(): boolean {
     const allPrivileges = [
       ...(this.userRole.privileges || []),
