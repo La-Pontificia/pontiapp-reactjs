@@ -33,6 +33,10 @@ export default function PrivilegesDrawer(props: PrivilegesDrawerProps) {
     props.asignedPrivileges ?? []
   )
 
+  React.useEffect(() => {
+    setAsignedPrivileges(props.asignedPrivileges ?? [])
+  }, [props.asignedPrivileges])
+
   const [privileges, setPrivileges] =
     React.useState<typeof PRIVILEGES>(PRIVILEGES)
 
