@@ -10,6 +10,8 @@ import {
   MegaphoneLoudRegular,
   PersonFilled,
   PersonRegular,
+  StoreMicrosoftFilled,
+  StoreMicrosoftRegular,
   TabletFilled,
   TabletRegular
 } from '@fluentui/react-icons'
@@ -139,6 +141,16 @@ export const RootSidebar = () => {
             icon={TabletRegular}
             activeIcon={TabletFilled}
             href="/m/attentions"
+          />
+        )}
+
+        {authUser.hasModule('inventories') && (
+          <ItemNav
+            tooltip="Modulo de inventarios"
+            text="Inventario"
+            icon={StoreMicrosoftRegular}
+            activeIcon={StoreMicrosoftFilled}
+            href="/m/inventories"
           />
         )}
       </nav>
