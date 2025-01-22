@@ -33,7 +33,7 @@ export const UsersSidebar = () => {
       )}
       <nav className="pr-2 py-2 px-3">
         <ItemSidebarNav
-          has="users:show"
+          has={['users:show']}
           icon={PersonRegular}
           iconActive={PersonFilled}
           href="/m/users/all"
@@ -41,7 +41,7 @@ export const UsersSidebar = () => {
           Todos
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="users:show"
+          has={['users:show']}
           icon={PersonDeleteRegular}
           iconActive={PersonDeleteFilled}
           href="/m/users/disabled"
@@ -49,7 +49,7 @@ export const UsersSidebar = () => {
           Inactivos
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="users:teams"
+          has={['users:teams']}
           icon={PeopleRegular}
           iconActive={PeopleFilled}
           href="/m/users/teams"
@@ -58,7 +58,7 @@ export const UsersSidebar = () => {
         </ItemSidebarNav>
         <div className="font-semibold px-5 pt-5 pb-2">Ajustes</div>
         <ItemSidebarNav
-          has="users:areas"
+          has={['users:areas']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
           href="/m/users/areas"
@@ -66,7 +66,7 @@ export const UsersSidebar = () => {
           Areas de trabajo
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="users:departments"
+          has={['users:departments']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
           href="/m/users/departments"
@@ -74,7 +74,7 @@ export const UsersSidebar = () => {
           Departamentos
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="users:jobs"
+          has={['users:jobs']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
           href="/m/users/jobs"
@@ -82,7 +82,7 @@ export const UsersSidebar = () => {
           Puestos
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="users:roles"
+          has={['users:roles']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
           href="/m/users/roles"
@@ -90,7 +90,7 @@ export const UsersSidebar = () => {
           Cargos
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="users:userRoles"
+          has={['users:userRoles']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
           href="/m/users/user-roles"
@@ -98,7 +98,7 @@ export const UsersSidebar = () => {
           Privilegios y roles
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="users:contractTypes"
+          has={['users:contractTypes']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
           href="/m/users/contract-types"

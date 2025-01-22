@@ -28,7 +28,7 @@ export default function QuickSchedules({ slug }: { slug?: string }) {
   if (!isLoading && countSchedules === 0) return null
   return (
     <div className="flex flex-col border-b pb-4 border-neutral-500/30">
-      <h2 className="dark:dark:text-neutral-400 pb-2 text-lg">Horarios</h2>
+      <h2 className="dark:dark:text-neutral-400 py-2 text-lg">Horarios</h2>
       <div>
         <div
           className={cn(

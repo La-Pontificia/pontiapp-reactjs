@@ -55,7 +55,7 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
 
   return (
     <div className="flex flex-col border-t overflow-auto border-neutral-500/30">
-      <h2 className="dark:dark:text-neutral-400 pb-2 text-lg">Organización</h2>
+      <h2 className="dark:dark:text-neutral-400 py-2 text-lg">Organización</h2>
       {!hasOrganization ? (
         <div className="pt-4">
           <p className="opacity-70">
@@ -68,8 +68,10 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
           <div className="flex divide-x max-md:divide-y max-md:flex-col max-md:gap-y-5 max-md:divide-x-0 overflow-auto md:first:[&>div]:pl-0 md:[&>div]:px-3 md:last:[&>div]:pr-0 divide-neutral-500/30">
             {data?.manager && (
               <div className="">
-                <h2 className="text-xs pb-2 max-md:pt-2">Jefe (Manager)</h2>
-                <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-hidden rounded-lg shadow-sm dark:shadow-black">
+                <h2 className="text-xs pb-2 max-md:pt-2">
+                  Bajo la supervision de
+                </h2>
+                <div className="bg-stone-500/5 mb-1 dark:bg-stone-500/10 overflow-hidden rounded-lg shadow-sm dark:shadow-black">
                   <PersonItem appearance="vertical" person={data?.manager} />
                 </div>
               </div>
@@ -77,9 +79,9 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
             {data.subordinates?.length > 0 && (
               <div className="w-fit max-md:w-full">
                 <h2 className="text-xs pb-2 max-md:pt-2">
-                  Personas reportando a {user?.displayName}
+                  Personas reportando
                 </h2>
-                <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-auto flex gap-4 rounded-lg shadow-sm dark:shadow-black">
+                <div className="bg-stone-500/5 mb-1 dark:bg-stone-500/10 overflow-auto flex gap-2 rounded-lg shadow-sm dark:shadow-black">
                   {data?.subordinates.map((subordinate) => (
                     <PersonItem
                       key={subordinate.id}
@@ -92,10 +94,8 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
             )}
             {data.coworkers?.length > 0 && (
               <div className="overflow-auto">
-                <h2 className="text-xs pb-2 max-md:pt-2">
-                  {user?.displayName} trabaja con
-                </h2>
-                <div className="bg-stone-500/5 dark:bg-stone-500/10 overflow-auto flex gap-4 rounded-lg shadow-sm dark:shadow-black">
+                <h2 className="text-xs pb-2 max-md:pt-2">Trabaja junto a</h2>
+                <div className="bg-stone-500/5 mb-1 dark:bg-stone-500/10 overflow-auto flex gap-2 rounded-lg shadow-sm dark:shadow-black">
                   {data?.coworkers.map((coworker) => (
                     <PersonItem
                       key={coworker.id}
@@ -112,7 +112,7 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
               to={`${rootURL}/${slug}/organization`}
               className="text-blue-500 hover:underline"
             >
-              Ver toda la organización
+              Ver toda la organización de {user?.displayName}
             </Link>
           </div>
         </>

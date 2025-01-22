@@ -7,15 +7,15 @@ import {
   PersonRegular
 } from '@fluentui/react-icons'
 import { useSlugUser } from '../+layout'
-import { Link } from 'react-router'
+// import { Link } from 'react-router'
 import { toast } from 'anni'
 
 export default function QuickContactInformation() {
-  const { user, isLoading, rootURL } = useSlugUser()
+  const { user, isLoading } = useSlugUser()
 
   return (
     <div className="flex flex-col">
-      <h2 className="dark:dark:text-neutral-400 pb-2 text-lg">
+      <h2 className="dark:dark:text-neutral-400 py-2 text-lg">
         Información de contacto
       </h2>
       <div className="grid grid-cols-2 gap-x-10 gap-y-3">
@@ -62,14 +62,14 @@ export default function QuickContactInformation() {
           </>
         )}
       </div>
-      <div className="flex justify-start mt-2">
+      {/* <div className="flex justify-start mt-2">
         <Link
           to={`${rootURL}/${user?.username}/contact`}
           className="text-blue-500 hover:underline"
         >
           Ver más información
         </Link>
-      </div>
+      </div> */}
     </div>
   )
 }

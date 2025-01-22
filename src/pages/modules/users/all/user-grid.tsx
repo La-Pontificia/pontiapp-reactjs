@@ -114,9 +114,10 @@ export default function UserGrid({
             children: managerUpdating ? (
               <Spinner size="extra-tiny" />
             ) : user.manager ? (
-              <div className="flex rounded-xl items-center p-1 dark:bg-neutral-500/40 bg-stone-200 shadow-black/20 dark:shadow-lg">
+              <div className="flex rounded-xl items-center p-1 dark:bg-blue-900 bg-stone-200 shadow-black/80 dark:shadow-lg">
                 <Avatar
                   size={36}
+                  color="steel"
                   name={user.manager.displayName}
                   image={{
                     src: user.manager.photoURL
