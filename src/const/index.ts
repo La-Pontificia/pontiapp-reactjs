@@ -170,20 +170,10 @@ export const PRIVILEGES = {
   'attentions:businessUnits': '(Tickets) - Unidades de negocio de atención',
 
   // Edas management
-  'edas:showAll': 'Ver todas las edas',
-  'edas:show': 'Ver edas que supervisa',
-  'edas:createAll': 'Registrar todas las edas',
-  'edas:create': 'Registrar edas que supervisa',
-  'edas:createYourself': 'Registrar sus edas',
-  'edas:reset': 'Resetear edas',
-  'edas:closeAll': 'Cerrar todas las edas',
-  'edas:close': 'Cerrar las edas que supervisa',
-  'edas:report': 'Generar reportes de edas',
-  'edas:years': 'Años',
-  'edas:goals': 'Objetivos',
-  'edas:evaluations': 'Evaluaciones',
-  'edas:questionnaires': 'Cuestionarios',
-  'edas:questionnaireTemplates': 'Plantillas de cuestionarios',
+  'edas:collaborators:inHisSupervision':
+    '(Edas) - Colaboradores bajo su supervisión',
+  'edas:collaborators:show': '(Edas) - Ver todos los colaboradores',
+  'edas:my': '(Edas) - Ver sus edas',
 
   // Events management
   'events:show': 'Eventos',
