@@ -18,20 +18,20 @@ export default function AssistsEvents() {
           icon={MegaphoneCircleRegular}
           iconActive={MegaphoneCircleFilled}
           href="/m/events"
-          has="events:show"
+          has={['events:show']}
         >
           Eventos
         </ItemSidebarNav>
         <ItemSidebarNav
           icon={GuestAddRegular}
-          has="events:records:register"
+          has={['events:records:register']}
           iconActive={GuestAddFilled}
           href="/m/events/register"
         >
           Registrar asistencia
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="events:records:view"
+          has={['events:records:view']}
           icon={TaskListSquarePersonRegular}
           iconActive={TaskListSquarePersonFilled}
           href="/m/events/records"
@@ -39,7 +39,7 @@ export default function AssistsEvents() {
           Registros
         </ItemSidebarNav>
         <ItemSidebarNav
-          has="events:records:reportFiles"
+          has={['events:records:reportFiles']}
           icon={DocumentTableRegular}
           iconActive={DocumentTableFilled}
           href="/m/events/report-files"
