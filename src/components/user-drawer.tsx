@@ -44,6 +44,11 @@ export default function UserDrawer(props: UserDrawerProps) {
     setOpen(false)
     props.onSubmit(selectedUsers)
   }
+
+  React.useEffect(() => {
+    setSelectedUsers(props.users || [])
+  }, [props.users])
+
   return (
     <>
       <Button
