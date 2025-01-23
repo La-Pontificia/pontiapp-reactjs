@@ -84,12 +84,6 @@ export default function SlotSlugTicket() {
             <p className="text-sm font-semibold opacity-50">Llamando a:</p>
             <p className="text-lg font-semibold">{callingTicket.displayName}</p>
           </div>
-          <div className="p-2">
-            <p className="text-sm font-semibold opacity-50">Servicio:</p>
-            <p className="text-lg font-semibold">
-              {callingTicket.attentionServiceName}
-            </p>
-          </div>
           <div className="pt-5 flex flex-col gap-2 items-center">
             <Button
               disabled={starting}

@@ -131,9 +131,9 @@ export default function AttentionsSlugAnswerTicket() {
       </Helmet> */}
       <div className="flex flex-col h-full overflow-auto flex-grow">
         <nav className="p-4 flex justify-between px-4">
-          <h2 className="dark:text-slate-200 font-semibold">
+          {/* <h2 className="dark:text-slate-200 font-semibold">
             <span className="opacity-70">Puesto:</span> Matriculas
-          </h2>
+          </h2> */}
           <div className="flex items-center gap-2 text-xs font-medium">
             <div className="w-2.5 aspect-square bg-lime-500 rounded-full relative">
               <div className="w-full h-full animate-ping aspect-square bg-lime-500 rounded-full relative"></div>

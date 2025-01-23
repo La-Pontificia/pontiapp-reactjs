@@ -56,12 +56,6 @@ export default function AttendingTicket() {
   return (
     <div className="h-full flex flex-col overflow-y-auto flex-grow">
       <div className="flex-grow overflow-y-auto rounded-xl">
-        <div className="flex items-center gap-4 p-2 px-4 border-b border-black">
-          <span className="text-sm block opacity-50">Servicio:</span>
-          <span className="block text-base font-semibold">
-            {attending.ticket.attentionServiceName}
-          </span>
-        </div>
         <div className="bg-neutral-500/20 flex items-center gap-4 p-2 px-4 border-b border-black">
           <span className="text-sm block opacity-50">Nombres y apellidos:</span>
           <span className="block text-base font-semibold">

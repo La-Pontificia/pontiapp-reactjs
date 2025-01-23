@@ -71,7 +71,7 @@ export const Ticket = ({ ticket }: { ticket: FirebaseAttentionTicket }) => {
   React.useEffect(() => {
     const interval = setInterval(() => {
       setTimeAgo(timeAgoShort(ticket.created_at))
-    }, 5000)
+    }, 1000)
     return () => clearInterval(interval)
   }, [ticket.created_at])
 
@@ -105,12 +105,12 @@ export const Ticket = ({ ticket }: { ticket: FirebaseAttentionTicket }) => {
     <div className="w-full">
       <button
         onClick={handleCalled}
-        className="text-left p-3 rounded-md w-full border-2 border-transparent flex items-center gap-3 hover:bg-slate-500/5"
+        className="text-left p-2 rounded-md w-full border-2 border-transparent flex items-center gap-3 hover:bg-slate-500/5"
         key={ticket.id}
       >
         <div>
           <Avatar
-            size={36}
+            size={32}
             icon={<TicketDiagonalRegular fontSize={26} />}
             color={
               importance === 'very-important'
@@ -122,10 +122,7 @@ export const Ticket = ({ ticket }: { ticket: FirebaseAttentionTicket }) => {
           />
         </div>
         <div className="flex-grow">
-          <p className="font-semibold pb-0.5">{ticket.attentionServiceName}</p>
-          <p className="text-xs dark:text-neutral-400 text-neutral-700">
-            {ticket.displayName}
-          </p>
+          <p className="text-sm">{ticket.displayName}</p>
         </div>
         <div>
           <Badge
@@ -187,7 +184,6 @@ export const TicketTranseferred = ({
           />
         </div>
         <div className="flex-grow">
-          <p className="font-semibold pb-0.5">{ticket.attentionServiceName}</p>
           <p className="text-xs dark:text-neutral-200 text-neutral-700">
             {ticket.displayName}
           </p>
