@@ -18,11 +18,9 @@ export class FirebaseAttentionTicket {
   personPeriodName: string | null
   personBusiness: string | null
 
-  attentionserviceId: string
   attentionPositionId: string
   attentionPositionBusinessId: string
 
-  attentionServiceName: string
   attentionPositionName: string
   attentionPositionShortName: string
   attentionPositionBusinessName: string
@@ -44,10 +42,8 @@ export class FirebaseAttentionTicket {
     this.personCareer = data.personCareer
     this.personPeriodName = data.personPeriodName
     this.personBusiness = data.personBusiness
-    this.attentionserviceId = data.attentionserviceId
     this.attentionPositionId = data.attentionPositionId
     this.attentionPositionBusinessId = data.attentionPositionBusinessId
-    this.attentionServiceName = data.attentionServiceName
     this.attentionPositionName = data.attentionPositionName
     this.attentionPositionShortName = data.attentionPositionShortName
     this.attentionPositionBusinessName = data.attentionPositionBusinessName
