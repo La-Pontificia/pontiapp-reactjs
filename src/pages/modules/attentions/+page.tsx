@@ -10,6 +10,7 @@ import { Avatar, Badge, Spinner } from '@fluentui/react-components'
 import { countRangeMinutes, format, timeAgo } from '~/lib/dayjs'
 import { ClockRegular } from '@fluentui/react-icons'
 import UserHoverInfo from '~/components/user-hover-info'
+import { Helmet } from 'react-helmet'
 
 export type Filter = {
   startDate: string | null
@@ -84,6 +85,9 @@ export default function AttentionsPage() {
 
   return (
     <div className="w-full px-3 flex flex-col flex-grow h-full">
+      <Helmet>
+        <title>Atenciones | PontiApp</title>
+      </Helmet>
       <AttentionsFilters onAplyFilters={handleAplyFilters} isLoading={false} />
       <div className="overflow-auto flex flex-col rounded-xl pt-2 h-full">
         {isLoading ? (
@@ -137,7 +141,11 @@ export default function AttentionsPage() {
                       </td>
                       <td>
                         <p>
-                          <Badge appearance="outline" icon={<ClockRegular />}>
+                          <Badge
+                            color="success"
+                            appearance="outline"
+                            icon={<ClockRegular />}
+                          >
                             {countRangeMinutes(
                               item.startAttend,
                               item.finishAttend
@@ -148,7 +156,7 @@ export default function AttentionsPage() {
                       <td>
                         <div>
                           <p>
-                            <span className="opacity-60 inline-block pr-1">
+                            <span className="opacity-60 font-semibold inline-block pr-1">
                               {item.position?.shortName}
                             </span>
                             {item.position?.name}

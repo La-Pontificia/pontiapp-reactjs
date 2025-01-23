@@ -77,7 +77,7 @@ export default function Item({ item }: { item: FirebaseAttentionTicket }) {
   React.useEffect(() => {
     const interval = setInterval(() => {
       setTimeAgo(timeAgoShort(item.created_at))
-    }, 5000)
+    }, 1000)
     return () => clearInterval(interval)
   }, [item.created_at])
 
@@ -90,7 +90,7 @@ export default function Item({ item }: { item: FirebaseAttentionTicket }) {
         <td>
           <div className="flex items-center gap-2">
             <Avatar size={32} icon={<TicketDiagonalFilled />} />
-            <p className="text-nowrap">{item.attentionServiceName}</p>
+            {/* <p className="text-nowrap">{item.attentionServiceName}</p> */}
           </div>
         </td>
         <td>

@@ -7,7 +7,6 @@ import {
 } from 'firebase/firestore'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { businesses } from '~/const'
 import { format } from '~/lib/dayjs'
 import { fdb } from '~/lib/firebase'
 import { FirebaseAttentionTicket } from '~/types/attention-ticket'
@@ -26,7 +25,9 @@ export default function AttentionsShiftScreen() {
 
   // datas
   const [tickets, setTickets] = React.useState<FirebaseAttentionTicket[]>([])
-  const [, setCallingTickets] = React.useState<FirebaseAttentionTicket[]>([])
+  const [calling, setCallingTickets] = React.useState<
+    FirebaseAttentionTicket[]
+  >([])
   const [, setIsLoading] = React.useState(true)
   // const [businessIds, setBusinessIds] = React.useState<string[]>([])
 
@@ -71,86 +72,87 @@ export default function AttentionsShiftScreen() {
   }, [getConditions])
 
   return (
-    <div className="flex flex-col w-full overflow-y-auto h-full flex-grow">
+    <div
+      style={{
+        backgroundImage: 'url(/_bg.webp)'
+      }}
+      className="flex relative flex-col text-black w-full bg-cover bg-center overflow-y-auto h-full flex-grow"
+    >
+      <div className="absolute inset-0 bg-blue-600/30"></div>
       <Helmet>
         <title>Turnos | PontiApp</title>
       </Helmet>
-      {/* <div className="flex gap-2 [&>button]:border [&>button]:border-neutral-700 [&>button]:rounded-xl [&>button]:px-2 [&>button]:py-1">
-        <button className="font-semibold" onClick={addAtStart}>
-          Add item to start
-        </button>
-        <button className="font-semibold" onClick={addAtRandom}>
-          Add item at random
-        </button>
-        <button className="font-semibold" onClick={removeAtStart}>
-          Remove from start
-        </button>
-        <button className="font-semibold" onClick={removeAtRandom}>
-          Remove random
-        </button>
-        <button className="font-semibold" onClick={reset}>
-          Reset
-        </button>
-      </div> */}
-      <div className="flex-grow divide-x overflow-y-auto divide-stone-500/30 flex">
-        <div className="flex-grow h-full">
-          {/* <iframe
-            width="100%"
-            height="100%"
-            src="https://www.youtube.com/embed/_i1jtqlKQ_Q?si=2w990AWskCyseE8n"
-            title="YouTube video player"
-            frameBorder="0"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            allowFullScreen
-          ></iframe> */}
-        </div>
-        <div className="min-w-[35vw] flex flex-col overflow-y-auto">
-          <nav className="p-5 text-center">
-            <h1 className="text-4xl">
-              {realtime.split(':').slice(0, 2).join(':')}:
-              <span className="opacity-30">
-                {realtime.split(':')[2].split(' ')[0]}
-              </span>{' '}
-              {realtime.split(':')[2].split(' ')[1]}
-            </h1>
-            <p className="text-xs dark:text-stone-300">
-              {date.slice(0, 1).toUpperCase() + date.slice(1)}
-            </p>
-          </nav>
-          <div className="border-t relative border-stone-500/40 overflow-y-auto flex flex-col">
-            <h1 className="p-3 pb-0 dark:text-yellow-500 text-yellow-600 text-center">
-              Proximos turnos
-            </h1>
-            <div
-              aria-hidden
-              className="absolute pointer-events-none select-none inset-0 bg-gradient-to-t from-white dark:from-[#121212] via-transparent z-[1]"
-            ></div>
-            <div className="divide-y divide-neutral-500/20 overflow-y-auto">
-              <div className="flex justify-between text-sm font-semibold px-4 pb-2 opacity-50">
-                <p className="">Persona</p>
-                <p>Puesto</p>
-              </div>
-              {tickets.map((ticket) => {
+      <div className="flex-grow overflow-y-auto relative flex">
+        <div className="flex-grow h-full w-full grid place-content-center">
+          {calling.length > 0 && (
+            <div className="bg-blue-700 min-w-[450px] animate-slideOut divide-y divide-blue-500 text-blue-50 rounded-xl p-2">
+              <h1 className="text-center pb-3 pt-1 text-xl opacity-50 tracking-tight font-medium">
+                Llamando...
+              </h1>
+              {calling.map((ticket) => {
                 return (
                   <div
                     key={ticket.id}
-                    className="flex p-3 px-4 items-center gap-2"
+                    className="flex p-3 px-5 items-center gap-5"
                   >
-                    <h1 className="text-xl tracking-tight font-semibold line-clamp-1 flex-grow">
+                    <h1 className="text-2xl tracking-tight font-semibold line-clamp-1 flex-grow">
                       {ticket.personFirstNames}
                     </h1>
-                    <div className="font-semibold text-xl text-blue-700 dark:text-blue-600">
-                      {ticket.attentionPositionShortName}
+                    <div className="font-semibold flex gap-2 text-xl px-3 opacity-80">
+                      <span>Puesto</span>
+                      {ticket.attentionPositionName}
                     </div>
                   </div>
                 )
               })}
             </div>
+          )}
+        </div>
+        <div className="min-w-[450px] h-full flex p-2 flex-col overflow-y-auto">
+          <div className="w-full h-full rounded-xl bg-stone-100 flex flex-col overflow-y-auto">
+            <nav className="p-5 text-center bg-blue-600 text-white font-semibold tracking-tight">
+              <h1 className="text-4xl">
+                {realtime.split(':').slice(0, 2).join(':')}:
+                <span className="opacity-50">
+                  {realtime.split(':')[2].split(' ')[0]}
+                </span>{' '}
+                {realtime.split(':')[2].split(' ')[1]}
+              </h1>
+              <p className="text-xs opacity-80 pt-2">
+                {date.slice(0, 1).toUpperCase() + date.slice(1)}
+              </p>
+            </nav>
+            <div className="border-t relative border-blue-500/40 overflow-y-auto flex flex-col">
+              <h1 className="p-3 pb-0  text-center">Proximos turnos</h1>
+              <div className="divide-y divide-stone-500/30 overflow-y-auto">
+                <div className="flex justify-between text-sm font-semibold px-5 pb-2 opacity-50">
+                  <p className="">Persona</p>
+                  <p className="px-5">Puesto</p>
+                </div>
+                {tickets.map((ticket) => {
+                  return (
+                    <div
+                      key={ticket.id}
+                      className="flex p-3 px-5 items-center gap-2"
+                    >
+                      <h1 className="text-xl tracking-tight font-semibold line-clamp-1 flex-grow">
+                        {ticket.personFirstNames}
+                      </h1>
+                      <div className="font-semibold text-xl items-center flex px-3 gap-2 text-black">
+                        <p className="text-nowrap text-sm max-w-[13ch] overflow-hidden text-ellipsis">
+                          {ticket.attentionPositionName}
+                        </p>
+                        <p>{ticket.attentionPositionShortName}</p>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </div>
-      <footer className="flex items-center border-t border-dashed border-stone-500/50 justify-center gap-10 p-5">
+      {/* <footer className="flex items-center border-t border-dashed border-stone-500/50 justify-center gap-10 p-5">
         {Object.entries(businesses).map(([, { acronym, logo, name }]) => (
           <img
             className="w-auto h-[27px] group-hover:scale-105"
@@ -159,7 +161,7 @@ export default function AttentionsShiftScreen() {
             alt={acronym + ' Logo' + name}
           />
         ))}
-      </footer>
+      </footer> */}
     </div>
   )
 }
@@ -198,7 +200,7 @@ export default function AttentionsShiftScreen() {
 //       <div
 //         onClick={onClick}
 //         className={cn(
-//           'font-semibold dark:bg-stone-800 shadow-md shadow-black col-span-2 p-5 mt-4 grid place-content-center text-lg rounded-2xl w-full text-white',
+//           'font-semibold bg-stone-800 shadow-md shadow-black col-span-2 p-5 mt-4 grid place-content-center text-lg rounded-2xl w-full text-white',
 //           isPrincipal && ''
 //         )}
 //       >
@@ -238,7 +240,7 @@ export default function AttentionsShiftScreen() {
 //       <div
 //         onClick={onClick}
 //         className={cn(
-//           'font-semibold text-center dark:bg-neutral-950 col-span-2 p-10 grid place-content-center rounded-2xl w-full text-white border-2 dark:border-stone-500/40'
+//           'font-semibold text-center bg-neutral-950 col-span-2 p-10 grid place-content-center rounded-2xl w-full text-white border-2 border-stone-500/40'
 //         )}
 //       >
 //         <h1 className="text-xl">{children}</h1>
