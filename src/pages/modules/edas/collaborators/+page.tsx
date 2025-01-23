@@ -133,6 +133,7 @@ export default function CollaboratorsPage() {
               placeholder="Filtrar por nombre o persona"
               dismiss={() => {
                 setFilters((prev) => ({ ...prev, q: null }))
+                handleChange('')
               }}
             />
           </div>
