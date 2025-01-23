@@ -68,7 +68,7 @@ export default function Form({
     setFetching(true)
     const URI = defaultValues
       ? `attentions/positions/${defaultValues?.id}`
-      : `attentions/positions`
+      : `attentions/positions/store`
 
     const res = await api.post(URI, {
       data: JSON.stringify({

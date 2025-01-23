@@ -14,14 +14,18 @@ import Form from './form'
 import Item from './position'
 import { AttentionPosition } from '~/types/attention-position'
 import { Helmet } from 'react-helmet'
+import SearchBox from '~/commons/search-box'
+import { useDebounced } from '~/hooks/use-debounced'
 
 export default function AttentionsPositionsPage() {
   const { user: authUser } = useAuth()
+  const [q, setQ] = React.useState<string | null>(null)
+
   const { data, isLoading, refetch } = useQuery<AttentionPosition[]>({
-    queryKey: ['attentions/positions/all/relationship'],
+    queryKey: ['attentions/positions/all/relationship', q],
     queryFn: async () => {
       const res = await api.get<AttentionPosition[]>(
-        'attentions/positions/all?relationship=business,current'
+        `attentions/positions/all?relationship=business,current&q=${q ?? ''}`
       )
       if (!res.ok) return []
       return res.data
@@ -46,21 +50,41 @@ export default function AttentionsPositionsPage() {
     return Object.values(positionMap ?? {})
   }, [data])
 
+  const { value: searchValue, handleChange } = useDebounced({
+    onCompleted: (value) => setQ(value)
+  })
+
   return (
     <div className="flex px-2 relative flex-col w-full py-3 overflow-hidden h-full">
       <Helmet>
         <title>Puestos de atenciones | PontiApp</title>
       </Helmet>
-      <nav className="flex items-center py-2 border-b border-neutral-500/20">
+      <nav className="flex items-center py-2 justify-between border-b border-neutral-500/20">
         <Form
           refetch={refetch}
           triggerProps={{
             disabled:
               isLoading || !authUser.hasPrivilege('events:positions:create'),
             appearance: 'primary',
+            style: {
+              borderRadius: '3rem'
+            },
             icon: <AddFilled />,
-            children: <span>Registrar puesto de atención</span>
+            children: <span>Nuevo puesto</span>
           }}
+        />
+        <SearchBox
+          value={searchValue}
+          onChange={(e) => {
+            if (e.target.value === '') setQ(null)
+            handleChange(e.target.value)
+          }}
+          className="w-[270px]"
+          dismiss={() => {
+            setQ(null)
+            handleChange('')
+          }}
+          placeholder="Filtrar"
         />
       </nav>
       <div className="overflow-auto flex-grow rounded-xl pt-2 h-full">
@@ -93,8 +117,7 @@ export default function AttentionsPositionsPage() {
                             <td className="max-w-[0px] w-[0px]"></td>
                             <td className="text-nowrap">Puesto de atención</td>
                             <td className="text-nowrap">Atendiendo ahora</td>
-                            <td className="text-nowrap">Disponible</td>
-                            <td>Servicios </td>
+                            <td className="text-nowrap">Estado</td>
                             <td></td>
                           </tr>
                         </thead>
