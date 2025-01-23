@@ -3,7 +3,6 @@ import { Listeng } from '~/components/listeng'
 import { useQrCodeReader } from '~/hooks/use-qr-reader'
 import { api } from '~/lib/api'
 import { useUi } from '~/store/ui'
-import { AttentionService } from '~/types/attention-service'
 import { BusinessUnit } from '~/types/business-unit'
 import { Combobox, Option, Spinner, Tooltip } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
@@ -14,6 +13,7 @@ import { getPersonByDocumentId } from '~/utils/fetch'
 import { createTicket } from '~/services/tickets'
 import { handleError } from '~/utils'
 import { Helmet } from 'react-helmet'
+import { AttentionPosition } from '~/types/attention-position'
 
 type Person = {
   documentId: string
@@ -35,10 +35,9 @@ export default function AttentionsRegisterPage() {
   const toggleModuleMaximized = useUi((s) => s.toggleModuleMaximized)
 
   const [wainting, setWainting] = React.useState(false)
-  const [services, setServices] = React.useState<AttentionService[]>([])
-  const [selectedService, setSelectedService] =
-    React.useState<AttentionService | null>(null)
+  const [positions, setPositions] = React.useState<AttentionPosition[]>([])
   const [person, setPerson] = React.useState<Person | null>(null)
+  const [success, setSuccess] = React.useState(false)
 
   const [selectedBusinessUnits, setSelectedBusinessUnits] = React.useState<
     BusinessUnit[]
@@ -62,16 +61,17 @@ export default function AttentionsRegisterPage() {
   const handleSearchPerson = async (documentId: string) => {
     try {
       setWainting(true)
-      const res = await api.get<AttentionService[]>(
-        `attentions/services?ids=${selectedBusinessUnits
+      const res = await api.get<AttentionPosition[]>(
+        `attentions/positions/all?businessIds=${selectedBusinessUnits
           .map((e) => e.id)
-          .join(',')}&relationship=position,position.business`
+          .join(',')}&state=available`
       )
 
+      console.log(res)
       if (res.ok) {
-        setServices(res.data.map((service) => new AttentionService(service)))
+        setPositions(res.data.map((i) => new AttentionPosition(i)))
       } else {
-        throw new Error('No se pudo obtener los servicios')
+        throw new Error('No se pudo obtener los puestos de atención')
       }
 
       const person = await getPersonByDocumentId(documentId, false)
@@ -116,11 +116,11 @@ export default function AttentionsRegisterPage() {
     if (isHeaderOpen) toggleHeader()
   }
 
-  const onSubmit = async () => {
+  const onSubmit = async ({ position }: { position: AttentionPosition }) => {
     try {
       setCreating(true)
-      if (!person || !selectedService) {
-        return toast('No se ha encontrado la persona')
+      if (!person || !position) {
+        return toast('Error al generar el ticket')
       }
       const ok = await createTicket({
         personDocumentId: person.documentId,
@@ -133,19 +133,16 @@ export default function AttentionsRegisterPage() {
         personGender: person?.gender ?? null,
         personPeriodName: person?.periodName ?? null,
 
-        attentionPositionBusinessId: selectedService.position.business.id,
-        attentionPositionBusinessName: selectedService.position.business.name,
-        attentionPositionId: selectedService.position.id,
-        attentionPositionName: selectedService.position.name,
-        attentionPositionShortName: selectedService.position.shortName ?? null,
-        attentionserviceId: selectedService.id,
-        attentionServiceName: selectedService.name
+        attentionPositionBusinessId: position.business.id,
+        attentionPositionBusinessName: position.business.name,
+        attentionPositionId: position.id,
+        attentionPositionName: position.name,
+        attentionPositionShortName: position.shortName ?? null
       })
 
       if (!ok) {
         throw new Error('No se pudo generar el ticket')
       }
-      toast('Ticket generado correctamente')
     } catch (error) {
       console.error(error)
       toast('Ops! Algo salió mal', {
@@ -153,9 +150,12 @@ export default function AttentionsRegisterPage() {
       })
     } finally {
       setCreating(false)
+      setSuccess(true)
       setPerson(null)
-      setServices([])
-      setSelectedService(null)
+      setPositions([])
+      setTimeout(() => {
+        setSuccess(false)
+      }, 2000)
     }
   }
 
@@ -168,9 +168,36 @@ export default function AttentionsRegisterPage() {
         <div className="h-full w-full grid place-content-center">
           <Spinner size="huge" />
         </div>
+      ) : creating ? (
+        <div className="flex-grow h-full grid place-content-center">
+          <Spinner size="huge" />
+        </div>
+      ) : success ? (
+        <div className="flex-grow  h-full grid place-content-center">
+          <svg
+            width={60}
+            height={60}
+            className="checkmark dark:text-[#1f1e1d]"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 52 52"
+          >
+            <circle
+              className="checkmark__circle"
+              cx="26"
+              cy="26"
+              r="25"
+              fill="none"
+            />
+            <path
+              className="checkmark__check"
+              fill="none"
+              d="M14.1 27.2l7.1 7.2 16.7-16.8"
+            />
+          </svg>
+        </div>
       ) : (
         <div className="h-full overflow-hidden flex flex-col relative w-full">
-          <div className="text-center py-10 pb-3 items-center h-full mx-auto flex">
+          <div className="text-center py-10 w-full pb-3 items-center h-full mx-auto flex">
             {!person && (
               <div className="flex relative flex-col items-center w-full">
                 <Listeng
@@ -179,7 +206,7 @@ export default function AttentionsRegisterPage() {
                   grayScale={!wainting}
                   className="mx-auto"
                 />
-                <div className="absolute -bottom-20">
+                <div className="absolute -bottom-9">
                   {selectedBusinessUnits.length < 1 ? (
                     <p className="pt-10 text-xs opacity-70">
                       Selecciona al menos una unidad de negocio para comenzar
@@ -199,11 +226,8 @@ export default function AttentionsRegisterPage() {
             {person && (
               <Selection
                 onSubmit={onSubmit}
-                services={services}
-                setSelectedService={setSelectedService}
-                selectedService={selectedService}
+                positions={positions}
                 person={person}
-                creating={creating}
               />
             )}
           </div>
