@@ -31,7 +31,7 @@ export const Listeng = React.forwardRef<
             data-rotate={rotate ? '' : undefined}
             className="aspect-square data-[rotate]:animate-spin absolute inset-0 bg-gradient-to-b from-blue-500 via-violet-500 to-lime-500 rounded-full p-1"
           >
-            <div className="w-full h-full dark:bg-neutral-950 bg-white rounded-full"></div>
+            <div className="w-full h-full dark:bg-[#1f1e1d] bg-white rounded-full"></div>
           </div>
         </div>
         <div
@@ -42,7 +42,7 @@ export const Listeng = React.forwardRef<
             data-rotate={rotate ? '' : undefined}
             className="aspect-square blur-lg w-full h-full data-[rotate]:animate-spin bg-gradient-to-b from-blue-500 via-violet-500 to-lime-500 rounded-full p-2"
           >
-            <div className="w-full h-full dark:bg-neutral-950 bg-white rounded-full"></div>
+            <div className="w-full h-full dark:bg-[#1f1e1d] bg-white rounded-full"></div>
           </div>
         </div>
       </div>
