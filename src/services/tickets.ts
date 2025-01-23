@@ -101,8 +101,8 @@ export const finishTicket = async (
         personPeriodName: values.ticket.personPeriodName,
         personGender: values.ticket.personGender,
         personEmail: values.ticket.personEmail,
-        startAttend: values.startAt,
-        finishAttend: new Date(),
+        startAttend: format(values.startAt, 'YYYY-MM-DD HH:mm:ss'),
+        finishAttend: format(new Date(), 'YYYY-MM-DD HH:mm:ss'),
         ticket: {
           id: values.ticket.id,
           createdAt: values.ticket.created_at,
