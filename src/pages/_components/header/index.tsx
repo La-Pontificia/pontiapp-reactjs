@@ -7,12 +7,12 @@ import {
   PanelLeftExpandFilled,
   SearchRegular
 } from '@fluentui/react-icons'
-import { useLocation } from 'react-router'
+import { Link, useLocation } from 'react-router'
 import UserMenu from './menu'
 import UserFeedback from './feedback'
 import { useAuth } from '~/store/auth'
 import RootSearch from './search'
-import SettingsDrawer from './settings'
+import { Lp } from '~/icons'
 
 const Toggles = () => {
   const toggleSidebar = useUi((s) => s.toggleSidebar)
@@ -61,6 +61,7 @@ const Toggles = () => {
 export default function RootHeader() {
   const isHeaderOpen = useUi((s) => s.isHeaderOpen)
   const toggleHeader = useUi((s) => s.toggleHeader)
+  const { user: authUser } = useAuth()
   return (
     <header
       style={{
@@ -71,8 +72,16 @@ export default function RootHeader() {
     >
       <nav className="flex relative flex-grow items-center basis-0">
         <Toggles />
+        <nav className="px-2">
+          <Link
+            to={`/${authUser.username}`}
+            className="flex justify-center drop-shadow-[0_0_10px_rgba(0,0,0,.1)] dark:drop-shadow-[0_0_10px_rgba(0,0,0,.5)] items-center gap-1"
+          >
+            <Lp size={25} className="dark:text-sky-500 text-sky-700" />
+          </Link>
+        </nav>
         <h1 className="font-semibold text-base pl-2 hidden sm:block">
-          Ponti App
+          PontiApp
         </h1>
       </nav>
       <nav className="">
@@ -84,7 +93,6 @@ export default function RootHeader() {
             <SearchRegular fontSize={25} />
           </button>
         </Tooltip>
-        <SettingsDrawer />
         <UserFeedback />
         <UserMenu />
       </nav>
