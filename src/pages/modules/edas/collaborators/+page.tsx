@@ -112,7 +112,7 @@ export default function CollaboratorsPage() {
                 }}
                 data-active={filters.edas === key ? '' : undefined}
                 key={key}
-                className="border text-nowrap outline outline-2 outline-transparent data-[active]:border-transparent data-[active]:dark:outline-blue-600 data-[active]:bg-blue-700/20 border-stone-500 rounded-full py-1 px-3 font-medium"
+                className="border text-nowrap outline outline-2 outline-transparent data-[active]:border-transparent data-[active]:dark:border-transparent data-[active]:outline-blue-600 data-[active]:dark:outline-blue-600 data-[active]:bg-blue-700/10 data-[active]:dark:bg-blue-700/20 border-stone-300 dark:border-stone-500 rounded-full py-1 px-3 font-medium"
               >
                 {value}
               </button>
