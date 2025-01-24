@@ -17,7 +17,8 @@ import {
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
 import React from 'react'
-import { Lp } from '~/icons'
+import SettingsDrawer from './settings'
+// import { Lp } from '~/icons'
 
 type ItemNav = {
   icon?: FluentIcon
@@ -50,22 +51,22 @@ const ItemNav = (props: ItemNav) => {
         onMouseLeave={() => setHover(false)}
         data-active={isActive ? '' : undefined}
         to={props.href}
-        className="relative group dark:text-stone-400 text-stone-600  flex justify-center items-center"
+        className="relative group dark:text-stone-400 text-stone-600 flex justify-center items-center"
       >
         <div className="absolute inset-y-0 transition-all group-hover:py-5 group-data-[active]:py-4 py-7 left-0">
-          <div className="h-full w-[3px] group-hover:bg-[#1d02ec] group-hover:dark:bg-[#ffcdff] group-data-[active]:bg-[#1d02ec] group-data-[active]:dark:bg-[#ffcdff] rounded-xl"></div>
+          <div className="h-full w-[3px] group-hover:bg-[#1d02ec] group-hover:dark:bg-[#7385ff] group-data-[active]:bg-[#1d02ec] group-data-[active]:dark:bg-[#7385ff] rounded-xl"></div>
         </div>
-        <div className="w-[57px] transition-colors min-w-[57px] flex group-data-[active]:shadow-sm border-transparent border group-data-[active]:border-stone-200 group-data-[active]:dark:border-stone-700/70 items-center flex-col justify-center aspect-[10/9] text-center rounded-[14px] group-data-[active]:bg-white group-hover:dark:bg-[#1a1a1a] hover:bg-white/60 group-data-[active]:dark:bg-[#1a1a1a]">
+        <div className="w-[57px] transition-colors min-w-[57px] flex group-data-[active]:shadow-sm border-transparent border group-data-[active]:border-stone-200 group-data-[active]:dark:border-stone-700/70 items-center flex-col justify-center aspect-[10/9] text-center rounded-[14px] group-data-[active]:bg-white group-hover:dark:bg-[#1a1a1a] hover:bg-white group-data-[active]:dark:bg-[#1a1a1a]">
           {Icon ? (
             <Icon
-              fontSize={30}
-              className="group-data-[active]:dark:text-[#ffcdff] group-hover:dark:text-[#ffcdff] group-hover:text-[#1d02ec] group-data-[active]:text-[#1d02ec]"
+              fontSize={28}
+              className="group-data-[active]:dark:text-[#7385ff] group-hover:dark:text-[#7385ff] group-hover:text-[#1d02ec] group-data-[active]:text-[#1d02ec]"
             />
           ) : (
             <Avatar
               name={props.text}
               color="colorful"
-              size={28}
+              size={24}
               image={{
                 src: props.image
               }}
@@ -78,19 +79,15 @@ const ItemNav = (props: ItemNav) => {
   )
 }
 
-export const RootSidebar = () => {
+export const RootSidebar = ({
+  contentRef
+}: {
+  contentRef: React.RefObject<HTMLDivElement>
+}) => {
   const { user: authUser } = useAuth()
   return (
-    <header className="flex flex-col gap-5 min-w-[70px] relative justify-between z-[1] overflow-x-hidden overflow-y-auto py-5 h-full">
-      <nav className="flex-grow basis-0">
-        <Link
-          to={`/${authUser.username}`}
-          className="flex justify-center drop-shadow-[0_0_10px_rgba(0,0,0,.1)] dark:drop-shadow-[0_0_10px_rgba(0,0,0,.5)] items-center gap-1"
-        >
-          <Lp size={36} className="dark:text-violet-500 text-violet-700" />
-        </Link>
-      </nav>
-      <nav className="flex pl-1 flex-col flex-grow space-y-4 overflow-y-auto justify-center">
+    <header className="flex flex-col gap-5 min-w-[70px] relative justify-between z-[1] overflow-x-hidden overflow-y-auto py-2 h-full">
+      <nav className="flex pl-1 flex-col flex-grow space-y-4 overflow-y-auto">
         <ItemNav
           tooltip={authUser.displayName}
           text={authUser.displayName}
@@ -154,7 +151,9 @@ export const RootSidebar = () => {
           />
         )}
       </nav>
-      <nav className="flex-grow basis-0 justify-end"></nav>
+      <nav className="flex justify-center">
+        <SettingsDrawer contentRef={contentRef} />
+      </nav>
     </header>
   )
 }
