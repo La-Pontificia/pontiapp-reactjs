@@ -1,4 +1,5 @@
 import { AttentionPosition } from '~/types/attention-position'
+
 export default function Selection({
   person,
   positions,
@@ -27,14 +28,14 @@ export default function Selection({
               <button
                 onClick={() => onSubmit({ position })}
                 key={position.id}
-                className="rounded-2xl border-2 border-stone-700 text-white group font-semibold tracking-tight text-base"
+                className="rounded-2xl border-2 border-stone-300 dark:border-stone-700 dark:text-white group font-semibold tracking-tight text-base"
               >
                 <p className="p-12">{position.name}</p>
                 <p
                   style={{
                     color: position.background
                   }}
-                  className="opacity-50 text-xs pb-2"
+                  className="dark:opacity-50 text-xs pb-2"
                 >
                   {position.business.acronym}
                 </p>
