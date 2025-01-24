@@ -83,7 +83,7 @@ export default function AttentionsShiftScreen() {
         <title>Turnos | PontiApp</title>
       </Helmet>
       <div className="flex-grow overflow-y-auto relative flex">
-        <div className="flex-grow h-full w-full grid place-content-center">
+        <div className="h-full flex-grow grid place-content-center">
           {calling.length > 0 && (
             <div className="bg-blue-700 min-w-[450px] animate-slideOut divide-y divide-blue-500 text-blue-50 rounded-xl p-2">
               <h1 className="text-center pb-3 pt-1 text-xl opacity-50 tracking-tight font-medium">
