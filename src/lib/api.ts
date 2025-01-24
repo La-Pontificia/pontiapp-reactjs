@@ -65,6 +65,9 @@ async function fetchCore<T>(
   })
 
   if (!res.ok) {
+    if (res.status === 401) {
+      window.location.href = `/login?redirectURL=${window.location.href}`
+    }
     return handleError(await res.json())
   }
 
