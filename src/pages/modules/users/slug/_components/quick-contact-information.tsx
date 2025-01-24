@@ -15,7 +15,7 @@ export default function QuickContactInformation() {
 
   return (
     <div className="flex flex-col">
-      <h2 className="dark:dark:text-neutral-400 py-2 text-lg">
+      <h2 className="dark:dark:text-neutral-400 font-semibold py-2 text-sm">
         Información de contacto
       </h2>
       <div className="grid grid-cols-2 gap-x-10 gap-y-3">
@@ -32,7 +32,7 @@ export default function QuickContactInformation() {
               children={
                 <a
                   href={`mailto:${user?.email}`}
-                  className="dark:text-blue-500 text-blue-700"
+                  className="dark:text-[#eaa8ff] font-semibold text-[#0e37cd]"
                 >
                   {user?.email}
                 </a>
@@ -42,19 +42,25 @@ export default function QuickContactInformation() {
               title="Correo electrónico"
             />
             <InfoItem
-              children={<p>{user?.role?.name}</p>}
+              children={<p className="font-semibold">{user?.role?.name}</p>}
               textValue={user?.role?.name}
               icon={PersonRegular}
               title="Cargo"
             />
             <InfoItem
-              children={<p>{user?.role?.department.name}</p>}
+              children={
+                <p className="font-semibold">{user?.role?.department.name}</p>
+              }
               textValue={user?.role?.department.name}
               icon={BuildingRegular}
               title="Departamento"
             />
             <InfoItem
-              children={<p>{user?.role?.department?.area?.name}</p>}
+              children={
+                <p className="font-semibold">
+                  {user?.role?.department?.area?.name}
+                </p>
+              }
               textValue={user?.role?.department?.area?.name}
               icon={BuildingMultipleFilled}
               title="Area"
@@ -92,10 +98,10 @@ export const InfoItem = ({
     toast('Copiado al portapapeles')
   }
   return (
-    <div className="flex rounded-lg group  hover:bg-stone-500/10 p-1.5 items-center gap-4">
-      <Icon fontSize={22} className="opacity-60" />
+    <div className="flex rounded-lg group hover:bg-stone-500/10 p-1.5 items-center gap-4">
+      <Icon fontSize={22} className="opacity-90" />
       <div className="flex-grow">
-        <p className="text-xs dark:text-neutral-400">{title}</p>
+        <p className="text-xs dark:text-neutral-300">{title}</p>
         {children}
       </div>
       <button

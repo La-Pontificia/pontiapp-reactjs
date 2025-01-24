@@ -28,7 +28,9 @@ export default function QuickSchedules({ slug }: { slug?: string }) {
   if (!isLoading && countSchedules === 0) return null
   return (
     <div className="flex flex-col border-b pb-4 border-neutral-500/30">
-      <h2 className="dark:dark:text-neutral-400 py-2 text-lg">Horarios</h2>
+      <h2 className="dark:dark:text-neutral-400 font-semibold pb-2 text-sm">
+        Horarios
+      </h2>
       <div>
         <div
           className={cn(
@@ -72,9 +74,9 @@ const ScheduleItem = ({ schedule }: { schedule: Schedule }) => {
   }
 
   return (
-    <div className="schedule-item divide-y divide-neutral-500/30 dark:text-neutral-300 bg-stone-500/5 dark:bg-stone-500/10 shadow-sm border-neutral-500/40 px-4 rounded-lg">
+    <div className="schedule-item divide-y divide-slate-500/30 dark:text-neutral-300 bg-slate-500/10 border dark:border-slate-700 border-stone-300 dark:bg-blue-500/10 shadow-sm border-neutral-500/40 px-4 rounded-xl">
       <div className="py-2 flex items-center gap-3">
-        <CalendarRegular fontSize={22} className="opacity-60" />
+        <CalendarRegular fontSize={22} className="" />
         <div className="justify-between flex-grow font-semibold">
           <span>
             {format(schedule.startDate, '[Desde] [el] dddd, DD [de] MMMM YYYY')}
@@ -92,7 +94,7 @@ const ScheduleItem = ({ schedule }: { schedule: Schedule }) => {
         </Badge>
       </div>
       <div className="py-3 flex items-center gap-3">
-        <ClockRegular fontSize={22} className="opacity-60" />
+        <ClockRegular fontSize={22} className="" />
         <div className="flex-grow">
           <p className="text-xs">
             {format(schedule.from, 'h:mm A')} - {format(schedule.to, 'h:mm A')}{' '}

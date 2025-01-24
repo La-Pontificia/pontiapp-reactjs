@@ -55,7 +55,9 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
 
   return (
     <div className="flex flex-col border-t overflow-auto border-neutral-500/30">
-      <h2 className="dark:dark:text-neutral-400 py-2 text-lg">Organización</h2>
+      <h2 className="dark:dark:text-neutral-400 font-semibold py-5 pb-2 text-sm">
+        Organización
+      </h2>
       {!hasOrganization ? (
         <div className="pt-4">
           <p className="opacity-70">
@@ -71,7 +73,7 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
                 <h2 className="text-xs pb-2 max-md:pt-2">
                   Bajo la supervision de
                 </h2>
-                <div className="bg-stone-500/5 mb-1 dark:bg-stone-500/10 overflow-hidden rounded-lg shadow-sm dark:shadow-black">
+                <div className="border border-stone-300 dark:border-stone-700 bg-stone-500/10 overflow-auto flex gap-2 rounded-lg shadow-sm dark:shadow-black shadow-stone-700/10">
                   <PersonItem appearance="vertical" person={data?.manager} />
                 </div>
               </div>
@@ -81,7 +83,7 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
                 <h2 className="text-xs pb-2 max-md:pt-2">
                   Personas reportando
                 </h2>
-                <div className="bg-stone-500/5 mb-1 dark:bg-stone-500/10 overflow-auto flex gap-2 rounded-lg shadow-sm dark:shadow-black">
+                <div className="border border-stone-300 dark:border-stone-700 bg-stone-500/10 overflow-auto flex gap-2 rounded-lg shadow-sm dark:shadow-black shadow-stone-700/10">
                   {data?.subordinates.map((subordinate) => (
                     <PersonItem
                       key={subordinate.id}
@@ -95,7 +97,7 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
             {data.coworkers?.length > 0 && (
               <div className="overflow-auto">
                 <h2 className="text-xs pb-2 max-md:pt-2">Trabaja junto a</h2>
-                <div className="bg-stone-500/5 mb-1 dark:bg-stone-500/10 overflow-auto flex gap-2 rounded-lg shadow-sm dark:shadow-black">
+                <div className="border border-stone-300 dark:border-stone-700 bg-stone-500/10 overflow-auto flex gap-2 rounded-lg shadow-sm dark:shadow-black shadow-stone-700/10">
                   {data?.coworkers.map((coworker) => (
                     <PersonItem
                       key={coworker.id}

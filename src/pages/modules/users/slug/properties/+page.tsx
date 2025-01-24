@@ -55,7 +55,7 @@ export default function UsersSlugPropertiesPage() {
         {loading ? (
           <div className="h-4 w-16 rounded-full bg-neutral-500/30 animate-pulse" />
         ) : (
-          <div>{children || '-'}</div>
+          <div className="font-semibold">{children || '-'}</div>
         )}
       </div>
     )

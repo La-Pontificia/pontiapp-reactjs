@@ -21,13 +21,15 @@ import {
   Spinner,
   SplitButton,
   Tab,
-  TabList
+  TabList,
+  Tooltip
 } from '@fluentui/react-components'
 import {
   CameraRegular,
   CopyRegular,
   MoreHorizontal20Filled,
   PenRegular,
+  PersonFeedbackRegular,
   SendFilled
 } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
@@ -289,6 +291,15 @@ export default function UsersSlugLayout(): JSX.Element {
                   )}
                 </Tab>
               ))}
+              <Tooltip
+                content="Envia un error o sugerencia"
+                relationship="label"
+              >
+                <button className="ml-auto dark:text-[#eaa8ff] text-[#0e37cd] flex items-center gap-1 font-semibold">
+                  <PersonFeedbackRegular fontSize={23} />
+                  <p>Feedback</p>
+                </button>
+              </Tooltip>
             </TabList>
           )}
         </div>
