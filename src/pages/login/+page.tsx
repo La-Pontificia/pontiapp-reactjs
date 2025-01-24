@@ -24,7 +24,10 @@ export default function LoginPage() {
   const handleID = async () => {
     setLoadingId(true)
     const uri = new URL(`${apiHost}/api/auth/login/id`)
-    uri.searchParams.set('redirectURL', `${host}${currentRedirentURL || ''}`)
+    uri.searchParams.set(
+      'redirectURL',
+      currentRedirentURL ? currentRedirentURL : host
+    )
     uri.searchParams.set('redirectErrorURL', `${host}/login`)
     window.location.href = uri.href
   }
@@ -41,7 +44,9 @@ export default function LoginPage() {
     })
     console.log(res)
     if (res.ok)
-      return (window.location.href = `${host}${currentRedirentURL || ''}`)
+      return (window.location.href = currentRedirentURL
+        ? currentRedirentURL
+        : host)
     setLoadingCredential(false)
     toast(handleAuthError(res.error))
     return
