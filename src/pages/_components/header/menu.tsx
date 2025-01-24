@@ -86,9 +86,9 @@ export default function UserMenu() {
                 as="h1"
                 weight="semibold"
                 size={300}
-                className="text-center dark:text-blue-600 px-3"
+                className="text-center dark:text-blue-400 text-[#0e37cd] px-3"
               >
-                Ponti App
+                PontiApp
               </Text>
               <button
                 onClick={signOut}
@@ -137,7 +137,7 @@ export default function UserMenu() {
                 </p>
                 <Link
                   to={`/${user.username}`}
-                  className="text-blue-500 hover:underline"
+                  className="dark:text-blue-400 text-[#0e37cd] hover:underline"
                 >
                   Ver perfil
                 </Link>
@@ -147,7 +147,7 @@ export default function UserMenu() {
               <ChangePassword />
               <button
                 onClick={signOut}
-                className="flex items-center gap-1 text-blue-600 dark:text-blue-500 font-semibold hover:underline w-full"
+                className="flex items-center gap-1 dark:text-blue-400 text-[#0e37cd] font-semibold hover:underline w-full"
               >
                 <SignOutRegular fontSize={20} />
                 Cerrar sesión
@@ -194,7 +194,7 @@ export const ChangePassword = () => {
     <>
       <button
         onClick={() => setOpenDialog(true)}
-        className="flex items-center gap-1 text-blue-600 dark:text-blue-500 font-semibold hover:underline w-full"
+        className="flex items-center gap-1 dark:text-blue-400 text-[#0e37cd] font-semibold hover:underline w-full"
       >
         <PersonPasskeyRegular fontSize={18} />
         Cambiar contraseña

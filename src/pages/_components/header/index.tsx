@@ -87,7 +87,7 @@ export default function RootHeader() {
       <nav className="">
         <RootSearch />
       </nav>
-      <nav className="flex flex-grow dark:text-[#646eff] text-blue-700 basis-0 gap-5 justify-end">
+      <nav className="flex flex-grow dark:text-[#eaa8ff] text-[#0e37cd] basis-0 gap-5 justify-end">
         <Tooltip content="Buscar" relationship="label">
           <button className="block md:hidden">
             <SearchRegular fontSize={25} />
