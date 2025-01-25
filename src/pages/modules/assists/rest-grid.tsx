@@ -1,5 +1,9 @@
 import { Avatar, Badge, Button } from '@fluentui/react-components'
-import { CalendarRegular, ClockRegular } from '@fluentui/react-icons'
+import {
+  CalendarRegular,
+  ClockRegular,
+  CloudDatabaseRegular
+} from '@fluentui/react-icons'
 import React from 'react'
 import { Link } from 'react-router'
 import UserHoverInfo from '~/components/user-hover-info'
@@ -34,7 +38,7 @@ export default function RestAssistsGrid({ data }: { data: RestAssist[] }) {
             return (
               <tr
                 key={key}
-                className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+                className="relative bg-white dark:bg-[#2a2826] [&>td]:text-nowrap group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
               >
                 <td>
                   <UserHoverInfo slug={assist.user.username}>
@@ -48,19 +52,19 @@ export default function RestAssistsGrid({ data }: { data: RestAssist[] }) {
                       <div>
                         <Link
                           to={'/' + assist.user.username}
-                          className="hover:underline dark:text-blue-500"
+                          className="hover:underline font-semibold"
                         >
                           {assist.user.displayName}
                         </Link>
-                        <p className="text-xs opacity-60">
-                          {assist.user.email}
-                        </p>
                       </div>
                     </div>
                   </UserHoverInfo>
                 </td>
                 <td>
-                  <p>{assist.terminal.name}</p>
+                  <div className="flex items-center gap-1 font-semibold opacity-90">
+                    <CloudDatabaseRegular fontSize={25} />
+                    {assist.terminal.name}
+                  </div>
                 </td>
                 <td>
                   <div className="flex items-center gap-2">

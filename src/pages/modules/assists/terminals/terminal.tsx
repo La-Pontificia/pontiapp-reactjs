@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Badge,
   Button,
   Dialog,
   DialogActions,
@@ -12,8 +11,9 @@ import {
 } from '@fluentui/react-components'
 import {
   BuildingPeopleRegular,
-  DeleteFilled,
-  PenFilled
+  CloudDatabaseRegular,
+  DeleteRegular,
+  PenRegular
 } from '@fluentui/react-icons'
 import React from 'react'
 import { format, timeAgo } from '~/lib/dayjs'
@@ -49,7 +49,7 @@ export default function Item({
 
   return (
     <>
-      <tr className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
+      <tr className="relative bg-white dark:bg-[#2a2826] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
         <td>
           <div className="flex items-center gap-2">
             <Avatar
@@ -59,11 +59,14 @@ export default function Item({
               name={item.name}
               aria-label={item.name}
             />
-            <p className="line-clamp-3">{item.name}</p>
+            <p className="line-clamp-3 font-semibold">{item.name}</p>
           </div>
         </td>
         <td>
-          <p className="opacity-50">{item.database}</p>
+          <div className="opacity-80 flex items-center gap-2">
+            <CloudDatabaseRegular fontSize={20} />
+            {item.database}
+          </div>
         </td>
         <td>
           <p>
@@ -80,28 +83,24 @@ export default function Item({
               defaultValues={item}
               refetch={refetch}
               triggerProps={{
-                size: 'small',
                 appearance: 'transparent',
                 children: (
-                  <Badge
-                    icon={<PenFilled fontSize={15} />}
-                    appearance="tint"
-                    color="success"
-                  >
+                  <div className="flex items-center gap-2 font-semibold">
+                    <PenRegular fontSize={20} />
                     Editar
-                  </Badge>
+                  </div>
                 )
               }}
             />
-            <button onClick={() => setOpenDelete(true)}>
-              <Badge
-                icon={<DeleteFilled fontSize={15} />}
-                appearance="tint"
-                color="danger"
-              >
+            <Button
+              appearance="transparent"
+              onClick={() => setOpenDelete(true)}
+            >
+              <div className="flex items-center gap-2 font-semibold">
+                <DeleteRegular fontSize={20} />
                 Eliminar
-              </Badge>
-            </button>
+              </div>
+            </Button>
           </div>
         </td>
       </tr>

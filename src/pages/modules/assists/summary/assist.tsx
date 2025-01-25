@@ -6,16 +6,13 @@ import { format } from '~/lib/dayjs'
 export default function Item({ item }: { item: SingleAssistSummary }) {
   return (
     <>
-      <tr className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-3 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
+      <tr className="relative bg-white dark:bg-[#2a2826] [&>td]:text-nowrap group [&>td]:p-3 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
         <td>
           <div className="flex items-center gap-2">
-            <Avatar
-              icon={<CalendarLtrRegular />}
-              color="colorful"
-              size={40}
-              name={item.date}
-            />
-            <p className="line-clamp-3">{format(item.date, 'DD/MM/YYYY')}</p>
+            <CalendarLtrRegular fontSize={23} />
+            <p className="line-clamp-3 capitalize">
+              {format(item.date, 'dddd, D [de] MMMM [del] YYYY')}
+            </p>
           </div>
         </td>
         <td>

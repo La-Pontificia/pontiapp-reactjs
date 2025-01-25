@@ -89,14 +89,8 @@ export default function AssistsWithUsersPage() {
   }
 
   return (
-    <div className="w-full flex overflow-auto flex-col flex-grow h-full p-3">
-      <header className="pb-3">
-        <nav className="pb-2">
-          <p className="text-xs dark:text-blue-600 text-blue-700">
-            Asistencias con información de los colaboradores, "solo de los
-            usuarios registrados en el sistema".
-          </p>
-        </nav>
+    <div className="w-full flex overflow-auto flex-col flex-grow h-full px-3 pb-2">
+      <header>
         <AssistFilters
           jobs={jobs ?? []}
           isJobsLoading={isJobsLoading}
@@ -127,13 +121,18 @@ export default function AssistsWithUsersPage() {
                   tardar varios segundos o minutos.
                 </p>
               </div>
-            ) : (
+            ) : assists && assists?.length > 0 ? (
               <AssistsGrid assists={assists ?? []} />
+            ) : (
+              <div className="grid place-content-center h-full text-xs">
+                No se encontraron registros de asistencias con los filtros
+                seleccionados.
+              </div>
             )}
           </>
         )}
       </div>
-      <footer className="py-5 pb-2">
+      <footer className="pt-3">
         <p className="font-semibold">
           {assists?.length ?? 0} registros encontrados.
         </p>

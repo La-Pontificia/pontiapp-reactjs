@@ -53,7 +53,7 @@ export default function AssistsGrid({ data }: { data: Assist[] }) {
             return (
               <tr
                 key={key}
-                className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+                className="relative bg-white dark:bg-[#2a2826] [&>td]:text-nowrap group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
               >
                 <td>
                   <UserHoverInfo slug={assist.user.username}>
@@ -67,13 +67,10 @@ export default function AssistsGrid({ data }: { data: Assist[] }) {
                       <div>
                         <Link
                           to={'/' + assist.user.username}
-                          className="hover:underline dark:text-blue-500"
+                          className="hover:underline font-semibold"
                         >
                           {assist.user.displayName}
                         </Link>
-                        <p className="text-xs opacity-60">
-                          {assist.user.email}
-                        </p>
                       </div>
                     </div>
                   </UserHoverInfo>

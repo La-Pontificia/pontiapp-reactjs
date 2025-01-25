@@ -1,7 +1,7 @@
 import {
+  Avatar,
   Badge,
   Button,
-  Combobox,
   Dialog,
   DialogActions,
   DialogBody,
@@ -9,20 +9,22 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerHeaderTitle,
   Field,
-  Option,
-  Popover,
-  PopoverSurface,
-  PopoverTrigger,
-  SearchBox,
-  Spinner
+  Spinner,
+  Tag,
+  TagPicker,
+  TagPickerControl,
+  TagPickerList,
+  TagPickerOption,
+  Tooltip
 } from '@fluentui/react-components'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import {
-  CalendarRtlRegular,
-  Dismiss12Regular,
-  DockRegular
-} from '@fluentui/react-icons'
+import { Dismiss24Regular, FilterAddFilled } from '@fluentui/react-icons'
 import React from 'react'
 import { localizedStrings } from '~/const'
 import { AssistTerminal } from '~/types/assist-terminal'
@@ -32,6 +34,10 @@ import { Link } from 'react-router'
 import { api } from '~/lib/api'
 import { toast } from 'anni'
 import { useAuth } from '~/store/auth'
+import { useDebounced } from '~/hooks/use-debounced'
+import SearchBox from '~/commons/search-box'
+import { ExcelColored } from '~/icons'
+import { UIContext } from '~/providers/ui'
 
 export default function AssistFilters({
   isTerminalsLoading,
@@ -44,27 +50,49 @@ export default function AssistFilters({
   onAplyFilters: (filters: Filter) => void
   isLoading: boolean
 }) {
-  const [startDate, setStartDate] = React.useState<Date | null>(null)
-  const [endDate, setEndDate] = React.useState<Date | null>(null)
-  const [q, setQ] = React.useState<string | null>(null)
+  const [startDate, setStartDate] = React.useState<Date | null>(new Date())
+  const [endDate, setEndDate] = React.useState<Date | null>(new Date())
   const [openReport, setOpenReport] = React.useState(false)
   const [reporting, setReporting] = React.useState(false)
+  const [openFilters, setOpenFilters] = React.useState(false)
   const { user: authUser } = useAuth()
 
   const [selectedTerminals, setSelectedTerminals] = React.useState<
     AssistTerminal[]
-  >([])
+  >(terminals[0] ? [terminals[0]] : [])
 
   const onTagClick = (id: string) => {
     setSelectedTerminals(selectedTerminals.filter((o) => o.id !== id))
   }
+
+  React.useEffect(() => {
+    if (selectedTerminals.length === 0 && terminals.length > 0) {
+      setSelectedTerminals(terminals[0] ? [terminals[0]] : [])
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [terminals])
+
+  const {
+    onChange,
+    value: searchValue,
+    handleChange
+  } = useDebounced({
+    onCompleted: (e) => {
+      onAplyFilters({
+        startDate,
+        endDate,
+        q: e,
+        terminalsIds: selectedTerminals.map((o) => o.id)
+      })
+    }
+  })
 
   const handleReport = async () => {
     setReporting(true)
     let uri = 'assists/withoutUsers/report?tm=true'
     if (startDate) uri += `&startDate=${format(startDate, 'YYYY-MM-DD')}`
     if (endDate) uri += `&endDate=${format(endDate, 'YYYY-MM-DD')}`
-    if (q) uri += `&q=${q}`
+    if (searchValue.length > 0) uri += `&q=${searchValue}`
     if (selectedTerminals.length > 0)
       uri += `&assistTerminals=${selectedTerminals.map((e) => e.id).join(',')}`
     const res = await api.get(uri)
@@ -78,159 +106,289 @@ export default function AssistFilters({
     setReporting(false)
   }
 
+  React.useEffect(() => {
+    onAplyFilters({
+      startDate,
+      endDate,
+      q: searchValue,
+      terminalsIds: selectedTerminals.map((o) => o.id)
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const ctxui = React.useContext(UIContext)
+
   return (
     <>
-      <nav className="flex items-end gap-2">
-        <SearchBox
-          value={q || ''}
-          dismiss={{
-            onClick: () => {
-              setQ(null)
-            }
-          }}
-          disabled={isLoading}
-          onChange={(_, e) => {
-            if (e.value === '') setQ(null)
-            setQ(e.value)
-          }}
-          placeholder="Buscar asistencias"
-        />
-        <Popover withArrow>
-          <PopoverTrigger disableButtonEnhancement>
-            <Button
+      <nav className="w-full space-y-2 py-3 border-b border-stone-500/30">
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex-grow flex items-center gap-2">
+            <h2 className="font-semibold text-xl pr-2">
+              Asistencias sin usuarios registrados
+            </h2>
+          </div>
+          <div className="flex gap-2 items-center">
+            <Tooltip content="Mas filtros" relationship="description">
+              <button
+                onClick={() => setOpenFilters(true)}
+                className="flex items-center gap-1 dark:text-[#eaa8ff] font-medium px-2"
+              >
+                <FilterAddFilled fontSize={25} />
+                Filtros
+              </button>
+            </Tooltip>
+            <SearchBox
+              className="min-w-[250px]"
+              value={searchValue}
+              dismiss={() => {
+                onAplyFilters({
+                  startDate,
+                  endDate,
+                  q: null,
+                  terminalsIds: selectedTerminals.map((o) => o.id)
+                })
+                handleChange('')
+              }}
               disabled={isLoading}
-              icon={
-                <CalendarRtlRegular
-                  data-active={startDate || endDate ? '' : undefined}
-                  className="text-nowrap font-normal dark:data-[active]:text-blue-600"
+              onChange={(e) => {
+                if (e.target.value === '')
+                  onAplyFilters({
+                    startDate,
+                    endDate,
+                    q: null,
+                    terminalsIds: selectedTerminals.map((o) => o.id)
+                  })
+                onChange(e)
+              }}
+              placeholder="Filtrar por dni, nombres o apellidos"
+            />
+            {authUser.hasPrivilege('assists:report') && (
+              <div className="ml-auto">
+                <Button
+                  disabled={
+                    isLoading ||
+                    !endDate ||
+                    !startDate ||
+                    !selectedTerminals.length
+                  }
+                  icon={<ExcelColored />}
+                  appearance="subtle"
+                  onClick={() => setOpenReport(true)}
+                  style={{}}
+                >
+                  Excel
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="px-1 border-t border-stone-500/20 pt-2 flex gap-4 flex-wrap">
+          <Field size="small" label="Terminales biométricos">
+            <div className="flex gap-2 flex-wrap">
+              {selectedTerminals.length > 0 ? (
+                selectedTerminals.map((terminal) => (
+                  <Badge
+                    key={terminal.id}
+                    color="brand"
+                    style={{
+                      padding: '0.7rem 0.3rem'
+                    }}
+                    shape="circular"
+                    icon={
+                      <Avatar
+                        size={20}
+                        aria-hidden
+                        name={terminal.name}
+                        color="colorful"
+                      />
+                    }
+                  >
+                    {terminal.name}
+                  </Badge>
+                ))
+              ) : (
+                <p className="opacity-70 font-medium">
+                  Sin biométricos seleccionados
+                </p>
+              )}
+            </div>
+          </Field>
+          <Field size="small" label="Rango de fechas">
+            <p className="text-xs font-medium">
+              {startDate ? format(startDate, 'DD-MM-YYYY') : 'Sin seleccionar'}{' '}
+              - {endDate ? format(endDate, 'DD-MM-YYYY') : 'Sin seleccionar'}
+            </p>
+          </Field>
+        </div>
+      </nav>
+
+      {openFilters && (
+        <Drawer
+          mountNode={ctxui?.contentRef.current}
+          position="start"
+          separator
+          className="min-w-[400px] z-[9999] max-w-full"
+          open={openFilters}
+          onOpenChange={(_, { open }) => setOpenFilters(open)}
+        >
+          <DrawerHeader className="border-b border-stone-500/30">
+            <DrawerHeaderTitle
+              action={
+                <Button
+                  appearance="subtle"
+                  aria-label="Close"
+                  icon={<Dismiss24Regular />}
+                  onClick={() => setOpenFilters(false)}
                 />
               }
-              appearance="secondary"
-              style={{}}
-            ></Button>
-          </PopoverTrigger>
-          <PopoverSurface
-            tabIndex={-1}
-            style={{
-              padding: 0,
-              borderRadius: '15px'
-            }}
-          >
-            <div className="p-3 min-w-[250px]">
-              <div className="grid gap-2">
-                <Field label="Desde">
-                  <DatePicker
-                    disabled={isLoading}
-                    value={startDate ? new Date(startDate) : null}
-                    onSelectDate={(date) => {
-                      setStartDate(date ? date : null)
+            >
+              Filtros
+            </DrawerHeaderTitle>
+          </DrawerHeader>
+          <DrawerBody className="flex flex-col overflow-y-auto">
+            <div className="py-5 grid gap-3">
+              <Field
+                label="Terminales biométricos"
+                required
+                validationMessage="Selecione al menos un terminal"
+                validationState={
+                  selectedTerminals.length > 0 ? 'none' : 'error'
+                }
+              >
+                <TagPicker
+                  disabled={isTerminalsLoading || isLoading}
+                  onOptionSelect={(_, data) => {
+                    const selected = selectedTerminals.find(
+                      (t) => t.id === data.value
+                    )
+                    setSelectedTerminals((prev) =>
+                      selected
+                        ? prev.filter((t) => t.id !== data.value)
+                        : [
+                            ...prev,
+                            terminals!.find((t) => t.id === data.value)!
+                          ]
+                    )
+                  }}
+                  selectedOptions={selectedTerminals.map((o) => o.id)}
+                >
+                  <TagPickerControl
+                    style={{
+                      gap: 4,
+                      padding: selectedTerminals.length > 0 ? 5 : undefined
                     }}
-                    formatDate={(date) => format(date, 'DD-MM-YYYY')}
-                    strings={localizedStrings}
-                    placeholder="Seleccionar fecha"
-                  />
-                </Field>
-                <Field label="Hasta">
-                  <DatePicker
-                    value={endDate ? new Date(endDate) : null}
-                    onSelectDate={(date) => {
-                      setEndDate(date ? date : null)
-                    }}
-                    disabled={isLoading}
-                    formatDate={(date) => format(date, 'DD-MM-YYYY')}
-                    strings={localizedStrings}
-                    placeholder="Seleccionar fecha"
-                  />
-                </Field>
-              </div>
-            </div>
-          </PopoverSurface>
-        </Popover>
+                  >
+                    {selectedTerminals.map((terminal) => (
+                      <Tag
+                        disabled={isTerminalsLoading || isLoading}
+                        key={terminal.id}
+                        shape="circular"
+                        dismissible
+                        onClick={() => onTagClick(terminal.id)}
+                        media={
+                          <Avatar
+                            aria-hidden
+                            name={terminal.name}
+                            color="colorful"
+                          />
+                        }
+                        value={terminal.id}
+                      >
+                        {terminal.name}
+                      </Tag>
+                    ))}
+                  </TagPickerControl>
+                  <TagPickerList>
+                    {terminals.length > 0 ? (
+                      terminals
+                        .filter((t) =>
+                          selectedTerminals.every((st) => st.id !== t.id)
+                        )
+                        .map((terminal) => (
+                          <TagPickerOption
+                            media={
+                              <Avatar
+                                shape="square"
+                                aria-hidden
+                                name={terminal.name}
+                                color="colorful"
+                              />
+                            }
+                            value={terminal.id}
+                            key={terminal.id}
+                          >
+                            {terminal.name}
+                          </TagPickerOption>
+                        ))
+                    ) : (
+                      <TagPickerOption value="no-options">
+                        No hay opciones
+                      </TagPickerOption>
+                    )}
+                  </TagPickerList>
+                </TagPicker>
+              </Field>
 
-        <Combobox
-          disabled={isTerminalsLoading || isLoading}
-          multiselect={true}
-          style={{
-            minWidth: '50px'
-          }}
-          input={{
-            style: {
-              width: '100px'
-            }
-          }}
-          selectedOptions={selectedTerminals.map((o) => o.id)}
-          placeholder={`Terminales (${selectedTerminals?.length})`}
-          onOptionSelect={(_, event) => {
-            const selected = selectedTerminals.find(
-              (t) => t.id === event.optionValue
-            )
-            setSelectedTerminals((prev) =>
-              selected
-                ? prev.filter((t) => t.id !== event.optionValue)
-                : [...prev, terminals!.find((t) => t.id === event.optionValue)!]
-            )
-          }}
-        >
-          {terminals?.map((terminal) => (
-            <Option text={terminal.name} key={terminal.id} value={terminal.id}>
-              <div className="block">
-                <p>{terminal.name}</p>
-                <p className="text-xs opacity-50">{terminal.database}</p>
-              </div>
-            </Option>
-          ))}
-        </Combobox>
-        <Button
-          appearance="secondary"
-          style={{}}
-          disabled={
-            isLoading || !endDate || !startDate || !selectedTerminals.length
-          }
-          onClick={() => {
-            onAplyFilters({
-              startDate,
-              endDate,
-              q,
-              terminalsIds: selectedTerminals.map((o) => o.id)
-            })
-          }}
-        >
-          Filtrar
-        </Button>
-        {authUser.hasPrivilege('assists:report') && (
-          <div className="ml-auto">
+              <Field
+                label="Desde"
+                required
+                validationMessage="Selecione una fecha"
+                validationState={startDate ? 'none' : 'error'}
+              >
+                <DatePicker
+                  disabled={isLoading}
+                  value={startDate ? new Date(startDate) : null}
+                  onSelectDate={(date) => {
+                    setStartDate(date ? date : null)
+                  }}
+                  formatDate={(date) => format(date, 'DD-MM-YYYY')}
+                  strings={localizedStrings}
+                  placeholder="Seleccionar fecha"
+                />
+              </Field>
+              <Field
+                label="Hasta"
+                required
+                validationMessage="Selecione una fecha"
+                validationState={endDate ? 'none' : 'error'}
+              >
+                <DatePicker
+                  value={endDate ? new Date(endDate) : null}
+                  onSelectDate={(date) => {
+                    setEndDate(date ? date : null)
+                  }}
+                  disabled={isLoading}
+                  formatDate={(date) => format(date, 'DD-MM-YYYY')}
+                  strings={localizedStrings}
+                  placeholder="Seleccionar fecha"
+                />
+              </Field>
+            </div>
+          </DrawerBody>
+          <DrawerFooter className="w-full border-t border-stone-500/30">
             <Button
               disabled={
                 isLoading || !endDate || !startDate || !selectedTerminals.length
               }
-              icon={<DockRegular />}
-              appearance="secondary"
-              onClick={() => setOpenReport(true)}
-              style={{}}
+              onClick={() => {
+                setOpenFilters(false)
+                onAplyFilters({
+                  startDate,
+                  endDate,
+                  q: searchValue,
+                  terminalsIds: selectedTerminals.map((o) => o.id)
+                })
+              }}
+              appearance="primary"
             >
-              <span className="hidden xl:block">Generar reporte</span>
+              Aplicar filtros
             </Button>
-          </div>
-        )}
-      </nav>
-      <nav className="pt-3 flex gap-2 flex-wrap">
-        {selectedTerminals.map((terminal) => (
-          <button
-            disabled={isLoading}
-            onClick={() => onTagClick(terminal.id)}
-            key={terminal.id}
-          >
-            <Badge
-              color="success"
-              appearance="tint"
-              className="flex gap-1 items-center"
-            >
-              {terminal.name}
-              <Dismiss12Regular />
-            </Badge>
-          </button>
-        ))}
-      </nav>
+            <Button onClick={() => setOpenFilters(false)} appearance="outline">
+              Cerrar
+            </Button>
+          </DrawerFooter>
+        </Drawer>
+      )}
 
       {openReport && (
         <Dialog

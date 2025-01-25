@@ -1,6 +1,5 @@
 import {
   Button,
-  Combobox,
   Dialog,
   DialogActions,
   DialogBody,
@@ -8,16 +7,18 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
+  Drawer,
+  DrawerBody,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerHeaderTitle,
   Field,
-  Option,
-  Popover,
-  PopoverSurface,
-  PopoverTrigger,
-  SearchBox,
-  Spinner
+  Select,
+  Spinner,
+  Tooltip
 } from '@fluentui/react-components'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { CalendarRtlRegular, DockRegular } from '@fluentui/react-icons'
+import { Dismiss24Regular, FilterAddFilled } from '@fluentui/react-icons'
 import React from 'react'
 import { localizedStrings } from '~/const'
 import { Filter } from './+page'
@@ -28,13 +29,17 @@ import { toast } from 'anni'
 import { Job } from '~/types/job'
 import { Area } from '~/types/area'
 import { useAuth } from '~/store/auth'
+import { useDebounced } from '~/hooks/use-debounced'
+import { UIContext } from '~/providers/ui'
+import SearchBox from '~/commons/search-box'
+import { ExcelColored } from '~/icons'
 
 export default function AssistFilters({
   onAplyFilters,
   isLoading,
   areas,
   isAreasLoading,
-  // isJobsLoading,
+  isJobsLoading,
   jobs
 }: {
   onAplyFilters: (filters: Filter) => void
@@ -45,21 +50,37 @@ export default function AssistFilters({
   isJobsLoading: boolean
 }) {
   const { user: authUser } = useAuth()
-  const [startDate, setStartDate] = React.useState<Date | null>(null)
-  const [endDate, setEndDate] = React.useState<Date | null>(null)
-  const [q, setQ] = React.useState<string | null>(null)
+  const [startDate, setStartDate] = React.useState<Date | null>(new Date())
+  const [endDate, setEndDate] = React.useState<Date | null>(new Date())
   const [openReport, setOpenReport] = React.useState(false)
   const [reporting, setReporting] = React.useState(false)
+  const [openFilters, setOpenFilters] = React.useState(false)
 
   const [job, setJob] = React.useState<Job | null>(null)
   const [area, setArea] = React.useState<Area | null>(null)
+
+  const {
+    onChange,
+    value: searchValue,
+    handleChange
+  } = useDebounced({
+    onCompleted: (e) => {
+      onAplyFilters({
+        startDate,
+        endDate,
+        q: e,
+        areaId: area?.id ?? null,
+        jobId: job?.id ?? null
+      })
+    }
+  })
 
   const handleReport = async () => {
     setReporting(true)
     let uri = 'assists/report?advanced=true'
     if (startDate) uri += `&startDate=${format(startDate, 'YYYY-MM-DD')}`
     if (endDate) uri += `&endDate=${format(endDate, 'YYYY-MM-DD')}`
-    if (q) uri += `&q=${q}`
+    if (searchValue.length > 0) uri += `&q=${searchValue}`
     if (area) uri += `&areaId=${area.id}`
     if (job) uri += `&jobId=${job.id}`
 
@@ -75,155 +96,214 @@ export default function AssistFilters({
     setReporting(false)
   }
 
+  React.useEffect(() => {
+    onAplyFilters({
+      startDate,
+      endDate,
+      q: searchValue,
+      areaId: area?.id ?? null,
+      jobId: job?.id ?? null
+    })
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
+
+  const ctxui = React.useContext(UIContext)
+
   return (
     <>
-      <nav className="flex items-end gap-2">
-        <SearchBox
-          value={q || ''}
-          dismiss={{
-            onClick: () => {
-              setQ(null)
-            }
-          }}
-          disabled={isLoading}
-          onChange={(_, e) => {
-            if (e.value === '') setQ(null)
-            setQ(e.value)
-          }}
-          placeholder="Buscar asistencias"
-        />
-        <Popover withArrow>
-          <PopoverTrigger disableButtonEnhancement>
-            <Button
+      <nav className="w-full space-y-2 py-3 border-b border-stone-500/30">
+        <div className="flex flex-col lg:flex-row gap-4">
+          <div className="flex-grow flex items-center gap-2">
+            <h2 className="font-semibold text-xl pr-2">
+              Asistencias consolidadas
+            </h2>
+          </div>
+          <div className="flex gap-2 items-center">
+            <Tooltip content="Mas filtros" relationship="description">
+              <button
+                onClick={() => setOpenFilters(true)}
+                className="flex items-center gap-1 dark:text-[#eaa8ff] font-medium px-2"
+              >
+                <FilterAddFilled fontSize={25} />
+                Filtros
+              </button>
+            </Tooltip>
+            <SearchBox
+              className="min-w-[250px]"
+              value={searchValue}
+              dismiss={() => {
+                onAplyFilters({
+                  startDate,
+                  endDate,
+                  q: null,
+                  areaId: area?.id ?? null,
+                  jobId: job?.id ?? null
+                })
+                handleChange('')
+              }}
               disabled={isLoading}
-              icon={
-                <CalendarRtlRegular
-                  data-active={startDate || endDate ? '' : undefined}
-                  className="text-nowrap font-normal dark:data-[active]:text-blue-600"
+              onChange={(e) => {
+                if (e.target.value === '')
+                  onAplyFilters({
+                    startDate,
+                    endDate,
+                    q: null,
+                    areaId: area?.id ?? null,
+                    jobId: job?.id ?? null
+                  })
+                onChange(e)
+              }}
+              placeholder="Filtrar por dni, nombres o apellidos"
+            />
+            {authUser.hasPrivilege('assists:report') && (
+              <div className="ml-auto">
+                <Button
+                  disabled={isLoading || !endDate || !startDate}
+                  icon={<ExcelColored />}
+                  appearance="subtle"
+                  onClick={() => setOpenReport(true)}
+                  style={{}}
+                >
+                  Excel
+                </Button>
+              </div>
+            )}
+          </div>
+        </div>
+        <div className="px-1 border-t border-stone-500/20 pt-2 flex gap-4 flex-wrap">
+          <Field size="small" label="Rango de fechas">
+            <p className="text-xs font-medium">
+              {startDate ? format(startDate, 'DD-MM-YYYY') : 'Sin seleccionar'}{' '}
+              - {endDate ? format(endDate, 'DD-MM-YYYY') : 'Sin seleccionar'}
+            </p>
+          </Field>
+        </div>
+      </nav>
+
+      {openFilters && (
+        <Drawer
+          mountNode={ctxui?.contentRef.current}
+          position="start"
+          separator
+          className="min-w-[400px] z-[9999] max-w-full"
+          open={openFilters}
+          onOpenChange={(_, { open }) => setOpenFilters(open)}
+        >
+          <DrawerHeader className="border-b border-stone-500/30">
+            <DrawerHeaderTitle
+              action={
+                <Button
+                  appearance="subtle"
+                  aria-label="Close"
+                  icon={<Dismiss24Regular />}
+                  onClick={() => setOpenFilters(false)}
                 />
               }
-              appearance="secondary"
-              style={{}}
-            />
-          </PopoverTrigger>
-          <PopoverSurface
-            tabIndex={-1}
-            style={{
-              padding: 0,
-              borderRadius: '15px'
-            }}
-          >
-            <div className="p-3 min-w-[250px]">
-              <div className="grid gap-2">
-                <Field label="Desde">
-                  <DatePicker
-                    disabled={isLoading}
-                    value={startDate ? new Date(startDate) : null}
-                    onSelectDate={(date) => {
-                      setStartDate(date ? date : null)
-                    }}
-                    formatDate={(date) => format(date, 'DD-MM-YYYY')}
-                    strings={localizedStrings}
-                    placeholder="Seleccionar fecha"
-                  />
-                </Field>
-                <Field label="Hasta">
-                  <DatePicker
-                    value={endDate ? new Date(endDate) : null}
-                    onSelectDate={(date) => {
-                      setEndDate(date ? date : null)
-                    }}
-                    disabled={isLoading}
-                    formatDate={(date) => format(date, 'DD-MM-YYYY')}
-                    strings={localizedStrings}
-                    placeholder="Seleccionar fecha"
-                  />
-                </Field>
-              </div>
-            </div>
-          </PopoverSurface>
-        </Popover>
-        <Combobox
-          disabled={isAreasLoading || isLoading}
-          style={{
-            minWidth: '50px'
-          }}
-          input={{
-            style: {
-              width: '100px'
-            }
-          }}
-          selectedOptions={[job?.id ?? '']}
-          placeholder="Puesto"
-          onOptionSelect={(_, event) => {
-            const selected = jobs.find((t) => t.id === event.optionValue)
-            setJob(selected ?? null)
-          }}
-          value={job?.name ?? ''}
-        >
-          {jobs?.map((job) => (
-            <Option text={job.name} key={job.id} value={job.id}>
-              {job.name}
-            </Option>
-          ))}
-        </Combobox>
-        <Combobox
-          disabled={isAreasLoading || isLoading}
-          style={{
-            minWidth: '50px'
-          }}
-          input={{
-            style: {
-              width: '150px'
-            }
-          }}
-          selectedOptions={[area?.id ?? '']}
-          placeholder="Área"
-          onOptionSelect={(_, event) => {
-            const selected = areas.find((t) => t.id === event.optionValue)
-            setArea(selected ?? null)
-          }}
-          value={area?.name ?? ''}
-        >
-          {areas?.map((area) => (
-            <Option text={area.name} key={area.id} value={area.id}>
-              {area.name}
-            </Option>
-          ))}
-        </Combobox>
-        <Button
-          appearance="secondary"
-          style={{}}
-          disabled={isLoading || !endDate || !startDate}
-          onClick={() => {
-            onAplyFilters({
-              startDate,
-              endDate,
-              q,
-              areaId: area?.id ?? null,
-              jobId: job?.id ?? null
-            })
-          }}
-        >
-          Filtrar
-        </Button>
-        {authUser.hasPrivilege('assists:report') && (
-          <div className="ml-auto">
-            <Button
-              disabled={
-                isLoading || !endDate || !startDate
-                // || !selectedTerminals.length
-              }
-              icon={<DockRegular />}
-              appearance="secondary"
-              onClick={() => setOpenReport(true)}
-              style={{}}
             >
-              <span className="hidden xl:block">Generar reporte</span>
+              Filtros
+            </DrawerHeaderTitle>
+          </DrawerHeader>
+          <DrawerBody className="flex flex-col overflow-y-auto">
+            <div className="py-5 grid gap-3">
+              <Field label="Puesto de trabajo">
+                <Select
+                  disabled={isJobsLoading || isLoading}
+                  value={job?.id ?? ''}
+                  onChange={(e) => {
+                    const selected = jobs.find((t) => t.id === e.target.value)
+                    setJob(selected ?? null)
+                  }}
+                >
+                  <option value="">
+                    {isJobsLoading ? 'Cargando...' : 'Todos'}
+                  </option>
+                  {jobs?.map((job) => (
+                    <option key={job.id} value={job.id}>
+                      {job.name}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <Field label="Área">
+                <Select
+                  disabled={isAreasLoading || isLoading}
+                  value={area?.id ?? ''}
+                  onChange={(e) => {
+                    const selected = areas.find((t) => t.id === e.target.value)
+                    setArea(selected ?? null)
+                  }}
+                >
+                  <option value="">
+                    {isJobsLoading ? 'Cargando...' : 'Todos'}
+                  </option>
+                  {areas?.map((area) => (
+                    <option key={area.id} value={area.id}>
+                      {area.name}
+                    </option>
+                  ))}
+                </Select>
+              </Field>
+              <div className="border-t border-stone-500/40 mt-4"></div>
+              <Field
+                label="Desde"
+                required
+                validationMessage="Selecione una fecha"
+                validationState={startDate ? 'none' : 'error'}
+              >
+                <DatePicker
+                  disabled={isLoading}
+                  value={startDate ? new Date(startDate) : null}
+                  onSelectDate={(date) => {
+                    setStartDate(date ? date : null)
+                  }}
+                  formatDate={(date) => format(date, 'DD-MM-YYYY')}
+                  strings={localizedStrings}
+                  placeholder="Seleccionar fecha"
+                />
+              </Field>
+              <Field
+                label="Hasta"
+                required
+                validationMessage="Selecione una fecha"
+                validationState={endDate ? 'none' : 'error'}
+              >
+                <DatePicker
+                  value={endDate ? new Date(endDate) : null}
+                  onSelectDate={(date) => {
+                    setEndDate(date ? date : null)
+                  }}
+                  disabled={isLoading}
+                  formatDate={(date) => format(date, 'DD-MM-YYYY')}
+                  strings={localizedStrings}
+                  placeholder="Seleccionar fecha"
+                />
+              </Field>
+            </div>
+          </DrawerBody>
+          <DrawerFooter className="w-full border-t border-stone-500/30">
+            <Button
+              disabled={isLoading || !endDate || !startDate}
+              onClick={() => {
+                setOpenFilters(false)
+                onAplyFilters({
+                  startDate,
+                  endDate,
+                  q: searchValue,
+                  areaId: area?.id ?? null,
+                  jobId: job?.id ?? null
+                })
+              }}
+              appearance="primary"
+            >
+              Aplicar filtros
             </Button>
-          </div>
-        )}
-      </nav>
+            <Button onClick={() => setOpenFilters(false)} appearance="outline">
+              Cerrar
+            </Button>
+          </DrawerFooter>
+        </Drawer>
+      )}
+
       {openReport && (
         <Dialog
           open={openReport}

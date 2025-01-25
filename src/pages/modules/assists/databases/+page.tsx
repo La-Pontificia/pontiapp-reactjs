@@ -43,7 +43,7 @@ export default function AssistsDatabasesPage() {
             </thead>
             <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
               {items?.map((item) => (
-                <tr className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
+                <tr className="relative bg-white dark:bg-[#2a2826] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
                   <td>
                     <div className="flex items-center gap-2">
                       <Avatar

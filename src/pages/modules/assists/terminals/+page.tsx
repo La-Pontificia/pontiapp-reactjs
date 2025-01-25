@@ -1,8 +1,8 @@
 import { api } from '~/lib/api'
 import { useQuery } from '@tanstack/react-query'
-import { AddFilled, Search20Regular } from '@fluentui/react-icons'
+import { AddFilled } from '@fluentui/react-icons'
 import Form from './form'
-import { SearchBox, Spinner } from '@fluentui/react-components'
+import { Spinner } from '@fluentui/react-components'
 import React from 'react'
 import { useDebounced } from '~/hooks/use-debounced'
 import Item from './terminal'
@@ -10,6 +10,7 @@ import { ResponsePaginate } from '~/types/paginate-response'
 import { toast } from 'anni'
 import { handleError } from '~/utils'
 import { AssistTerminal } from '~/types/assist-terminal'
+import SearchBox from '~/commons/search-box'
 
 export default function AssistTerminalsPage() {
   const [items, setItems] = React.useState<AssistTerminal[]>([])
@@ -65,34 +66,34 @@ export default function AssistTerminalsPage() {
   })
 
   return (
-    <div className="flex w-full px-3 flex-col pb-3 overflow-y-auto h-full">
-      <nav className="pb-3 pt-4 flex border-b border-neutral-500/30 items-center gap-4">
-        <Form
-          refetch={refetch}
-          triggerProps={{
-            disabled: isLoading,
-            appearance: 'primary',
-            icon: <AddFilled />,
-            children: <span>Nuevo</span>
-          }}
-        />
+    <div className="flex w-full px-3 flex-col overflow-y-auto h-full">
+      <nav className="pb-3 pt-4 flex flex-wrap w-full border-b border-neutral-500/30 items-center gap-4">
+        <div className="flex-grow flex flex-wrap">
+          <h2 className="font-semibold text-xl pr-2">Terminales biométricos</h2>
+          <Form
+            refetch={refetch}
+            triggerProps={{
+              disabled: isLoading,
+              style: {
+                borderRadius: 20
+              },
+              appearance: 'primary',
+              icon: <AddFilled />,
+              children: <span>Nuevo</span>
+            }}
+          />
+        </div>
         <SearchBox
+          className="min-w-[400px]"
           disabled={isLoading}
           value={searchValue}
-          dismiss={{
-            onClick: () => setQ('')
+          dismiss={() => setQ('')}
+          onChange={(e) => {
+            if (e.target.value === '') setQ(undefined)
+            handleChange(e.target.value)
           }}
-          onChange={(_, e) => {
-            if (e.value === '') setQ(undefined)
-            handleChange(e.value)
-          }}
-          contentBefore={<Search20Regular className="text-blue-500" />}
-          placeholder="Buscar"
+          placeholder="Filtrar por nombre"
         />
-        <p className="text-xs dark:text-blue-500">
-          {items.length} Terminal{items.length > 1 ? 'es' : ''} biometrico
-          {items.length > 1 ? 's' : ''} encontrados
-        </p>
       </nav>
       <div className="overflow-auto rounded-xl pt-2 h-full">
         {isLoading ? (

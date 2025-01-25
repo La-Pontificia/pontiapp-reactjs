@@ -33,7 +33,7 @@ export default function AssistsGrid({
           {assists.slice(startSlice, endSlice).map((assist, key) => (
             <tr
               key={key}
-              className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
+              className="relative bg-white dark:bg-[#2a2826] [&>td]:text-nowrap group [&>td]:p-3 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
             >
               <td>
                 <div className="flex items-center gap-2">

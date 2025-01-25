@@ -94,14 +94,8 @@ export default function AssistsPage() {
   }
 
   return (
-    <div className="w-full flex overflow-auto flex-col flex-grow h-full p-3">
+    <div className="w-full flex overflow-auto flex-col flex-grow h-full p-3 pt-0">
       <header>
-        <nav className="pb-2">
-          <p className="text-xs dark:text-blue-600 text-blue-700">
-            En este apartado podrás visualizar las asistencias de los
-            colaboradores calculados con sus horarios respectivos.
-          </p>
-        </nav>
         <AssistFilters
           jobs={jobs ?? []}
           isJobsLoading={isJobsLoading}
@@ -112,7 +106,7 @@ export default function AssistsPage() {
         />
       </header>
 
-      <div className="overflow-auto flex flex-col flex-grow rounded-xl">
+      <div className="overflow-auto flex flex-col flex-grow pt-1">
         {!filters.endDate && !filters.startDate ? (
           <div className="flex-grow grid place-content-center h-full">
             <p className="text-xs text-center opacity-60">
@@ -131,7 +125,7 @@ export default function AssistsPage() {
                 </p>
               </div>
             ) : (
-              <div className="overflow-auto pt-2 flex flex-col">
+              <div className="overflow-auto flex flex-col">
                 <div className="pb-2">
                   <TabList
                     selectedValue={tab}
