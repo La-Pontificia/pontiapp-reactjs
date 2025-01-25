@@ -8,40 +8,40 @@ import { AddRegular, PersonRegular } from '@fluentui/react-icons'
 import { getRandomMessageBirthday } from '~/utils'
 import { format } from '~/lib/dayjs'
 
-const Card1 = ({ user }: { user: User }) => {
-  return (
-    <div className="min-w-max shadow-black/40 text-white shadow-xl rounded-sm select-none overflow-hidden relative">
-      <div className="absolute flex justify-center items-center h-[80%] inset-x-0">
-        <Avatar
-          color="colorful"
-          icon={<PersonRegular fontSize={80} />}
-          style={{
-            width: '180px',
-            height: '180px'
-          }}
-          image={{
-            src: user.photoURL
-          }}
-        />
-        <div className="absolute pt-5 pr-5">
-          <img src="/1_mask.webp" width={270} alt="" />
-        </div>
-      </div>
-      <div className="absolute text-center inset-x-0 bottom-0 h-[38%]">
-        <h1 className="font-semibold tracking-tight text-2xl">
-          {user.displayName}
-        </h1>
-        <p className="text-sm opacity-80 ">
-          {user.role.name} - {user.role.department.area.name}
-        </p>
-        <p className="max-w-[28ch] tracking-tight text-amber-200 text-lg pt-4 mx-auto">
-          ¡{getRandomMessageBirthday()}!
-        </p>
-      </div>
-      <img src="/1.webp" className="max-h-[90vh] h-[600px] min-w-max" />
-    </div>
-  )
-}
+// const Card1 = ({ user }: { user: User }) => {
+//   return (
+//     <div className="min-w-max shadow-black/40 text-white shadow-xl rounded-sm select-none overflow-hidden relative">
+//       <div className="absolute flex justify-center items-center h-[80%] inset-x-0">
+//         <Avatar
+//           color="colorful"
+//           icon={<PersonRegular fontSize={80} />}
+//           style={{
+//             width: '180px',
+//             height: '180px'
+//           }}
+//           image={{
+//             src: user.photoURL
+//           }}
+//         />
+//         <div className="absolute pt-5 pr-5">
+//           <img src="/1_mask.webp" width={270} alt="" />
+//         </div>
+//       </div>
+//       <div className="absolute text-center inset-x-0 bottom-0 h-[38%]">
+//         <h1 className="font-semibold tracking-tight text-2xl">
+//           {user.displayName}
+//         </h1>
+//         <p className="text-sm opacity-80 ">
+//           {user.role.name} - {user.role.department.area.name}
+//         </p>
+//         <p className="max-w-[28ch] tracking-tight text-amber-200 text-lg pt-4 mx-auto">
+//           ¡{getRandomMessageBirthday()}!
+//         </p>
+//       </div>
+//       <img src="/1.webp" className="max-h-[90vh] h-[600px] min-w-max" />
+//     </div>
+//   )
+// }
 
 // const Card2 = ({ user }: { user: User }) => {
 //   return (
@@ -128,12 +128,12 @@ export default function BirthdayBoys() {
 
   if (date === now && showed) return null
 
-  const RenderRandomCard = ({ user }: { user: User }) => {
-    const cards = [Card1, Card3]
-    const i = Math.floor(Math.random() * cards.length)
-    const Card = cards[i]
-    return <Card user={user} />
-  }
+  // const RenderRandomCard = ({ user }: { user: User }) => {
+  //   const cards = [Card1, Card3]
+  //   const i = Math.floor(Math.random() * cards.length)
+  //   const Card = cards[i]
+  //   return <Card user={user} />
+  // }
 
   return (
     <Modal onClose={() => setShowed(true)}>
@@ -151,7 +151,7 @@ export default function BirthdayBoys() {
           <div className="h-full mx-auto select-none px-10 flex items-center w-fit relative">
             <div className="flex [&>div]:pointer-events-auto relative items-center py-10 gap-10 overflow-auto">
               {birthdayBoys.map((user, index) => (
-                <RenderRandomCard key={index} user={user} />
+                <Card3 key={index} user={user} />
               ))}
             </div>
           </div>
