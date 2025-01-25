@@ -42,7 +42,7 @@ export default function UserGrid({
   //   toast('Jefe actualizado correctamente.')
   // }
   return (
-    <tr className="relative [&>td]:text-nowrap group [&>td]:p-3 bg-white dark:bg-[#272523] [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
+    <tr className="relative [&>td]:text-nowrap group [&>td]:p-3 bg-white dark:bg-[#2e2b27] [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
       <td>
         <UserHoverInfo slug={user.username}>
           <div className="flex items-center gap-2">
