@@ -10,15 +10,12 @@ import {
 import { Dismiss24Regular, SettingsRegular } from '@fluentui/react-icons'
 import React from 'react'
 import { useTheme } from '~/providers/theme'
+import { UIContext } from '~/providers/ui'
 
-export default function SettingsDrawer({
-  contentRef
-}: {
-  contentRef: React.RefObject<HTMLDivElement>
-}) {
+export default function SettingsDrawer() {
   const [open, setOpen] = React.useState(false)
   const { theme, toggleTheme } = useTheme()
-
+  const ctxui = React.useContext(UIContext)
   return (
     <>
       <Tooltip content="Ajustes" relationship="label">
@@ -32,7 +29,7 @@ export default function SettingsDrawer({
       </Tooltip>
       {open && (
         <Drawer
-          mountNode={contentRef.current}
+          mountNode={ctxui?.contentRef.current}
           position="start"
           separator
           className="min-w-[400px] z-[9999] max-w-full"

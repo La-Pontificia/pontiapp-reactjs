@@ -79,11 +79,7 @@ const ItemNav = (props: ItemNav) => {
   )
 }
 
-export const RootSidebar = ({
-  contentRef
-}: {
-  contentRef: React.RefObject<HTMLDivElement>
-}) => {
+export const RootSidebar = () => {
   const { user: authUser } = useAuth()
   return (
     <header className="flex flex-col gap-5 min-w-[70px] relative justify-between z-[1] overflow-x-hidden overflow-y-auto py-2 h-full">
@@ -152,7 +148,7 @@ export const RootSidebar = ({
         )}
       </nav>
       <nav className="flex justify-center">
-        <SettingsDrawer contentRef={contentRef} />
+        <SettingsDrawer />
       </nav>
     </header>
   )
