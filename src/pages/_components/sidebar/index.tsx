@@ -6,10 +6,15 @@ import {
   DocumentFlowchartFilled,
   DocumentFlowchartRegular,
   type FluentIcon,
+  GridDotsRegular,
+  HomeRegular,
   MegaphoneLoudFilled,
   MegaphoneLoudRegular,
+  MoreHorizontalFilled,
+  MoreHorizontalRegular,
   PersonFilled,
   PersonRegular,
+  SearchRegular,
   StoreMicrosoftFilled,
   StoreMicrosoftRegular,
   TabletFilled,
@@ -18,6 +23,7 @@ import {
 import { Link, useLocation } from 'react-router'
 import React from 'react'
 import SettingsDrawer from './settings'
+import { cn } from '~/utils'
 // import { Lp } from '~/icons'
 
 type ItemNav = {
@@ -27,6 +33,7 @@ type ItemNav = {
   image?: string
   tooltip: string
   text: string
+  className?: string
 }
 
 const ItemNav = (props: ItemNav) => {
@@ -51,7 +58,10 @@ const ItemNav = (props: ItemNav) => {
         onMouseLeave={() => setHover(false)}
         data-active={isActive ? '' : undefined}
         to={props.href}
-        className="relative group dark:text-stone-400 text-stone-600 flex justify-center items-center"
+        className={cn(
+          'relative group dark:text-stone-400 text-stone-600 flex justify-center items-center',
+          props.className
+        )}
       >
         <div className="absolute inset-y-0 transition-all group-hover:py-5 group-data-[active]:py-4 py-7 left-0">
           <div className="h-full w-[3px] group-hover:bg-[#1d02ec] group-hover:dark:bg-[#7385ff] group-data-[active]:bg-[#1d02ec] group-data-[active]:dark:bg-[#7385ff] rounded-xl"></div>
@@ -72,7 +82,9 @@ const ItemNav = (props: ItemNav) => {
               }}
             />
           )}
-          <p className="text-[10px] leading-4 line-clamp-1">{props.text}</p>
+          <p className="text-[10px] leading-4 line-clamp-1 text-ellipsis">
+            {props.text}
+          </p>
         </div>
       </Link>
     </Tooltip>
@@ -81,9 +93,27 @@ const ItemNav = (props: ItemNav) => {
 
 export const RootSidebar = () => {
   const { user: authUser } = useAuth()
+
+  const responsiveItems = {
+    user: {
+      href: `/${authUser.username}`,
+      text: 'Inicio',
+      icon: HomeRegular
+    },
+    search: {
+      href: '/search',
+      text: 'Buscar',
+      icon: SearchRegular
+    },
+    modules: {
+      text: 'Módulos',
+      href: '/m',
+      icon: GridDotsRegular
+    }
+  }
   return (
-    <header className="flex flex-col gap-5 min-w-[70px] relative justify-between z-[1] overflow-x-hidden overflow-y-auto py-2 h-full">
-      <nav className="flex pl-1 flex-col flex-grow space-y-4 overflow-y-auto">
+    <header className="flex max-lg:w-full max-lg:bottom-0 max-lg:h-[65px] max-lg:dark:bg-[#312f2c] max-lg:bg-[#f5f0f0] max-lg:fixed flex-col gap-5 min-w-[70px] relative justify-between z-[1] overflow-x-hidden overflow-y-auto lg:py-2 h-full">
+      <nav className="pl-1 hidden lg:flex flex-col flex-grow space-y-4 overflow-y-auto">
         <ItemNav
           tooltip={authUser.displayName}
           text={authUser.displayName}
@@ -146,8 +176,33 @@ export const RootSidebar = () => {
             href="/m/inventories"
           />
         )}
+        {authUser.hasModule('resourceManagement') && (
+          <ItemNav
+            tooltip="Gestión de recursos"
+            text="Recursos"
+            icon={MoreHorizontalRegular}
+            activeIcon={MoreHorizontalFilled}
+            href="/m/resource-management"
+          />
+        )}
       </nav>
-      <nav className="flex justify-center">
+      <nav className="flex lg:hidden h-full">
+        {Object.entries(responsiveItems).map(([key, item]) => {
+          return (
+            <Link
+              className="w-full text-xs dark:text-stone-300 flex text-center items-center justify-center"
+              key={key}
+              to={item.href}
+            >
+              <div>
+                <item.icon fontSize={25} className="mx-auto" />
+                <p>{item.text}</p>
+              </div>
+            </Link>
+          )
+        })}
+      </nav>
+      <nav className="flex max-lg:hidden justify-center">
         <SettingsDrawer />
       </nav>
     </header>
