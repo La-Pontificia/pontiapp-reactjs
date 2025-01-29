@@ -1,10 +1,7 @@
-import {
-  FluentProvider,
-  webDarkTheme,
-  webLightTheme
-} from '@fluentui/react-components'
+import { FluentProvider } from '@fluentui/react-components'
 import React from 'react'
 import { useTheme } from './theme'
+import { lightTheme, darkTheme } from '~/utils/themes'
 
 export default function FluentUIProvider({
   children
@@ -13,7 +10,7 @@ export default function FluentUIProvider({
 }>) {
   const { theme } = useTheme()
   return (
-    <FluentProvider theme={theme === 'dark' ? webDarkTheme : webLightTheme}>
+    <FluentProvider theme={theme === 'dark' ? darkTheme : lightTheme}>
       {children}
     </FluentProvider>
   )
