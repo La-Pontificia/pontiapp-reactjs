@@ -16,7 +16,7 @@ export default function LandingLayout() {
             />
           </Link>
         </nav>
-        <nav className="flex items-center gap-10">
+        <nav className="hidden lg:flex items-center gap-10">
           {Object.entries(businesses).map(([url, { acronym, logo, name }]) => (
             <Link
               title={'Ir a la página de ' + name}
