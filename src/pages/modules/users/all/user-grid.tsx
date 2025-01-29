@@ -40,9 +40,9 @@ export default function UserGrid({
   const handleManager = async (manager?: User) => {
     setManagerUpdating(true)
     const res = await api.post(`users/${user.id}/manager`, {
-      data: {
+      data: JSON.stringify({
         managerId: manager?.id
-      }
+      })
     })
     if (!res.ok) {
       setManagerUpdating(false)
@@ -60,7 +60,7 @@ export default function UserGrid({
     toast('Jefe actualizado correctamente.')
   }
   return (
-    <tr className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
+    <tr className="relative [&>td]:text-nowrap group [&>td]:p-3 [&>td]:px-3">
       <td>
         <UserHoverInfo slug={user.username}>
           <div className="flex items-center gap-2">
@@ -82,17 +82,10 @@ export default function UserGrid({
           </div>
         </UserHoverInfo>
       </td>
-      <td>
-        <div className="max-w-[30ch] opacity-70 text-ellipsis overflow-hidden">
+      <td className="max-sm:hidden">
+        <div className="max-w-[30ch] opacity-60 text-ellipsis overflow-hidden">
           {user.role.name}
         </div>
-      </td>
-      <td className="max-lg:hidden">
-        <p className="dark:text-white relative max-xl:max-w-[20ch] text-ellipsis overflow-hidden">
-          <a href={`mailto:${user.email}`} className="hover:underline">
-            {user.email}
-          </a>
-        </p>
       </td>
       <td className="max-xl:hidden">
         <UserDrawer
@@ -114,9 +107,9 @@ export default function UserGrid({
             children: managerUpdating ? (
               <Spinner size="extra-tiny" />
             ) : user.manager ? (
-              <div className="flex rounded-xl items-center p-1 dark:bg-blue-900 bg-stone-200 shadow-black/80 dark:shadow-lg">
+              <div className="flex rounded-xl items-center p-1  shadow-black/80 dark:shadow-lg">
                 <Avatar
-                  size={36}
+                  size={20}
                   color="steel"
                   name={user.manager.displayName}
                   image={{

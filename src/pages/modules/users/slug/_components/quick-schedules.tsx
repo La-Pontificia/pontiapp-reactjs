@@ -28,7 +28,7 @@ export default function QuickSchedules({ slug }: { slug?: string }) {
   if (!isLoading && countSchedules === 0) return null
   return (
     <div className="flex flex-col border-b pb-4 border-neutral-500/30">
-      <h2 className="dark:dark:text-neutral-400 font-semibold pb-2 text-sm">
+      <h2 className="dark:dark:text-neutral-400 font-semibold text-sm">
         Horarios
       </h2>
       <div>
@@ -74,7 +74,7 @@ const ScheduleItem = ({ schedule }: { schedule: Schedule }) => {
   }
 
   return (
-    <div className="schedule-item divide-y divide-slate-500/30 dark:text-neutral-300 bg-slate-500/10 border dark:border-slate-700 border-stone-300 dark:bg-blue-500/10 shadow-sm border-neutral-500/40 px-4 rounded-xl">
+    <div className="schedule-item divide-y divide-stone-500/30 dark:text-neutral-300 dark:border-slate-700 border-stone-300 shadow-sm border-neutral-500/40 px-2 rounded-xl">
       <div className="py-2 flex items-center gap-3">
         <CalendarRegular fontSize={22} className="" />
         <div className="justify-between flex-grow font-semibold">
@@ -97,8 +97,9 @@ const ScheduleItem = ({ schedule }: { schedule: Schedule }) => {
         <ClockRegular fontSize={22} className="" />
         <div className="flex-grow">
           <p className="text-xs">
-            {format(schedule.from, 'h:mm A')} - {format(schedule.to, 'h:mm A')}{' '}
-            ({countRangeMinutes(schedule.from, schedule.to)})
+            De {format(schedule.from, 'h:mm A')} a{' '}
+            {format(schedule.to, 'h:mm A')} (
+            {countRangeMinutes(schedule.from, schedule.to)})
           </p>
         </div>
       </div>

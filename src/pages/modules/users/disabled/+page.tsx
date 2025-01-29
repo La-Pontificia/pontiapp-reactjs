@@ -3,18 +3,16 @@ import { api } from '~/lib/api'
 import { ResponsePaginate } from '~/types/paginate-response'
 import { User } from '~/types/user'
 import * as React from 'react'
-import { Button, SearchBox, Spinner } from '@fluentui/react-components'
-import {
-  AddFilled,
-  Search20Regular,
-  TableSearch20Regular
-} from '@fluentui/react-icons'
-import CollaboratorsGrid from './grid'
+import { Spinner, Tooltip } from '@fluentui/react-components'
+import { AddFilled, FilterAddFilled } from '@fluentui/react-icons'
+import UsersGrid from './grid'
 import { useDebounced } from '~/hooks/use-debounced'
 import CollaboratorsFilters from './filters'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { useAuth } from '~/store/auth'
+import SearchBox from '~/commons/search-box'
+import { Helmet } from 'react-helmet'
 
 export type FiltersValues = {
   q: string | null
@@ -28,7 +26,7 @@ export type FiltersValues = {
 
 export default function DisabledUsersPage() {
   const { user: authUser } = useAuth()
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false)
+  const [openFilters, setOpenFilters] = React.useState(false)
   const [loadingMore, setLoadingMore] = React.useState(false)
   const [info, setInfo] = React.useState<ResponsePaginate<User[]>>(
     {} as ResponsePaginate<User[]>
@@ -106,53 +104,49 @@ export default function DisabledUsersPage() {
 
   return (
     <div className="flex flex-col flex-grow overflow-y-auto">
-      <nav className="flex items-center w-full gap-4 py-4">
+      <Helmet>
+        <title>Usuarios inactivos | PontiApp</title>
+      </Helmet>
+      <nav className="flex items-center border-b gap-2 dark:border-stone-500/50 w-full py-4 px-3 max-lg:py-2">
+        <h1 className="font-semibold flex-grow text-lg">Inactivos</h1>
         {authUser.hasPrivilege('users:create') && (
           <Link
             to="/m/users/create"
-            className="flex items-center gap-2 rounded-md hover:bg-neutral-500/20 p-1.5"
+            className="flex font-semibold max-lg:hidden items-center gap-1 rounded-md hover:bg-neutral-500/20 p-1.5"
           >
-            <AddFilled
-              fontSize={20}
-              className="dark:text-blue-500 text-blue-600"
-            />
-            Crear usuario
+            <AddFilled fontSize={20} />
+            Crear
           </Link>
         )}
-
-        <Button
-          appearance="transparent"
-          className="text-nowrap"
-          onClick={() => setIsSidebarOpen(true)}
-          icon={<TableSearch20Regular />}
-        >
-          Filtros
-        </Button>
-        {isSidebarOpen && (
+        <Tooltip content="Mas filtros" relationship="description">
+          <button
+            onClick={() => setOpenFilters(true)}
+            className="flex items-center gap-1 px-2 font-medium"
+          >
+            <FilterAddFilled fontSize={25} />
+            <p className="max-md:hidden">Filtros</p>
+          </button>
+        </Tooltip>
+        {openFilters && (
           <CollaboratorsFilters
             filters={filters}
             setFilters={setFilters}
-            setSidebarIsOpen={setIsSidebarOpen}
-            sidebarIsOpen={isSidebarOpen}
+            setSidebarIsOpen={setOpenFilters}
+            sidebarIsOpen={openFilters}
           />
         )}
         <div className="ml-auto">
           <SearchBox
             value={searchValue}
-            style={{
-              borderRadius: '2rem'
+            dismiss={() => {
+              setFilters((prev) => ({ ...prev, q: null }))
             }}
-            dismiss={{
-              onClick: () => {
+            onChange={(e) => {
+              if (e.target.value === '')
                 setFilters((prev) => ({ ...prev, q: null }))
-              }
+              handleChange(e.target.value)
             }}
-            onChange={(_, e) => {
-              if (e.value === '') setFilters((prev) => ({ ...prev, q: null }))
-              handleChange(e.value)
-            }}
-            contentBefore={<Search20Regular className="text-blue-500" />}
-            placeholder="Filtrar por nombres"
+            placeholder="Filtrar por DNI, nombres"
           />
         </div>
       </nav>
@@ -177,31 +171,27 @@ export default function DisabledUsersPage() {
           </div>
         )}
 
-        {!loading && users?.length > 0 && (
+        {!loading && (
           <>
-            <div className="flex-grow rounded-xl overflow-y-auto">
-              <CollaboratorsGrid
-                refetch={refetch}
-                isLoadingMore={loadingMore}
-                users={users}
-              />
+            <div className="flex-grow rounded-xl overflow-auto">
+              <UsersGrid refetch={refetch} users={users} />
             </div>
             {info && (
-              <footer className="flex px-5 py-2 justify-center">
+              <footer className="flex text-sm px-5 py-2 justify-center">
                 <div className="flex justify-between w-full">
-                  <p className="flex basis-0 flex-grow">
+                  <p className="flex max-sm:hidden opacity-60 basis-0 flex-grow">
                     Mostrando {info.from} - {info.to} de {info.total} resultados
                   </p>
                   {info.next_page_url && (
                     <button
                       disabled={loadingMore}
                       onClick={nextPage}
-                      className="dark:text-blue-500 hover:underline"
+                      className="dark:text-blue-500 font-semibold mx-auto hover:underline"
                     >
                       {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
                     </button>
                   )}
-                  <p className="flex basis-0 flex-grow justify-end">
+                  <p className="flex max-sm:hidden opacity-60 basis-0 flex-grow justify-end">
                     Página {info.current_page} de {info.last_page}
                   </p>
                 </div>

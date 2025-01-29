@@ -4,6 +4,7 @@ import { Avatar, Spinner, Tooltip } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'
 import { useSlugUser } from '../+layout'
+import { useMediaQuery } from '@uidotdev/usehooks'
 
 export default function QuickOrganization({ slug }: { slug?: string }) {
   const { user, rootURL } = useSlugUser()
@@ -53,72 +54,58 @@ export default function QuickOrganization({ slug }: { slug?: string }) {
   const hasOrganization =
     data?.coworkers.length || data?.subordinates.length || data?.manager
 
+  if (!hasOrganization) return null
   return (
     <div className="flex flex-col border-t overflow-auto border-neutral-500/30">
       <h2 className="dark:dark:text-neutral-400 font-semibold py-5 pb-2 text-sm">
         Organización
       </h2>
-      {!hasOrganization ? (
-        <div className="pt-4">
-          <p className="opacity-70">
-            <span className="font-semibold">{user?.displayName}</span> no tiene
-            organización asignada.
-          </p>
-        </div>
-      ) : (
-        <>
-          <div className="flex divide-x max-md:divide-y max-md:flex-col max-md:gap-y-5 max-md:divide-x-0 overflow-auto md:first:[&>div]:pl-0 md:[&>div]:px-3 md:last:[&>div]:pr-0 divide-neutral-500/30">
-            {data?.manager && (
-              <div className="">
-                <h2 className="text-xs pb-2 max-md:pt-2">
-                  Bajo la supervision de
-                </h2>
-                <div className="border border-stone-300 dark:border-stone-700 bg-stone-500/10 overflow-auto flex gap-2 rounded-lg shadow-sm dark:shadow-black shadow-stone-700/10">
-                  <PersonItem appearance="vertical" person={data?.manager} />
-                </div>
-              </div>
-            )}
-            {data.subordinates?.length > 0 && (
-              <div className="w-fit max-md:w-full">
-                <h2 className="text-xs pb-2 max-md:pt-2">
-                  Personas reportando
-                </h2>
-                <div className="border border-stone-300 dark:border-stone-700 bg-stone-500/10 overflow-auto flex gap-2 rounded-lg shadow-sm dark:shadow-black shadow-stone-700/10">
-                  {data?.subordinates.map((subordinate) => (
-                    <PersonItem
-                      key={subordinate.id}
-                      appearance="vertical"
-                      person={subordinate}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
-            {data.coworkers?.length > 0 && (
-              <div className="overflow-auto">
-                <h2 className="text-xs pb-2 max-md:pt-2">Trabaja junto a</h2>
-                <div className="border border-stone-300 dark:border-stone-700 bg-stone-500/10 overflow-auto flex gap-2 rounded-lg shadow-sm dark:shadow-black shadow-stone-700/10">
-                  {data?.coworkers.map((coworker) => (
-                    <PersonItem
-                      key={coworker.id}
-                      appearance="vertical"
-                      person={coworker}
-                    />
-                  ))}
-                </div>
-              </div>
-            )}
+      <div className="flex w-full divide-x max-lg:divide-y max-lg:flex-col max-lg:gap-y-5 max-lg:divide-x-0 overflow-auto lg:first:[&>div]:pl-0 lg:[&>div]:px-3 lg:last:[&>div]:pr-0 divide-neutral-500/30">
+        {data?.manager && (
+          <div className="max-lg:w-full">
+            <h2 className="text-xs pb-2 max-lg:pt-2">Bajo la supervision de</h2>
+            <div className="max-lg:w-full">
+              <PersonItem appearance="vertical" person={data?.manager} />
+            </div>
           </div>
-          <div className="flex justify-start mt-2">
-            <Link
-              to={`${rootURL}/${slug}/organization`}
-              className="text-blue-500 hover:underline"
-            >
-              Ver toda la organización de {user?.displayName}
-            </Link>
+        )}
+        {data.subordinates?.length > 0 && (
+          <div className="lg:w-fit max-md:w-full">
+            <h2 className="text-xs pb-2 max-lg:pt-2">Personas reportando</h2>
+            <div className="flex max-lg:flex-col">
+              {data?.subordinates.map((subordinate) => (
+                <PersonItem
+                  key={subordinate.id}
+                  appearance="vertical"
+                  person={subordinate}
+                />
+              ))}
+            </div>
           </div>
-        </>
-      )}
+        )}
+        {data.coworkers?.length > 0 && (
+          <div className="overflow-auto">
+            <h2 className="text-xs pb-2 max-lg:pt-2">Trabaja junto a</h2>
+            <div className="flex max-lg:flex-col">
+              {data?.coworkers.map((coworker) => (
+                <PersonItem
+                  key={coworker.id}
+                  appearance="vertical"
+                  person={coworker}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
+      <div className="flex justify-start mt-2">
+        <Link
+          to={`${rootURL}/${slug}/organization`}
+          className="text-blue-500 hover:underline"
+        >
+          Ver toda la organización de {user?.displayName}
+        </Link>
+      </div>
     </div>
   )
 }
@@ -129,6 +116,10 @@ const PersonItem = ({
   person?: User | null
   appearance: 'vertical' | 'horizontal'
 }) => {
+  const isMediumDevice = useMediaQuery(
+    'only screen and (min-width : 0px) and (max-width : 1023px)'
+  )
+
   const { rootURL } = useSlugUser()
   if (!person) return null
   return (
@@ -151,18 +142,18 @@ const PersonItem = ({
     >
       <Link
         to={`${rootURL}/${person.username}`}
-        className="flex justify-center space-y-2 w-[150px] min-h-[165px] min-w-[150px] text-center dark:text-neutral-300 hover:bg-stone-500/5 dark:hover:bg-stone-500/20 py-3 flex-col items-center px-2"
+        className="max-lg:gap-2 flex lg:justify-center lg:space-y-2 lg:w-[150px] lg:min-h-[165px] lg:min-w-[150px] lg:text-center dark:text-neutral-300 hover:bg-stone-500/5 dark:hover:bg-stone-500/20 py-3 lg:flex-col items-center px-2"
       >
         <Avatar
-          size={64}
+          size={isMediumDevice ? 40 : 64}
           color="colorful"
           name={person.displayName}
           image={{
             src: person.photoURL
           }}
         />
-        <div className="text-xs flex flex-col justify-center space-y-1 flex-grow">
-          <h2 className="font-semibold line-clamp-1 text-base dark:text-white">
+        <div className="text-xs flex flex-col justify-center space-y-1 max-lg:flex-grow">
+          <h2 className="font-semibold line-clamp-1 text-sm lg:text-base dark:text-white">
             {person.displayName}
           </h2>
           <p className="opacity-80 line-clamp-2">{person.role?.name}</p>

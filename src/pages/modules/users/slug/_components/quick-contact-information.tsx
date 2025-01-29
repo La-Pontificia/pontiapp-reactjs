@@ -18,7 +18,7 @@ export default function QuickContactInformation() {
       <h2 className="dark:dark:text-neutral-400 font-semibold py-2 text-sm">
         Información de contacto
       </h2>
-      <div className="grid grid-cols-2 gap-x-10 gap-y-3">
+      <div className="grid lg:grid-cols-2 gap-x-10 gap-y-3">
         {isLoading ? (
           <>
             <div className="w-full h-[20px] mx-2 my-5 bg-stone-500/20 animate-pulse rounded-full"></div>
@@ -99,14 +99,20 @@ export const InfoItem = ({
   }
   return (
     <div className="flex rounded-lg group hover:bg-stone-500/10 p-1.5 items-center gap-4">
-      <Icon fontSize={22} className="opacity-90" />
+      <Icon
+        fontSize={22}
+        style={{
+          minWidth: '22px'
+        }}
+        className="opacity-90"
+      />
       <div className="flex-grow">
         <p className="text-xs dark:text-neutral-300">{title}</p>
         {children}
       </div>
       <button
         onClick={handleCopy}
-        className="h-full opacity-0 group-hover:opacity-100 hover:bg-stone-500/20 p-2.5 rounded-md"
+        className="h-full opacity-0 max-lg:opacity-100 group-hover:opacity-100 hover:bg-stone-500/20 p-2.5 rounded-md"
       >
         <CopyRegular fontSize={20} className="dark:text-neutral-400" />
       </button>

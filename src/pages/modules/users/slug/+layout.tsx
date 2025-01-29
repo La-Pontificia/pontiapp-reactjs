@@ -27,6 +27,7 @@ import {
 import {
   CameraRegular,
   CopyRegular,
+  MailRegular,
   MoreHorizontal20Filled,
   PenRegular,
   PersonFeedbackRegular,
@@ -40,6 +41,7 @@ import { FaWhatsapp } from 'react-icons/fa'
 import { useAuth } from '~/store/auth'
 import ExpiryStatusRenderer from '~/components/expiry-status-renderer'
 import { useUpdateProfile } from '~/hooks/user-update-profile'
+import { useMediaQuery } from '@uidotdev/usehooks'
 
 type AuthState = {
   user?: User | null
@@ -53,6 +55,10 @@ export const useSlugUser = () => React.useContext(UserSlugContext)
 
 export default function UsersSlugLayout(): JSX.Element {
   const { user: authUser } = useAuth()
+
+  const isMediumDevice = useMediaQuery(
+    'only screen and (min-width : 0px) and (max-width : 1023px)'
+  )
 
   const params = useParams<{
     slug: string
@@ -142,11 +148,11 @@ export default function UsersSlugLayout(): JSX.Element {
     authUser.hasPrivilege('users:edit') || authUser.id === user?.id
 
   return (
-    <div className="relative p-2 max-lg:pt-0 h-full w-full flex flex-col overflow-y-auto rounded-0">
+    <div className="relative lg:p-2 max-lg:pt-0 h-full w-full flex flex-col overflow-y-auto rounded-0">
       <Helmet>
         <title>{user ? user.displayName : ''} | PontiApp</title>
       </Helmet>
-      <div className="mx-auto max-lg:min-h-auto min-h-[180px] flex max-w-5xl flex-col w-full pr-5">
+      <div className="mx-auto max-lg:min-h-auto min-h-[180px] flex max-w-5xl flex-col w-full lg:pr-5">
         <div className="h-full flex flex-grow items-center">
           <div className="flex flex-grow h-full items-center gap-5 py-5 pl-5">
             {isLoading ? (
@@ -182,7 +188,7 @@ export default function UsersSlugLayout(): JSX.Element {
                           </button>
                         ) : undefined
                       }}
-                      size={128}
+                      size={isMediumDevice ? 96 : 128}
                       color="colorful"
                       name={user.displayName}
                       image={{
@@ -191,36 +197,50 @@ export default function UsersSlugLayout(): JSX.Element {
                       }}
                     />
                   </div>
-                  <div className="space-y-2">
-                    <h1 className="text-3xl font-bold line-clamp-1">
+                  <div className="lg:space-y-2">
+                    <h1 className="text-xl lg:text-3xl font-bold lg:line-clamp-1">
                       {user.displayName}
                     </h1>
-                    <p className="line-clamp-1 overflow-hidden text-ellipsis gap-2 hover:[&>a]:underline">
+                    <p className="lg:line-clamp-1 line-clamp-2 overflow-hidden text-ellipsis gap-2 hover:[&>a]:underline">
                       {user.role?.name} • {user.role?.department?.name}
                     </p>
-                    <div className="flex gap-4 items-center">
-                      <SplitButton
-                        menuButton={{
-                          icon: <CopyRegular fontSize={25} />,
-                          onClick: () => {
-                            navigator.clipboard.writeText(user.email)
-                            toast('Copiado a portapapeles.')
-                          }
-                        }}
-                        primaryActionButton={{
-                          icon: (
-                            <SendFilled className="-rotate-45" fontSize={16} />
-                          ),
-                          onClick: () => {
-                            window.open(
-                              `mailto:${user.email}?subject=Hola ${user.displayName}`
-                            )
-                          }
-                        }}
-                        appearance="primary"
+                    <div className="flex gap-4 max-lg:pt-3 items-center">
+                      <div className="lg:flex hidden">
+                        <SplitButton
+                          menuButton={{
+                            icon: <CopyRegular fontSize={25} />,
+                            onClick: () => {
+                              navigator.clipboard.writeText(user.email)
+                              toast('Copiado a portapapeles.')
+                            }
+                          }}
+                          primaryActionButton={{
+                            icon: (
+                              <SendFilled
+                                className="-rotate-45"
+                                fontSize={16}
+                              />
+                            ),
+                            onClick: () => {
+                              window.open(
+                                `mailto:${user.email}?subject=Hola ${user.displayName}`
+                              )
+                            }
+                          }}
+                          appearance="primary"
+                        >
+                          Enviar mensaje
+                        </SplitButton>
+                      </div>
+                      <a
+                        href={`mailto:${user.email}`}
+                        className="flex lg:hidden gap-1 items-center"
                       >
-                        Enviar mensaje
-                      </SplitButton>
+                        <MailRegular
+                          fontSize={25}
+                          className="dark:text-blue-500 text-blue-600"
+                        />
+                      </a>
                       {phoneContact && (
                         <button
                           onClick={() => {
@@ -232,7 +252,7 @@ export default function UsersSlugLayout(): JSX.Element {
                             size={25}
                             className="dark:text-green-500 text-green-600"
                           />
-                          WhatsApp
+                          <p className="lg:flex hidden">WhatsApp</p>
                         </button>
                       )}
                       {authUser.hasPrivilege('users:edit') && (
@@ -278,6 +298,7 @@ export default function UsersSlugLayout(): JSX.Element {
                 navigate(`${rootURL}/${params.slug}/${d.value}`)
               }
               appearance="subtle"
+              className="overflow-x-auto"
             >
               {Object.entries(TABS).map(([key, value]) => (
                 <Tab key={key} value={key}>

@@ -42,7 +42,7 @@ export const PersonItem = ({
           onClick={handleSlug}
           data-current={person.id === slugUser?.id ? '' : undefined}
           data-single={single ? '' : undefined}
-          className="flex data-[current]:outline-dashed outline-offset-2 outline-violet-500 mx-auto border border-neutral-500/30 data-[single]:w-full w-[320px] rounded-md px-3 gap-3 text-left dark:text-neutral-300 hover:bg-neutral-500/10  py-3 items-center p-2"
+          className="flex data-[current]:outline-1 outline outline-transparent data-[current]:outline-blue-600 mx-auto border border-neutral-500/30 data-[single]:w-full w-[320px] rounded-md px-3 gap-3 text-left dark:text-neutral-300 hover:bg-neutral-500/10  py-3 items-center p-2"
         >
           <Avatar
             size={48}

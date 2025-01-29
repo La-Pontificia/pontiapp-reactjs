@@ -1,8 +1,5 @@
 import { ItemSidebarNav, ReusableSidebar } from '~/components/reusable-sidebar'
-import { useAuth } from '~/store/auth'
-import { Tooltip } from '@fluentui/react-components'
 import {
-  Add20Regular,
   DocumentFilled,
   DocumentRegular,
   PeopleFilled,
@@ -12,25 +9,10 @@ import {
   PersonFilled,
   PersonRegular
 } from '@fluentui/react-icons'
-import { Link } from 'react-router'
 
 export const UsersSidebar = () => {
-  const { user: authUser } = useAuth()
   return (
     <ReusableSidebar homePath="/m/users" title="Usuarios">
-      {authUser.hasPrivilege('users:create') && (
-        <nav className="w-full px-5 pt-4">
-          <Tooltip relationship="label" content="Nuevo usuario">
-            <Link
-              to="/m/users/create"
-              className="flex text-sm rounded-full dark:text-white p-1.5 px-4 w-fit hover:scale-110 transition-transform justify-center bg-gradient-to-r text-white from-blue-600 to-violet-600 hover:bg-blue-500 dark:from-blue-600 dark:to-violet-600 hover:dark:bg-blue-500 items-center gap-1 font-semibold"
-            >
-              <Add20Regular />
-              Nuevo
-            </Link>
-          </Tooltip>
-        </nav>
-      )}
       <nav className="pr-2 py-2 px-3">
         <ItemSidebarNav
           has={['users:show']}
@@ -60,6 +42,7 @@ export const UsersSidebar = () => {
         <ItemSidebarNav
           has={['users:areas']}
           icon={DocumentRegular}
+          emptyIcon
           iconActive={DocumentFilled}
           href="/m/users/areas"
         >
@@ -69,11 +52,13 @@ export const UsersSidebar = () => {
           has={['users:departments']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
+          emptyIcon
           href="/m/users/departments"
         >
           Departamentos
         </ItemSidebarNav>
         <ItemSidebarNav
+          emptyIcon
           has={['users:jobs']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
@@ -82,6 +67,7 @@ export const UsersSidebar = () => {
           Puestos
         </ItemSidebarNav>
         <ItemSidebarNav
+          emptyIcon
           has={['users:roles']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
@@ -90,6 +76,7 @@ export const UsersSidebar = () => {
           Cargos
         </ItemSidebarNav>
         <ItemSidebarNav
+          emptyIcon
           has={['users:userRoles']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
@@ -98,6 +85,7 @@ export const UsersSidebar = () => {
           Privilegios y roles
         </ItemSidebarNav>
         <ItemSidebarNav
+          emptyIcon
           has={['users:contractTypes']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}

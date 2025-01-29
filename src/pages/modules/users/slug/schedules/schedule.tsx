@@ -13,7 +13,7 @@ export const ScheduleItem = ({ schedule }: { schedule: Schedule }) => {
     return 'Noche'
   }
   return (
-    <div className="schedule-item divide-y divide-slate-500/30 dark:text-neutral-300 bg-slate-500/10 border dark:border-slate-700 border-stone-300 dark:bg-blue-500/10 shadow-sm border-neutral-500/40 px-4 rounded-xl">
+    <div className="schedule-item divide-y border divide-stone-500/30 dark:text-neutral-300 dark:border-stone-700 border-stone-300 shadow-sm border-neutral-500/40 px-2 rounded-xl">
       <div className="py-2 flex items-center gap-3">
         <CalendarRegular fontSize={22} />
         <div className="justify-between flex-grow font-semibold">

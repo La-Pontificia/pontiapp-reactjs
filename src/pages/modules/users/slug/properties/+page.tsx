@@ -49,7 +49,7 @@ export default function UsersSlugPropertiesPage() {
   }) => {
     return (
       <div className="flex items-center gap-4">
-        <p className="min-w-[200px] text-nowrap dark:text-neutral-400">
+        <p className="lg:min-w-[200px] max-lg:flex-grow text-nowrap dark:text-neutral-400">
           {title}
         </p>
         {loading ? (

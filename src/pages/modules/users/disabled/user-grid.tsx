@@ -60,10 +60,7 @@ export default function UserGrid({
     toast('Jefe actualizado correctamente.')
   }
   return (
-    <tr className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
-      <td className="pl-4">
-        <label></label>
-      </td>
+    <tr className="relative [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3">
       <td>
         <UserHoverInfo slug={user.username}>
           <div className="flex items-center gap-2">
@@ -85,7 +82,7 @@ export default function UserGrid({
           </div>
         </UserHoverInfo>
       </td>
-      <td>
+      <td className="max-sm:hidden">
         <div className="max-w-[30ch] opacity-70 text-ellipsis overflow-hidden">
           {user.role.name}
         </div>
@@ -117,9 +114,10 @@ export default function UserGrid({
             children: managerUpdating ? (
               <Spinner size="extra-tiny" />
             ) : user.manager ? (
-              <div className="flex rounded-xl items-center p-1 dark:bg-neutral-500/40 bg-stone-200 shadow-black/20 dark:shadow-lg">
+              <div className="flex rounded-xl items-center p-1  shadow-black/80 dark:shadow-lg">
                 <Avatar
-                  size={36}
+                  size={20}
+                  color="steel"
                   name={user.manager.displayName}
                   image={{
                     src: user.manager.photoURL

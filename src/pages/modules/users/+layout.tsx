@@ -9,7 +9,7 @@ export default function UsersLayout() {
         <title>Usuarios - Ponti App</title>
       </Helmet>
       <UsersSidebar />
-      <div className="h-full flex flex-col pr-4 max-lg:px-3 w-full overflow-auto">
+      <div className="h-full flex flex-col pr-4 max-lg:px-0 w-full overflow-auto">
         <Outlet />
       </div>
     </div>
