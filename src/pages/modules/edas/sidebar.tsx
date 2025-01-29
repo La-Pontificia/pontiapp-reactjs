@@ -1,9 +1,9 @@
 import { ItemSidebarNav, ReusableSidebar } from '~/components/reusable-sidebar'
 import {
-  DocumentFilled,
-  DocumentRegular,
-  FolderFilled,
-  FolderRegular,
+  // DocumentFilled,
+  // DocumentRegular,
+  // FolderFilled,
+  // FolderRegular,
   PersonFilled,
   PersonRegular
 } from '@fluentui/react-icons'
@@ -17,7 +17,7 @@ export const EdasSidebar = () => {
         <ItemSidebarNav
           has={['edas:my']}
           avatar={authUser.photoURL}
-          href="/m/edas/my"
+          href={`/m/edas/${authUser.username}`}
         >
           Mis edas
         </ItemSidebarNav>
@@ -32,16 +32,18 @@ export const EdasSidebar = () => {
         >
           Colaboradores
         </ItemSidebarNav>
-        <ItemSidebarNav
+        {/* <ItemSidebarNav
           has={['edas:show']}
           icon={FolderRegular}
           iconActive={FolderFilled}
           href="/m/edas"
         >
           Edas
-        </ItemSidebarNav>
-        <div className="font-semibold px-5 pt-5 pb-2">Ajustes y otros</div>
-        <ItemSidebarNav
+        </ItemSidebarNav> */}
+        {/* <div className="font-semibold pl-4 pt-5 pb-2 dark:text-blue-400 text-blue-700 text-xs">
+          Ajustes y otros
+        </div> */}
+        {/* <ItemSidebarNav
           has={['edas:years']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
@@ -56,7 +58,7 @@ export const EdasSidebar = () => {
           href="/m/edas/questionnaires"
         >
           Cuestionarios
-        </ItemSidebarNav>
+        </ItemSidebarNav> */}
       </nav>
     </ReusableSidebar>
   )
