@@ -101,45 +101,41 @@ export default function CollaboratorsPage() {
 
   return (
     <div className="flex px-5 flex-col flex-grow overflow-auto">
-      <nav className="w-full gap-4 py-4 pb-3 border-b border-stone-500/30">
-        <div className="flex flex-col lg:flex-row gap-4">
-          <div className="flex-grow flex items-center gap-2">
-            <h2 className="font-semibold text-xl pr-2">Bajo tu supervisión</h2>
-            {Object.entries(filterButtons).map(([key, value]) => (
-              <button
-                onClick={() => {
-                  setFilters((prev) => ({ ...prev, edas: key }))
-                }}
-                data-active={filters.edas === key ? '' : undefined}
-                key={key}
-                className="border text-nowrap outline outline-2 outline-transparent data-[active]:border-transparent data-[active]:dark:border-transparent data-[active]:outline-blue-600 data-[active]:dark:outline-blue-600 data-[active]:bg-blue-700/10 data-[active]:dark:bg-blue-700/20 border-stone-300 dark:border-stone-500 rounded-full py-1 px-3 font-medium"
-              >
-                {value}
-              </button>
-            ))}
-          </div>
-          <div className="flex gap-3 items-center">
-            <button>
-              <FilterAddFilled fontSize={25} />
-            </button>
-            <SearchBox
-              value={searchValue}
-              onChange={(e) => {
-                if (e.target.value === '')
-                  setFilters((prev) => ({ ...prev, q: null }))
-                handleChange(e.target.value)
-              }}
-              className="w-[270px]"
-              placeholder="Filtrar por nombre o persona"
-              dismiss={() => {
+      <nav className="flex items-center flex-wrap gap-2 w-full py-4 px-3 max-lg:py-2">
+        <h2 className="font-semibold text-xl pr-2">Bajo tu supervisión</h2>
+        {Object.entries(filterButtons).map(([key, value]) => (
+          <button
+            onClick={() => {
+              setFilters((prev) => ({ ...prev, edas: key }))
+            }}
+            data-active={filters.edas === key ? '' : undefined}
+            key={key}
+            className="border text-nowrap outline outline-2 outline-transparent data-[active]:border-transparent data-[active]:dark:border-transparent data-[active]:outline-blue-600 data-[active]:dark:outline-blue-600 data-[active]:bg-blue-700/10 data-[active]:dark:bg-blue-700/20 border-stone-300 dark:border-stone-500 rounded-full py-1 px-3 font-medium"
+          >
+            {value}
+          </button>
+        ))}
+        <div className="ml-auto flex items-center gap-2">
+          <button>
+            <FilterAddFilled fontSize={25} />
+          </button>
+          <SearchBox
+            value={searchValue}
+            onChange={(e) => {
+              if (e.target.value === '')
                 setFilters((prev) => ({ ...prev, q: null }))
-                handleChange('')
-              }}
-            />
-          </div>
+              handleChange(e.target.value)
+            }}
+            className="w-[270px]"
+            placeholder="Filtrar por nombre o persona"
+            dismiss={() => {
+              setFilters((prev) => ({ ...prev, q: null }))
+              handleChange('')
+            }}
+          />
         </div>
       </nav>
-      <div className="w-full h-full flex-col pt-2 flex flex-grow overflow-auto">
+      <div className="w-full h-full flex-col flex flex-grow overflow-auto">
         {isLoading ? (
           <div className="h-full grid place-content-center">
             <Spinner size="large" />
@@ -154,21 +150,21 @@ export default function CollaboratorsPage() {
               />
             </div>
             {info && (
-              <footer className="flex px-5 py-2 justify-center">
+              <footer className="flex text-sm px-5 py-2 justify-center">
                 <div className="flex justify-between w-full">
-                  <p className="flex basis-0 flex-grow">
+                  <p className="flex max-sm:hidden opacity-60 basis-0 flex-grow">
                     Mostrando {info.from} - {info.to} de {info.total} resultados
                   </p>
                   {info.next_page_url && (
                     <button
                       disabled={loadingMore}
                       onClick={nextPage}
-                      className="dark:text-blue-500 font-medium hover:underline"
+                      className="dark:text-blue-500 font-semibold mx-auto hover:underline"
                     >
-                      {loadingMore ? <Spinner size="tiny" /> : 'Cargar 25 más'}
+                      {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
                     </button>
                   )}
-                  <p className="flex basis-0 flex-grow justify-end">
+                  <p className="flex max-sm:hidden opacity-60 basis-0 flex-grow justify-end">
                     Página {info.current_page} de {info.last_page}
                   </p>
                 </div>

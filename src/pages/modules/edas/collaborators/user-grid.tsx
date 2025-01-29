@@ -42,7 +42,7 @@ export default function UserGrid({
   //   toast('Jefe actualizado correctamente.')
   // }
   return (
-    <tr className="relative [&>td]:text-nowrap group [&>td]:p-3 bg-white dark:bg-[#2e2b27] [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
+    <tr className="relative [&>td]:text-nowrap group [&>td]:p-3 [&>td]:px-3">
       <td>
         <UserHoverInfo slug={user.username}>
           <div className="flex items-center gap-2">
@@ -57,7 +57,7 @@ export default function UserGrid({
             />
             <Link
               className="hover:underline font-semibold relative"
-              to={`/m/edas/collaborators/${user.username}`}
+              to={`/m/edas/${user.username}`}
             >
               {user.displayName}
             </Link>
@@ -69,7 +69,7 @@ export default function UserGrid({
           {user.role.name}
         </div>
       </td>
-      <td>
+      <td className="max-xl:hidden">
         <div className="max-w-[30ch] opacity-90 text-ellipsis overflow-hidden">
           {user.role.department.area.name}
         </div>
