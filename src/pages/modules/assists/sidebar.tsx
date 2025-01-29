@@ -74,7 +74,9 @@ export const AssistsSidebar = () => {
         >
           Archivos de reportes
         </ItemSidebarNav>
-        <div className="font-semibold px-5 pt-5 pb-2">Ajustes</div>
+        <div className="font-semibold pl-4 pt-5 pb-2 dark:text-blue-400 text-blue-700 text-xs">
+          Ajustes
+        </div>
         <ItemSidebarNav
           has={['assists:assistTerminals']}
           icon={FolderRegular}
