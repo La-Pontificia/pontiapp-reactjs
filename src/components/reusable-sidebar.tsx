@@ -31,7 +31,7 @@ export const ReusableSidebar = React.forwardRef<
   const [sidebarHover, setSidebarHover] = React.useState(false)
 
   const isMediumDevice = useMediaQuery(
-    'only screen and (min-width : 369px) and (max-width : 992px)'
+    'only screen and (min-width : 169px) and (max-width : 992px)'
   )
 
   React.useEffect(() => {
@@ -52,16 +52,18 @@ export const ReusableSidebar = React.forwardRef<
         onMouseLeave={() => setSidebarHover(false)}
         style={{
           transform: isSidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-          marginLeft: isSidebarOpen ? '0' : '-250px'
+          marginLeft: isSidebarOpen ? '0' : '-240px'
         }}
         ref={ref}
         className={cn(
-          'h-full  overflow-y-auto transition-all w-[250px] min-w-[250px]',
+          'h-full max-lg:fixed max-lg:h-svh max-lg:pb-[65px] max-lg:top-[50px] max-lg:w-full max-lg:z-[9999] max-lg:dark:bg-[#21201d] max-lg:bg-[#f5f0f0] max-lg:mb-[65px] overflow-y-auto transition-all w-[240px] min-w-[240px]',
           className
         )}
       >
-        <nav className="pl-7 pr-2 pt-4 pb-1 flex justify-between">
-          <h2 className="text-sm opacity-70 font-semibold">{title}</h2>
+        <nav className="pl-6 pr-2 pt-4 flex justify-between">
+          <h2 className="font-semibold dark:text-blue-400 text-blue-700 text-xs">
+            {title}
+          </h2>
           <Tooltip
             content={
               isModuleMaximized ? 'Restaurar tamaño' : 'Maximizar módulo actual'
@@ -72,7 +74,7 @@ export const ReusableSidebar = React.forwardRef<
               onClick={toggleModuleMaximized}
               data-active={sidebarHover ? '' : undefined}
               data-maximized={isModuleMaximized ? '' : undefined}
-              className="opacity-0 text-stone-500 data-[maximized]:rotate-180 data-[maximized]:opacity-100 data-[maximized]:dark:text-[#5e67ed] data-[maximized]:text-blue-600 data-[active]:opacity-100 transition-opacity"
+              className="opacity-0 max-lg:hidden text-stone-500 data-[maximized]:rotate-180 data-[maximized]:opacity-100 data-[maximized]:dark:text-[#5e67ed] data-[maximized]:text-blue-600 data-[active]:opacity-100 transition-opacity"
             >
               <OpenFilled fontSize={20} />
             </button>
@@ -106,8 +108,12 @@ export const ItemSidebarNav = (props: ItemNav) => {
   const privileges = user.allPrivileges
   const ctx = React.useContext(ContextReusableSidebar)
 
-  const hasPrivilege = props.has.some((p) => privileges.includes(p))
+  const isMediumDevice = useMediaQuery(
+    'only screen and (min-width : 169px) and (max-width : 992px)'
+  )
 
+  const hasPrivilege = props.has.some((p) => privileges.includes(p))
+  const toggleSidebar = useUi((state) => state.toggleSidebar)
   if (!hasPrivilege && !user.isDeveloper) return null
 
   const isActive =
@@ -121,27 +127,32 @@ export const ItemSidebarNav = (props: ItemNav) => {
     <Link
       data-active={isActive ? '' : undefined}
       to={props.href}
-      className="block relative dark:text-neutral-300 text-neutral-900 data-[active]:font-semibold group pl-3"
+      onClick={() => {
+        if (isMediumDevice) toggleSidebar()
+      }}
+      className="block relative dark:text-neutral-300 max-lg:dark:text-stone-400 text-neutral-900 data-[active]:font-semibold group pl-1"
     >
-      <div className="absolute pointer-events-none inset-y-0 left-0 flex items-center">
-        <span className="h-[10px] group-data-[active]:h-[20px] transition-all group-hover:h-[20px] group-data-[active]:bg-blue-800 dark:group-data-[active]:bg-blue-600 group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
+      <div className="absolute max-lg:hidden pointer-events-none inset-y-0 left-0 flex items-center">
+        <span className="h-[10px] group-data-[active]:h-[5px] transition-all group-hover:h-[10px] group-data-[active]:bg-blue-600 dark:group-data-[active]:bg-[#7385ff] group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
       </div>
-      <div className="flex items-center transition-colors font-medium group-data-[active]:dark:text-white gap-2 px-2 py-2 rounded-lg group-hover:bg-white dark:group-hover:bg-stone-700/50">
-        {props.emptyIcon ? (
-          <span className="w-[23px] aspect-square"></span>
-        ) : Icon ? (
-          <Icon
-            fontSize={23}
-            className="dark:text-neutral-200 group-data-[active]:dark:text-blue-600 group-data-[active]:text-blue-800"
-          />
-        ) : (
-          <Avatar
-            size={24}
-            image={{
-              src: props.avatar
-            }}
-          />
-        )}
+      <div className="flex items-center transition-colors font-medium group-data-[active]:dark:text-white gap-2 px-2 py-2 rounded-lg group-hover:bg-white dark:group-hover:bg-stone-700/50 max-lg:text-base">
+        <div className="max-lg:hidden">
+          {props.emptyIcon ? (
+            <span className="block aspect-square"></span>
+          ) : Icon ? (
+            <Icon
+              fontSize={23}
+              className="dark:text-neutral-200 group-data-[active]:dark:text-[#7385ff] group-data-[active]:text-blue-600"
+            />
+          ) : (
+            <Avatar
+              size={24}
+              image={{
+                src: props.avatar
+              }}
+            />
+          )}
+        </div>
         {props.children}
         {props.feacture && (
           <ExpiryStatusRenderer from={props.feacture.from}>
