@@ -40,17 +40,18 @@ export default function RootSearch() {
   })
 
   return (
-    <div className="hidden dark:text-neutral-300 text-stone-800 md:block">
+    <div className="hidden max-lg:w-full dark:text-neutral-300 text-stone-800 lg:block">
       <div
         onClick={() => setOpen(false)}
         data-open={open ? '' : undefined}
         className="data-[open]:opacity-100 pointer-events-none data-[open]:pointer-events-auto  fixed opacity-0 z-[99] dark:bg-neutral-950/90 bg-stone-950/20 inset-0"
       />
-      <div className="z-[99] relative flex flex-col">
+      <div className="z-[99] max-lg:w-full relative flex flex-col">
         <SearchBox
           input={{
             onFocus: () => setOpen(true),
-            autoComplete: 'off'
+            autoComplete: 'off',
+            width: '100%'
           }}
           value={value}
           onChange={(_, e) => {
@@ -66,7 +67,7 @@ export default function RootSearch() {
           type="search"
           autoComplete="off"
           placeholder="Buscar"
-          className="lg:w-[500px] md:w-[300px]"
+          className="lg:w-[500px] max-md:w-[300px] max-lg:w-full"
           style={{
             borderRadius: '7px',
             height: '35px'
