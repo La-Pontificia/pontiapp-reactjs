@@ -181,7 +181,7 @@ export default function SlugCollaboratorsEdaSlugLayout() {
             </Button>
           ) : (
             <p className="text-xs dark:text-stone-400 text-red-600 border-t dark:border-stone-700 pt-3 mt-3">
-              No tienes priviegio ⚠️ suficientes para registrar el Eda
+              No tienes privilegios ⚠️ suficientes para registrar el Eda
             </p>
           )}
         </div>
