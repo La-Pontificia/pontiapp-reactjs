@@ -2,6 +2,7 @@ import {
   Button,
   Drawer,
   DrawerBody,
+  DrawerFooter,
   DrawerHeader,
   DrawerHeaderTitle,
   Field,
@@ -97,9 +98,6 @@ export default function ObjetiveForm({
         className="md:min-w-[600px] max-w-full min-w-full"
         open={open}
         onOpenChange={(_, { open }) => {
-          if (open === false && !disabled) {
-            onSubmit()
-          }
           setOpen(open)
         }}
       >
@@ -152,7 +150,7 @@ export default function ObjetiveForm({
                 >
                   <TextEditor
                     disabled={disabled}
-                    className="min-h-[100px]"
+                    className="min-h-[130px]"
                     placeholder="Ingrese la descripción del objetivo"
                     defaultValue={field.value}
                     onChange={(e) => field.onChange(e)}
@@ -173,7 +171,7 @@ export default function ObjetiveForm({
                 >
                   <TextEditor
                     disabled={field.disabled}
-                    className="min-h-[200px] max-h-[250px] overflow-y-auto"
+                    className="min-h-[290px] max-h-[290px] overflow-y-auto"
                     placeholder="Liste los indicadores del objetivo"
                     defaultValue={field.value}
                     onChange={(e) => field.onChange(e)}
@@ -220,6 +218,20 @@ export default function ObjetiveForm({
             />
           </div>
         </DrawerBody>
+        <DrawerFooter className="flex items-center gap-2">
+          <Button appearance="primary" onClick={onSubmit} disabled={disabled}>
+            {defaultObjetive ? 'Actualizar' : 'Agregar'}
+          </Button>
+          <Button
+            appearance="secondary"
+            onClick={() => {
+              setOpen(false)
+            }}
+            disabled={disabled}
+          >
+            Cancelar
+          </Button>
+        </DrawerFooter>
       </Drawer>
     </>
   )

@@ -1,6 +1,6 @@
 /* eslint-disable react-refresh/only-export-components */
 import React from 'react'
-import { Outlet, useNavigate, useParams } from 'react-router'
+import { Navigate, Outlet, useNavigate, useParams } from 'react-router'
 import { EdaYear } from '~/types/eda-year'
 import { SlugCollaboratorContext } from '../+layout'
 import { api } from '~/lib/api'
@@ -9,10 +9,16 @@ import {
   AvatarGroup,
   AvatarGroupItem,
   Button,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger,
   Spinner
 } from '@fluentui/react-components'
 import { useAuth } from '~/store/auth'
-// import { format } from '~/lib/dayjs'
 import { Eda } from '~/types/eda'
 
 import { toast } from 'anni'
@@ -29,6 +35,7 @@ export const SlugCollaboratorEdaSlugContext =
   React.createContext<SlugEdaSlugState>({} as SlugEdaSlugState)
 export default function SlugCollaboratorsEdaSlugLayout() {
   const ctxc = React.useContext(SlugCollaboratorContext)
+  const [openDelete, setOpenDelete] = React.useState(false)
   const navigate = useNavigate()
   const { slugYear } = useParams<{
     slugYear: string
@@ -40,6 +47,12 @@ export default function SlugCollaboratorsEdaSlugLayout() {
   const edaIsTheCurrentUser = ctxc.collaborator.username === authUser.username
   const hasCurrentUserSupervision =
     ctxc.collaborator.manager?.username === authUser.username
+
+  const hasAccess =
+    (edaIsTheCurrentUser && authUser.hasPrivilege('edas:my')) ||
+    (hasCurrentUserSupervision &&
+      authUser.hasPrivilege('edas:collaborators:inHisSupervision')) ||
+    authUser.hasPrivilege('edas:collaborators:all')
 
   const {
     data: eda,
@@ -71,6 +84,26 @@ export default function SlugCollaboratorsEdaSlugLayout() {
       toast.success('Eda registrado exitosamente ✅')
     }
   })
+
+  const { mutate: deleteEda, isPending: deleting } = useMutation({
+    mutationKey: ['edas', eda?.id, 'delete'],
+    mutationFn: () =>
+      api.post(`edas/${eda?.id}/delete`, {
+        alreadyHandleError: false
+      }),
+    onError: (error) => {
+      console.error(error)
+      toast.error('Ocurrió un error al intentar eliminar el Eda 😢')
+    },
+    onSuccess: () => {
+      refetchEda()
+      toast.success('Eda eliminado exitosamente ✅')
+    }
+  })
+
+  if (!hasAccess) {
+    return <Navigate to="/m/edas" />
+  }
 
   if (isLoadingEda)
     return (
@@ -142,12 +175,54 @@ export default function SlugCollaboratorsEdaSlugLayout() {
                   </AvatarGroup>
                 </div>
                 <div className="dark:text-stone-400 flex items-end gap-2 max-lg:flex max-lg:items-center max-lg:gap-3 font-medium max-lg:text-xs text-right lg:space-y-2 text-nowrap text-stone-600">
-                  <Button size="small">Cerrar Eda</Button>
-                  <Button size="small">Restablecer Eda</Button>
+                  {/* <Button size="small">Cerrar Eda</Button> */}
+                  {authUser.hasPrivilege('edas:delete') && (
+                    <Button
+                      size="small"
+                      onClick={() => setOpenDelete(true)}
+                      disabled={deleting}
+                    >
+                      Eliminar
+                    </Button>
+                  )}
                 </div>
               </div>
             </nav>
           </header>
+          <Dialog
+            open={openDelete}
+            onOpenChange={(_, e) => setOpenDelete(e.open)}
+            modalType="alert"
+          >
+            <DialogSurface>
+              <DialogBody>
+                <DialogTitle>
+                  ¿Estás seguro de eliminar el eda de{' '}
+                  {ctxc.collaborator.displayName} del año {year.name}?
+                </DialogTitle>
+                <DialogContent>
+                  <p className="opacity-70">
+                    Esta acción no se puede deshacer y eliminará los objetivos,
+                    evaluaciones, questionarios y respuestas asociadas a este
+                    eda.
+                  </p>
+                </DialogContent>
+                <DialogActions>
+                  <DialogTrigger disableButtonEnhancement>
+                    <Button appearance="secondary">Cancelar</Button>
+                  </DialogTrigger>
+                  <Button
+                    onClick={() => deleteEda()}
+                    disabled={deleting}
+                    icon={deleting ? <Spinner size="tiny" /> : undefined}
+                    appearance="primary"
+                  >
+                    ELiminar
+                  </Button>
+                </DialogActions>
+              </DialogBody>
+            </DialogSurface>
+          </Dialog>
           <Outlet />
         </div>
       ) : (
