@@ -5,6 +5,7 @@ export type ExtendedRequestInit = RequestInit & {
   data?: any
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
   api?: boolean
+  alreadyHandleError?: boolean
 }
 
 type ErrorResponse = {
@@ -34,7 +35,7 @@ async function fetchCore<T>(
   pathname: string,
   options?: ExtendedRequestInit
 ): Promise<ApiReturnType<T>> {
-  const { api = true, ...ops } = options ?? {}
+  const { api = true, alreadyHandleError = true, ...ops } = options ?? {}
 
   const URL = api
     ? `${VITE_API_HOST}/api/${pathname}`
@@ -68,7 +69,12 @@ async function fetchCore<T>(
     if (res.status === 401) {
       window.location.href = `/login?redirectURL=${window.location.href}`
     }
-    return handleError(await res.json())
+    if (alreadyHandleError) {
+      return handleError(await res.json())
+    } else {
+      const errorData = await res.json()
+      throw new Error(errorData.error || 'An error occurred')
+    }
   }
 
   return handleSuccess<T>(await res.json())
