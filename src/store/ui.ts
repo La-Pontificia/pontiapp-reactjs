@@ -6,6 +6,7 @@ interface UiState {
 
   isModuleMaximized: boolean
   toggleModuleMaximized: () => void
+  setModuleMaximized: (value: boolean) => void
 
   isHeaderOpen: boolean
   toggleHeader: () => void
@@ -15,6 +16,7 @@ const StoreApi: StateCreator<UiState> = (set) => ({
   isSidebarOpen: true,
   toggleSidebar: () =>
     set((state) => ({ isSidebarOpen: !state.isSidebarOpen })),
+  setModuleMaximized: (value) => set({ isModuleMaximized: value }),
   isModuleMaximized: false,
   toggleModuleMaximized: () =>
     set((state) => ({ isModuleMaximized: !state.isModuleMaximized })),
