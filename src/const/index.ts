@@ -173,7 +173,7 @@ export const PRIVILEGES = {
   // Edas management
   'edas:collaborators:inHisSupervision':
     '(Edas) - Ver solo colaboradores bajo su supervisión',
-  'edas:collaborators:show': '(Edas) - Ver todos los colaboradores',
+  'edas:collaborators:all': '(Edas) - Ver todos los colaboradores',
   'edas:my': '(Edas) - Ver sus edas',
   'edas:create:my': '(Edas) - Crear sus edas',
   'edas:create:inHisSupervision': '(Edas) - Crear edas bajo su supervisión',
