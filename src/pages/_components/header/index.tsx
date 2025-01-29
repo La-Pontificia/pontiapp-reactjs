@@ -3,8 +3,7 @@ import { useUi } from '~/store/ui'
 import { Tooltip } from '@fluentui/react-components'
 import {
   CaretDownFilled,
-  PanelLeftContractRegular,
-  PanelLeftExpandFilled,
+  NavigationFilled,
   SearchRegular
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
@@ -17,18 +16,9 @@ import { Lp } from '~/icons'
 const Toggles = () => {
   const toggleSidebar = useUi((s) => s.toggleSidebar)
   const isSidebarOpen = useUi((s) => s.isSidebarOpen)
-
-  // const toggleModuleMaximized = useUi((s) => s.toggleModuleMaximized)
-  // const isModuleMaximized = useUi((s) => s.isModuleMaximized)
-
   const locaction = useLocation()
-  const { user: authUser } = useAuth()
 
-  const isHome =
-    locaction.pathname === '/' ||
-    locaction.pathname.startsWith(`/${authUser.username}`)
-
-  // const isModules = locaction.pathname.includes('/m')
+  const isHome = !locaction.pathname.startsWith(`/m`)
 
   return (
     <div className="flex items-center">
@@ -39,18 +29,8 @@ const Toggles = () => {
           }
           relationship="label"
         >
-          <button
-            onClick={toggleSidebar}
-            className="p-2 px-2.5 dark:text-stone-400 hover:bg-stone-500/20  rounded-lg"
-          >
-            {isSidebarOpen ? (
-              <PanelLeftContractRegular fontSize={26} />
-            ) : (
-              <PanelLeftExpandFilled
-                className="dark:text-[#5e67ed] text-blue-600"
-                fontSize={26}
-              />
-            )}
+          <button onClick={toggleSidebar} className="px-2">
+            <NavigationFilled fontSize={25} />
           </button>
         </Tooltip>
       )}
@@ -68,28 +48,29 @@ export default function RootHeader() {
         marginTop: isHeaderOpen ? '0' : '-56px'
       }}
       data-hidden={!isHeaderOpen ? '' : undefined}
-      className="h-[50px] min-h-[50px] dark:bg-[#1b1a19] bg-[#f5f0f0] relative dark:shadow-sm border-b dark:border-stone-700 dark:shadow-black/10 justify-between gap-4 w-full z-10 flex items-center px-2"
+      className="h-[50px] min-h-[50px] lg:dark:bg-[#1c1a17] lg:bg-[#f5f0f0] relative dark:shadow-sm border-b dark:border-stone-700 dark:shadow-black/10 justify-between gap-4 w-full z-10 flex items-center px-2"
     >
       <nav className="flex relative flex-grow items-center basis-0">
         <Toggles />
-        <nav className="px-2">
+        <nav className="px-1">
           <Link
             to={`/${authUser.username}`}
             className="flex justify-center drop-shadow-[0_0_10px_rgba(0,0,0,.1)] dark:drop-shadow-[0_0_10px_rgba(0,0,0,.5)] items-center gap-1"
           >
-            <Lp size={25} className="dark:text-sky-500 text-sky-700" />
+            <Lp
+              size={25}
+              className="dark:text-sky-500 lg:block hidden text-sky-700"
+            />
           </Link>
         </nav>
-        <h1 className="font-semibold text-base pl-2 hidden sm:block">
-          PontiApp
-        </h1>
+        <h1 className="font-semibold text-base">PontiApp</h1>
       </nav>
-      <nav className="">
+      <nav className="max-lg:w-full">
         <RootSearch />
       </nav>
       <nav className="flex flex-grow dark:text-[#eaa8ff] text-[#0e37cd] basis-0 gap-5 justify-end">
         <Tooltip content="Buscar" relationship="label">
-          <button className="block md:hidden">
+          <button className="block lg:hidden">
             <SearchRegular fontSize={25} />
           </button>
         </Tooltip>
