@@ -199,94 +199,92 @@ export const ChangePassword = () => {
         <PersonPasskeyRegular fontSize={18} />
         Cambiar contraseña
       </button>
-      {openDialog && (
-        <Dialog
-          open={openDialog}
-          onOpenChange={(_, e) => setOpenDialog(e.open)}
-          modalType="modal"
-        >
-          <DialogSurface aria-describedby={undefined}>
-            <DialogBody>
-              <DialogTitle>Cambiar contraseña.</DialogTitle>
-              <DialogContent className="space-y-4">
-                <div className="grid gap-4">
-                  <Controller
-                    control={control}
-                    name="oldPassword"
-                    rules={{ required: 'Este campo es requerido' }}
-                    render={({ field, fieldState }) => (
-                      <Field
-                        validationMessage={fieldState.error?.message}
-                        label="Ingrese su contraseña actual"
-                        required
-                      >
-                        <Input autoComplete="off" type="password" {...field} />
-                      </Field>
-                    )}
-                  />
+      <Dialog
+        open={openDialog}
+        onOpenChange={(_, e) => setOpenDialog(e.open)}
+        modalType="modal"
+      >
+        <DialogSurface aria-describedby={undefined}>
+          <DialogBody>
+            <DialogTitle>Cambiar contraseña.</DialogTitle>
+            <DialogContent className="space-y-4">
+              <div className="grid gap-4">
+                <Controller
+                  control={control}
+                  name="oldPassword"
+                  rules={{ required: 'Este campo es requerido' }}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      validationMessage={fieldState.error?.message}
+                      label="Ingrese su contraseña actual"
+                      required
+                    >
+                      <Input autoComplete="off" type="password" {...field} />
+                    </Field>
+                  )}
+                />
 
-                  <Controller
-                    control={control}
-                    name="newPassword"
-                    rules={{
-                      required: 'Este campo es requerido',
-                      pattern: {
-                        value:
-                          /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
-                        message:
-                          'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número'
-                      }
-                    }}
-                    render={({ field, fieldState }) => (
-                      <Field
-                        validationMessage={fieldState.error?.message}
-                        label="Ingrese su nueva contraseña"
-                        required
-                      >
-                        <Input autoComplete="nope" type="password" {...field} />
-                      </Field>
-                    )}
-                  />
+                <Controller
+                  control={control}
+                  name="newPassword"
+                  rules={{
+                    required: 'Este campo es requerido',
+                    pattern: {
+                      value:
+                        /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+                      message:
+                        'La contraseña debe tener al menos 8 caracteres, una letra mayúscula, una letra minúscula y un número'
+                    }
+                  }}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      validationMessage={fieldState.error?.message}
+                      label="Ingrese su nueva contraseña"
+                      required
+                    >
+                      <Input autoComplete="nope" type="password" {...field} />
+                    </Field>
+                  )}
+                />
 
-                  <Controller
-                    control={control}
-                    name="confirmPassword"
-                    rules={{
-                      required: 'Este campo es requerido',
-                      validate: (value) =>
-                        value === watch('newPassword') ||
-                        'Las contraseñas no coinciden'
-                    }}
-                    render={({ field, fieldState }) => (
-                      <Field
-                        validationMessage={fieldState.error?.message}
-                        label="Confirme su nueva contraseña"
-                        required
-                      >
-                        <Input autoComplete="nope" type="password" {...field} />
-                      </Field>
-                    )}
-                  />
-                </div>
-              </DialogContent>
-              <DialogActions>
-                <DialogTrigger disableButtonEnhancement>
-                  <Button appearance="secondary">Cerrar</Button>
-                </DialogTrigger>
-                <Button
-                  disabled={changing}
-                  icon={changing ? <Spinner size="tiny" /> : undefined}
-                  onClick={onSubmit}
-                  type="submit"
-                  appearance="primary"
-                >
-                  <span className="text-nowrap">Cambiar contraseña</span>
-                </Button>
-              </DialogActions>
-            </DialogBody>
-          </DialogSurface>
-        </Dialog>
-      )}
+                <Controller
+                  control={control}
+                  name="confirmPassword"
+                  rules={{
+                    required: 'Este campo es requerido',
+                    validate: (value) =>
+                      value === watch('newPassword') ||
+                      'Las contraseñas no coinciden'
+                  }}
+                  render={({ field, fieldState }) => (
+                    <Field
+                      validationMessage={fieldState.error?.message}
+                      label="Confirme su nueva contraseña"
+                      required
+                    >
+                      <Input autoComplete="nope" type="password" {...field} />
+                    </Field>
+                  )}
+                />
+              </div>
+            </DialogContent>
+            <DialogActions>
+              <DialogTrigger disableButtonEnhancement>
+                <Button appearance="secondary">Cerrar</Button>
+              </DialogTrigger>
+              <Button
+                disabled={changing}
+                icon={changing ? <Spinner size="tiny" /> : undefined}
+                onClick={onSubmit}
+                type="submit"
+                appearance="primary"
+              >
+                <span className="text-nowrap">Cambiar contraseña</span>
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
     </>
   )
 }
