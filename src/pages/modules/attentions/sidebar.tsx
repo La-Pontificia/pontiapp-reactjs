@@ -31,10 +31,10 @@ export default function AttentionsSidenar() {
           Registro Rápido
         </ItemSidebarNav>
         <ItemSidebarNav
-          has={['attentions:answer-ticket']}
+          has={['attentions:answerTickets']}
           icon={PersonSupportRegular}
           iconActive={PersonSupportFilled}
-          href="/m/attentions/answerTickets"
+          href="/m/attentions/answer-tickets"
         >
           Iniciar atención
         </ItemSidebarNav>
