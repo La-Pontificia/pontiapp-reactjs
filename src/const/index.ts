@@ -178,6 +178,7 @@ export const PRIVILEGES = {
   'edas:create:my': '(Edas) - Crear sus edas',
   'edas:create:inHisSupervision': '(Edas) - Crear edas bajo su supervisión',
   'edas:create:all': '(Edas) - Crear edas de cualquier colaborador',
+  'edas:delete': '(Edas) - Eliminar edas de cualquier colaborador',
   'edas:objetives:edit': '(Edas) - Editar objetivos',
   'edas:objetives:delete': '(Edas) - Eliminar objetivos',
   'edas:objetives:approve': '(Edas) - Aprobar objetivos',
