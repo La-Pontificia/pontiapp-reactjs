@@ -171,9 +171,18 @@ export const PRIVILEGES = {
 
   // Edas management
   'edas:collaborators:inHisSupervision':
-    '(Edas) - Colaboradores bajo su supervisión',
+    '(Edas) - Ver solo colaboradores bajo su supervisión',
   'edas:collaborators:show': '(Edas) - Ver todos los colaboradores',
   'edas:my': '(Edas) - Ver sus edas',
+  'edas:create:my': '(Edas) - Crear sus edas',
+  'edas:create:inHisSupervision': '(Edas) - Crear edas bajo su supervisión',
+  'edas:create:all': '(Edas) - Crear edas de cualquier colaborador',
+  'edas:objetives:edit': '(Edas) - Editar objetivos',
+  'edas:objetives:delete': '(Edas) - Eliminar objetivos',
+  'edas:objetives:approve': '(Edas) - Aprobar objetivos',
+  'edas:evaluations:qualify': '(Edas) - Calificar evaluaciones',
+  'edas:evaluations:selftQualify': '(Edas) - Auto calificar evaluaciones',
+  'edas:evaluations:close': '(Edas) - Cerrar evaluaciones',
 
   // Events management
   'events:show': 'Eventos',
