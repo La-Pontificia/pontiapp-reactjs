@@ -161,8 +161,9 @@ export const PRIVILEGES = {
   // Attentions management
   'attentions:tickets': '(Tickets) - Ver tickets',
   'attentions:tickets:create': '(Tickets) - Registrar tickets',
+  'attentions:register': '(Tickets) - Registro rápido de tickets',
   'attentions:shiftScreen': '(Tickets) - Pantalla de turnos',
-  'attentions:answerTicket': '(Tickets) - Atender tickets',
+  'attentions:answerTickets': '(Tickets) - Atender tickets',
   'attentions:show': '(Tickets) - Ver atenciones',
   'attentions:reportFiles': '(Tickets) - Ver reportes de atenciones',
   'attentions:positions': '(Tickets) - Puestos de atención',
