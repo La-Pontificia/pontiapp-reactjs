@@ -64,12 +64,11 @@ export default function LoginPage() {
         backgroundImage: 'url(lp-build.webp)'
       }}
     >
-      <span className="bg-[url(/noise.png)] opacity-5 absolute pointer-events-none inset-0 bg-center"></span>
       <Helmet>
-        <title>Ponti App | Login</title>
+        <title>Ponti App | Iniciar Sesión</title>
       </Helmet>
-      <div className="w-full bg-[#000000c9] h-full text-white flex-col flex flex-grow">
-        <div className="flex-grow flex-col px-10 w-full max-w-xl mx-auto flex items-center justify-center">
+      <div className="w-full bg-[#000000cc] lg:bg-[#000000c9] h-full text-white flex-col flex flex-grow">
+        <div className="flex-grow flex-col lg:px-10 px-2 w-full max-w-xl mx-auto flex items-center justify-center">
           <h1 className="text-yellow-50 py-8 font-medium tracking-tight text-2xl text-center">
             Ponti App
           </h1>
@@ -77,7 +76,7 @@ export default function LoginPage() {
           <button
             disabled={loadingId}
             onClick={handleID}
-            className="mx-auto relative shadow-xl hover:scale-105 active:scale-95 transition-transform font-semibold text-yellow-50 group w-full bg-black h-16 px-10 rounded-2xl flex items-center gap-2 justify-center"
+            className="mx-auto relative shadow-xl lg:hover:scale-105 active:scale-95 transition-transform font-semibold text-yellow-50 group w-full bg-black h-16 px-10 rounded-2xl flex items-center gap-2 justify-center"
           >
             {loadingId ? (
               <Spinner />
@@ -99,7 +98,7 @@ export default function LoginPage() {
           <div className="w-full flex items-center flex-col">
             <form
               onSubmit={handleCredential}
-              className="rounded-2xl shadow-2xl group divide-y hover:scale-105 transition-transform overflow-hidden divide-neutral-500/30 bg-black w-full"
+              className="rounded-2xl shadow-2xl group divide-y lg:hover:scale-105 transition-transform overflow-hidden divide-neutral-500/30 bg-black w-full"
             >
               <input
                 disabled={!!loadingCredential}
