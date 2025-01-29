@@ -42,14 +42,13 @@ export default function LoginPage() {
         password: form.get('password')
       })
     })
-    console.log(res)
-    if (res.ok)
+    if (res.ok) {
       return (window.location.href = currentRedirentURL
         ? currentRedirentURL
         : host)
+    }
     setLoadingCredential(false)
     toast(handleAuthError(res.error))
-    return
   }
 
   React.useEffect(() => {
