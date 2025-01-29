@@ -1,12 +1,15 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Time } from '~/types'
 import relativeTime from 'dayjs/plugin/relativeTime'
+import customParseFormat from 'dayjs/plugin/customParseFormat'
 import dayjs from 'dayjs'
 import 'dayjs/locale/es'
+dayjs.extend(customParseFormat)
 dayjs.extend(relativeTime)
 
-export const parse = (date: any): Date => {
-  return dayjs(date).toDate()
+export { dayjs }
+export const parse = (date: any, format?: string): Date => {
+  return dayjs(date, format).toDate()
 }
 
 export const format = (date: any, format?: string): string => {
