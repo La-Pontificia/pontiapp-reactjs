@@ -6,6 +6,8 @@ import EdasRoutes from './edas/route'
 import AssistsRoutes from './assists/routes'
 import EventsRoutes from './events/routes'
 import AttentionsRoutes from './attentions/route'
+import InventoriesRoutes from './inventories/routes'
+import ResourceManagementRoutes from './resource-management/routes'
 
 export default function ModulesRoutes() {
   return (
@@ -17,6 +19,11 @@ export default function ModulesRoutes() {
         <Route path="assists/*" element={<AssistsRoutes />} />
         <Route path="events/*" element={<EventsRoutes />} />
         <Route path="attentions/*" element={<AttentionsRoutes />} />
+        <Route path="inventories/*" element={<InventoriesRoutes />} />
+        <Route
+          path="resource-management/*"
+          element={<ResourceManagementRoutes />}
+        />
       </Route>
     </Routes>
   )
