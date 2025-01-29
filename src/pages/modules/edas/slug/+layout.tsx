@@ -4,6 +4,7 @@ import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Link, Outlet, useParams } from 'react-router'
 import { api } from '~/lib/api'
+import { useAuth } from '~/store/auth'
 import { EdaYear } from '~/types/eda-year'
 import { User } from '~/types/user'
 
@@ -15,6 +16,7 @@ type SlugCollaboratorState = {
 export const SlugCollaboratorContext =
   React.createContext<SlugCollaboratorState>({} as SlugCollaboratorState)
 export default function SlugCollaboratorsLayout() {
+  const { user: authUser } = useAuth()
   const params = useParams<{
     slug: string
     slugYear: string
@@ -76,7 +78,7 @@ export default function SlugCollaboratorsLayout() {
       </div>
     )
 
-  if (!user.manager && !isUserLoading)
+  if (!user.manager && !isUserLoading && !authUser.isDeveloper)
     return (
       <div className="p-5 text-center h-full grid place-content-center flex-col items-center font-semibold gap-3 w-full">
         {user.displayName} no tiene un supervisor asignado.
