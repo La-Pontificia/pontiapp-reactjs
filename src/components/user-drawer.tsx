@@ -13,14 +13,12 @@ import {
   DrawerBody,
   DrawerHeader,
   DrawerHeaderTitle,
-  SearchBox,
-  SkeletonItem,
-  useRestoreFocusSource,
-  useRestoreFocusTarget
+  Spinner
 } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
 import * as React from 'react'
+import SearchBox from '~/commons/search-box'
 
 type UserDrawerProps = {
   title?: string
@@ -33,8 +31,6 @@ type UserDrawerProps = {
 }
 
 export default function UserDrawer(props: UserDrawerProps) {
-  const restoreFocusTargetAttributes = useRestoreFocusTarget()
-  const restoreFocusSourceAttributes = useRestoreFocusSource()
   const [open, setOpen] = React.useState(false)
   const [selectedUsers, setSelectedUsers] = React.useState<User[]>(
     props.users || []
@@ -51,15 +47,10 @@ export default function UserDrawer(props: UserDrawerProps) {
 
   return (
     <>
-      <Button
-        {...props.triggerProps}
-        {...restoreFocusTargetAttributes}
-        onClick={() => setOpen(true)}
-      />
+      <Button {...props.triggerProps} onClick={() => setOpen(true)} />
       {open && (
         <Drawer
           position="end"
-          {...restoreFocusSourceAttributes}
           separator
           className="xl:min-w-[50svw] lg:min-w-[80svw] max-w-full min-w-full"
           open={open}
@@ -117,9 +108,7 @@ export function Users(
     includeCurrentUser = true
   } = props
 
-  const [query, setQuery] = React.useState<string>(
-    props.users?.length === 1 ? props.users[0].email : ''
-  )
+  const [query, setQuery] = React.useState<string | null>(null)
 
   const {
     data: users,
@@ -128,6 +117,7 @@ export function Users(
   } = useQuery<User[]>({
     queryKey: ['users/all', query],
     queryFn: async () => {
+      if (!query) return []
       const res = await api.get<User[]>(
         'users/all?status=actives&limit=15&q=' + query
       )
@@ -165,16 +155,16 @@ export function Users(
     }
   }
 
+  const list = users && users?.length > 0 ? users : selectedUsers
+
   return (
-    <div className="flex flex-col flex-grow h-full overflow-y-auto gap-4">
-      <nav className="pb-3 flex items-center gap-4">
+    <div className="flex flex-col flex-grow h-full overflow-y-auto gap-2">
+      <nav className="pb-3 flex items-center gap-4 border-b dark:border-stone-700">
         <SearchBox
-          onChange={(_, e) => onChangeValue(e.value)}
-          defaultValue={query}
-          style={{
-            maxWidth: '100%'
-          }}
-          placeholder="Filtrar colaboradores"
+          onChange={(e) => onChangeValue(e.target.value)}
+          defaultValue={query || ''}
+          className="w-[400px] max-lg:w-full"
+          placeholder="Filtrar por nombre o correo"
         />
         {selectedUsers.length > 0 && (
           <Badge appearance="tint" color="success">
@@ -188,33 +178,12 @@ export function Users(
       >
         <div className="w-full overflow-y-auto">
           {isLoading ? (
-            <div className="space-y-5">
-              <div className="grid items-center gap-5 grid-cols-[min-content,20%,20%,15%,15%]">
-                <SkeletonItem
-                  className="animate-pulse"
-                  shape="circle"
-                  size={24}
-                />
-                <SkeletonItem className="animate-pulse" size={16} />
-                <SkeletonItem className="animate-pulse" size={16} />
-                <SkeletonItem className="animate-pulse" size={16} />
-                <SkeletonItem className="animate-pulse" size={16} />
-              </div>
-              <div className="grid items-center gap-5 grid-cols-[min-content,20%,20%,15%,15%]">
-                <SkeletonItem
-                  className="animate-pulse"
-                  shape="circle"
-                  size={24}
-                />
-                <SkeletonItem className="animate-pulse" size={16} />
-                <SkeletonItem className="animate-pulse" size={16} />
-                <SkeletonItem className="animate-pulse" size={16} />
-                <SkeletonItem className="animate-pulse" size={16} />
-              </div>
+            <div className="h-full grid place-content-center">
+              <Spinner size="large" />
             </div>
           ) : (
-            <div className="overflow-y-auto divide-y dark:divide-black divide-neutral-200">
-              {users?.map((u) => {
+            <div className="overflow-y-auto flex-grow divide-y dark:divide-stone-700 divide-neutral-200">
+              {list.map((u) => {
                 const selected = selectedUsers.find((user) => user.id === u.id)
                 if (!includeCurrentUser && u.id === user.id) return null
                 return (
@@ -236,15 +205,14 @@ export function Users(
                         src: u.photoURL
                       }}
                     />
-                    <div className="flex-grow">
+                    <div className="flex-grow font-semibold">
                       <p>{u.displayName}</p>
-                      <p className="text-xs dark:text-blue-500">{u.email}</p>
                     </div>
                   </label>
                 )
               })}
-              {users && users.length < 1 && (
-                <div className="py-3">
+              {list && list.length < 1 && (
+                <div className="py-3 h-full font-semibold grid place-content-center">
                   <p className="text-center opacity-70 text-sm">
                     No se encontraron colaboradores
                   </p>
