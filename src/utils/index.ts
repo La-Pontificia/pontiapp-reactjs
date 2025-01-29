@@ -4,6 +4,7 @@ import { BIRTHDAY_MESSAGE } from '~/const/index'
 
 import clsx, { type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
+import { parse } from '~/lib/dayjs'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -38,4 +39,29 @@ export const hashCode = (str: string): number => {
   return Array.from(str).reduce((hash, char) => {
     return hash * 31 + char.charCodeAt(0)
   }, 0)
+}
+
+export const parseTime = (time: string): Date | null => {
+  const timeRegex = /^(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM)$/i
+  const match = time.trim().match(timeRegex)
+
+  if (!match) return null
+
+  const [, hours, minutes, period] = match
+  let parsedHours = parseInt(hours, 10)
+
+  if (period.toUpperCase() === 'PM' && parsedHours !== 12) {
+    parsedHours += 12
+  } else if (period.toUpperCase() === 'AM' && parsedHours === 12) {
+    parsedHours = 0
+  }
+
+  const date = new Date()
+
+  date.setHours(parsedHours)
+  date.setMinutes(parseInt(minutes, 10))
+  date.setSeconds(0)
+  date.setMilliseconds(0)
+
+  return parse(date)
 }
