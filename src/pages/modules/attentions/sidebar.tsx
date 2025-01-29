@@ -25,7 +25,7 @@ export default function AttentionsSidenar() {
         <ItemSidebarNav
           icon={SparkleRegular}
           iconActive={SparkleFilled}
-          has={['attentions.register']}
+          has={['attentions:register']}
           href="/m/attentions/register"
         >
           Registro Rápido
@@ -34,7 +34,7 @@ export default function AttentionsSidenar() {
           has={['attentions:answer-ticket']}
           icon={PersonSupportRegular}
           iconActive={PersonSupportFilled}
-          href="/m/attentions/answer-tickets"
+          href="/m/attentions/answerTickets"
         >
           Iniciar atención
         </ItemSidebarNav>
