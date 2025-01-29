@@ -123,7 +123,7 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
           children={
             <a
               href={`mailto:${user?.email}`}
-              className="dark:text-blue-500 text-blue-700"
+              className="dark:text-blue-500 font-semibold text-blue-700"
             >
               {user?.email}
             </a>
