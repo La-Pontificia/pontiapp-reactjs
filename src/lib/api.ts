@@ -6,6 +6,7 @@ export type ExtendedRequestInit = RequestInit & {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE'
   api?: boolean
   alreadyHandleError?: boolean
+  redirectWithoutSession?: boolean
 }
 
 type ErrorResponse = {
@@ -35,7 +36,12 @@ async function fetchCore<T>(
   pathname: string,
   options?: ExtendedRequestInit
 ): Promise<ApiReturnType<T>> {
-  const { api = true, alreadyHandleError = true, ...ops } = options ?? {}
+  const {
+    api = true,
+    alreadyHandleError = true,
+    redirectWithoutSession = true,
+    ...ops
+  } = options ?? {}
 
   const URL = api
     ? `${VITE_API_HOST}/api/${pathname}`
@@ -66,7 +72,7 @@ async function fetchCore<T>(
   })
 
   if (!res.ok) {
-    if (res.status === 401) {
+    if (res.status === 401 && redirectWithoutSession) {
       window.location.href = `/login?redirectURL=${window.location.href}`
     }
     if (alreadyHandleError) {
