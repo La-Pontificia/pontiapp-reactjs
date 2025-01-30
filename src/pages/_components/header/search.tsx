@@ -33,6 +33,7 @@ type State = {
 
 export default function RootSearch() {
   const [open, setOpen] = React.useState(false)
+  const [hover, setHover] = React.useState(false)
   const [q, setQ] = React.useState<string | null>(null)
 
   const { value, handleChange } = useDebounced({
@@ -53,6 +54,9 @@ export default function RootSearch() {
             autoComplete: 'off',
             width: '100%'
           }}
+          onMouseEnter={() => setHover(true)}
+          onMouseLeave={() => setHover(false)}
+          readOnly={!hover}
           value={value}
           onChange={(_, e) => {
             handleChange(e.value)
