@@ -27,44 +27,42 @@ export default function SettingsDrawer() {
           <SettingsRegular fontSize={25} className="opacity-80" />
         </button>
       </Tooltip>
-      {open && (
-        <Drawer
-          mountNode={ctxui?.contentRef.current}
-          position="start"
-          separator
-          className="min-w-[400px] z-[9999] max-w-full"
-          open={open}
-          onOpenChange={(_, { open }) => setOpen(open)}
-        >
-          <DrawerHeader>
-            <DrawerHeaderTitle
-              action={
-                <Button
-                  appearance="subtle"
-                  aria-label="Close"
-                  icon={<Dismiss24Regular />}
-                  onClick={() => setOpen(false)}
-                />
-              }
-            >
-              Ajustes y preferencias
-            </DrawerHeaderTitle>
-          </DrawerHeader>
-          <DrawerBody className="flex flex-col gap-3 overflow-y-auto ">
-            <div className="pt-3">
-              <label className="flex items-center justify-between font-semibold text-base">
-                <h1>Modo oscuro </h1>
-                <Switch
-                  onChange={() => {
-                    toggleTheme()
-                  }}
-                  checked={theme === 'dark'}
-                />
-              </label>
-            </div>
-          </DrawerBody>
-        </Drawer>
-      )}
+      <Drawer
+        mountNode={ctxui?.contentRef.current}
+        position="start"
+        separator
+        className="min-w-[400px] z-[9999] max-w-full"
+        open={open}
+        onOpenChange={(_, { open }) => setOpen(open)}
+      >
+        <DrawerHeader>
+          <DrawerHeaderTitle
+            action={
+              <Button
+                appearance="subtle"
+                aria-label="Close"
+                icon={<Dismiss24Regular />}
+                onClick={() => setOpen(false)}
+              />
+            }
+          >
+            Ajustes y preferencias
+          </DrawerHeaderTitle>
+        </DrawerHeader>
+        <DrawerBody className="flex flex-col gap-3 overflow-y-auto ">
+          <div className="pt-3">
+            <label className="flex items-center justify-between font-semibold text-base">
+              <h1>Modo oscuro </h1>
+              <Switch
+                onChange={() => {
+                  toggleTheme()
+                }}
+                checked={theme === 'dark'}
+              />
+            </label>
+          </div>
+        </DrawerBody>
+      </Drawer>
     </>
   )
 }
