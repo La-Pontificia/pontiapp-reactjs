@@ -2,45 +2,35 @@
 // import { api } from '~/lib/api'
 // import { useAuth } from '~/store/auth'
 // import { handleAuthError } from '~/utils'
-import { Avatar } from '@fluentui/react-components'
+import { Avatar, Button, Spinner } from '@fluentui/react-components'
+import { MailArrowUpRegular } from '@fluentui/react-icons'
+import { useMutation } from '@tanstack/react-query'
+import { toast } from 'anni'
 import React from 'react'
 import { Link } from 'react-router'
 import UserHoverInfo from '~/components/user-hover-info'
+import { api } from '~/lib/api'
+import { timeAgo } from '~/lib/dayjs'
 import { Collaborator } from '~/types/collaborator'
 
 export default function UserGrid({
-  user: userProp
-}: // refetch
-{
+  user: userProp,
+  refetch
+}: {
   user: Collaborator
   refetch: () => void
 }) {
-  // const [managerUpdating, setManagerUpdating] = React.useState(false)
   const [user] = React.useState(new Collaborator(userProp))
-  // const { user: authUser } = useAuth()
-
-  // const handleManager = async (manager?: Collaborator) => {
-  //   setManagerUpdating(true)
-  //   const res = await api.post(`users/${user.id}/manager`, {
-  //     data: {
-  //       managerId: manager?.id
-  //     }
-  //   })
-  //   if (!res.ok) {
-  //     setManagerUpdating(false)
-  //     return toast(handleAuthError(res.error))
-  //   }
-  //   setManagerUpdating(false)
-  //   setUser(
-  //     (u) =>
-  //       new Collaborator({
-  //         ...u,
-  //         manager: manager ? new Collaborator(manager) : undefined
-  //       } as Collaborator)
-  //   )
-  //   refetch()
-  //   toast('Jefe actualizado correctamente.')
-  // }
+  const { mutate: invite, isPending: invitating } = useMutation({
+    mutationFn: () => api.post(`edas/collaborators/${user.username}/invite`),
+    onError: () => {
+      toast.error('No se pudo enviar la invitación 📨')
+    },
+    onSuccess: () => {
+      toast.success('Invitación enviada 📨')
+      refetch()
+    }
+  })
   return (
     <tr className="relative [&>td]:text-nowrap group [&>td]:p-3 [&>td]:px-3">
       <td>
@@ -87,6 +77,29 @@ export default function UserGrid({
         ) : (
           <p>Sin jefe</p>
         )}
+      </td>
+      <td>
+        <div>
+          <Button
+            disabled={invitating}
+            size="small"
+            icon={
+              invitating ? (
+                <Spinner size="extra-tiny" />
+              ) : (
+                <MailArrowUpRegular />
+              )
+            }
+            onClick={() => invite()}
+          >
+            Invitar
+          </Button>
+          {user.edaInvitedAt && (
+            <p className="text-xs opacity-70">
+              Enviado {timeAgo(user.edaInvitedAt)}
+            </p>
+          )}
+        </div>
       </td>
     </tr>
   )
