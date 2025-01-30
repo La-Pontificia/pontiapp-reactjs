@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { api } from '~/lib/api'
 import { User } from '~/types/user'
 import React, { createContext } from 'react'
@@ -16,7 +17,13 @@ const AuthContext = createContext<AuthState>({} as AuthState)
 // eslint-disable-next-line react-refresh/only-export-components
 export const useAuth = () => React.useContext(AuthContext)
 
-export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
+export const AuthProvider = ({
+  children,
+  redirectWithoutSession
+}: {
+  children: React.ReactNode
+  redirectWithoutSession?: boolean
+}) => {
   const [user, setUser] = React.useState<User | null>(null)
   const [birthdayBoys, setBirthdayBoys] = React.useState<User[]>([])
   const [loading, setLoading] = React.useState(true)
@@ -26,7 +33,9 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       const res = await api.get<{
         authUser: User
         birthdayBoys: User[]
-      }>('auth/current?relationship=userRole,role')
+      }>('auth/current?relationship=userRole,role', {
+        redirectWithoutSession
+      })
 
       if (!res.ok) throw new Error(res.error)
 
