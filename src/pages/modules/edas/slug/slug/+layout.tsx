@@ -226,7 +226,7 @@ export default function SlugCollaboratorsEdaSlugLayout() {
           <Outlet />
         </div>
       ) : (
-        <div className="grid place-content-center max-w-xs mx-auto text-center space-y-3 h-full w-full">
+        <div className="grid place-content-center items-center justify-center max-w-xs mx-auto text-center space-y-3 h-full w-full">
           <h1 className="font-semibold text-lg tracking-tight">
             Eda no disponible.
           </h1>
@@ -246,14 +246,16 @@ export default function SlugCollaboratorsEdaSlugLayout() {
             aún no ha sido registrada
           </p>
           {hasCreate ? (
-            <Button
-              appearance="primary"
-              onClick={() => create()}
-              disabled={creating}
-              icon={creating ? <Spinner size="tiny" /> : <></>}
-            >
-              Registrar Eda
-            </Button>
+            <div className="flex justify-center">
+              <Button
+                appearance="primary"
+                onClick={() => create()}
+                disabled={creating}
+                icon={creating ? <Spinner size="tiny" /> : undefined}
+              >
+                Registrar Eda
+              </Button>
+            </div>
           ) : (
             <p className="text-xs dark:text-stone-400 text-red-600 border-t dark:border-stone-700 pt-3 mt-3">
               No tienes privilegios ⚠️ suficientes para registrar el Eda
