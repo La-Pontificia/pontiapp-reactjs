@@ -35,6 +35,7 @@ export class User {
   updatedBy?: string
   createdUser?: User
   updatedUser?: User
+  edaInvitedAt?: Date
 
   constructor(
     data: User & {
@@ -70,6 +71,7 @@ export class User {
     this.role = data.role
     this.customPrivileges = data.customPrivileges
     this.internalDisplayName = data.displayName
+    this.edaInvitedAt = data.edaInvitedAt
 
     if (data.contract_type)
       this.contractType = new ContractType(data.contract_type)
