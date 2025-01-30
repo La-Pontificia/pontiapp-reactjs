@@ -21,10 +21,18 @@ import {
   MenuTrigger,
   Spinner
 } from '@fluentui/react-components'
-import { MoreHorizontal20Filled } from '@fluentui/react-icons'
+import {
+  BranchRegular,
+  CircleOffRegular,
+  KeyResetRegular,
+  MoreHorizontal20Filled,
+  OpenRegular,
+  PenRegular
+} from '@fluentui/react-icons'
 import React from 'react'
 import { Link, useNavigate } from 'react-router'
 import UserHoverInfo from '~/components/user-hover-info'
+import ResetPassword from '~/components/reset-password'
 
 export default function UserGrid({
   user: userProp,
@@ -156,26 +164,9 @@ export const UserGridOptions = ({
   const { user: authUser } = useAuth()
 
   const [isResetAlertOpen, setIsResetAlertOpen] = React.useState(false)
-  const [resetingPassword, setResetingPassword] = React.useState(false)
 
   const [isToggleStatusOpen, setIsToggleStatusOpen] = React.useState(false)
   const [toglingStatus, setToglingStatus] = React.useState(false)
-
-  const handleResetPassword = async () => {
-    setResetingPassword(true)
-    const res = await api.post<string>(`users/${user.id}/reset-password`)
-    if (!res.ok) {
-      setResetingPassword(false)
-      return toast(handleAuthError(res.error))
-    }
-    setResetingPassword(false)
-    setIsResetAlertOpen(false)
-
-    // copy to clipboard
-    navigator.clipboard.writeText(res.data)
-    toast('Copiada a portapapeles.')
-    refetch()
-  }
 
   const handleToogleStatus = async () => {
     setToglingStatus(true)
@@ -218,12 +209,14 @@ export const UserGridOptions = ({
         <MenuPopover>
           <MenuList>
             <MenuItem
+              icon={<OpenRegular />}
               onClick={() => window.open(`/${user.username}`, '_blank')}
             >
               Ver perfil
             </MenuItem>
             {authUser.hasPrivilege('users:edit') && (
               <MenuItem
+                icon={<PenRegular />}
                 disabled={!authUser.hasPrivilege('users:edit')}
                 onClick={() => navigate(`/m/users/edit/${user.username}`)}
               >
@@ -231,50 +224,33 @@ export const UserGridOptions = ({
               </MenuItem>
             )}
             {authUser.hasPrivilege('users:resetPassword') && (
-              <MenuItem onClick={() => setIsResetAlertOpen(true)}>
+              <MenuItem
+                icon={<KeyResetRegular />}
+                onClick={() => setIsResetAlertOpen(true)}
+              >
                 Restablecer contraseña
               </MenuItem>
             )}
             {authUser.hasPrivilege('users:toggleStatus') && (
-              <MenuItem onClick={() => setIsToggleStatusOpen(true)}>
+              <MenuItem
+                icon={<CircleOffRegular />}
+                onClick={() => setIsToggleStatusOpen(true)}
+              >
                 {user.status ? 'Deshabilitar acceso' : 'Habilitar acceso'}
               </MenuItem>
+            )}
+            {authUser.hasPrivilege('users:createVersion') && (
+              <MenuItem icon={<BranchRegular />}>Crear una version</MenuItem>
             )}
           </MenuList>
         </MenuPopover>
       </Menu>
 
-      <Dialog
+      <ResetPassword
+        user={user}
         open={isResetAlertOpen}
-        onOpenChange={(_, e) => setIsResetAlertOpen(e.open)}
-        modalType="alert"
-      >
-        <DialogSurface>
-          <DialogBody>
-            <DialogTitle>
-              ¿Estás seguro que deseas restablecer la contraseña de{' '}
-              {user.displayName}?
-            </DialogTitle>
-            <DialogContent>
-              Una vez restablecida, la nueva contraseña sera visible en la
-              alerta de notificación.
-            </DialogContent>
-            <DialogActions>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary">Cancelar</Button>
-              </DialogTrigger>
-              <Button
-                onClick={handleResetPassword}
-                disabled={resetingPassword}
-                icon={resetingPassword ? <Spinner size="tiny" /> : undefined}
-                appearance="primary"
-              >
-                Restablecer
-              </Button>
-            </DialogActions>
-          </DialogBody>
-        </DialogSurface>
-      </Dialog>
+        setOpen={setIsResetAlertOpen}
+      />
 
       <Dialog
         open={isToggleStatusOpen}

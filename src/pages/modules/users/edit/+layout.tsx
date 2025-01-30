@@ -31,6 +31,7 @@ import { Helmet } from 'react-helmet'
 import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
 // import { IoIosGitMerge } from 'react-icons/io'
 import { useAuth } from '~/store/auth'
+import ResetPassword from '~/components/reset-password'
 
 type AuthState = {
   user?: User | null
@@ -163,26 +164,9 @@ export const UserOptions = ({
 }) => {
   const { user: authUser } = useAuth()
   const [isResetAlertOpen, setIsResetAlertOpen] = React.useState(false)
-  const [resetingPassword, setResetingPassword] = React.useState(false)
 
   const [isToggleStatusOpen, setIsToggleStatusOpen] = React.useState(false)
   const [toglingStatus, setToglingStatus] = React.useState(false)
-
-  const handleResetPassword = async () => {
-    setResetingPassword(true)
-    const res = await api.post<string>(`users/${user.id}/reset-password`)
-    if (!res.ok) {
-      setResetingPassword(false)
-      return toast(handleAuthError(res.error))
-    }
-    setResetingPassword(false)
-    setIsResetAlertOpen(false)
-
-    // copy to clipboard
-    navigator.clipboard.writeText(res.data)
-    toast('Copiada a portapapeles.')
-    refetch()
-  }
 
   const handleToogleStatus = async () => {
     setToglingStatus(true)
@@ -238,39 +222,11 @@ export const UserOptions = ({
         </MenuPopover>
       </Menu>
 
-      {isResetAlertOpen && (
-        <Dialog
-          open={isResetAlertOpen}
-          onOpenChange={(_, e) => setIsResetAlertOpen(e.open)}
-          modalType="alert"
-        >
-          <DialogSurface>
-            <DialogBody>
-              <DialogTitle>
-                ¿Estás seguro que deseas restablecer la contraseña de{' '}
-                {user.displayName}?
-              </DialogTitle>
-              <DialogContent>
-                Una vez restablecida, la nueva contraseña sera visible en la
-                alerta de notificación.
-              </DialogContent>
-              <DialogActions>
-                <DialogTrigger disableButtonEnhancement>
-                  <Button appearance="secondary">Cancelar</Button>
-                </DialogTrigger>
-                <Button
-                  onClick={handleResetPassword}
-                  disabled={resetingPassword}
-                  icon={resetingPassword ? <Spinner size="tiny" /> : undefined}
-                  appearance="primary"
-                >
-                  Restablecer
-                </Button>
-              </DialogActions>
-            </DialogBody>
-          </DialogSurface>
-        </Dialog>
-      )}
+      <ResetPassword
+        open={isResetAlertOpen}
+        setOpen={setIsResetAlertOpen}
+        user={user}
+      />
 
       {isToggleStatusOpen && (
         <Dialog

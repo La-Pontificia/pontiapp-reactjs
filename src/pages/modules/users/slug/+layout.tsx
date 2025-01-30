@@ -25,13 +25,15 @@ import {
   Tooltip
 } from '@fluentui/react-components'
 import {
+  BranchRegular,
   CameraRegular,
+  CircleOffRegular,
   CopyRegular,
+  KeyResetRegular,
   MailRegular,
   MoreHorizontal20Filled,
   PenRegular,
-  PersonFeedbackRegular,
-  SendFilled
+  PersonFeedbackRegular
 } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
 import React, { createContext } from 'react'
@@ -42,6 +44,7 @@ import { useAuth } from '~/store/auth'
 import ExpiryStatusRenderer from '~/components/expiry-status-renderer'
 import { useUpdateProfile } from '~/hooks/user-update-profile'
 import { useMediaQuery } from '@uidotdev/usehooks'
+import ResetPassword from '~/components/reset-password'
 
 type AuthState = {
   user?: User | null
@@ -215,12 +218,7 @@ export default function UsersSlugLayout(): JSX.Element {
                             }
                           }}
                           primaryActionButton={{
-                            icon: (
-                              <SendFilled
-                                className="-rotate-45"
-                                fontSize={16}
-                              />
-                            ),
+                            icon: <MailRegular fontSize={20} />,
                             onClick: () => {
                               window.open(
                                 `mailto:${user.email}?subject=Hola ${user.displayName}`
@@ -261,11 +259,9 @@ export default function UsersSlugLayout(): JSX.Element {
                             onClick={() =>
                               navigate(`/m/users/edit/${user.username}`)
                             }
-                            appearance="secondary"
+                            appearance="transparent"
                             icon={<PenRegular />}
-                          >
-                            Editar
-                          </Button>
+                          ></Button>
                         </div>
                       )}
                       {user && <UserOptions refetch={refetch} user={user} />}
@@ -349,29 +345,11 @@ export const UserOptions = ({
 }) => {
   const navigate = useNavigate()
   const [isResetAlertOpen, setIsResetAlertOpen] = React.useState(false)
-  const [resetingPassword, setResetingPassword] = React.useState(false)
 
   const [isToggleStatusOpen, setIsToggleStatusOpen] = React.useState(false)
   const [toglingStatus, setToglingStatus] = React.useState(false)
 
   const { user: authUser } = useAuth()
-
-  const handleResetPassword = async () => {
-    setResetingPassword(true)
-    const res = await api.post<string>(`users/${user.id}/reset-password`)
-    if (!res.ok) {
-      setResetingPassword(false)
-      return toast(handleAuthError(res.error))
-    }
-    setResetingPassword(false)
-    setIsResetAlertOpen(false)
-
-    // copy to clipboard
-    navigator.clipboard.writeText(res.data)
-    toast('Copiada a portapapeles.')
-    refetch()
-  }
-
   const handleToogleStatus = async () => {
     setToglingStatus(true)
     const res = await api.post<string>(`users/${user.id}/toggle-status`)
@@ -401,61 +379,40 @@ export const UserOptions = ({
           <MenuList>
             {authUser.hasPrivilege('users:edit') && (
               <MenuItem
+                icon={<PenRegular />}
                 onClick={() => navigate(`/m/users/edit/${user.username}`)}
               >
                 Editar usuario
               </MenuItem>
             )}
             {authUser.hasPrivilege('users:resetPassword') && (
-              <MenuItem onClick={() => setIsResetAlertOpen(true)}>
+              <MenuItem
+                icon={<KeyResetRegular />}
+                onClick={() => setIsResetAlertOpen(true)}
+              >
                 Restablecer contraseña
               </MenuItem>
             )}
             {authUser.hasPrivilege('users:toggleStatus') && (
-              <MenuItem onClick={() => setIsToggleStatusOpen(true)}>
+              <MenuItem
+                icon={<CircleOffRegular />}
+                onClick={() => setIsToggleStatusOpen(true)}
+              >
                 {user.status ? 'Deshabilitar acceso' : 'Habilitar acceso'}
               </MenuItem>
             )}
             {authUser.hasPrivilege('users:createVersion') && (
-              <MenuItem>Crear una version</MenuItem>
+              <MenuItem icon={<BranchRegular />}>Crear una version</MenuItem>
             )}
           </MenuList>
         </MenuPopover>
       </Menu>
 
-      {isResetAlertOpen && (
-        <Dialog
-          open={isResetAlertOpen}
-          onOpenChange={(_, e) => setIsResetAlertOpen(e.open)}
-          modalType="alert"
-        >
-          <DialogSurface>
-            <DialogBody>
-              <DialogTitle>
-                ¿Estás seguro que deseas restablecer la contraseña de{' '}
-                {user.displayName}?
-              </DialogTitle>
-              <DialogContent>
-                Una vez restablecida, la nueva contraseña sera visible en la
-                alerta de notificación.
-              </DialogContent>
-              <DialogActions>
-                <DialogTrigger disableButtonEnhancement>
-                  <Button appearance="secondary">Cancelar</Button>
-                </DialogTrigger>
-                <Button
-                  onClick={handleResetPassword}
-                  disabled={resetingPassword}
-                  icon={resetingPassword ? <Spinner size="tiny" /> : undefined}
-                  appearance="primary"
-                >
-                  Restablecer
-                </Button>
-              </DialogActions>
-            </DialogBody>
-          </DialogSurface>
-        </Dialog>
-      )}
+      <ResetPassword
+        user={user}
+        open={isResetAlertOpen}
+        setOpen={setIsResetAlertOpen}
+      />
 
       {isToggleStatusOpen && (
         <Dialog

@@ -10,11 +10,12 @@ export default function UsersGrid({
 }) {
   return (
     <table className="w-full relative">
-      <thead className="border-b dark:border-stone-700">
-        <tr className="">
-          <td className="w-full"></td>
-          <td className="max-sm:hidden"></td>
-          <td className="max-xl:hidden"></td>
+      <thead className="">
+        <tr className="font-semibold [&>td]:p-3 [&>td]:text-nowrap dark:text-neutral-400 text-neutral-500 text-left">
+          <td className="max-sm:w-full">Usuario</td>
+          <td className="max-sm:hidden">Cargo</td>
+          <td className="max-xl:hidden">Email</td>
+          <td className="max-xl:hidden">Jefe (Manager)</td>
           <td></td>
         </tr>
       </thead>
