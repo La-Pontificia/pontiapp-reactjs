@@ -20,7 +20,7 @@ export default function UserGrid({
   user: Collaborator
   refetch: () => void
 }) {
-  const [user] = React.useState(new Collaborator(userProp))
+  const [user, setUser] = React.useState(new Collaborator(userProp))
   const { mutate: invite, isPending: invitating } = useMutation({
     mutationFn: () => api.post(`edas/collaborators/${user.username}/invite`),
     onError: () => {
@@ -29,6 +29,8 @@ export default function UserGrid({
     onSuccess: () => {
       toast.success('Invitación enviada 📨')
       refetch()
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      setUser(new Collaborator({ ...user, edaInvitedAt: new Date() } as any))
     }
   })
   return (
