@@ -66,59 +66,41 @@ export default function LoginPage() {
   }, [searchParams])
 
   return (
-    <div className="min-h-svh flex flex-col">
-      <header className="h-20 z-[1] px-10 fixed flex text-white items-center justify-between w-full">
-        <nav className="flex flex-grow basis-0">
-          <Link to="/login" className="flex items-center gap-1">
-            <img src="_lp-only-logo.webp" className="" width={25} alt="" />
-            <img
-              src="_lp_only-letters.webp"
-              className="invert grayscale"
-              width={70}
-              alt=""
-            />
-          </Link>
-        </nav>
-        <nav className="hidden lg:flex items-center gap-10">
-          {Object.entries(businesses).map(([url, { acronym, logo, name }]) => (
-            <Link
-              title={'Ir a la página de ' + name}
-              key={url}
-              to={url}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group"
-            >
-              <img
-                className="w-[100%] invert hover:invert-0 group-hover:scale-105 grayscale group-hover:grayscale-0 md:h-[25px] h-[15px]"
-                src={logo}
-                loading="lazy"
-                alt={acronym + ' Logo' + name}
-              />
-            </Link>
-          ))}
-        </nav>
-        <nav className="flex flex-grow basis-0 justify-end"></nav>
-      </header>
+    <div className="min-h-svh flex">
+      <Helmet>
+        <title>Ponti App | Iniciar Sesión</title>
+      </Helmet>
+      <h2 className="hidden" data-seo="true">
+        PontiApp del grupo la Pontificia, Escuela Superior La Pontificia,
+        Instituto La Pontificia, Educación Continua, Escuela Cybernet
+      </h2>
       <div
-        className="w-full z-[0] text-white relative flex-grow h-full flex-col flex bg-cover bg-center"
         style={{
-          backgroundImage: 'url(lp-build.webp)'
+          backgroundImage: 'url(/_bg.webp)'
         }}
+        className="flex flex-col w-full bg-cover bg-center text-black flex-grow"
       >
-        <Helmet>
-          <title>Ponti App | Iniciar Sesión</title>
-        </Helmet>
-        <div className="w-full bg-[#000000cc] lg:bg-[#000000c9] h-full text-white flex-col flex flex-grow">
-          <div className="flex-grow flex-col lg:px-10 px-2 w-full max-w-xl mx-auto flex items-center justify-center">
-            <h1 className="text-yellow-50 py-8 font-medium tracking-tight text-2xl text-center">
-              Ponti App
+        <div className="bg-white">
+          <nav className="p-10 flex justify-center basis-0">
+            <Link to="/login" className="flex items-center gap-1">
+              <img src="_lp-only-logo.webp" className="" width={30} alt="" />
+              <img src="_lp_only-letters.webp" className="" width={80} alt="" />
+            </Link>
+          </nav>
+          <header className="lg:py-8 pb-5 lg:pb-8">
+            <h1 className="font-bold pb-2 tracking-tight text-2xl text-center">
+              PontiApp
             </h1>
-
+            <p className="max-w-[35ch] opacity-70 text-center mx-auto">
+              Aplicación Institucional PontiApp, sistema integrado de gestión de
+              EDA
+            </p>
+          </header>
+          <div className="flex-grow lg:max-w-md max-w-full lg:p-0 px-4 mx-auto bg-white">
             <button
               disabled={loadingId}
               onClick={handleID}
-              className="mx-auto relative shadow-xl lg:hover:scale-105 active:scale-95 transition-transform font-semibold text-yellow-50 group w-full bg-black h-16 px-10 rounded-2xl flex items-center gap-2 justify-center"
+              className="mx-auto relative lg:hover:scale-105 active:scale-95 transition-transform font-semibold text-black group w-full bg-yellow-400 h-14 px-10 rounded-xl flex items-center gap-2 justify-center"
             >
               {loadingId ? (
                 <Spinner />
@@ -140,7 +122,7 @@ export default function LoginPage() {
             <div className="w-full flex items-center flex-col">
               <form
                 onSubmit={handleCredential}
-                className="rounded-2xl shadow-2xl group divide-y lg:hover:scale-105 transition-transform overflow-hidden divide-neutral-500/30 bg-black w-full"
+                className="rounded-xl border-2 border-black group divide-y-2 transition-transform overflow-hidden divide-black bg-white w-full"
               >
                 <input
                   disabled={!!loadingCredential}
@@ -149,7 +131,7 @@ export default function LoginPage() {
                   data-fillable
                   autoComplete="off"
                   placeholder="Correo o nombre de usuario"
-                  className="p-5 font-semibold placeholder:text-neutral-500 outline-none bg-transparent w-full"
+                  className="p-4 px-5 placeholder:text-neutral-500 outline-none bg-transparent w-full"
                 />
                 <div className="relative">
                   <input
@@ -159,13 +141,13 @@ export default function LoginPage() {
                     type={passwordVisible ? 'text' : 'password'}
                     autoComplete="off"
                     placeholder="Contraseña"
-                    className="p-5 font-semibold placeholder:text-neutral-500 outline-none bg-transparent w-full"
+                    className="p-4 px-5 placeholder:text-neutral-500 outline-none bg-transparent w-full"
                   />
                   <div className="absolute inset-y-0 right-0 px-3 flex items-center">
                     <button
                       type="button"
                       onClick={() => setPasswordVisible(!passwordVisible)}
-                      className="text-neutral-500 opacity-0 group-hover:opacity-100 transition-opacity px-2"
+                      className="text-neutral-500 transition-opacity px-2"
                     >
                       {passwordVisible ? (
                         <PiEye size={23} />
@@ -175,12 +157,12 @@ export default function LoginPage() {
                     </button>
                     <button
                       disabled={!!loadingCredential}
-                      className="aspect-square dark:text-blue-500 text-blue-500 hover:scale-110  rounded-full"
+                      className="aspect-square dark:text-yellow-500 text-yellow-500 hover:scale-110 rounded-full"
                     >
                       {loadingCredential ? (
                         <Spinner size="medium" />
                       ) : (
-                        <ArrowCircleRightRegular fontSize={35} />
+                        <ArrowCircleRightRegular fontSize={40} />
                       )}
                     </button>
                   </div>
@@ -188,20 +170,41 @@ export default function LoginPage() {
               </form>
             </div>
           </div>
-          <footer className="pb-10">
-            <p className="mt-6 text-xs text-gray-100 text-center">
-              {new Date().getFullYear()} ©{' '}
-              <a
-                href="https://lp.com.pe"
-                target="_blank"
-                className="border-b border-gray-500 border-dotted"
-              >
-                La Pontificia.
-              </a>{' '}
-              Todos los derechos reservados.
-            </p>
-          </footer>
         </div>
+        <footer className="p-10 py-20 bg-gradient-to-b from-white via-white/95 to-transparent">
+          <div className="grayscale flex flex-wrap justify-center items-center gap-10">
+            {Object.entries(businesses).map(
+              ([url, { acronym, logo, name }]) => (
+                <Link
+                  title={'Ir a la página de ' + name}
+                  key={url}
+                  to={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="group"
+                >
+                  <img
+                    className="w-[100%] h-[30px] "
+                    src={logo}
+                    loading="lazy"
+                    alt={acronym + ' Logo' + name}
+                  />
+                </Link>
+              )
+            )}
+          </div>
+          <p className="mt-10 text-xs text-center">
+            {new Date().getFullYear()} ©{' '}
+            <a
+              href="https://lp.com.pe"
+              target="_blank"
+              className="border-b border-dotted"
+            >
+              La Pontificia.
+            </a>{' '}
+            Todos los derechos reservados.
+          </p>
+        </footer>
       </div>
     </div>
   )
