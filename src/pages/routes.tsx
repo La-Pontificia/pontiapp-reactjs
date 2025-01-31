@@ -22,7 +22,6 @@ export default function MainRoutes() {
           <AuthProvider>
             <AuthMiddleware>
               <Outlet />
-              {/* <RootLayout /> */}
             </AuthMiddleware>
           </AuthProvider>
         }
