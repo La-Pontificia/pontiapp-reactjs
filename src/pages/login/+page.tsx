@@ -66,7 +66,7 @@ export default function LoginPage() {
   }, [searchParams])
 
   return (
-    <div className="min-h-svh flex">
+    <div className="min-h-svh flex bg-white">
       <Helmet>
         <title>Ponti App | Iniciar Sesión</title>
       </Helmet>
@@ -74,29 +74,43 @@ export default function LoginPage() {
         PontiApp del grupo la Pontificia, Escuela Superior La Pontificia,
         Instituto La Pontificia, Educación Continua, Escuela Cybernet
       </h2>
-      <div
-        style={{
-          backgroundImage: 'url(/_bg.webp)'
-        }}
-        className="flex flex-col w-full bg-cover bg-center text-black flex-grow"
-      >
-        <div className="bg-white">
+      <div className="flex w-full text-black flex-grow">
+        <div className="flex-grow lg:flex hidden">
+          <img
+            fetchPriority="high"
+            loading="lazy"
+            src="/night.webp"
+            className="w-full h-full object-cover"
+            alt="Sede Ayacucho Escuela la Pontificia"
+          />
+        </div>
+        <div className="bg-yellow-50/50 text-black flex flex-col md:px-5 md:w-[550px] md:min-w-[550px] md:max-w-[550px] flex-grow h-full">
           <nav className="p-10 flex justify-center basis-0">
             <Link to="/login" className="flex items-center gap-1">
-              <img src="_lp-only-logo.webp" className="" width={30} alt="" />
-              <img src="_lp_only-letters.webp" className="" width={80} alt="" />
+              <img
+                src="_lp-only-logo.webp"
+                className=""
+                width={50}
+                alt="Logo Grupo La Pontificia"
+              />
+              <img
+                src="_lp_only-letters.webp"
+                className=""
+                width={100}
+                alt="Logo Grupo La Pontificia Letters"
+              />
             </Link>
           </nav>
           <header className="lg:py-8 pb-5 lg:pb-8">
             <h1 className="font-bold pb-2 tracking-tight text-2xl text-center">
               PontiApp
             </h1>
-            <p className="max-w-[35ch] opacity-70 text-center mx-auto">
+            <p className="max-w-[35ch] opacity-70 text-center text-sm mx-auto">
               Aplicación Institucional PontiApp, sistema integrado de gestión de
               EDA
             </p>
           </header>
-          <div className="flex-grow lg:max-w-md max-w-full lg:p-0 px-4 mx-auto bg-white">
+          <div className="flex-grow px-4 my-auto">
             <button
               disabled={loadingId}
               onClick={handleID}
@@ -119,7 +133,7 @@ export default function LoginPage() {
             <div className="py-5 font-medium text-xs max-w-[40ch] text-center mx-auto">
               También puedes iniciar sesión con tu correo o nombre de usuario.
             </div>
-            <div className="w-full flex items-center flex-col">
+            <div className="w-full">
               <form
                 onSubmit={handleCredential}
                 className="rounded-xl border-2 border-black group divide-y-2 transition-transform overflow-hidden divide-black bg-white w-full"
@@ -168,43 +182,49 @@ export default function LoginPage() {
                   </div>
                 </div>
               </form>
+              <a
+                href="#"
+                className="hover:underline w-fit text-sm mt-3 block mx-auto text-slate-700"
+              >
+                ¿Olvidaste tu contraseña?
+              </a>
             </div>
           </div>
+          <footer className="p-10">
+            <div className="grayscale flex flex-wrap justify-center items-center gap-10">
+              {Object.entries(businesses).map(
+                ([url, { acronym, logo, name }]) => (
+                  <Link
+                    title={'Ir a la página de ' + name}
+                    key={url}
+                    to={url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="group"
+                  >
+                    <img
+                      className="w-[100%] h-[25px] "
+                      src={logo}
+                      loading="lazy"
+                      alt={acronym + ' Logo' + name}
+                    />
+                  </Link>
+                )
+              )}
+            </div>
+            <p className="mt-10 text-xs text-center">
+              {new Date().getFullYear()} ©{' '}
+              <a
+                href="https://lp.com.pe"
+                target="_blank"
+                className="border-b border-dotted"
+              >
+                La Pontificia.
+              </a>{' '}
+              Todos los derechos reservados.
+            </p>
+          </footer>
         </div>
-        <footer className="p-10 py-20 bg-gradient-to-b from-white via-white/95 to-transparent">
-          <div className="grayscale flex flex-wrap justify-center items-center gap-10">
-            {Object.entries(businesses).map(
-              ([url, { acronym, logo, name }]) => (
-                <Link
-                  title={'Ir a la página de ' + name}
-                  key={url}
-                  to={url}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="group"
-                >
-                  <img
-                    className="w-[100%] h-[30px] "
-                    src={logo}
-                    loading="lazy"
-                    alt={acronym + ' Logo' + name}
-                  />
-                </Link>
-              )
-            )}
-          </div>
-          <p className="mt-10 text-xs text-center">
-            {new Date().getFullYear()} ©{' '}
-            <a
-              href="https://lp.com.pe"
-              target="_blank"
-              className="border-b border-dotted"
-            >
-              La Pontificia.
-            </a>{' '}
-            Todos los derechos reservados.
-          </p>
-        </footer>
       </div>
     </div>
   )
