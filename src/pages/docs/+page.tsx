@@ -10,7 +10,7 @@ export default function DocsPage() {
       setContent(module.default)
     })
   }, [])
-
+  
   return (
     <Markdown className="prose dark:prose-invert" remarkPlugins={[remarkGfm]}>
       {content}

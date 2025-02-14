@@ -455,49 +455,47 @@ export default function AssistFilters({
         </Drawer>
       )}
 
-      {openReport && (
-        <Dialog
-          open={openReport}
-          onOpenChange={(_, e) => setOpenReport(e.open)}
-          modalType="alert"
-        >
-          <DialogSurface>
-            <DialogBody>
-              <DialogTitle>
-                Verifica los filtros seleccionados antes de generar el reporte.
-              </DialogTitle>
-              <DialogContent>
-                <p className="w-full">
-                  Puedes seguir usando el sistema mientras se genera el reporte.
-                  enviaremos un correo cuando esté listo o puedes descargarlo
-                  desde la sección de{' '}
-                  <Link
-                    to="/m/assists/report-files"
-                    target="_blank"
-                    className="underline"
-                  >
-                    archivo de reportes
-                  </Link>{' '}
-                  del módulo.
-                </p>
-              </DialogContent>
-              <DialogActions>
-                <DialogTrigger disableButtonEnhancement>
-                  <Button appearance="secondary">Cancelar</Button>
-                </DialogTrigger>
-                <Button
-                  onClick={handleReport}
-                  disabled={reporting}
-                  icon={reporting ? <Spinner size="tiny" /> : undefined}
-                  appearance="primary"
+      <Dialog
+        open={openReport}
+        onOpenChange={(_, e) => setOpenReport(e.open)}
+        modalType="alert"
+      >
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>
+              Verifica los filtros seleccionados antes de generar el reporte.
+            </DialogTitle>
+            <DialogContent>
+              <p className="w-full">
+                Puedes seguir usando el sistema mientras se genera el reporte.
+                enviaremos un correo cuando esté listo o puedes descargarlo
+                desde la sección de{' '}
+                <Link
+                  to="/m/assists/report-files"
+                  target="_blank"
+                  className="underline"
                 >
-                  Generar reporte
-                </Button>
-              </DialogActions>
-            </DialogBody>
-          </DialogSurface>
-        </Dialog>
-      )}
+                  archivo de reportes
+                </Link>{' '}
+                del módulo.
+              </p>
+            </DialogContent>
+            <DialogActions>
+              <DialogTrigger disableButtonEnhancement>
+                <Button appearance="secondary">Cancelar</Button>
+              </DialogTrigger>
+              <Button
+                onClick={handleReport}
+                disabled={reporting}
+                icon={reporting ? <Spinner size="tiny" /> : undefined}
+                appearance="primary"
+              >
+                Generar reporte
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
     </>
   )
 }

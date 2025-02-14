@@ -8,7 +8,7 @@ export default function QuickInfo() {
       <h2 className="dark:dark:text-neutral-400 font-semibold py-5 pb-2 text-sm">
         Metadata
       </h2>
-      <footer className="text-neutral-500 font-semibold text-xs">
+      <footer className="dark:text-neutral-300 text-stone-700 font-semibold text-xs">
         {user?.id && <p>ID: {user?.id}</p>}
         {user?.username && <p>Username: {user?.username}</p>}
         {user?.updated_at && <p>Actualizado {timeAgo(user?.updated_at)}</p>}

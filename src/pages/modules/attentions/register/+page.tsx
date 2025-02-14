@@ -74,7 +74,7 @@ export default function AttentionsRegisterPage() {
         throw new Error('No se pudo obtener los puestos de atención')
       }
 
-      const person = await getPersonByDocumentId(documentId, false)
+      const person = await getPersonByDocumentId(documentId)
 
       if (!person) {
         throw new Error('No se encontró la persona')

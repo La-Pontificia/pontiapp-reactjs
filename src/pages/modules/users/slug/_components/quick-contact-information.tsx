@@ -15,9 +15,7 @@ export default function QuickContactInformation() {
 
   return (
     <div className="flex flex-col">
-      <h2 className="dark:dark:text-neutral-400 font-semibold py-2 text-sm">
-        Información de contacto
-      </h2>
+      <h2 className="font-semibold py-2 text-sm">Información de contacto</h2>
       <div className="grid lg:grid-cols-2 gap-x-10 gap-y-3">
         {isLoading ? (
           <>
@@ -32,7 +30,7 @@ export default function QuickContactInformation() {
               children={
                 <a
                   href={`mailto:${user?.email}`}
-                  className="dark:text-[#eaa8ff] font-semibold text-[#0e37cd]"
+                  className="dark:text-blue-500 text-blue-700"
                 >
                   {user?.email}
                 </a>
@@ -41,30 +39,28 @@ export default function QuickContactInformation() {
               icon={MailRegular}
               title="Correo electrónico"
             />
-            <InfoItem
-              children={<p className="font-semibold">{user?.role?.name}</p>}
-              textValue={user?.role?.name}
-              icon={PersonRegular}
-              title="Cargo"
-            />
-            <InfoItem
-              children={
-                <p className="font-semibold">{user?.role?.department.name}</p>
-              }
-              textValue={user?.role?.department.name}
-              icon={BuildingRegular}
-              title="Departamento"
-            />
-            <InfoItem
-              children={
-                <p className="font-semibold">
-                  {user?.role?.department?.area?.name}
-                </p>
-              }
-              textValue={user?.role?.department?.area?.name}
-              icon={BuildingMultipleFilled}
-              title="Area"
-            />
+            {user?.role && (
+              <>
+                <InfoItem
+                  children={<p>{user.role.name}</p>}
+                  textValue={user.role.name}
+                  icon={PersonRegular}
+                  title="Cargo"
+                />
+                <InfoItem
+                  children={<p>{user.role.department.name}</p>}
+                  textValue={user.role.department.name}
+                  icon={BuildingRegular}
+                  title="Departamento"
+                />
+                <InfoItem
+                  children={<p>{user.role.department?.area?.name}</p>}
+                  textValue={user.role.department?.area?.name}
+                  icon={BuildingMultipleFilled}
+                  title="Area"
+                />
+              </>
+            )}
           </>
         )}
       </div>
@@ -98,7 +94,7 @@ export const InfoItem = ({
     toast('Copiado al portapapeles')
   }
   return (
-    <div className="flex rounded-lg group hover:bg-stone-500/10 p-1.5 items-center gap-4">
+    <div className="flex rounded-md group hover:bg-stone-500/10 p-1.5 items-center gap-4">
       <Icon
         fontSize={22}
         style={{

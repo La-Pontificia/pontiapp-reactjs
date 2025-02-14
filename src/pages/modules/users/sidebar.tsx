@@ -2,11 +2,13 @@ import { ItemSidebarNav, ReusableSidebar } from '~/components/reusable-sidebar'
 import {
   DocumentFilled,
   DocumentRegular,
-  PeopleFilled,
-  PeopleRegular,
-  PersonDeleteFilled,
-  PersonDeleteRegular,
+  // PeopleFilled,
+  // PeopleRegular,
   PersonFilled,
+  // PersonLightbulbFilled,
+  // PersonLightbulbRegular,
+  PersonProhibitedFilled,
+  PersonProhibitedRegular,
   PersonRegular
 } from '@fluentui/react-icons'
 
@@ -20,29 +22,38 @@ export const UsersSidebar = () => {
           iconActive={PersonFilled}
           href="/m/users/all"
         >
-          Todos
+          Activos
         </ItemSidebarNav>
         <ItemSidebarNav
           has={['users:show']}
-          icon={PersonDeleteRegular}
-          iconActive={PersonDeleteFilled}
+          icon={PersonProhibitedRegular}
+          iconActive={PersonProhibitedFilled}
           href="/m/users/disabled"
         >
           Inactivos
         </ItemSidebarNav>
-        <ItemSidebarNav
+        {/* <ItemSidebarNav
+          has={['users:collaborators:show']}
+          icon={PersonLightbulbRegular}
+          iconActive={PersonLightbulbFilled}
+          href="/m/users/collaborators"
+        >
+          Colaboradores
+        </ItemSidebarNav> */}
+        {/* <ItemSidebarNav
           has={['users:teams']}
           icon={PeopleRegular}
           iconActive={PeopleFilled}
           href="/m/users/teams"
         >
           Grupos
-        </ItemSidebarNav>
-        <div className="font-semibold px-5 pt-5 pb-2">Ajustes</div>
+        </ItemSidebarNav> */}
+        <div className="font-semibold pl-4 pt-5 pb-2 dark:text-blue-400 text-blue-700 text-xs">
+          Ajustes
+        </div>
         <ItemSidebarNav
           has={['users:areas']}
           icon={DocumentRegular}
-          emptyIcon
           iconActive={DocumentFilled}
           href="/m/users/areas"
         >
@@ -52,13 +63,11 @@ export const UsersSidebar = () => {
           has={['users:departments']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
-          emptyIcon
           href="/m/users/departments"
         >
           Departamentos
         </ItemSidebarNav>
         <ItemSidebarNav
-          emptyIcon
           has={['users:jobs']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
@@ -67,7 +76,6 @@ export const UsersSidebar = () => {
           Puestos
         </ItemSidebarNav>
         <ItemSidebarNav
-          emptyIcon
           has={['users:roles']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
@@ -76,7 +84,6 @@ export const UsersSidebar = () => {
           Cargos
         </ItemSidebarNav>
         <ItemSidebarNav
-          emptyIcon
           has={['users:userRoles']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
@@ -85,7 +92,6 @@ export const UsersSidebar = () => {
           Privilegios y roles
         </ItemSidebarNav>
         <ItemSidebarNav
-          emptyIcon
           has={['users:contractTypes']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}

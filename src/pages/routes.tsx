@@ -11,19 +11,21 @@ import DocsLayout from './docs/+layout'
 import DocsPage from './docs/+page'
 import SlugDocsPage from './docs/slug/+page'
 import CreatePasswordPage from './create-password/+page'
+import FluentUIProvider from '~/providers/fluentui'
 
 export default function MainRoutes() {
   return (
     <Routes>
       <Route path="/login" element={<LoginPage />} />
-
       <Route
         element={
-          <AuthProvider>
-            <AuthMiddleware>
-              <Outlet />
-            </AuthMiddleware>
-          </AuthProvider>
+          <FluentUIProvider>
+            <AuthProvider>
+              <AuthMiddleware>
+                <Outlet />
+              </AuthMiddleware>
+            </AuthProvider>
+          </FluentUIProvider>
         }
       >
         <Route path="/create-password" element={<CreatePasswordPage />} />

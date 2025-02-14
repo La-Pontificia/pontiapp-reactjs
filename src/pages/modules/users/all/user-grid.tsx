@@ -14,20 +14,18 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
-  Menu,
-  MenuItem,
-  MenuList,
-  MenuPopover,
-  MenuTrigger,
-  Spinner
+  Spinner,
+  TableCell,
+  TableCellLayout,
+  TableRow,
+  TableSelectionCell,
+  Tooltip
 } from '@fluentui/react-components'
 import {
-  BranchRegular,
-  CircleOffRegular,
   KeyResetRegular,
-  MoreHorizontal20Filled,
   OpenRegular,
-  PenRegular
+  PenRegular,
+  PersonProhibitedRegular
 } from '@fluentui/react-icons'
 import React from 'react'
 import { Link, useNavigate } from 'react-router'
@@ -68,85 +66,97 @@ export default function UserGrid({
     toast('Jefe actualizado correctamente.')
   }
   return (
-    <tr className="relative [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3">
-      <td>
-        <UserHoverInfo slug={user.username}>
-          <div className="flex items-center gap-2">
-            <Avatar
-              size={40}
-              color="colorful"
-              name={user.displayName}
-              aria-label={user.displayName}
-              image={{
-                src: user.photoURL
-              }}
-            />
-            <Link
-              className="hover:underline font-semibold relative"
-              to={`/m/users/${user.username}`}
-            >
-              {user.displayName}
-            </Link>
+    <>
+      <TableRow>
+        <TableSelectionCell type="radio" />
+        <TableCell>
+          <UserHoverInfo slug={user.username}>
+            <div className="flex items-center gap-2">
+              <TableCellLayout
+                media={
+                  <Avatar
+                    name={user.displayName}
+                    color="colorful"
+                    badge={{
+                      status: 'available'
+                    }}
+                    image={{
+                      src: user.photoURL
+                    }}
+                  />
+                }
+              >
+                <Link
+                  className="hover:underline dark:text-blue-500 text-blue-600 relative"
+                  to={`/m/users/${user.username}`}
+                >
+                  {user.displayName}
+                </Link>
+              </TableCellLayout>
+            </div>
+          </UserHoverInfo>
+        </TableCell>
+        <TableCell className="max-sm:hidden">
+          <div className="line-clamp-2 opacity-60 text-ellipsis overflow-hidden">
+            {user.role?.name ?? ''}
           </div>
-        </UserHoverInfo>
-      </td>
-      <td className="max-sm:hidden">
-        <div className="max-w-[30ch] opacity-60 text-ellipsis overflow-hidden">
-          {user.role.name}
-        </div>
-      </td>
-      <td className="max-lg:hidden">
-        <p className="dark:text-white relative max-xl:max-w-[20ch] text-ellipsis overflow-hidden">
-          <a href={`mailto:${user.email}`} className="hover:underline">
-            {user.email}
-          </a>
-        </p>
-      </td>
-      <td className="max-xl:hidden">
-        <UserDrawer
-          max={1}
-          users={user.manager ? [user.manager] : []}
-          title="Jefe inmediato"
-          onSubmitTitle="Cambiar jefe"
-          onSubmit={(v) => handleManager(v[0])}
-          triggerProps={{
-            appearance: 'transparent',
-            style: {
-              padding: 0,
-              'box-shadow': 'none !important',
-              border: 'none !important',
-              borderRadius: '12px !important'
-            } as React.CSSProperties,
-            disabled:
-              !!managerUpdating || !authUser.hasPrivilege('users:asignManager'),
-            children: managerUpdating ? (
-              <Spinner size="extra-tiny" />
-            ) : user.manager ? (
-              <div className="flex rounded-xl items-center p-1  shadow-black/80 dark:shadow-lg">
-                <Avatar
-                  size={20}
-                  color="steel"
-                  name={user.manager.displayName}
-                  image={{
-                    src: user.manager.photoURL
-                  }}
-                />
-                <span className="px-1 font-medium dark:text-white text-black">
-                  {user.manager.displayName}
-                </span>
-              </div>
-            ) : (
-              <div className="p-2">
-                <span className="px-1 py-1 block">Sin jefe</span>
-              </div>
-            )
-          }}
-        />
-      </td>
-      <td className="">
-        <UserGridOptions refetch={refetch} setUser={setUser} user={user} />
-      </td>
-    </tr>
+        </TableCell>
+        <TableCell className="max-lg:hidden">
+          <p className="dark:text-white relative text-ellipsis overflow-hidden">
+            <a href={`mailto:${user.email}`} className="hover:underline">
+              {user.email}
+            </a>
+          </p>
+        </TableCell>
+        <TableCell className="max-xl:hidden">
+          <UserDrawer
+            max={1}
+            users={user.manager ? [user.manager] : []}
+            title="Jefe inmediato"
+            onSubmitTitle="Cambiar jefe"
+            onSubmit={(v) => handleManager(v[0])}
+            triggerProps={{
+              appearance: 'transparent',
+              style: {
+                padding: 0,
+                'box-shadow': 'none !important',
+                border: 'none !important',
+                borderRadius: '12px !important'
+              } as React.CSSProperties,
+              disabled:
+                !!managerUpdating ||
+                !authUser.hasPrivilege('users:asignManager'),
+              children: managerUpdating ? (
+                <Spinner size="extra-tiny" />
+              ) : user.manager ? (
+                <div className="flex rounded-xl items-center text-left p-1  shadow-black/80 dark:shadow-lg">
+                  <TableCellLayout
+                    media={
+                      <Avatar
+                        name={user.manager.displayName}
+                        color="colorful"
+                        image={{
+                          src: user.manager.photoURL
+                        }}
+                      />
+                    }
+                  >
+                    {user.manager.displayName}
+                  </TableCellLayout>
+                </div>
+              ) : (
+                <div className="p-2">
+                  <span className="px-1 py-1 block">Sin jefe</span>
+                </div>
+              )
+            }}
+          />
+        </TableCell>
+        <TableCell>
+          <UserGridOptions refetch={refetch} setUser={setUser} user={user} />
+        </TableCell>
+      </TableRow>
+    </>
   )
 }
 
@@ -193,64 +203,45 @@ export const UserGridOptions = ({
 
   return (
     <>
-      <Menu closeOnScroll persistOnItemClick positioning={{ autoSize: true }}>
-        <MenuTrigger disableButtonEnhancement>
+      <Tooltip content="Ver perfil" relationship="description">
+        <Button
+          icon={<OpenRegular />}
+          onClick={() => window.open(`/${user.username}`, '_blank')}
+          appearance="transparent"
+        />
+      </Tooltip>
+      {authUser.hasPrivilege('users:edit') && (
+        <Tooltip content="Editar usuario" relationship="description">
           <Button
-            style={{
-              padding: 0
-            }}
+            icon={<PenRegular />}
+            onClick={() => navigate(`/m/users/${user.username}/edit`)}
             appearance="transparent"
-            className="relative opacity-60"
-          >
-            <MoreHorizontal20Filled />
-          </Button>
-        </MenuTrigger>
-        <MenuPopover>
-          <MenuList>
-            <MenuItem
-              icon={<OpenRegular />}
-              onClick={() => window.open(`/${user.username}`, '_blank')}
-            >
-              Ver perfil
-            </MenuItem>
-            {authUser.hasPrivilege('users:edit') && (
-              <MenuItem
-                icon={<PenRegular />}
-                disabled={!authUser.hasPrivilege('users:edit')}
-                onClick={() => navigate(`/m/users/edit/${user.username}`)}
-              >
-                Editar
-              </MenuItem>
-            )}
-            {authUser.hasPrivilege('users:resetPassword') && (
-              <MenuItem
-                icon={<KeyResetRegular />}
-                onClick={() => setIsResetAlertOpen(true)}
-              >
-                Restablecer contraseña
-              </MenuItem>
-            )}
-            {authUser.hasPrivilege('users:toggleStatus') && (
-              <MenuItem
-                icon={<CircleOffRegular />}
-                onClick={() => setIsToggleStatusOpen(true)}
-              >
-                {user.status ? 'Deshabilitar acceso' : 'Habilitar acceso'}
-              </MenuItem>
-            )}
-            {authUser.hasPrivilege('users:createVersion') && (
-              <MenuItem icon={<BranchRegular />}>Crear una version</MenuItem>
-            )}
-          </MenuList>
-        </MenuPopover>
-      </Menu>
-
+          />
+        </Tooltip>
+      )}
+      {authUser.hasPrivilege('users:resetPassword') && (
+        <Tooltip content="Restablecer contraseña" relationship="description">
+          <Button
+            icon={<KeyResetRegular />}
+            onClick={() => setIsResetAlertOpen(true)}
+            appearance="transparent"
+          />
+        </Tooltip>
+      )}
+      {authUser.hasPrivilege('users:toggleStatus') && (
+        <Tooltip content={'Deshabilitar acceso'} relationship="description">
+          <Button
+            icon={<PersonProhibitedRegular />}
+            onClick={() => setIsToggleStatusOpen(true)}
+            appearance="transparent"
+          />
+        </Tooltip>
+      )}
       <ResetPassword
         user={user}
         open={isResetAlertOpen}
         setOpen={setIsResetAlertOpen}
       />
-
       <Dialog
         open={isToggleStatusOpen}
         onOpenChange={(_, e) => setIsToggleStatusOpen(e.open)}

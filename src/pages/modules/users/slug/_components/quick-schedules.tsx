@@ -15,12 +15,11 @@ export default function QuickSchedules({ slug }: { slug?: string }) {
     queryKey: ['quick-schedules', slug],
     queryFn: async () => {
       const res = await api.get<Schedule[]>(
-        'users/' + slug + '/schedules?relationship=terminal&limit=3'
+        `users/schedules/${slug}?archived=false&limit=3`
       )
       if (!res.ok) return []
       return res.data.map((d) => new Schedule(d))
-    },
-    gcTime: 1000 * 60 * 60 * 5
+    }
   })
 
   const countSchedules = schedules?.length || 0

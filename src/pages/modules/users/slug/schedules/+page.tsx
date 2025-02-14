@@ -22,7 +22,7 @@ export default function UsersSlugSchedulesPage() {
     queryKey: ['schedules', slug],
     queryFn: async () => {
       const res = await api.get<Schedule[]>(
-        'users/' + slug + '/schedules?relationship=terminal'
+        `users/schedules/${slug}?archived=false`
       )
       if (!res.ok) return []
       return res.data.map((d) => new Schedule(d))
@@ -32,7 +32,7 @@ export default function UsersSlugSchedulesPage() {
   const countSchedules = schedules?.length || 0
 
   return (
-    <div className="max-w-5xl px-4 mx-auto w-full">
+    <div className="max-w-7xl px-4 mx-auto w-full">
       <Helmet>
         <title>
           {user ? user.displayName + ' -' : ''} Horarios | Ponti App

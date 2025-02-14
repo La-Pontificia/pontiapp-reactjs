@@ -2,7 +2,14 @@
 // import { api } from '~/lib/api'
 // import { useAuth } from '~/store/auth'
 // import { handleAuthError } from '~/utils'
-import { Avatar, Button, Spinner } from '@fluentui/react-components'
+import {
+  Avatar,
+  Button,
+  Spinner,
+  TableCell,
+  TableRow,
+  TableSelectionCell
+} from '@fluentui/react-components'
 import { MailArrowUpRegular } from '@fluentui/react-icons'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'anni'
@@ -34,8 +41,9 @@ export default function UserGrid({
     }
   })
   return (
-    <tr className="relative [&>td]:text-nowrap group [&>td]:p-3 [&>td]:px-3">
-      <td>
+    <TableRow>
+      <TableSelectionCell type="radio" />
+      <TableCell>
         <UserHoverInfo slug={user.username}>
           <div className="flex items-center gap-2">
             <Avatar
@@ -55,23 +63,23 @@ export default function UserGrid({
             </Link>
           </div>
         </UserHoverInfo>
-      </td>
-      <td>
+      </TableCell>
+      <TableCell>
         <div className="max-w-[30ch] opacity-70 text-ellipsis overflow-hidden">
-          {user.role.name}
+          {user.role?.name}
         </div>
-      </td>
-      <td className="max-xl:hidden">
+      </TableCell>
+      <TableCell className="max-xl:!hidden">
         <div className="max-w-[30ch] opacity-90 text-ellipsis overflow-hidden">
-          {user.role.department.area.name}
+          {user.role?.department.area.name}
         </div>
-      </td>
-      <td>
+      </TableCell>
+      <TableCell>
         <p className="font-medium opacity-70">
           {user.edasCount} {user.edasCount === 1 ? 'Eda' : 'Edas'}
         </p>
-      </td>
-      <td className="max-xl:hidden">
+      </TableCell>
+      <TableCell className="max-xl:!hidden">
         {user.manager?.displayName ? (
           <p className="dark:text-blue-500 text-blue-600 font-medium">
             {user.manager?.displayName}
@@ -79,8 +87,8 @@ export default function UserGrid({
         ) : (
           <p>Sin jefe</p>
         )}
-      </td>
-      <td>
+      </TableCell>
+      <TableCell>
         <div>
           <Button
             disabled={invitating}
@@ -102,7 +110,7 @@ export default function UserGrid({
             </p>
           )}
         </div>
-      </td>
-    </tr>
+      </TableCell>
+    </TableRow>
   )
 }

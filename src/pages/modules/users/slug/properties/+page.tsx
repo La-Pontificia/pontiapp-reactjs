@@ -47,6 +47,7 @@ export default function UsersSlugPropertiesPage() {
     loading: boolean
     children: React.ReactNode
   }) => {
+    if (!children) return null
     return (
       <div className="flex items-center gap-4">
         <p className="lg:min-w-[200px] max-lg:flex-grow text-nowrap dark:text-neutral-400">
@@ -55,14 +56,14 @@ export default function UsersSlugPropertiesPage() {
         {loading ? (
           <div className="h-4 w-16 rounded-full bg-neutral-500/30 animate-pulse" />
         ) : (
-          <div className="font-semibold">{children || '-'}</div>
+          <div className="font-semibold">{children}</div>
         )}
       </div>
     )
   }
 
   return (
-    <div className="max-w-5xl px-4 mx-auto w-full">
+    <div className="max-w-7xl px-4 mx-auto w-full">
       <Helmet>
         <title>
           {user ? user.displayName + ' -' : ''} Propiedades | Ponti App
@@ -71,7 +72,7 @@ export default function UsersSlugPropertiesPage() {
       <p className="pt-4 opacity-70">
         Información detallada de {user?.displayName}
       </p>
-      <div className="space-y-4 py-5">
+      <div className="space-y-2 py-5">
         <h2 className="font-semibold">Básicos</h2>
         <Lazy
           title="Correo"
@@ -121,11 +122,13 @@ export default function UsersSlugPropertiesPage() {
             )
           }
         />
-        <Lazy
-          title="Privilegios adicionales"
-          loading={isLoading}
-          children={user?.customPrivileges?.length || '0 Pivilegios'}
-        />
+        {user?.customPrivileges?.length && (
+          <Lazy
+            title="Privilegios adicionales"
+            loading={isLoading}
+            children={user?.customPrivileges?.length}
+          />
+        )}
         <h2 className="font-semibold">Propiedades</h2>
         <div className="flex items-center gap-4">
           <Avatar
@@ -153,9 +156,7 @@ export default function UsersSlugPropertiesPage() {
           title="Fecha de nacimiento"
           loading={aditionalIsLoading}
           children={
-            properties?.birthdate
-              ? format(properties?.birthdate, 'DD/MM/YYYY')
-              : '-'
+            properties?.birthdate && format(properties?.birthdate, 'DD/MM/YYYY')
           }
         />
         <Lazy
@@ -182,22 +183,30 @@ export default function UsersSlugPropertiesPage() {
           }
         />
         <h2 className="font-semibold">Organización</h2>
-        <Lazy
-          title="Puesto de trabajo"
-          loading={isLoading}
-          children={user?.role.job?.name}
-        />
-        <Lazy title="Cargo" loading={isLoading} children={user?.role?.name} />
-        <Lazy
-          title="Departamento"
-          loading={isLoading}
-          children={user?.role?.department.name}
-        />
-        <Lazy
-          title="Area"
-          loading={isLoading}
-          children={user?.role?.department.area.name}
-        />
+        {user?.role && (
+          <>
+            <Lazy
+              title="Puesto de trabajo"
+              loading={isLoading}
+              children={user.role.job.name}
+            />
+            <Lazy
+              title="Cargo"
+              loading={isLoading}
+              children={user?.role?.name}
+            />
+            <Lazy
+              title="Departamento"
+              loading={isLoading}
+              children={user?.role?.department.name}
+            />
+            <Lazy
+              title="Area"
+              loading={isLoading}
+              children={user?.role?.department.area.name}
+            />
+          </>
+        )}
         <Lazy
           title="Fecha de ingreso"
           loading={aditionalIsLoading}

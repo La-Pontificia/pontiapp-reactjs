@@ -1,5 +1,13 @@
 import { User } from '~/types/user'
 import UserGrid from './user-grid'
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
+  TableSelectionCell
+} from '@fluentui/react-components'
 
 export default function UsersGrid({
   users,
@@ -9,21 +17,24 @@ export default function UsersGrid({
   refetch: () => void
 }) {
   return (
-    <table className="w-full relative">
-      <thead className="">
-        <tr className="font-semibold [&>td]:p-3 [&>td]:text-nowrap dark:text-neutral-400 text-neutral-500 text-left">
-          <td className="max-sm:w-full">Usuario</td>
-          <td className="max-sm:hidden">Cargo</td>
-          <td className="max-xl:hidden">Email</td>
-          <td className="max-xl:hidden">Jefe (Manager)</td>
-          <td></td>
-        </tr>
-      </thead>
-      <tbody className="divide-y overflow-y-auto divide-neutral-300 dark:divide-neutral-500/30">
+    <Table>
+      <TableHeader>
+        <TableRow>
+          <TableSelectionCell type="radio" invisible />
+          <TableHeaderCell>Usuario</TableHeaderCell>
+          <TableHeaderCell className="!max-sm:hidden">Cargo</TableHeaderCell>
+          <TableHeaderCell className="!max-xl:hidden">Email</TableHeaderCell>
+          <TableHeaderCell className="!max-xl:hidden">
+            Jefe (Manager)
+          </TableHeaderCell>
+          <TableHeaderCell></TableHeaderCell>
+        </TableRow>
+      </TableHeader>
+      <TableBody>
         {users.map((user) => (
           <UserGrid refetch={refetch} user={user} key={user.id} />
         ))}
-      </tbody>
-    </table>
+      </TableBody>
+    </Table>
   )
 }

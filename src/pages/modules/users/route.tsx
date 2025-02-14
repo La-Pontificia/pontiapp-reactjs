@@ -2,10 +2,7 @@ import { Navigate, Route, Routes } from 'react-router'
 import ProtectedModule from '~/protected/module'
 import Protected from '~/protected/auth'
 
-import UsersEditSchedulesPage from '~/pages/modules/users/edit/schedules/+page'
 import UsersSlugHistoryPage from '~/pages/modules/users/slug/history/+page'
-import UsersEditLayout from '~/pages/modules/users/edit/+layout'
-import UsersEditPage from '~/pages/modules/users/edit/+page'
 import UsersTeamsPage from '~/pages/modules/users/teams/+page'
 import UsersTeamSlugPage from '~/pages/modules/users/teams/[slug]/+page'
 import UsersReportFilesPage from '~/pages/modules/users/report-files/+page'
@@ -15,11 +12,8 @@ import UsersJobsPage from '~/pages/modules/users/jobs/+page'
 import UsersRolesPage from '~/pages/modules/users/roles/+page'
 import UsersContractTypesPage from '~/pages/modules/users/contract-types/+page'
 import UsersUserRolesPage from '~/pages/modules/users/user-roles/+page'
-import UsersEditOrganizationPage from '~/pages/modules/users/edit/organization/+page'
-import UsersEditPropertiesPage from '~/pages/modules/users/edit/properties/+page'
 import DisabledUsersPage from '~/pages/modules/users/disabled/+page'
 import AllUsersPage from '~/pages/modules/users/all/+page'
-import CreateUserPage from '~/pages/modules/users/create/+page'
 import UsersLayout from '~/pages/modules/users/+layout'
 import UsersSlugLayout from './slug/+layout'
 import UsersSlugPage from './slug/+page'
@@ -27,6 +21,7 @@ import UsersSlugOrganizationPage from './slug/organization/+page'
 import UsersSlugPropertiesPage from './slug/properties/+page'
 import UsersSlugSchedulesPage from './slug/schedules/+page'
 import UsersSlugAssistsPage from './slug/assists/+page'
+import UserdSlugEditPage from './slug/edit/+page'
 
 export default function UsersRoutes() {
   return (
@@ -52,14 +47,6 @@ export default function UsersRoutes() {
           element={
             <Protected has="users:show" navigate="/m/users/all">
               <DisabledUsersPage />
-            </Protected>
-          }
-        />
-        <Route
-          path="create"
-          element={
-            <Protected has="users:create" navigate="/m/users/all">
-              <CreateUserPage />
             </Protected>
           }
         />
@@ -137,20 +124,6 @@ export default function UsersRoutes() {
             }
           />
         </Route>
-        <Route
-          path="edit/:slug"
-          element={
-            <Protected has="users:edit" navigate="/m/users/all">
-              <UsersEditLayout />
-            </Protected>
-          }
-        >
-          <Route index element={<UsersEditPage />} />
-          <Route path="organization" element={<UsersEditOrganizationPage />} />
-          <Route path="properties" element={<UsersEditPropertiesPage />} />
-
-          <Route path="schedules" element={<UsersEditSchedulesPage />} />
-        </Route>
         <Route path=":slug" element={<UsersSlugLayout />}>
           <Route index element={<UsersSlugPage />} />
           <Route path="organization" element={<UsersSlugOrganizationPage />} />
@@ -158,6 +131,14 @@ export default function UsersRoutes() {
           <Route path="schedules" element={<UsersSlugSchedulesPage />} />
           <Route path="assists" element={<UsersSlugAssistsPage />} />
           <Route path="history" element={<UsersSlugHistoryPage />} />
+          <Route
+            path="edit"
+            element={
+              <Protected has="users:edit" navigate="/m/users/all">
+                <UserdSlugEditPage />
+              </Protected>
+            }
+          />
         </Route>
         {/* <Route path="*" element={<UsersPage />} /> */}
       </Route>

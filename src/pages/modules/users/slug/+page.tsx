@@ -11,7 +11,7 @@ export default function UsersSlugPage() {
   const slug = params.slug
 
   return (
-    <div className="max-w-5xl py-3 space-y-4 lg:px-5 px-3 mx-auto w-full">
+    <div className="max-w-7xl py-3 space-y-4 lg:px-5 px-4 mx-auto w-full">
       <QuickSchedules slug={slug} />
       <QuickContactInformation />
       <QuickOrganization slug={slug} />

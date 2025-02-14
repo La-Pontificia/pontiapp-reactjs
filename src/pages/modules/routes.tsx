@@ -7,7 +7,7 @@ import AssistsRoutes from './assists/routes'
 import EventsRoutes from './events/routes'
 import AttentionsRoutes from './attentions/route'
 import InventoriesRoutes from './inventories/routes'
-import ResourceManagementRoutes from './resource-management/routes'
+import ResourceManagementRoutes from './rm/routes'
 
 export default function ModulesRoutes() {
   return (
@@ -20,10 +20,7 @@ export default function ModulesRoutes() {
         <Route path="events/*" element={<EventsRoutes />} />
         <Route path="attentions/*" element={<AttentionsRoutes />} />
         <Route path="inventories/*" element={<InventoriesRoutes />} />
-        <Route
-          path="resource-management/*"
-          element={<ResourceManagementRoutes />}
-        />
+        <Route path="rm/*" element={<ResourceManagementRoutes />} />
       </Route>
     </Routes>
   )

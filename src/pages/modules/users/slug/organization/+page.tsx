@@ -36,7 +36,7 @@ export default function UsersSlugOrganizationPage() {
           {user ? user.displayName + ' -' : ''} Organizaciones | Ponti App
         </title>
       </Helmet>
-      <div className="max-w-5xl px-4 py-3 dark:text-neutral-400 w-full mx-auto">
+      <div className="max-w-7xl px-4 py-3 dark:text-neutral-400 w-full mx-auto">
         <div className="flex items-center gap-1">
           <p>
             Jerarquía visual de la organización de {user?.displayName} {}
@@ -51,7 +51,7 @@ export default function UsersSlugOrganizationPage() {
           }
         </div>
       </div>
-      <div className="max-w-5xl flex-grow py-5 px-4 mx-auto w-full flex flex-col items-center">
+      <div className="max-w-7xl px-4 flex-grow py-5 mx-auto w-full flex flex-col items-center">
         {isLoading && (
           <>
             <SkeletonPersonItem />

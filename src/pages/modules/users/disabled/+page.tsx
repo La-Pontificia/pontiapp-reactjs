@@ -1,18 +1,16 @@
-import { toast } from 'anni'
 import { api } from '~/lib/api'
 import { ResponsePaginate } from '~/types/paginate-response'
 import { User } from '~/types/user'
 import * as React from 'react'
 import { Spinner, Tooltip } from '@fluentui/react-components'
-import { AddFilled, FilterAddFilled } from '@fluentui/react-icons'
+import { FilterAddFilled, FolderPeopleRegular } from '@fluentui/react-icons'
 import UsersGrid from './grid'
 import { useDebounced } from '~/hooks/use-debounced'
 import CollaboratorsFilters from './filters'
 import { useQuery } from '@tanstack/react-query'
-import { Link } from 'react-router'
-import { useAuth } from '~/store/auth'
 import SearchBox from '~/commons/search-box'
 import { Helmet } from 'react-helmet'
+import Pagination from '~/commons/pagination'
 
 export type FiltersValues = {
   q: string | null
@@ -22,15 +20,11 @@ export type FiltersValues = {
   role: string | null
   hasManager: string | null
   hasSchedules: string | null
+  page: number
 }
 
 export default function DisabledUsersPage() {
-  const { user: authUser } = useAuth()
   const [openFilters, setOpenFilters] = React.useState(false)
-  const [loadingMore, setLoadingMore] = React.useState(false)
-  const [info, setInfo] = React.useState<ResponsePaginate<User[]>>(
-    {} as ResponsePaginate<User[]>
-  )
   const [filters, setFilters] = React.useState<FiltersValues>({
     q: null,
     job: null,
@@ -38,11 +32,13 @@ export default function DisabledUsersPage() {
     area: null,
     role: null,
     hasManager: null,
-    hasSchedules: null
+    hasSchedules: null,
+    page: 1
   })
 
   const getFiltersQuery = () => {
     let query = '?status=inactives&relationship=role,manager'
+    if (filters.page) query += `&page=${filters.page}`
     if (filters.q) query += `&q=${filters.q}`
     if (filters.job) query += `&job=${filters.job}`
     if (filters.department) query += `&department=${filters.department}`
@@ -52,8 +48,6 @@ export default function DisabledUsersPage() {
     if (filters.hasSchedules) query += `&hasSchedules=${filters.hasSchedules}`
     return query
   }
-
-  const [users, setUsers] = React.useState<User[]>([])
 
   const {
     data,
@@ -70,33 +64,6 @@ export default function DisabledUsersPage() {
     }
   })
 
-  React.useEffect(() => {
-    if (!data) return
-    setUsers(data.data.map((user) => new User(user)))
-    setInfo(data)
-  }, [data])
-
-  const nextPage = async () => {
-    setLoadingMore(true)
-    const query = getFiltersQuery()
-    const res = await api.get<ResponsePaginate<User[]>>(
-      'users/all' + query + `&page=${info.current_page + 1}`
-    )
-    if (res.ok) {
-      setUsers((prev) => [
-        ...prev,
-        ...res.data.data.map((user) => new User(user))
-      ])
-      setInfo({
-        ...res.data,
-        data: []
-      })
-    } else {
-      toast('No se pudo cargar la lista de colaboradores')
-    }
-    setLoadingMore(false)
-  }
-
   const { handleChange, value: searchValue } = useDebounced({
     delay: 300,
     onCompleted: (value) => setFilters((prev) => ({ ...prev, q: value }))
@@ -107,23 +74,17 @@ export default function DisabledUsersPage() {
       <Helmet>
         <title>Usuarios inactivos | PontiApp</title>
       </Helmet>
-      <nav className="flex items-center border-b gap-2 dark:border-stone-500/50 w-full py-4 px-3 max-lg:py-2">
-        <h1 className="font-semibold flex-grow text-lg">Inactivos</h1>
-        {authUser.hasPrivilege('users:create') && (
-          <Link
-            to="/m/users/create"
-            className="flex font-semibold max-lg:hidden items-center gap-1 rounded-md hover:bg-neutral-500/20 p-1.5"
-          >
-            <AddFilled fontSize={20} />
-            Crear
-          </Link>
-        )}
+      <nav className="flex items-center gap-2 w-full py-2 px-2 max-lg:py-2">
+        <h1 className="font-semibold flex-grow text-lg">Usuarios inactivos</h1>
         <Tooltip content="Mas filtros" relationship="description">
           <button
             onClick={() => setOpenFilters(true)}
-            className="flex items-center gap-1 px-2 font-medium"
+            className="flex items-center gap-1"
           >
-            <FilterAddFilled fontSize={25} />
+            <FilterAddFilled
+              fontSize={25}
+              className="dark:text-blue-500 text-blue-700"
+            />
             <p className="max-md:hidden">Filtros</p>
           </button>
         </Tooltip>
@@ -140,6 +101,7 @@ export default function DisabledUsersPage() {
             value={searchValue}
             dismiss={() => {
               setFilters((prev) => ({ ...prev, q: null }))
+              handleChange('')
             }}
             onChange={(e) => {
               if (e.target.value === '')
@@ -151,53 +113,25 @@ export default function DisabledUsersPage() {
         </div>
       </nav>
       <div className="w-full h-full flex-col flex flex-grow overflow-auto">
-        {loading && (
+        {loading ? (
           <div className="flex-grow grid place-content-center">
             <Spinner size="large" />
           </div>
-        )}
-
-        {!loading && users?.length < 1 && (
-          <div className="grid place-content-center flex-grow">
-            <img
-              src="/search.webp"
-              width={90}
-              alt="No se encontraron resultados"
-              className="mx-auto"
-            />
-            <p className="text-xs opacity-60 pt-5">
-              No se encontraron resultados para la búsqueda
-            </p>
-          </div>
-        )}
-
-        {!loading && (
+        ) : data?.data && data.data?.length > 0 ? (
           <>
-            <div className="flex-grow rounded-xl overflow-auto">
-              <UsersGrid refetch={refetch} users={users} />
+            <div className="flex-grow overflow-y-auto">
+              <UsersGrid refetch={refetch} users={data.data} />
             </div>
-            {info && (
-              <footer className="flex text-sm px-5 py-2 justify-center">
-                <div className="flex justify-between w-full">
-                  <p className="flex max-sm:hidden opacity-60 basis-0 flex-grow">
-                    Mostrando {info.from} - {info.to} de {info.total} resultados
-                  </p>
-                  {info.next_page_url && (
-                    <button
-                      disabled={loadingMore}
-                      onClick={nextPage}
-                      className="dark:text-blue-500 font-semibold mx-auto hover:underline"
-                    >
-                      {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
-                    </button>
-                  )}
-                  <p className="flex max-sm:hidden opacity-60 basis-0 flex-grow justify-end">
-                    Página {info.current_page} de {info.last_page}
-                  </p>
-                </div>
-              </footer>
-            )}
+            <Pagination
+              state={data}
+              onChangePage={(page) => setFilters((prev) => ({ ...prev, page }))}
+            />
           </>
+        ) : (
+          <div className="grid place-content-center flex-grow w-full h-full text-xs opacity-80">
+            <FolderPeopleRegular fontSize={50} className="mx-auto opacity-70" />
+            <p className="pt-2">No hay nada que mostrar</p>
+          </div>
         )}
       </div>
     </div>

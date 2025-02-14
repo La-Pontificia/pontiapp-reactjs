@@ -15,8 +15,8 @@ import {
   PersonFilled,
   PersonRegular,
   SearchRegular,
-  StoreMicrosoftFilled,
-  StoreMicrosoftRegular,
+  // StoreMicrosoftFilled,
+  // StoreMicrosoftRegular,
   TabletFilled,
   TabletRegular
 } from '@fluentui/react-icons'
@@ -167,7 +167,7 @@ export const RootSidebar = () => {
           />
         )}
 
-        {authUser.hasModule('inventories') && (
+        {/* {authUser.hasModule('inventories') && (
           <ItemNav
             tooltip="Modulo de inventarios"
             text="Inventario"
@@ -175,14 +175,14 @@ export const RootSidebar = () => {
             activeIcon={StoreMicrosoftFilled}
             href="/m/inventories"
           />
-        )}
-        {authUser.hasModule('resourceManagement') && (
+        )} */}
+        {authUser.hasModule('rm') && (
           <ItemNav
             tooltip="Gestión de recursos"
             text="Recursos"
             icon={MoreHorizontalRegular}
             activeIcon={MoreHorizontalFilled}
-            href="/m/resource-management"
+            href="/m/rm"
           />
         )}
       </nav>

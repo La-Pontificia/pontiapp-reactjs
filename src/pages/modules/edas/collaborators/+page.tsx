@@ -1,4 +1,3 @@
-import { toast } from 'anni'
 import { api } from '~/lib/api'
 import { ResponsePaginate } from '~/types/paginate-response'
 import * as React from 'react'
@@ -8,7 +7,8 @@ import { useDebounced } from '~/hooks/use-debounced'
 import { useQuery } from '@tanstack/react-query'
 import SearchBox from '~/commons/search-box'
 import { Collaborator } from '~/types/collaborator'
-import { FilterAddFilled } from '@fluentui/react-icons'
+// import { FilterAddFilled } from '@fluentui/react-icons'
+import Pagination from '~/commons/pagination'
 
 export type FiltersValues = {
   q: string | null
@@ -17,6 +17,7 @@ export type FiltersValues = {
   area: string | null
   role: string | null
   edas: string | null
+  page: number
 }
 
 const filterButtons = {
@@ -27,22 +28,19 @@ const filterButtons = {
 
 export default function CollaboratorsPage() {
   // const { user: authUser } = useAuth()
-  const [loadingMore, setLoadingMore] = React.useState(false)
-
-  const [info, setInfo] = React.useState<ResponsePaginate<Collaborator[]>>(
-    {} as ResponsePaginate<Collaborator[]>
-  )
   const [filters, setFilters] = React.useState<FiltersValues>({
     q: null,
     job: null,
     department: null,
     area: null,
     role: null,
-    edas: 'all'
+    edas: 'all',
+    page: 1
   })
 
   const getFiltersQuery = () => {
     let query = '?relationship=userRole'
+    if (filters.page) query += `&page=${filters.page}`
     if (filters.q) query += `&q=${filters.q}`
     if (filters.job) query += `&job=${filters.job}`
     if (filters.department) query += `&department=${filters.department}`
@@ -51,8 +49,6 @@ export default function CollaboratorsPage() {
     if (filters.edas) query += `&edas=${filters.edas}`
     return query
   }
-
-  const [users, setUsers] = React.useState<Collaborator[]>([])
 
   const { data, refetch, isLoading } = useQuery<ResponsePaginate<
     Collaborator[]
@@ -67,40 +63,13 @@ export default function CollaboratorsPage() {
     }
   })
 
-  React.useEffect(() => {
-    if (!data) return
-    setUsers(data.data.map((user) => new Collaborator(user)))
-    setInfo(data)
-  }, [data])
-
-  const nextPage = async () => {
-    setLoadingMore(true)
-    const query = getFiltersQuery()
-    const res = await api.get<ResponsePaginate<Collaborator[]>>(
-      'edas/collaborators' + query + `&page=${info.current_page + 1}`
-    )
-    if (res.ok) {
-      setUsers((prev) => [
-        ...prev,
-        ...res.data.data.map((user) => new Collaborator(user))
-      ])
-      setInfo({
-        ...res.data,
-        data: []
-      })
-    } else {
-      toast('No se pudo cargar la lista de colaboradores')
-    }
-    setLoadingMore(false)
-  }
-
   const { handleChange, value: searchValue } = useDebounced({
     delay: 300,
     onCompleted: (value) => setFilters((prev) => ({ ...prev, q: value }))
   })
 
   return (
-    <div className="flex px-5 flex-col flex-grow overflow-auto">
+    <div className="flex px-2 flex-col flex-grow overflow-auto">
       <nav className="flex items-center flex-wrap gap-2 w-full py-4 px-3 max-lg:py-2">
         <h2 className="font-semibold text-xl pr-2">Bajo tu supervisión</h2>
         {Object.entries(filterButtons).map(([key, value]) => (
@@ -116,9 +85,9 @@ export default function CollaboratorsPage() {
           </button>
         ))}
         <div className="ml-auto flex items-center gap-2">
-          <button>
+          {/* <button>
             <FilterAddFilled fontSize={25} />
-          </button>
+          </button> */}
           <SearchBox
             value={searchValue}
             onChange={(e) => {
@@ -140,36 +109,15 @@ export default function CollaboratorsPage() {
           <div className="h-full grid place-content-center">
             <Spinner size="large" />
           </div>
-        ) : users.length > 0 ? (
+        ) : data?.data && data.data.length > 0 ? (
           <>
             <div className="flex-grow rounded-xl overflow-y-auto">
-              <CollaboratorsGrid
-                refetch={refetch}
-                isLoadingMore={loadingMore}
-                users={users}
-              />
+              <CollaboratorsGrid refetch={refetch} users={data.data} />
             </div>
-            {info && (
-              <footer className="flex text-sm px-5 py-2 justify-center">
-                <div className="flex justify-between w-full">
-                  <p className="flex max-sm:hidden opacity-60 basis-0 flex-grow">
-                    Mostrando {info.from} - {info.to} de {info.total} resultados
-                  </p>
-                  {info.next_page_url && (
-                    <button
-                      disabled={loadingMore}
-                      onClick={nextPage}
-                      className="dark:text-blue-500 font-semibold mx-auto hover:underline"
-                    >
-                      {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
-                    </button>
-                  )}
-                  <p className="flex max-sm:hidden opacity-60 basis-0 flex-grow justify-end">
-                    Página {info.current_page} de {info.last_page}
-                  </p>
-                </div>
-              </footer>
-            )}
+            <Pagination
+              state={data}
+              onChangePage={(page) => setFilters((prev) => ({ ...prev, page }))}
+            />
           </>
         ) : (
           <div className="grid place-content-center text-sm opacity-60 h-full">
