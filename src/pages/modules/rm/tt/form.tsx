@@ -122,7 +122,7 @@ export default function TeacherTrackingForm(props?: Props) {
   const getPerson = async (documentId: string) => {
     setSearching(true)
     const res = await api.get<User[]>(`users/search?q=${documentId}`)
-    if (res.ok) {
+    if (res.ok && res.data.length > 0) {
       setValue(
         'teacherFullName',
         `${res.data[0].lastNames} ${res.data[0].firstNames}`
