@@ -210,7 +210,7 @@ export const PRIVILEGES = {
 
   // Resource management
   'rm:reportFiles': 'Ver archivos de reportes de Administración de Recursos',
-  'rm:tt': 'Registrar seguimiento a docentes',
+  'rm:tt': 'Visualizar seguimiento a docentes',
   'rm:tt:report': 'Generar reportes de seguimiento a docentes',
   'rm:tt:create': 'Registrar seguimiento a docentes',
   'rm:tt:update': 'Actualizar seguimiento a docentes',
