@@ -58,7 +58,9 @@ export const AuthProvider = ({
     try {
       await api.post('auth/signout')
       setUser(null)
-      window.location.href = `/login?redirectURL=${window.location.href}`
+      window.location.href = `/login?redirectURL=${encodeURIComponent(
+        window.location.href
+      )}`
     } catch (error) {
       console.error(error)
       setLoading(false)
