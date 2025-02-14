@@ -73,7 +73,9 @@ async function fetchCore<T>(
 
   if (!res.ok) {
     if (res.status === 401 && redirectWithoutSession) {
-      window.location.href = `/login?redirectURL=${window.location.href}`
+      window.location.href = `/login?redirectURL=${encodeURIComponent(
+        window.location.href
+      )}`
     }
     if (alreadyHandleError) {
       return handleError(await res.json())
