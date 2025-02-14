@@ -16,7 +16,7 @@ export default function ResourceManagementSidebar() {
           icon={PeopleEyeRegular}
           iconActive={PeopleEyeFilled}
           href="/m/rm/tt"
-          has={['rm:tt:show']}
+          has={['rm:tt']}
         >
           Seguimiento docentes
         </ItemSidebarNav>
