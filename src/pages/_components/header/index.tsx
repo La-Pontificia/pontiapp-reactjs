@@ -4,7 +4,7 @@ import { Tooltip } from '@fluentui/react-components'
 import {
   CaretDownFilled,
   GridDotsFilled,
-  NotebookQuestionMarkRegular,
+  // NotebookQuestionMarkRegular,
   SearchRegular
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
@@ -70,14 +70,14 @@ export default function RootHeader() {
         <RootSearch />
       </nav>
       <nav className="flex flex-grow items-center dark:text-[#eaa8ff] text-[#0e37cd] basis-0 gap-5 justify-end">
-        <Tooltip
+        {/* <Tooltip
           content="Manual de usuario (Docs PontiApp)"
           relationship="label"
         >
           <Link to="/docs" target="_blank">
             <NotebookQuestionMarkRegular fontSize={25} />
           </Link>
-        </Tooltip>
+        </Tooltip> */}
         <Tooltip content="Buscar" relationship="label">
           <button className="block lg:hidden">
             <SearchRegular fontSize={25} />
