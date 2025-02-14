@@ -115,7 +115,8 @@ export const days = {
 } as const
 
 export const availableDomains = {
-  'lapontificia.edu.pe': 'La Pontificia'
+  'lapontificia.edu.pe': 'La Pontificia',
+  'elp.edu.pe': 'Escuela Superior La Pontificia'
 } as const
 
 export const AREA_DEVELOPER_ID = VITE_AREA_DEVELOPER_ID
@@ -147,6 +148,8 @@ export const PRIVILEGES = {
   'users:roles': 'Cargos de usuarios',
   'users:userRoles': 'Roles y permisos de usuarios',
   'users:contractTypes': 'Tipos de contratos de usuarios',
+  'users:schedules:archived': 'Horarios archivados',
+  'users:files:all': 'Visualizar todos los archivos de reportes',
 
   // Assistances management
   'assists:schedules': 'Asistencias con horarios',
@@ -203,7 +206,16 @@ export const PRIVILEGES = {
   'tickets:show': 'Ver tickets',
 
   // Settings management
-  settings: 'Acceso a configuraciones del sistema'
+  settings: 'Acceso a configuraciones del sistema',
+
+  // Resource management
+  'rm:reportFiles': 'Ver archivos de reportes de Administración de Recursos',
+  'rm:tt': 'Registrar seguimiento a docentes',
+  'rm:tt:report': 'Generar reportes de seguimiento a docentes',
+  'rm:tt:create': 'Registrar seguimiento a docentes',
+  'rm:tt:update': 'Actualizar seguimiento a docentes',
+  'rm:tt:delete': 'Eliminar seguimiento a docentes',
+  'rm:club': 'App Descuentos'
 }
 
 export const BIRTHDAY_MESSAGE: string[] = [
