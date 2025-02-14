@@ -92,9 +92,11 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
           <h2 className="dark:font-bold font-medium tracking-tight text-xl">
             {user?.displayName}
           </h2>
-          <p className="pb-2 text-wrap">
-            {user?.role?.name} • {user?.role?.department?.name}
-          </p>
+          {user.role && (
+            <p className="pb-2 text-wrap">
+              {user.role.name} • {user?.role?.department?.name}
+            </p>
+          )}
           <div className="space-x-1">
             <Button
               as="a"
@@ -132,12 +134,14 @@ const UserHoverInfoContent = ({ slug }: { slug: string }) => {
           icon={MailRegular}
           title="Correo electrónico"
         />
-        <InfoItem
-          children={<p>{user?.role?.name}</p>}
-          textValue={user?.role?.name}
-          icon={PersonRegular}
-          title="Cargo"
-        />
+        {user?.role && (
+          <InfoItem
+            children={<p>{user?.role?.name}</p>}
+            textValue={user?.role?.name}
+            icon={PersonRegular}
+            title="Cargo"
+          />
+        )}
       </div>
       {user.manager && (
         <div className="border-t border-neutral-500/20 p-2">

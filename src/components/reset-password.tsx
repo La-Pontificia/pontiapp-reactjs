@@ -119,28 +119,26 @@ export default function ResetPassword({
                       validationMessage={error?.message}
                       validationState={error ? 'error' : 'none'}
                     >
-                      {open && (
-                        <Input
-                          {...field}
-                          input={{
-                            autoComplete: 'off'
-                          }}
-                          aria-hidden
-                          readOnly={autoGeneratePassword}
-                          type={showPassword ? 'text' : 'password'}
-                          contentAfter={
-                            <button
-                              onClick={() => setShowPassword((prev) => !prev)}
-                            >
-                              {showPassword ? (
-                                <Eye20Filled className="text-blue-500" />
-                              ) : (
-                                <Eye20Regular className="text-blue-500" />
-                              )}
-                            </button>
-                          }
-                        />
-                      )}
+                      <Input
+                        {...field}
+                        input={{
+                          autoComplete: 'off'
+                        }}
+                        aria-hidden
+                        readOnly={autoGeneratePassword}
+                        type={showPassword ? 'text' : 'password'}
+                        contentAfter={
+                          <button
+                            onClick={() => setShowPassword((prev) => !prev)}
+                          >
+                            {showPassword ? (
+                              <Eye20Filled className="text-blue-500" />
+                            ) : (
+                              <Eye20Regular className="text-blue-500" />
+                            )}
+                          </button>
+                        }
+                      />
                     </Field>
                   )}
                 />

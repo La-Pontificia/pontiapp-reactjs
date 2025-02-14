@@ -11,7 +11,6 @@ import {
   Checkbox,
   Drawer,
   DrawerBody,
-  DrawerHeader,
   DrawerHeaderTitle,
   Spinner
 } from '@fluentui/react-components'
@@ -48,48 +47,47 @@ export default function UserDrawer(props: UserDrawerProps) {
   return (
     <>
       <Button {...props.triggerProps} onClick={() => setOpen(true)} />
-      {open && (
-        <Drawer
-          position="end"
-          separator
-          className="xl:min-w-[50svw] lg:min-w-[80svw] max-w-full min-w-full"
-          open={open}
-          onOpenChange={(_, { open }) => setOpen(open)}
+      <Drawer
+        position="end"
+        separator
+        className="xl:min-w-[50svw] lg:min-w-[80svw] max-w-full min-w-full"
+        open={open}
+        type="overlay"
+        modalType="alert"
+        onOpenChange={(_, { open }) => setOpen(open)}
+      >
+        <DrawerHeaderTitle
+          className="px-5 py-3 w-full"
+          action={
+            <Button
+              appearance="subtle"
+              aria-label="Close"
+              icon={<Dismiss24Regular />}
+              onClick={() => setOpen(false)}
+            />
+          }
         >
-          <DrawerHeader>
-            <DrawerHeaderTitle
-              action={
-                <Button
-                  appearance="subtle"
-                  aria-label="Close"
-                  icon={<Dismiss24Regular />}
-                  onClick={() => setOpen(false)}
-                />
-              }
-            >
-              {props.title}
-            </DrawerHeaderTitle>
-          </DrawerHeader>
+          {props.title}
+        </DrawerHeaderTitle>
 
-          <DrawerBody className="flex flex-col overflow-y-auto">
-            {open && (
-              <Users
-                {...props}
-                selectedUsers={selectedUsers}
-                setSelectedUsers={setSelectedUsers}
-              />
-            )}
-            <footer className="border-t py-4 flex gap-3 dark:border-neutral-500">
-              <Button onClick={handleSubmit} appearance="primary">
-                {props.onSubmitTitle}
-              </Button>
-              <Button onClick={() => setOpen(false)} appearance="outline">
-                Cerrar
-              </Button>
-            </footer>
-          </DrawerBody>
-        </Drawer>
-      )}
+        <DrawerBody className="flex flex-col overflow-y-auto">
+          {open && (
+            <Users
+              {...props}
+              selectedUsers={selectedUsers}
+              setSelectedUsers={setSelectedUsers}
+            />
+          )}
+          <footer className="border-t py-4 flex gap-3 dark:border-neutral-500">
+            <Button onClick={handleSubmit} appearance="primary">
+              {props.onSubmitTitle}
+            </Button>
+            <Button onClick={() => setOpen(false)} appearance="outline">
+              Cerrar
+            </Button>
+          </footer>
+        </DrawerBody>
+      </Drawer>
     </>
   )
 }
@@ -131,7 +129,7 @@ export function Users(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
 
-  const { onChangeValue } = useDebounced({
+  const { handleChange, value: searchValue } = useDebounced({
     delay: 700,
     onCompleted: setQuery
   })
@@ -161,8 +159,12 @@ export function Users(
     <div className="flex flex-col flex-grow h-full overflow-y-auto gap-2">
       <nav className="pb-3 flex items-center gap-4 border-b dark:border-stone-700">
         <SearchBox
-          onChange={(e) => onChangeValue(e.target.value)}
-          defaultValue={query || ''}
+          onChange={(e) => handleChange(e.target.value)}
+          value={searchValue}
+          dismiss={() => {
+            setQuery(null)
+            handleChange('')
+          }}
           className="w-[400px] max-lg:w-full"
           placeholder="Filtrar por nombre o correo"
         />
@@ -182,14 +184,14 @@ export function Users(
               <Spinner size="large" />
             </div>
           ) : (
-            <div className="overflow-y-auto flex-grow divide-y dark:divide-stone-700 divide-neutral-200">
+            <div className="overflow-y-auto h-full flex-grow divide-neutral-500/20 divide-y">
               {list.map((u) => {
                 const selected = selectedUsers.find((user) => user.id === u.id)
                 if (!includeCurrentUser && u.id === user.id) return null
                 return (
                   <label
                     key={u.id}
-                    className="flex cursor-pointer items-center gap-2 py-3"
+                    className="flex cursor-pointer items-center gap-2 py-1"
                   >
                     <div>
                       <Checkbox
@@ -199,7 +201,7 @@ export function Users(
                     </div>
                     <Avatar
                       color="colorful"
-                      size={36}
+                      size={28}
                       name={u.displayName}
                       image={{
                         src: u.photoURL

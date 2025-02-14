@@ -7,7 +7,7 @@ import { useMediaQuery } from '@uidotdev/usehooks'
 import { Link, useLocation } from 'react-router'
 import { Avatar, Badge, Tooltip } from '@fluentui/react-components'
 import ExpiryStatusRenderer from './expiry-status-renderer'
-import { FluentIcon, OpenFilled } from '@fluentui/react-icons'
+import { FluentIcon, OpenFilled, OpenRegular } from '@fluentui/react-icons'
 import { useAuth } from '~/store/auth'
 
 type ContextReusableSidebar = {
@@ -52,11 +52,11 @@ export const ReusableSidebar = React.forwardRef<
         onMouseLeave={() => setSidebarHover(false)}
         style={{
           transform: isSidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-          marginLeft: isSidebarOpen ? '0' : '-240px'
+          marginLeft: isSidebarOpen ? '0' : '-200px'
         }}
         ref={ref}
         className={cn(
-          'h-full max-lg:fixed max-lg:h-svh max-lg:pb-[65px] max-lg:top-[50px] max-lg:w-full max-lg:z-[9999] max-lg:dark:bg-[#21201d] max-lg:bg-[#f5f0f0] max-lg:mb-[65px] overflow-y-auto transition-all w-[240px] min-w-[240px]',
+          'h-full max-lg:fixed max-lg:h-svh max-lg:pb-[65px] max-lg:top-[50px] max-lg:w-full max-lg:z-[9999] max-lg:dark:bg-[#21201d] max-lg:bg-[#f5f0f0] max-lg:mb-[65px] overflow-y-auto transition-all w-[200px] min-w-[200px]',
           className
         )}
       >
@@ -123,10 +123,12 @@ export const ItemSidebarNav = (props: ItemNav) => {
 
   const Icon = isActive ? props.iconActive : props.icon
 
+  const isExternal = props.href.startsWith('http')
   return (
     <Link
       data-active={isActive ? '' : undefined}
       to={props.href}
+      target={isExternal ? '_blank' : undefined}
       onClick={() => {
         if (isMediumDevice) toggleSidebar()
       }}
@@ -135,7 +137,7 @@ export const ItemSidebarNav = (props: ItemNav) => {
       <div className="absolute max-lg:hidden pointer-events-none inset-y-0 left-0 flex items-center">
         <span className="h-[10px] group-data-[active]:h-[5px] transition-all group-hover:h-[10px] group-data-[active]:bg-blue-600 dark:group-data-[active]:bg-[#7385ff] group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
       </div>
-      <div className="flex items-center transition-colors font-medium group-data-[active]:dark:text-white gap-2 px-2 py-2 rounded-lg group-hover:bg-white dark:group-hover:bg-stone-700/50 max-lg:text-base">
+      <div className="flex dark:font-normal font-medium items-center transition-colors group-data-[active]:dark:text-white gap-2 py-1 rounded-lg group-hover:bg-white dark:group-hover:bg-stone-700/50 max-lg:text-base">
         <div className="max-lg:hidden">
           {props.emptyIcon ? (
             <span className="block aspect-square"></span>
@@ -161,6 +163,7 @@ export const ItemSidebarNav = (props: ItemNav) => {
             </Badge>
           </ExpiryStatusRenderer>
         )}
+        {isExternal && <OpenRegular className="ml-auto" fontSize={20} />}
       </div>
     </Link>
   )
