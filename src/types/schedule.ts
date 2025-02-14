@@ -14,7 +14,7 @@ export class Schedule {
   archived: boolean
   terminalId: string
   terminal: AssistTerminal
-
+  tolerance: string
   created_at?: Date
   updated_at?: Date
   createdBy?: string
@@ -34,6 +34,7 @@ export class Schedule {
     this.archived = !!data.archived
     this.terminalId = data.terminalId
     this.terminal = data.terminal
+    this.tolerance = data.tolerance
     this.created_at = data.created_at
     this.updated_at = data.updated_at
     this.createdBy = data.createdBy

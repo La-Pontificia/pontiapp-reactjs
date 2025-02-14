@@ -14,7 +14,7 @@ export class User {
   documentId: string
   firstNames: string
   lastNames: string
-  role: Role
+  role: Role | null
   userRole: UserRole
   status: boolean
   email: string
