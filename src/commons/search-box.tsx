@@ -8,10 +8,14 @@ export const SearchBox = React.forwardRef<
     dismiss?: () => void
   }
 >(({ className, ...props }, ref) => {
+  const [hover, setHover] = React.useState(false)
   return (
     <label className="flex relative group items-center gap-2">
       <input
+        onMouseEnter={() => setHover(true)}
+        onMouseLeave={() => setHover(false)}
         ref={ref}
+        readOnly={!hover}
         {...props}
         className={cn(
           'w-full bg-transparent peer text-[13px] font-medium focus:border-blue-500 outline-none border rounded-full px-3 placeholder:text-stone-500 placeholder:font-medium py-1.5 border-stone-500 pl-8',
