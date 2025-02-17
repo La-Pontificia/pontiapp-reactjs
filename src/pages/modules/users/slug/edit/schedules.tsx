@@ -149,7 +149,7 @@ export function ScheduleForm(props: {
   const { mutate: fetch, isPending: fetching } = useMutation({
     mutationKey: ['schedules'],
     mutationFn: ({ values, id }: { values: string; id?: string }) =>
-      api.post(id ? `schedules/${id}` : 'schedules/store', {
+      api.post(id ? `users/schedules/${id}` : 'users/schedules', {
         data: values,
         alreadyHandleError: false
       }),
