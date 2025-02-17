@@ -45,7 +45,7 @@ export default function UsersSlugSchedulesPage() {
 
         {!isLoading && authUser.hasPrivilege('users:edit') && (
           <Link
-            to={`/m/users/edit/${user?.username}/schedules`}
+            to={`/m/users/${user?.username}/edit`}
             className="flex items-center hover:underline text-xs gap-2"
           >
             <PenRegular fontSize={20} />
