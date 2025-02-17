@@ -142,7 +142,7 @@ export function ScheduleForm(props: {
       startDate: props.default?.startDate
         ? parse(props.default?.startDate)
         : new Date(),
-      tolerance: props.default?.tolerance || '0'
+      tolerance: props.default?.tolerance || '5'
     }
   })
 
