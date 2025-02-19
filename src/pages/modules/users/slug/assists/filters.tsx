@@ -47,7 +47,7 @@ export default function UserSlugAssistsFilter({
         />
       </Field>
       <Button
-        appearance="secondary"
+        appearance="primary"
         disabled={isLoading || !endDate || !startDate}
         onClick={() => {
           onAplyFilters({
@@ -59,12 +59,12 @@ export default function UserSlugAssistsFilter({
         Filtrar
       </Button>
       {authUser.hasPrivilege('assists:report') && (
-        <div className="ml-auto">
+        <div className="ml-auto grayscale opacity-50">
           <Button
             disabled
             // disabled={isLoading || !endDate || !startDate}
             icon={<ExcelColored size={20} />}
-            appearance="secondary"
+            appearance="transparent"
             // onClick={() => setOpenReport(true)}
             style={{}}
           >

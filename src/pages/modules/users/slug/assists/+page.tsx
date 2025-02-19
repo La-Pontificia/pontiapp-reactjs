@@ -64,7 +64,7 @@ export default function UsersSlugAssistsPage() {
   })
 
   return (
-    <div className="max-w-5xl overflow-auto flex flex-col h-full px-4 mx-auto w-full">
+    <div className="max-w-7xl  flex flex-col h-full px-6 mx-auto w-full">
       <Helmet>
         <title>
           {user ? user.displayName + ' -' : ''} Assistencias | Ponti App
@@ -79,7 +79,7 @@ export default function UsersSlugAssistsPage() {
           <Spinner size="large" />
         </div>
       ) : (
-        <div className="overflow-auto flex flex-col pt-2 space-y-2">
+        <div className="flex flex-col pt-2 space-y-2">
           <h1 className=" px-1 text-blue-500">
             {user ? user.displayName + ' -' : ''} Assistencias en base a sus
             horarios

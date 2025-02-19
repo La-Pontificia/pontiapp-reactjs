@@ -1,4 +1,13 @@
-import { Badge, Button } from '@fluentui/react-components'
+import {
+  Badge,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow
+} from '@fluentui/react-components'
 import { CalendarRegular, ClockRegular } from '@fluentui/react-icons'
 import React from 'react'
 import { format } from '~/lib/dayjs'
@@ -11,23 +20,19 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
   const buttonRef = React.useRef<HTMLButtonElement>(null)
 
   return (
-    <div className="bg-white dark:bg-transparent p-1 rounded-xl shadow-lg">
-      <table className="w-full relative ">
-        <thead className="">
-          <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
-            <td>Fecha</td>
-            <td className="border-l border-neutral-500/30 text-center">
-              Horario AM
-            </td>
-            <td className="border-r border-neutral-500/30 text-center">
-              Marcaciones AM
-            </td>
-            <td className="text-center">Horario PM</td>
-            <td className="text-center">Marcaciones PM</td>
-          </tr>
-        </thead>
+    <>
+      <Table className="w-full relative ">
+        <TableHeader>
+          <TableRow>
+            <TableHeaderCell>Fecha</TableHeaderCell>
+            <TableHeaderCell>Horario AM</TableHeaderCell>
+            <TableHeaderCell>Marcaciones AM</TableHeaderCell>
+            <TableHeaderCell>Horario PM</TableHeaderCell>
+            <TableHeaderCell>Marcaciones PM</TableHeaderCell>
+          </TableRow>
+        </TableHeader>
 
-        <tbody className="divide-y overflow-y-auto divide-neutral-300 dark:divide-neutral-500/30">
+        <TableBody>
           {assists.slice(startSlice, endSlice).map((assist, key) => {
             const arriveMorningLate =
               assist.morningMarkedIn &&
@@ -47,20 +52,14 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
               new Date(assist.afternoonMarkedOut) < new Date(assist.afternoonTo)
 
             return (
-              <tr
-                key={key}
-                className="relative bg-neutral-50/40 dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-4 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
-              >
-                <td>
+              <TableRow key={key}>
+                <TableCell>
                   <div className="flex items-center capitalize">
-                    <CalendarRegular
-                      fontSize={23}
-                      className="mr-1 opacity-60"
-                    />
-                    {format(assist.date, 'dddd, DD [de] MMMM')}
+                    <CalendarRegular fontSize={23} className="mr-1" />
+                    {format(assist.date, 'dddd DD MMM')}
                   </div>
-                </td>
-                <td className="border-l border-neutral-500/30 text-center">
+                </TableCell>
+                <TableCell>
                   {assist.morningFrom && (
                     <p className="font-medium">
                       <ClockRegular fontSize={23} className="mr-1 opacity-60" />
@@ -73,10 +72,10 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                         : 'N/A'}
                     </p>
                   )}
-                </td>
-                <td className="border-r border-neutral-500/30 text-center">
+                </TableCell>
+                <TableCell>
                   {assist.morningFrom && (
-                    <div className="flex gap-2 justify-center">
+                    <div className="flex gap-2">
                       <Badge
                         color={
                           !assist.morningMarkedIn
@@ -88,9 +87,8 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                       >
                         {assist.morningMarkedIn
                           ? format(assist.morningMarkedIn, 'h:mm A')
-                          : 'N/A'}
+                          : 'No marcó'}
                       </Badge>
-
                       <Badge
                         color={
                           !assist.morningMarkedOut
@@ -102,28 +100,28 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                       >
                         {assist.morningMarkedOut
                           ? format(assist.morningMarkedOut, 'h:mm A')
-                          : 'N/A'}
+                          : 'No marcó'}
                       </Badge>
                     </div>
                   )}
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   {assist.afternoonFrom && (
-                    <p className="font-medium text-center">
-                      <ClockRegular fontSize={23} className="mr-1 opacity-60" />
+                    <p className="font-medium">
+                      <ClockRegular fontSize={23} className="mr-1 " />
                       {assist.afternoonFrom
                         ? format(assist.afternoonFrom, 'h:mm A')
-                        : 'N/A'}
+                        : 'No marcó'}
                       {' - '}
                       {assist.afternoonTo
                         ? format(assist.afternoonTo, 'h:mm A')
-                        : 'N/A'}
+                        : 'No marcó'}
                     </p>
                   )}
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   {assist.afternoonFrom && (
-                    <div className="flex gap-2 justify-center">
+                    <div className="flex gap-2 ">
                       <Badge
                         color={
                           !assist.afternoonMarkedIn
@@ -135,7 +133,7 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                       >
                         {assist.afternoonMarkedIn
                           ? format(assist.afternoonMarkedIn, 'h:mm A')
-                          : 'N/A'}
+                          : 'No marcó'}
                       </Badge>
 
                       <Badge
@@ -149,16 +147,16 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
                       >
                         {assist.afternoonMarkedOut
                           ? format(assist.afternoonMarkedOut, 'h:mm A')
-                          : 'N/A'}
+                          : 'No marcó'}
                       </Badge>
                     </div>
                   )}
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )
           })}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
       {assists.length > 15 && endSlice < assists.length && (
         <div className="flex p-3 justify-center">
           <Button
@@ -172,6 +170,6 @@ export default function AssistsGrid({ assists }: { assists: Assist[] }) {
           </Button>
         </div>
       )}
-    </div>
+    </>
   )
 }

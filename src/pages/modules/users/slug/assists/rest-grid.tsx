@@ -1,4 +1,13 @@
-import { Badge, Button } from '@fluentui/react-components'
+import {
+  Badge,
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow
+} from '@fluentui/react-components'
 import { CalendarRegular, ClockRegular } from '@fluentui/react-icons'
 import React from 'react'
 import { format } from '~/lib/dayjs'
@@ -11,57 +20,58 @@ export default function RestAssistsGrid({ data }: { data: RestAssist[] }) {
 
   const buttonRef = React.useRef<HTMLButtonElement>(null)
 
+  if (assists.length === 0) {
+    return null
+  }
+
   return (
-    <div className=" pt-6">
+    <div>
       <p className="px-2 pb-1 text-xs text-yellow-500">
         Registros de asistencias que el sistema no pudo procesar.
       </p>
-      <table className="w-full relative">
-        <thead className="">
-          <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
-            <td>Biométrico</td>
-            <td>Fecha</td>
-            <td>Día</td>
-            <td>Hora</td>
-            <td></td>
-          </tr>
-        </thead>
+      <Table className="w-full relative">
+        <TableHeader>
+          <TableRow>
+            <TableHeaderCell>Biométrico</TableHeaderCell>
+            <TableHeaderCell>Fecha</TableHeaderCell>
+            <TableHeaderCell>Día</TableHeaderCell>
+            <TableHeaderCell>Hora</TableHeaderCell>
+            <TableHeaderCell></TableHeaderCell>
+          </TableRow>
+        </TableHeader>
 
-        <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
+        <TableBody>
           {assists.slice(startSlice, endSlice).map((assist, key) => {
             return (
-              <tr
-                key={key}
-                className="relative bg-neutral-50/40 dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-4 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
-              >
-                <td>
+              <TableRow key={key}>
+                <TableCell>
                   <p>{assist.terminal.name}</p>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <div className="flex items-center capitalize gap-2">
                     <CalendarRegular fontSize={20} />
                     {format(assist.datetime, 'dddd, DD [de] MMMM')}
                   </div>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <p className="capitalize">
                     {format(assist.datetime, 'dddd')}{' '}
                   </p>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <div className="flex gap-2 items-center">
                     <ClockRegular fontSize={20} />
                     <p>{format(assist.datetime, 'h:mm A')}</p>
                   </div>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <Badge color="important">Sin procesar</Badge>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )
           })}
-        </tbody>
-      </table>
+        </TableBody>
+      </Table>
       {assists.length > 15 && endSlice < assists.length && (
         <div className="flex p-3 justify-center">
           <Button
