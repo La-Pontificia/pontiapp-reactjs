@@ -2,6 +2,8 @@ import { ItemSidebarNav, ReusableSidebar } from '~/components/reusable-sidebar'
 import {
   DocumentTableFilled,
   DocumentTableRegular,
+  FolderLinkFilled,
+  FolderLinkRegular,
   PeopleEyeFilled,
   PeopleEyeRegular,
   TabDesktopNewPageFilled,
@@ -38,6 +40,116 @@ export default function ResourceManagementSidebar() {
           has={['rm:club']}
         >
           App Descuentos
+        </ItemSidebarNav>
+        <div className="font-semibold pl-4 pt-5 pb-2 dark:text-blue-400 text-blue-700 text-xs">
+          Meta datos académicos
+        </div>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/academic-programs"
+          has={['rm:academicPrograms']}
+        >
+          Programas académicos
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/periods"
+          has={['rm:periods']}
+        >
+          Periodos
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/sections"
+          has={['rm:sections']}
+        >
+          Secciones
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/cycles"
+          has={['rm:cycles']}
+        >
+          Ciclos
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/course"
+          has={['rm:course']}
+        >
+          Cursos
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/classrooms"
+          has={['rm:classrooms']}
+        >
+          Aulas
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/academic-areas"
+          has={['rm:academicAreas']}
+        >
+          Áreas académicas
+        </ItemSidebarNav>
+        <div className="font-semibold pl-4 pt-5 pb-2 dark:text-blue-400 text-blue-700 text-xs">
+          Meta datos pontiapp
+        </div>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/business-units"
+          has={['rm:businessUnits']}
+        >
+          Unidad de negocios
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/locations"
+          has={['rm:locations']}
+        >
+          Sedes
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/areas"
+          has={['rm:areas']}
+        >
+          Áreas
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/departments"
+          has={['rm:departments']}
+        >
+          Departamentos
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/positions"
+          has={['rm:positions']}
+        >
+          Puestos
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          icon={FolderLinkRegular}
+          iconActive={FolderLinkFilled}
+          href="/m/rm/roles"
+          has={['rm:roles']}
+        >
+          Cargos
         </ItemSidebarNav>
       </nav>
     </ReusableSidebar>
