@@ -4,7 +4,6 @@ export class AssistTerminal {
   id: string
   name: string
   database: string
-  schedulesCount: number
   created_at?: Date
   updated_at?: Date
   createdBy?: string
@@ -16,7 +15,6 @@ export class AssistTerminal {
     this.id = data.id
     this.name = data.name
     this.database = data.database
-    this.schedulesCount = data.schedulesCount
     this.created_at = data.created_at
     this.updated_at = data.updated_at
     this.createdBy = data.createdBy

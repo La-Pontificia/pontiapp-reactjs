@@ -1,6 +1,6 @@
 import { User } from './user'
 
-export class BusinessUnit {
+export class RmBusinessUnit {
   id: string
   name: string
   domain: string
@@ -10,7 +10,7 @@ export class BusinessUnit {
   updated_at: Date
   creator: User
   updater: User
-  constructor(data: BusinessUnit) {
+  constructor(data: RmBusinessUnit) {
     this.id = data.id
     this.name = data.name
     this.domain = data.domain
