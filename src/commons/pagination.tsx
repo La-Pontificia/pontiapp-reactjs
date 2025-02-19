@@ -11,7 +11,7 @@ export default function Pagination({
     state
   return (
     <div className="flex py-2 max-lg:px-2 w-full items-center justify-start gap-3">
-      <footer className="flex items-center max-lg:w-full [&>button]:rounded-lg [&>button]:transition-all [&>button]:justify-center [&>button]:lg:flex [&>button]:gap-2 [&>button]:items-center [&>button]:first:px-2 [&>button]:last:px-3 overflow-hidden disabled:[&>button]:pointer-events-none disabled:[&>button]:opacity-50 hover:[&>button]:text-black dark:hover:[&>button]:text-white dark:text-stone-300 text-stone-700">
+      <footer className="flex items-center max-lg:w-full [&>button]:rounded-lg [&>button]:transition-all [&>button]:justify-center [&>button]:lg:flex [&>button]:gap-2 [&>button]:items-center [&>button]:first:px-2 [&>button]:last:px-3 overflow-hidden disabled:[&>button]:pointer-events-none disabled:[&>button]:opacity-50 dark:text-stone-300 text-stone-700">
         <button
           className="max-lg:mr-auto flex"
           onClick={() => {
