@@ -1,11 +1,21 @@
 import { api } from '~/lib/api'
 import { useQuery } from '@tanstack/react-query'
-import { Spinner } from '@fluentui/react-components'
+import {
+  Avatar,
+  Badge,
+  Spinner,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow
+} from '@fluentui/react-components'
 import React from 'react'
 import { format } from '~/lib/dayjs'
 import { AssistTerminal } from '~/types/assist-terminal'
 import AssistSummaryFilters from './filters'
-import Item from './assist'
+import { CalendarLtrRegular } from '@fluentui/react-icons'
 
 export type Filter = {
   startDate: Date | null
@@ -77,20 +87,52 @@ export default function AssistsSummaryPage() {
               <Spinner size="huge" />
             </div>
           ) : (
-            <table className="w-full relative">
-              <thead>
-                <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
-                  <td>Fecha</td>
-                  <td>Terminal (Biométrico)</td>
-                  <td>Cantidad</td>
-                </tr>
-              </thead>
-              <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHeaderCell>Fecha</TableHeaderCell>
+                  <TableHeaderCell>Terminal (Biométrico)</TableHeaderCell>
+                  <TableHeaderCell>Cantidad</TableHeaderCell>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
                 {items?.map((item) => (
-                  <Item key={item.date} item={item} />
+                  <TableRow key={item.date}>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <CalendarLtrRegular fontSize={25} />
+                        <p className="line-clamp-3 capitalize">
+                          {format(item.date, 'dddd, D [de] MMMM [del] YYYY')}
+                        </p>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <div className="flex items-center gap-2">
+                        <Avatar
+                          color="colorful"
+                          size={32}
+                          name={item.terminal.name}
+                        />
+                        <div>
+                          <p className="line-clamp-3">{item.terminal.name}</p>
+                          <p className="line-clamp-3 text-xs opacity-60">
+                            {item.terminal.database}
+                          </p>
+                        </div>
+                      </div>
+                    </TableCell>
+                    <TableCell>
+                      <Badge
+                        color={item.count > 0 ? 'success' : 'danger'}
+                        appearance="tint"
+                      >
+                        {item.count} asistencia{item.count > 1 ? 's' : ''}
+                      </Badge>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </tbody>
-            </table>
+              </TableBody>
+            </Table>
           )}
         </div>
       )}
