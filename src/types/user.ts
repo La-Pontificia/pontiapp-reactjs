@@ -105,14 +105,14 @@ export class User {
 
   get allPrivileges(): string[] {
     return [
-      ...(this.userRole.privileges || []),
+      ...(this.userRole?.privileges || []),
       ...(this.customPrivileges || [])
     ]
   }
 
   get isDeveloper(): boolean {
     const allPrivileges = [
-      ...(this.userRole.privileges || []),
+      ...(this.userRole?.privileges || []),
       ...(this.customPrivileges || [])
     ]
     return allPrivileges?.includes(PRIVILEGE_DEVELOPER) ?? false
@@ -120,7 +120,7 @@ export class User {
 
   hasPrivilege(privilege: string): boolean {
     const allPrivileges = [
-      ...(this.userRole.privileges || []),
+      ...(this.userRole?.privileges || []),
       ...(this.customPrivileges || [])
     ]
     return allPrivileges.includes(privilege) || this.isDeveloper
@@ -128,7 +128,7 @@ export class User {
 
   hasModule(module: string): boolean {
     const allPrivileges = [
-      ...(this.userRole.privileges || []),
+      ...(this.userRole?.privileges || []),
       ...(this.customPrivileges || [])
     ]
     return allPrivileges.some((p) => p.startsWith(module)) || this.isDeveloper
