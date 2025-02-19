@@ -6,7 +6,10 @@ type UIContextValue = {
   contentRef: React.RefObject<HTMLDivElement>
 }
 
-export const UIContext = React.createContext<UIContextValue | null>(null)
+export const UIContext = React.createContext<UIContextValue>(
+  {} as UIContextValue
+)
+export const useUI = () => React.useContext(UIContext)
 
 export default function UiProvider({
   children
