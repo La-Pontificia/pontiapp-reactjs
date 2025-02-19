@@ -2,27 +2,30 @@ import { api } from '~/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { AddFilled } from '@fluentui/react-icons'
 import Form from './form'
-import { Spinner } from '@fluentui/react-components'
+import {
+  Spinner,
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderCell,
+  TableRow
+} from '@fluentui/react-components'
 import React from 'react'
 import { useDebounced } from '~/hooks/use-debounced'
 import Item from './terminal'
 import { ResponsePaginate } from '~/types/paginate-response'
-import { toast } from 'anni'
-import { handleError } from '~/utils'
 import { AssistTerminal } from '~/types/assist-terminal'
 import SearchBox from '~/commons/search-box'
+import Pagination from '~/commons/pagination'
 
 export default function AssistTerminalsPage() {
-  const [items, setItems] = React.useState<AssistTerminal[]>([])
-  const [info, setInfo] = React.useState<ResponsePaginate<AssistTerminal[]>>(
-    {} as ResponsePaginate<AssistTerminal[]>
-  )
-  const [loadingMore, setLoadingMore] = React.useState(false)
+  const [page, setPage] = React.useState(1)
   const [q, setQ] = React.useState<string>()
 
   const query = `partials/assist-terminals/all?paginate=true&relationship=schedulesCount${
     q ? `&q=${q}` : ''
-  }`
+  } ${page ? `&page=${page}` : ''}`
+
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
     AssistTerminal[]
   > | null>({
@@ -33,32 +36,6 @@ export default function AssistTerminalsPage() {
       return res.data
     }
   })
-
-  const nextPage = async () => {
-    setLoadingMore(true)
-    const res = await api.get<ResponsePaginate<AssistTerminal[]>>(
-      `${query}&page=${info.current_page + 1}`
-    )
-    if (res.ok) {
-      setItems((prev) => [
-        ...prev,
-        ...res.data.data.map((c) => new AssistTerminal(c))
-      ])
-      setInfo({
-        ...res.data,
-        data: []
-      })
-    } else {
-      toast(handleError(res.error))
-    }
-    setLoadingMore(false)
-  }
-
-  React.useEffect(() => {
-    if (!data) return
-    setItems(data.data.map((c) => new AssistTerminal(c)))
-    setInfo(data)
-  }, [data])
 
   const { handleChange, value: searchValue } = useDebounced({
     delay: 400,
@@ -74,10 +51,8 @@ export default function AssistTerminalsPage() {
             refetch={refetch}
             triggerProps={{
               disabled: isLoading,
-              style: {
-                borderRadius: 20
-              },
               appearance: 'primary',
+              size: 'small',
               icon: <AddFilled />,
               children: <span>Nuevo</span>
             }}
@@ -101,45 +76,31 @@ export default function AssistTerminalsPage() {
             <Spinner size="huge" />
           </div>
         ) : (
-          <table className="w-full relative">
-            <thead>
-              <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
-                <td className="max-w-[200px] min-w-[200px]">Nombre</td>
-                <td>Base de datos</td>
-                <td>Horarios</td>
-                <td>Fecha creación</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHeaderCell>Nombre</TableHeaderCell>
+                <TableHeaderCell>Base de datos</TableHeaderCell>
+                <TableHeaderCell>Fecha creación</TableHeaderCell>
+                <TableHeaderCell></TableHeaderCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {!isLoading &&
-                items?.map((item) => (
+                data?.data?.map((item) => (
                   <Item refetch={refetch} key={item.id} item={item} />
                 ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         )}
       </div>
-      {info && (
-        <footer className="flex p-5 justify-center">
-          <div className="flex justify-between w-full">
-            <p className="flex basis-0 flex-grow">
-              Mostrando {info.from} - {info.to} de {info.total} resultados
-            </p>
-            {info.next_page_url && (
-              <button
-                disabled={loadingMore}
-                onClick={nextPage}
-                className="dark:text-blue-500 hover:underline"
-              >
-                {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
-              </button>
-            )}
-            <p className="flex basis-0 flex-grow justify-end">
-              Página {info.current_page} de {info.last_page}
-            </p>
-          </div>
-        </footer>
+      {data?.data && (
+        <Pagination
+          state={data}
+          onChangePage={(page) => {
+            setPage(page)
+          }}
+        />
       )}
     </div>
   )

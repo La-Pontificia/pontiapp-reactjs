@@ -7,7 +7,9 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
-  Spinner
+  Spinner,
+  TableCell,
+  TableRow
 } from '@fluentui/react-components'
 import {
   BuildingPeopleRegular,
@@ -49,89 +51,74 @@ export default function Item({
 
   return (
     <>
-      <tr className="relative bg-white dark:bg-[#2a2826] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
-        <td>
+      <TableRow>
+        <TableCell>
           <div className="flex items-center gap-2">
             <Avatar
               icon={<BuildingPeopleRegular />}
               color="colorful"
-              size={40}
+              size={32}
               name={item.name}
               aria-label={item.name}
             />
             <p className="line-clamp-3 font-semibold">{item.name}</p>
           </div>
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
           <div className="opacity-80 flex items-center gap-2">
-            <CloudDatabaseRegular fontSize={20} />
+            <CloudDatabaseRegular fontSize={24} />
             {item.database}
           </div>
-        </td>
-        <td>
-          <p>
-            {item.schedulesCount} horario{item.schedulesCount === 1 ? '' : 's'}
-          </p>
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
           <p>Registrado el {format(item.created_at, 'DD/MM/YYYY')}</p>
           <p className="text-xs opacity-60">{timeAgo(item.created_at)}</p>
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
           <div className="flex items-center gap-2">
             <Form
               defaultValues={item}
               refetch={refetch}
               triggerProps={{
+                className: '!w-fit',
                 appearance: 'transparent',
-                children: (
-                  <div className="flex items-center gap-2 font-semibold">
-                    <PenRegular fontSize={20} />
-                    Editar
-                  </div>
-                )
+                icon: <PenRegular />
               }}
             />
             <Button
               appearance="transparent"
+              icon={<DeleteRegular />}
               onClick={() => setOpenDelete(true)}
-            >
-              <div className="flex items-center gap-2 font-semibold">
-                <DeleteRegular fontSize={20} />
-                Eliminar
-              </div>
-            </Button>
+            />
           </div>
-        </td>
-      </tr>
-      {openDelete && (
-        <Dialog
-          open={openDelete}
-          onOpenChange={(_, e) => setOpenDelete(e.open)}
-          modalType="alert"
-        >
-          <DialogSurface>
-            <DialogBody>
-              <DialogTitle>
-                ¿Estás seguro de eliminar el terminal biométrico: {item.name}?
-              </DialogTitle>
-              <DialogActions>
-                <DialogTrigger disableButtonEnhancement>
-                  <Button appearance="secondary">Cancelar</Button>
-                </DialogTrigger>
-                <Button
-                  onClick={handleDelete}
-                  disabled={deleting}
-                  icon={deleting ? <Spinner size="tiny" /> : undefined}
-                  appearance="primary"
-                >
-                  ELiminar
-                </Button>
-              </DialogActions>
-            </DialogBody>
-          </DialogSurface>
-        </Dialog>
-      )}
+        </TableCell>
+      </TableRow>
+      <Dialog
+        open={openDelete}
+        onOpenChange={(_, e) => setOpenDelete(e.open)}
+        modalType="alert"
+      >
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>
+              ¿Estás seguro de eliminar el terminal biométrico: {item.name}?
+            </DialogTitle>
+            <DialogActions>
+              <DialogTrigger disableButtonEnhancement>
+                <Button appearance="secondary">Cancelar</Button>
+              </DialogTrigger>
+              <Button
+                onClick={handleDelete}
+                disabled={deleting}
+                icon={deleting ? <Spinner size="tiny" /> : undefined}
+                appearance="primary"
+              >
+                ELiminar
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
     </>
   )
 }
