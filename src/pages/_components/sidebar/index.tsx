@@ -3,6 +3,8 @@ import { Avatar, Tooltip } from '@fluentui/react-components'
 import {
   ClockFilled,
   ClockRegular,
+  CloudDatabaseFilled,
+  CloudDatabaseRegular,
   DocumentFlowchartFilled,
   DocumentFlowchartRegular,
   type FluentIcon,
@@ -10,8 +12,6 @@ import {
   HomeRegular,
   MegaphoneLoudFilled,
   MegaphoneLoudRegular,
-  MoreHorizontalFilled,
-  MoreHorizontalRegular,
   PersonFilled,
   PersonRegular,
   SearchRegular,
@@ -180,8 +180,8 @@ export const RootSidebar = () => {
           <ItemNav
             tooltip="Gestión de recursos"
             text="Recursos"
-            icon={MoreHorizontalRegular}
-            activeIcon={MoreHorizontalFilled}
+            icon={CloudDatabaseRegular}
+            activeIcon={CloudDatabaseFilled}
             href="/m/rm"
           />
         )}
