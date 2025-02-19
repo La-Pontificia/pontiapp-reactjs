@@ -86,19 +86,19 @@ export default function FormUser(props?: Props) {
       contacts: []
     }
   })
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (values) => {
     const newData = {
-      documentId: data.documentId,
-      lastNames: data.lastNames,
-      firstNames: data.firstNames,
-      displayName: data.displayName,
-      birthdate: data.birthdate,
-      contacts: data.contacts.length > 0 ? data.contacts : undefined,
-      photoURL: data.photoURL,
-      roleId: data.role?.id,
-      userRoleId: data.userRole?.id,
-      contractTypeId: data.contractType?.id,
-      schedules: data.schedules.map((s) => ({
+      documentId: values.documentId,
+      lastNames: values.lastNames,
+      firstNames: values.firstNames,
+      displayName: values.displayName,
+      birthdate: values.birthdate,
+      contacts: values.contacts.length > 0 ? values.contacts : undefined,
+      photoURL: values.photoURL,
+      roleId: values.role?.id,
+      userRoleId: values.userRole?.id,
+      contractTypeId: values.contractType?.id,
+      schedules: values.schedules.map((s) => ({
         ...s,
         from: format(s.from, 'YYYY-MM-DD HH:mm:ss'),
         to: format(s.to, 'YYYY-MM-DD HH:mm:ss'),
@@ -106,13 +106,13 @@ export default function FormUser(props?: Props) {
         tolerance: s.tolerance,
         assistTerminalId: s.terminal?.id
       })),
-      entryDate: data.entryDate,
-      email: data.username + '@' + data.domain,
-      username: data.username,
-      password: data.password,
-      status: data.status,
-      customPrivileges: data.customPrivileges,
-      managerId: data.manager?.id
+      entryDate: values.entryDate,
+      email: values.username + '@' + values.domain,
+      username: values.username,
+      password: values.password,
+      status: values.status,
+      customPrivileges: values.customPrivileges,
+      managerId: values.manager?.id
     }
     setFetching(true)
     const res = await api.post<User>('users/create', {

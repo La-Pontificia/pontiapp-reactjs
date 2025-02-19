@@ -87,7 +87,7 @@ export default function UserGrid({
                 }
               >
                 <Link
-                  className="hover:underline dark:text-blue-500 text-blue-600 relative"
+                  className="hover:underline font-semibold relative"
                   to={`/m/users/${user.username}`}
                 >
                   {user.displayName}
