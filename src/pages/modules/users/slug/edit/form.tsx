@@ -52,10 +52,10 @@ export default function FormUser() {
       status: user.status,
       domain: user.email.split('@')[1],
       username: user.username,
-      contacts: user.contacts || [],
+      contacts: user.contacts ?? [],
+      customPrivileges: user.customPrivileges ?? [],
       birthdate: user.birthdate,
       contractType: user.contractType,
-      customPrivileges: user.customPrivileges,
       entryDate: user.entryDate,
       job: user.role?.job,
       manager: user.manager,
@@ -65,25 +65,29 @@ export default function FormUser() {
     }
   })
 
-  const onSubmit = handleSubmit(async (data) => {
+  const onSubmit = handleSubmit(async (values) => {
     const newData = {
-      documentId: data.documentId,
-      lastNames: data.lastNames,
-      firstNames: data.firstNames,
-      displayName: data.displayName,
-      birthdate: data.birthdate,
-      contacts: data.contacts.length > 0 ? data.contacts : undefined,
-      photoURL: data.photoURL,
-      roleId: data.role?.id,
-      userRoleId: data.userRole?.id,
-      contractTypeId: data.contractType?.id,
-      entryDate: data.entryDate,
-      email: data.username + '@' + data.domain,
-      username: data.username,
-      status: data.status,
-      customPrivileges: data.customPrivileges,
-      managerId: data.manager?.id
+      documentId: values.documentId,
+      lastNames: values.lastNames,
+      firstNames: values.firstNames,
+      displayName: values.displayName,
+      birthdate: values.birthdate,
+      contacts: values.contacts.length > 0 ? values.contacts : undefined,
+      photoURL: values.photoURL,
+      roleId: values.role?.id,
+      userRoleId: values.userRole?.id,
+      contractTypeId: values.contractType?.id,
+      entryDate: values.entryDate,
+      email: values.username + '@' + values.domain,
+      username: values.username,
+      status: values.status,
+      customPrivileges: values.customPrivileges,
+      managerId: values.manager?.id
     }
+    console.log({
+      newData
+    })
+
     setFetching(true)
     const res = await api.post<User>(`users/${user.username}`, {
       data: JSON.stringify(newData)
