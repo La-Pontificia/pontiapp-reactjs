@@ -20,12 +20,12 @@ import { useDebounced } from '~/hooks/use-debounced'
 import Form from './form'
 import { useQuery } from '@tanstack/react-query'
 import { ResponsePaginate } from '~/types/paginate-response'
-import { AcademicProgram } from '~/types/rm-academic-program'
 import { api } from '~/lib/api'
 import Pagination from '~/commons/pagination'
 import Item from './item'
 import { BusinessUnit } from '~/types/business-unit'
 import Filters from './filters'
+import { RmAcademicProgram } from '~/types/rm-academic-program'
 
 export type FiltersValues = {
   q: string | null
@@ -56,11 +56,11 @@ export default function SectionsPage() {
   })
 
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
-    AcademicProgram[]
+    RmAcademicProgram[]
   > | null>({
     queryKey: ['rm/academiPrograms', filters],
     queryFn: async () => {
-      const res = await api.get<ResponsePaginate<AcademicProgram[]>>(
+      const res = await api.get<ResponsePaginate<RmAcademicProgram[]>>(
         'rm/academic-programs' + query
       )
       if (!res.ok) return null

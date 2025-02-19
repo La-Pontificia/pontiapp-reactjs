@@ -18,7 +18,7 @@ import {
 import { DeleteRegular, PenRegular } from '@fluentui/react-icons'
 import React from 'react'
 import { timeAgo } from '~/lib/dayjs'
-import { AcademicProgram } from '~/types/rm-academic-program'
+import { RmAcademicProgram } from '~/types/rm-academic-program'
 import Form from './form'
 import { useMutation } from '@tanstack/react-query'
 import { api } from '~/lib/api'
@@ -30,7 +30,7 @@ export default function Item({
   refetch
 }: {
   refetch: () => void
-  item: AcademicProgram
+  item: RmAcademicProgram
 }) {
   const [openForm, setOpenForm] = React.useState(false)
   const [openDelete, setOpenDelete] = React.useState(false)

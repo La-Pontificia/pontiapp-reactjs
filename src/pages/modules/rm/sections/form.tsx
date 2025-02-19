@@ -19,7 +19,7 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
 import { api } from '~/lib/api'
-import { AcademicProgram } from '~/types/rm-academic-program'
+import { RmAcademicProgram } from '~/types/rm-academic-program'
 import { BusinessUnit } from '~/types/business-unit'
 import { handleError } from '~/utils'
 
@@ -38,7 +38,7 @@ export default function Form({
   open: boolean
   onOpenChange: (open: boolean) => void
   refetch: () => void
-  defaultProp?: AcademicProgram | null
+  defaultProp?: RmAcademicProgram | null
   readOnly?: boolean
 }) {
   const { control, handleSubmit, reset } = useForm<FormValues>({
