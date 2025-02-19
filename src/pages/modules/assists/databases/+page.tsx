@@ -1,4 +1,14 @@
-import { Avatar, Badge, Spinner } from '@fluentui/react-components'
+import {
+  Avatar,
+  Badge,
+  Spinner,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow
+} from '@fluentui/react-components'
 import { CloudDatabaseRegular } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '~/lib/api'
@@ -30,56 +40,56 @@ export default function AssistsDatabasesPage() {
             <Spinner size="huge" />
           </div>
         ) : (
-          <table className="w-full relative">
-            <thead>
-              <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
-                <td>Nombre</td>
-                <td>Estado</td>
-                <td>Modelo de recuperación</td>
-                <td>Nivel de compatibilidad</td>
-                <td>Colación</td>
-                <td>Creado en</td>
-              </tr>
-            </thead>
-            <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
-              {items?.map((item) => (
-                <tr className="relative bg-white dark:bg-[#2a2826] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
-                  <td>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHeaderCell>Nombre</TableHeaderCell>
+                <TableHeaderCell>Estado</TableHeaderCell>
+                <TableHeaderCell>Modelo de recuperación</TableHeaderCell>
+                <TableHeaderCell>Nivel de compatibilidad</TableHeaderCell>
+                <TableHeaderCell>Colación</TableHeaderCell>
+                <TableHeaderCell>Creado en</TableHeaderCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {items?.map((item, i) => (
+                <TableRow key={i}>
+                  <TableCell>
                     <div className="flex items-center gap-2">
                       <Avatar
                         badge={{
                           status: item.state === 'ONLINE' ? 'available' : 'away'
                         }}
                         icon={<CloudDatabaseRegular fontSize={27} />}
-                        size={40}
+                        size={32}
                       />
-                      <p className="text-nowrap">{item.name}</p>
+                      <p className="text-nowrap font-semibold">{item.name}</p>
                     </div>
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <Badge
                       color={item.state === 'ONLINE' ? 'success' : 'warning'}
                       appearance="tint"
                     >
                       {item.state}
                     </Badge>
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <p>{item.recoveryModel}</p>
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <p>{item.compatibilityLevel}</p>
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <p>{item.collation}</p>
-                  </td>
-                  <td>
+                  </TableCell>
+                  <TableCell>
                     <p>{format(item.created_at, 'DD/MM/YYYY HH:mm:ss')}</p>
-                  </td>
-                </tr>
+                  </TableCell>
+                </TableRow>
               ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         )}
       </div>
     </div>
