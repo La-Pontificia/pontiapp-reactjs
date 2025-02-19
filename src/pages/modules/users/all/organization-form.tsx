@@ -261,8 +261,8 @@ export default function OrganizationForm({
                     <TimelineRegular fontSize={20} className="opacity-70" />
                     <div className="flex-grow">
                       <p>
-                        {formatDateToTimeString(new Date(schedule.from!))} -{' '}
-                        {formatDateToTimeString(new Date(schedule.to!))}
+                        {format(schedule.from, 'hh:mm A')} -{' '}
+                        {format(schedule.to, 'hh:mm A')}
                       </p>
                       <p className="text-xs opacity-70">
                         {schedule
@@ -424,6 +424,13 @@ export const ScheduleForm = ({
                       if (parse) field.onChange(parse)
                       else field.onChange(null)
                     }}
+                    formatDateToTimeString={(time) =>
+                      new Intl.DateTimeFormat('en-US', {
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true
+                      }).format(time)
+                    }
                     onTimeChange={(_, e) =>
                       e.selectedTime && field.onChange(parse(e.selectedTime))
                     }
@@ -458,6 +465,13 @@ export const ScheduleForm = ({
                       if (parse) field.onChange(parse)
                       else field.onChange(null)
                     }}
+                    formatDateToTimeString={(time) =>
+                      new Intl.DateTimeFormat('en-US', {
+                        hour: 'numeric',
+                        minute: 'numeric',
+                        hour12: true
+                      }).format(time)
+                    }
                     onTimeChange={(_, e) =>
                       e.selectedTime && field.onChange(parse(e.selectedTime))
                     }
