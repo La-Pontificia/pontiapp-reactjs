@@ -1,30 +1,32 @@
 import { api } from '~/lib/api'
 import { useQuery } from '@tanstack/react-query'
-import { AddFilled, Search20Regular } from '@fluentui/react-icons'
-// import Form from './form'
-import { SearchBox, Spinner } from '@fluentui/react-components'
+import { AddFilled } from '@fluentui/react-icons'
+import {
+  Spinner,
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderCell,
+  TableRow
+} from '@fluentui/react-components'
 import React from 'react'
 import { useDebounced } from '~/hooks/use-debounced'
 import { ResponsePaginate } from '~/types/paginate-response'
-import { toast } from 'anni'
-import { handleError } from '~/utils'
 import { Event } from '~/types/event'
 import Item from './event'
 import Form from './form'
 import { useAuth } from '~/store/auth'
+import SearchBox from '~/commons/search-box'
+import Pagination from '~/commons/pagination'
 
 export default function EventsPage() {
   const { user: authUser } = useAuth()
-  const [items, setItems] = React.useState<Event[]>([])
-  const [info, setInfo] = React.useState<ResponsePaginate<Event[]>>(
-    {} as ResponsePaginate<Event[]>
-  )
-  const [loadingMore, setLoadingMore] = React.useState(false)
   const [q, setQ] = React.useState<string>()
+  const [page, setPage] = React.useState(1)
 
   const query = `events/all?paginate=true&relationship=recordsCount,creator${
     q ? `&q=${q}` : ''
-  }`
+  } ${page ? `&page=${page}` : ''}`
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
     Event[]
   > | null>({
@@ -36,32 +38,6 @@ export default function EventsPage() {
     }
   })
 
-  const nextPage = async () => {
-    setLoadingMore(true)
-    const res = await api.get<ResponsePaginate<Event[]>>(
-      `${query}&page=${info.current_page + 1}`
-    )
-    if (res.ok) {
-      setItems((prev) => [
-        ...prev,
-        ...res.data.data.map((user) => new Event(user))
-      ])
-      setInfo({
-        ...res.data,
-        data: []
-      })
-    } else {
-      toast(handleError(res.error))
-    }
-    setLoadingMore(false)
-  }
-
-  React.useEffect(() => {
-    if (!data) return
-    setItems(data.data.map((team) => new Event(team)))
-    setInfo(data)
-  }, [data])
-
   const { handleChange, value: searchValue } = useDebounced({
     delay: 300,
     onCompleted: (value) => setQ(value)
@@ -69,42 +45,38 @@ export default function EventsPage() {
 
   return (
     <div className="flex flex-col w-full pb-3 overflow-auto h-full">
-      <nav className="pb-3 pt-4 flex border-b border-neutral-500/30 items-center gap-4">
+      <nav className="pb-3 pt-4 flex border-b border-neutral-500/30 items-center">
         {authUser.hasPrivilege('events:create') && (
           <Form
             refetch={refetch}
             triggerProps={{
               disabled: isLoading,
-              appearance: 'primary',
-              icon: <AddFilled />,
-              children: <span>Nuevo</span>
+              appearance: 'transparent',
+              icon: <AddFilled className="dark:text-blue-500 text-blue-700" />,
+              children: 'Nuevo'
             }}
           />
         )}
         <SearchBox
           disabled={isLoading}
           value={searchValue}
-          dismiss={{
-            onClick: () => setQ('')
+          dismiss={() => {
+            setQ(undefined)
+            handleChange('')
           }}
-          onChange={(_, e) => {
-            if (e.value === '') setQ(undefined)
-            handleChange(e.value)
+          onChange={(e) => {
+            if (e.target.value === '') setQ(undefined)
+            handleChange(e.target.value)
           }}
-          contentBefore={<Search20Regular className="text-blue-500" />}
           placeholder="Buscar evento"
         />
-        <p className="text-xs dark:text-blue-500">
-          {items.length} evento{items.length > 1 ? 's' : ''} encontrado
-          {items.length > 1 ? 's' : ''}
-        </p>
       </nav>
-      <div className="overflow-auto flex flex-col flex-grow rounded-xl pt-4 h-full">
+      <div className="overflow-auto flex flex-col flex-grow rounded-xl pt-2 h-full">
         {isLoading ? (
           <div className="h-full grid place-content-center">
             <Spinner size="huge" />
           </div>
-        ) : items && items?.length < 1 ? (
+        ) : data && data.data?.length < 1 ? (
           <div className="grid place-content-center flex-grow">
             <img
               src="/search.webp"
@@ -117,45 +89,27 @@ export default function EventsPage() {
             </p>
           </div>
         ) : (
-          <table className="w-full relative">
-            <thead>
-              <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
-                <td className="min-w-[400px]">Evento</td>
-                <td>Fecha</td>
-                <td>Registros</td>
-                <td>Registrado por</td>
-                <td></td>
-              </tr>
-            </thead>
-            <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
+          <Table className="w-full relative">
+            <TableHeader>
+              <TableRow>
+                <TableHeaderCell>Evento</TableHeaderCell>
+                <TableHeaderCell>Fecha</TableHeaderCell>
+                <TableHeaderCell>Registros</TableHeaderCell>
+                <TableHeaderCell>Registrado por</TableHeaderCell>
+                <TableHeaderCell></TableHeaderCell>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
               {!isLoading &&
-                items?.map((item) => (
+                data?.data?.map((item) => (
                   <Item refetch={refetch} key={item.id} item={item} />
                 ))}
-            </tbody>
-          </table>
+            </TableBody>
+          </Table>
         )}
       </div>
-      {info && (
-        <footer className="flex p-5 justify-center">
-          <div className="flex justify-between w-full">
-            <p className="flex basis-0 flex-grow">
-              Mostrando {info.from} - {info.to} de {info.total} resultados
-            </p>
-            {info.next_page_url && (
-              <button
-                disabled={loadingMore}
-                onClick={nextPage}
-                className="dark:text-blue-500 hover:underline"
-              >
-                {loadingMore ? <Spinner size="tiny" /> : 'Cargar más'}
-              </button>
-            )}
-            <p className="flex basis-0 flex-grow justify-end">
-              Página {info.current_page} de {info.last_page}
-            </p>
-          </div>
-        </footer>
+      {data && (
+        <Pagination state={data} onChangePage={(page) => setPage(page)} />
       )}
     </div>
   )

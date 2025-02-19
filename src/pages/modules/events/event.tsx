@@ -1,6 +1,5 @@
 import {
   Avatar,
-  Badge,
   Button,
   Dialog,
   DialogActions,
@@ -8,9 +7,11 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
-  Spinner
+  Spinner,
+  TableCell,
+  TableRow
 } from '@fluentui/react-components'
-import { DeleteFilled, PenFilled } from '@fluentui/react-icons'
+import { DeleteRegular, PenRegular } from '@fluentui/react-icons'
 import React from 'react'
 import { format } from '~/lib/dayjs'
 import { api } from '~/lib/api'
@@ -50,30 +51,30 @@ export default function Item({
 
   return (
     <>
-      <tr className="relative bg-white dark:bg-[#292827] [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
-        <td>
+      <TableRow>
+        <TableCell>
           <div className="flex items-center gap-2">
-            <Avatar color="colorful" size={40} name={item.name} />
+            <Avatar color="colorful" size={32} name={item.name} />
             <div>
               <p className="line-clamp-3 font-semibold">{item.name}</p>
               <p className="text-xs opacity-70">{item.description}</p>
             </div>
           </div>
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
           <p className="overflow-hidden font-medium text-nowrap capitalize text-ellipsis">
-            {item.date ? format(item.date, 'MMMM D, YYYY') : 'Sin fecha'}
+            {item.date ? format(item.date, 'DD MMM YYYY') : 'Sin fecha'}
           </p>
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
           <Link
             to={`/events/records/${item.id}`}
-            className="hover:underline text-nowrap  text-sm font-semibold text-blue-600"
+            className="hover:underline text-nowrap text-sm dark:text-blue-400 text-blue-600"
           >
             {item.recordsCount} asistente{item.recordsCount === 1 ? '' : 's'}
           </Link>
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
           <UserHoverInfo slug={item.creator.username}>
             <a
               target="_blank"
@@ -83,8 +84,8 @@ export default function Item({
               {item.creator?.displayName}
             </a>
           </UserHoverInfo>
-        </td>
-        <td>
+        </TableCell>
+        <TableCell>
           <div className="flex items-center gap-2">
             {authUser.hasPrivilege('events:edit') && (
               <Form
@@ -93,60 +94,44 @@ export default function Item({
                 triggerProps={{
                   size: 'small',
                   appearance: 'transparent',
-                  children: (
-                    <Badge
-                      icon={<PenFilled fontSize={15} />}
-                      appearance="tint"
-                      color="important"
-                    >
-                      Editar
-                    </Badge>
-                  )
+                  icon: <PenRegular fontSize={20} />
                 }}
               />
             )}
             {authUser.hasPrivilege('events:delete') && (
               <button onClick={() => setOpenDelete(true)}>
-                <Badge
-                  icon={<DeleteFilled fontSize={15} />}
-                  appearance="tint"
-                  color="informative"
-                >
-                  Eliminar
-                </Badge>
+                <DeleteRegular fontSize={20} />
               </button>
             )}
           </div>
-        </td>
-      </tr>
-      {openDelete && (
-        <Dialog
-          open={openDelete}
-          onOpenChange={(_, e) => setOpenDelete(e.open)}
-          modalType="alert"
-        >
-          <DialogSurface>
-            <DialogBody>
-              <DialogTitle>
-                ¿Estás seguro de eliminar el departamento: {item.name}?
-              </DialogTitle>
-              <DialogActions>
-                <DialogTrigger disableButtonEnhancement>
-                  <Button appearance="secondary">Cancelar</Button>
-                </DialogTrigger>
-                <Button
-                  onClick={handleDelete}
-                  disabled={deleting}
-                  icon={deleting ? <Spinner size="tiny" /> : undefined}
-                  appearance="primary"
-                >
-                  ELiminar
-                </Button>
-              </DialogActions>
-            </DialogBody>
-          </DialogSurface>
-        </Dialog>
-      )}
+        </TableCell>
+      </TableRow>
+      <Dialog
+        open={openDelete}
+        onOpenChange={(_, e) => setOpenDelete(e.open)}
+        modalType="alert"
+      >
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>
+              ¿Estás seguro de eliminar el departamento: {item.name}?
+            </DialogTitle>
+            <DialogActions>
+              <DialogTrigger disableButtonEnhancement>
+                <Button appearance="secondary">Cancelar</Button>
+              </DialogTrigger>
+              <Button
+                onClick={handleDelete}
+                disabled={deleting}
+                icon={deleting ? <Spinner size="tiny" /> : undefined}
+                appearance="primary"
+              >
+                ELiminar
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
     </>
   )
 }
