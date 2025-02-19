@@ -1,9 +1,17 @@
 import { format } from '~/lib/dayjs'
-import { Avatar, Button } from '@fluentui/react-components'
-import { CalendarRegular } from '@fluentui/react-icons'
+import {
+  Avatar,
+  Table,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow
+} from '@fluentui/react-components'
+import { CalendarRegular, ClockRegular } from '@fluentui/react-icons'
 import { AssistSingle } from './+page'
 import React from 'react'
 import { AssistTerminal } from '~/types/assist-terminal'
+import Pagination from '~/commons/pagination'
 
 export default function AssistsGrid({
   assists,
@@ -12,77 +20,109 @@ export default function AssistsGrid({
   assists: AssistSingle[]
   assistTerminals: AssistTerminal[]
 }) {
-  const [startSlice] = React.useState(0)
-  const [endSlice, setEndSlice] = React.useState(15)
+  const [slices, setSlices] = React.useState([0, 40])
+  const [page, setPage] = React.useState(1)
 
-  const buttonRef = React.useRef<HTMLButtonElement>(null)
+  const links = React.useMemo(() => {
+    const links = []
+    for (let i = 1; i <= Math.ceil(assists.length / 40); i++) {
+      links.push({
+        label: String(i),
+        url: `?page=${i}`,
+        active: page === i
+      })
+    }
+    setSlices([(page - 1) * 40, page * 40])
+    return links
+  }, [assists.length, page])
 
   return (
-    <div className="pt-3 overflow-auto">
-      <table className="w-full relative">
-        <thead className="">
-          <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
-            <td>Persona</td>
-            <td>Biometrico</td>
-            <td>Fecha</td>
-            <td>Hora</td>
-          </tr>
-        </thead>
+    <div className="pt-3 overflow-auto flex flex-col">
+      <div className="overflow-auto">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHeaderCell>Persona</TableHeaderCell>
+              <TableHeaderCell>Biometrico</TableHeaderCell>
+              <TableHeaderCell>Fecha</TableHeaderCell>
+              <TableHeaderCell>Hora</TableHeaderCell>
+            </TableRow>
+          </TableHeader>
 
-        <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
-          {assists.slice(startSlice, endSlice).map((assist, key) => (
-            <tr
-              key={key}
-              className="relative bg-white dark:bg-[#2a2826] [&>td]:text-nowrap group [&>td]:p-3 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
-            >
-              <td>
-                <div className="flex items-center gap-2">
-                  <Avatar
-                    color="colorful"
-                    size={40}
-                    name={`${assist.firstNames} ${assist.lastNames}`}
-                    icon={<CalendarRegular />}
-                  />
-                  <div>
-                    <p className="font-semibold">
-                      {assist.firstNames} {assist.lastNames}
-                    </p>
-                    <p className="text-xs opacity-60">{assist.documentId}</p>
+          <tbody>
+            {assists.slice(slices[0], slices[1]).map((assist, key) => (
+              <TableRow key={key}>
+                <TableCell>
+                  <div className="flex items-center gap-2">
+                    <Avatar
+                      color="colorful"
+                      size={32}
+                      name={`${assist.firstNames} ${assist.lastNames}`}
+                      icon={<CalendarRegular />}
+                    />
+                    <div>
+                      <p className="font-semibold">
+                        {assist.firstNames} {assist.lastNames}
+                      </p>
+                      <p className="text-xs opacity-60">{assist.documentId}</p>
+                    </div>
                   </div>
-                </div>
-              </td>
-              <td>
-                <p>
-                  {
-                    assistTerminals.find(
-                      (terminal) => terminal.id === assist.terminalId
-                    )?.name
-                  }
-                </p>
-              </td>
-              <td>
-                <p className="capitalize">
-                  {format(assist.datetime, 'MMMM D, YYYY')}
-                </p>
-              </td>
-              <td>{format(assist.datetime, 'h:mm A')}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-      {assists.length > 15 && endSlice < assists.length && (
-        <div className="flex p-3 justify-center">
-          <Button
-            ref={buttonRef}
-            onClick={() => {
-              setEndSlice(endSlice + 15)
-              buttonRef.current?.focus?.()
-            }}
-          >
-            Mostrar 15 registros más.
-          </Button>
-        </div>
-      )}
+                </TableCell>
+                <TableCell>
+                  <p>
+                    {
+                      assistTerminals.find(
+                        (terminal) => terminal.id === assist.terminalId
+                      )?.name
+                    }
+                  </p>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-1">
+                    <CalendarRegular fontSize={20} />
+                    {format(assist.datetime, 'MMMM D, YYYY')}
+                  </div>
+                </TableCell>
+                <TableCell>
+                  <div className="flex items-center gap-1">
+                    <ClockRegular fontSize={20} />
+                    {format(assist.datetime, 'h:mm A')}
+                  </div>
+                </TableCell>
+              </TableRow>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+      <Pagination
+        state={{
+          current_page: page,
+          from: slices[0] + 1,
+          links: [
+            {
+              label: 'Prev',
+              url: '/',
+              active: true
+            },
+            ...links,
+            {
+              label: 'Next',
+              url: '/',
+              active: true
+            }
+          ],
+          to: slices[1],
+          total: assists.length,
+          first_page_url: '',
+          last_page_url: '/',
+          last_page: Math.ceil(assists.length / 50),
+          prev_page_url: '/',
+          next_page_url: '/',
+          path: '',
+          per_page: 50
+        }}
+        onChangePage={(page) => setPage(page)}
+      />
     </div>
   )
 }

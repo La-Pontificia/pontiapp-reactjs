@@ -78,7 +78,7 @@ export default function AssistsWithoutUsersPage() {
           isLoading={isAssistsLoading}
         />
       </header>
-      <div className="overflow-auto flex-grow rounded-xl">
+      <div className="overflow-auto flex flex-col flex-grow rounded-xl">
         {(!filters.endDate && !filters.startDate) ||
         !filters.terminalsIds.length ? (
           <div className="flex-grow grid place-content-center h-full">
@@ -111,11 +111,6 @@ export default function AssistsWithoutUsersPage() {
           </>
         )}
       </div>
-      <footer className="pt-3">
-        <p className="font-semibold">
-          {assists?.length ?? 0} registros encontrados.
-        </p>
-      </footer>
     </div>
   )
 }

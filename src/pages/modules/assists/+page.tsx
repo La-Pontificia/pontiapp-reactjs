@@ -105,7 +105,6 @@ export default function AssistsPage() {
           isLoading={isAssistsLoading}
         />
       </header>
-
       <div className="overflow-auto flex flex-col flex-grow pt-1">
         {!filters.endDate && !filters.startDate ? (
           <div className="flex-grow grid place-content-center h-full">
@@ -141,7 +140,7 @@ export default function AssistsPage() {
                     ))}
                   </TabList>
                 </div>
-                <div className="overflow-auto">
+                <div className="overflow-auto flex flex-col">
                   {tab === 'matched' && (
                     <AssistsGrid data={data?.matchedAssists ?? []} />
                   )}

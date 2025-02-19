@@ -1,4 +1,13 @@
-import { Avatar, Badge, Button } from '@fluentui/react-components'
+import {
+  Avatar,
+  Badge,
+  Table,
+  TableBody,
+  TableCell,
+  TableHeader,
+  TableHeaderCell,
+  TableRow
+} from '@fluentui/react-components'
 import {
   CalendarRegular,
   ClockRegular,
@@ -6,6 +15,7 @@ import {
 } from '@fluentui/react-icons'
 import React from 'react'
 import { Link } from 'react-router'
+import Pagination from '~/commons/pagination'
 import UserHoverInfo from '~/components/user-hover-info'
 import { format } from '~/lib/dayjs'
 import { RestAssist } from '~/types/rest-assist'
@@ -13,39 +23,48 @@ import { RestAssist } from '~/types/rest-assist'
 export default function RestAssistsGrid({ data }: { data: RestAssist[] }) {
   const assists = data.map((item) => new RestAssist(item))
 
-  const [startSlice] = React.useState(0)
-  const [endSlice, setEndSlice] = React.useState(15)
-  const buttonRef = React.useRef<HTMLButtonElement>(null)
+  const [slices, setSlices] = React.useState([0, 30])
+  const [page, setPage] = React.useState(1)
+
+  const links = React.useMemo(() => {
+    const links = []
+    for (let i = 1; i <= Math.ceil(assists.length / 30); i++) {
+      links.push({
+        label: String(i),
+        url: `?page=${i}`,
+        active: page === i
+      })
+    }
+    setSlices([(page - 1) * 30, page * 30])
+    return links
+  }, [assists.length, page])
 
   return (
     <div className="overflow-auto">
-      <p className="px-2 pb-1 text-xs text-yellow-500">
+      <p className="px-2 pb-1 text-xs text-yellow-300">
         Registros de asistencias que el sistema no pudo procesar.
       </p>
-      <table className="w-full relative">
-        <thead className="">
-          <tr className="font-semibold [&>td]:px-3 [&>td]:pb-2 [&>td]:text-nowrap dark:text-neutral-400 text-left">
-            <td>Persona</td>
-            <td>Terminal</td>
-            <td>Fecha</td>
-            <td>Dia</td>
-            <td>Hora</td>
-          </tr>
-        </thead>
+      <Table>
+        <TableHeader className="">
+          <TableRow>
+            <TableHeaderCell>Persona</TableHeaderCell>
+            <TableHeaderCell>Terminal</TableHeaderCell>
+            <TableHeaderCell>Fecha</TableHeaderCell>
+            <TableHeaderCell>Dia</TableHeaderCell>
+            <TableHeaderCell>Hora</TableHeaderCell>
+          </TableRow>
+        </TableHeader>
 
-        <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
-          {assists.slice(startSlice, endSlice).map((assist, key) => {
+        <TableBody>
+          {assists.slice(slices[0], slices[1]).map((assist, key) => {
             return (
-              <tr
-                key={key}
-                className="relative bg-white dark:bg-[#2a2826] [&>td]:text-nowrap group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl"
-              >
-                <td>
+              <TableRow key={key}>
+                <TableCell>
                   <UserHoverInfo slug={assist.user.username}>
                     <div className="flex items-center gap-2">
                       <Avatar
                         color="colorful"
-                        size={40}
+                        size={32}
                         name={assist.user.displayName}
                         icon={<CalendarRegular />}
                       />
@@ -59,51 +78,67 @@ export default function RestAssistsGrid({ data }: { data: RestAssist[] }) {
                       </div>
                     </div>
                   </UserHoverInfo>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <div className="flex items-center gap-1 font-semibold opacity-90">
                     <CloudDatabaseRegular fontSize={25} />
                     {assist.terminal.name}
                   </div>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <div className="flex items-center gap-2">
                     <CalendarRegular fontSize={20} />
                     {format(assist.datetime, 'dddd, DD [de] MMMM')}
                   </div>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <p className="capitalize">
                     {format(assist.datetime, 'dddd')}{' '}
                   </p>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <div className="flex gap-2 items-center">
                     <ClockRegular fontSize={20} />
                     <p>{format(assist.datetime, 'h:mm A')}</p>
                   </div>
-                </td>
-                <td>
+                </TableCell>
+                <TableCell>
                   <Badge color="important">Sin procesar</Badge>
-                </td>
-              </tr>
+                </TableCell>
+              </TableRow>
             )
           })}
-        </tbody>
-      </table>
-      {assists.length > 15 && endSlice < assists.length && (
-        <div className="flex p-3 justify-center">
-          <Button
-            ref={buttonRef}
-            onClick={() => {
-              setEndSlice(endSlice + 15)
-              buttonRef.current?.focus?.()
-            }}
-          >
-            Mostrar 15 registros más.
-          </Button>
-        </div>
-      )}
+        </TableBody>
+      </Table>
+      <Pagination
+        state={{
+          current_page: page,
+          from: slices[0] + 1,
+          links: [
+            {
+              label: 'Prev',
+              url: '/',
+              active: true
+            },
+            ...links,
+            {
+              label: 'Next',
+              url: '/',
+              active: true
+            }
+          ],
+          to: slices[1],
+          total: assists.length,
+          first_page_url: '',
+          last_page_url: '/',
+          last_page: Math.ceil(assists.length / 30),
+          prev_page_url: '/',
+          next_page_url: '/',
+          path: '',
+          per_page: 30
+        }}
+        onChangePage={(page) => setPage(page)}
+      />
     </div>
   )
 }

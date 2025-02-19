@@ -122,9 +122,12 @@ export default function AssistFilters({
             <Tooltip content="Mas filtros" relationship="description">
               <button
                 onClick={() => setOpenFilters(true)}
-                className="flex items-center gap-1 dark:text-[#eaa8ff] font-medium px-2"
+                className="flex max-lg:hidden items-center gap-1"
               >
-                <FilterAddFilled fontSize={25} />
+                <FilterAddFilled
+                  fontSize={20}
+                  className="dark:text-blue-500 text-blue-700"
+                />
                 Filtros
               </button>
             </Tooltip>
