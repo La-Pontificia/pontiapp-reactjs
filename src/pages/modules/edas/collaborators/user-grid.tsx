@@ -47,7 +47,7 @@ export default function UserGrid({
         <UserHoverInfo slug={user.username}>
           <div className="flex items-center gap-2">
             <Avatar
-              size={40}
+              size={32}
               color="colorful"
               name={user.displayName}
               aria-label={user.displayName}
