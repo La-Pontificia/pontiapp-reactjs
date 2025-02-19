@@ -18,7 +18,7 @@ export const SearchBox = React.forwardRef<
         readOnly={!hover}
         {...props}
         className={cn(
-          'w-full bg-transparent peer text-[13px] font-medium focus:border-blue-500 outline-none border rounded-full px-3 placeholder:text-stone-500 placeholder:font-medium py-1.5 border-stone-500 pl-8',
+          'w-full bg-transparent peer text-[13px] font-medium focus:border-blue-500 outline-none border rounded-full px-3 placeholder:text-stone-500 placeholder:font-medium py-1.5 border-stone-500/80 pl-8',
           className
         )}
       />
