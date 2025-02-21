@@ -1,7 +1,11 @@
 import { Avatar } from '@fluentui/react-components'
 import {
   Copy20Regular,
+  FluentIcon,
+  LocationRegular,
   Mail20Regular,
+  MailRegular,
+  PersonRegular,
   Phone20Regular
 } from '@fluentui/react-icons'
 import { toast } from 'anni'
@@ -41,13 +45,17 @@ export default function UsersSlugPropertiesPage() {
   const Lazy = ({
     children,
     loading,
+    icon,
     title
   }: {
     title: string
     loading: boolean
+    icon?: FluentIcon
     children: React.ReactNode
   }) => {
     if (!children) return null
+
+    const Icon = icon
     return (
       <div className="flex items-center gap-4">
         <p className="lg:min-w-[200px] max-lg:flex-grow text-nowrap dark:text-neutral-400">
@@ -56,7 +64,17 @@ export default function UsersSlugPropertiesPage() {
         {loading ? (
           <div className="h-4 w-16 rounded-full bg-neutral-500/30 animate-pulse" />
         ) : (
-          <div className="font-semibold">{children}</div>
+          <div className="font-semibold flex items-center gap-1">
+            {Icon ? (
+              <Icon
+                fontSize={20}
+                className="inline-flex dark:text-blue-500 text-blue-600"
+              />
+            ) : (
+              <div className="w-[20px]"></div>
+            )}
+            {children}
+          </div>
         )}
       </div>
     )
@@ -75,6 +93,7 @@ export default function UsersSlugPropertiesPage() {
       <div className="space-y-2 py-5">
         <h2 className="font-semibold">Básicos</h2>
         <Lazy
+          icon={MailRegular}
           title="Correo"
           loading={isLoading}
           children={
@@ -110,6 +129,7 @@ export default function UsersSlugPropertiesPage() {
         />
         <Lazy
           title="Jefe (Manager)"
+          icon={PersonRegular}
           loading={aditionalIsLoading}
           children={
             properties?.manager && (
@@ -183,6 +203,14 @@ export default function UsersSlugPropertiesPage() {
           }
         />
         <h2 className="font-semibold">Organización</h2>
+        {user?.branch && (
+          <Lazy
+            title="Sede"
+            icon={LocationRegular}
+            loading={isLoading}
+            children={user.branch.name}
+          />
+        )}
         {user?.role && (
           <>
             <Lazy

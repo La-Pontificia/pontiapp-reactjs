@@ -27,6 +27,7 @@ import { format } from '~/lib/dayjs'
 import { toast } from 'anni'
 import { useNavigate } from 'react-router'
 import { api } from '~/lib/api'
+import { RmBranch } from '~/types/rm-branch'
 
 type Props = {
   title?: string
@@ -46,6 +47,7 @@ export type FormUserValues = {
   photoURL: string
   birthdate: Date
   contacts: ContactType[]
+  branch: RmBranch | null
   job: Job | null
   role: Role | null
   contractType: ContractType | null
@@ -106,6 +108,7 @@ export default function FormUser(props?: Props) {
         tolerance: s.tolerance,
         assistTerminalId: s.terminal?.id
       })),
+      branchId: values.branch?.id,
       entryDate: values.entryDate,
       email: values.username + '@' + values.domain,
       username: values.username,

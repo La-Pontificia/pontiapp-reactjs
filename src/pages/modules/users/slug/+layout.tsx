@@ -79,7 +79,7 @@ export default function UsersSlugLayout(): JSX.Element {
       const res = await api.get<User>(
         'users/' +
           slug +
-          '?relationship=role,role.department,role.department.area'
+          '?relationship=role,role.department,role.department.area,branch'
       )
       if (!res.ok) return null
       return new User(res.data)

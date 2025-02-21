@@ -15,6 +15,7 @@ import { toast } from 'anni'
 import { useSlugUser } from '../+layout'
 import React from 'react'
 import UsersEditSchedules from './schedules'
+import { RmBranch } from '~/types/rm-branch'
 
 export type FormUserValues = {
   documentId: string
@@ -28,6 +29,7 @@ export type FormUserValues = {
   role: Role | null
   contractType: ContractType | null
   entryDate: Date
+  branch: RmBranch | null
   username: string
   domain: string
   status: boolean
@@ -53,6 +55,7 @@ export default function FormUser() {
       domain: user.email.split('@')[1],
       username: user.username,
       contacts: user.contacts ?? [],
+      branch: user.branch,
       customPrivileges: user.customPrivileges ?? [],
       birthdate: user.birthdate,
       contractType: user.contractType,
@@ -77,6 +80,7 @@ export default function FormUser() {
       roleId: values.role?.id,
       userRoleId: values.userRole?.id,
       contractTypeId: values.contractType?.id,
+      branchId: values.branch?.id,
       entryDate: values.entryDate,
       email: values.username + '@' + values.domain,
       username: values.username,

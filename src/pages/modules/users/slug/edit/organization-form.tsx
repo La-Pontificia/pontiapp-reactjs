@@ -15,6 +15,7 @@ import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { format } from '~/lib/dayjs'
 import { calendarStrings } from '~/const'
 import { useAuth } from '~/store/auth'
+import { RmBranch } from '~/types/rm-branch'
 
 export default function OrganizationForm({
   control,
@@ -56,8 +57,51 @@ export default function OrganizationForm({
     }
   })
 
+  const { data: branches, isLoading: isBranchesLoading } = useQuery<RmBranch[]>(
+    {
+      queryKey: ['branches'],
+      queryFn: async () => {
+        const res = await api.get<RmBranch[]>('rm/branches')
+        if (!res.ok) return []
+        return res.data.map((i) => new RmBranch(i))
+      }
+    }
+  )
+
   return (
     <>
+      <Controller
+        control={control}
+        name="branch"
+        render={({ field, fieldState: { error } }) => (
+          <Field
+            orientation="horizontal"
+            validationMessage={error?.message}
+            label="Sede"
+          >
+            <Combobox
+              {...field}
+              value={field.value?.name ?? ''}
+              input={{
+                autoComplete: 'off'
+              }}
+              selectedOptions={field.value?.id ? [field.value?.id] : []}
+              disabled={isBranchesLoading}
+              onOptionSelect={(_, data) => {
+                const query = branches?.find((i) => i.id === data.optionValue)
+                field.onChange(query)
+              }}
+              placeholder="Selecciona un sede"
+            >
+              {branches?.map((i) => (
+                <Option key={i.id} text={i.name} value={i.id}>
+                  {i.name}
+                </Option>
+              ))}
+            </Combobox>
+          </Field>
+        )}
+      />
       <Controller
         control={control}
         render={({ field, fieldState: { error } }) => (

@@ -3,6 +3,7 @@ import {
   BuildingRegular,
   CopyRegular,
   FluentIcon,
+  LocationRegular,
   MailRegular,
   PersonRegular
 } from '@fluentui/react-icons'
@@ -16,7 +17,7 @@ export default function QuickContactInformation() {
   return (
     <div className="flex flex-col">
       <h2 className="font-semibold py-2 text-sm">Información de contacto</h2>
-      <div className="grid lg:grid-cols-2 gap-x-10 gap-y-3">
+      <div className="grid lg:grid-cols-3 sm:grid-cols-2 gap-x-10 gap-y-3">
         {isLoading ? (
           <>
             <div className="w-full h-[20px] mx-2 my-5 bg-stone-500/20 animate-pulse rounded-full"></div>
@@ -60,6 +61,15 @@ export default function QuickContactInformation() {
                   title="Area"
                 />
               </>
+            )}
+
+            {user?.branch && (
+              <InfoItem
+                children={<p>{user.branch.name}</p>}
+                textValue={user.branch.name}
+                icon={LocationRegular}
+                title="Sede"
+              />
             )}
           </>
         )}
