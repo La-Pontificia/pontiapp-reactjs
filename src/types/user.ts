@@ -2,6 +2,7 @@ import { CONTACT_TYPES, PRIVILEGE_DEVELOPER } from '~/const'
 import { Role } from './role'
 import { UserRole } from './user-role'
 import { ContractType } from './contract-type'
+import { RmBranch } from './rm-branch'
 
 export type ContactType = {
   value: string
@@ -23,6 +24,7 @@ export class User {
   entryDate?: Date
   birthdate?: Date
   fullName: string
+  branch: RmBranch | null
   contractType: ContractType
   contacts?: ContactType[]
   internalDisplayName: string
@@ -57,6 +59,7 @@ export class User {
     this.username = data.username
     this.entryDate = data.entryDate
     this.birthdate = data.birthdate
+    this.branch = data.branch
     this.fullName = data.fullName
     this.contractType = data.contractType
     this.contacts = data.contacts
@@ -77,6 +80,7 @@ export class User {
       this.contractType = new ContractType(data.contract_type)
     if (data.user_role) this.userRole = new UserRole(data.user_role)
     if (data.manager) this.manager = new User(data.manager)
+    if (data.branch) this.branch = new RmBranch(data.branch)
     if (data.role) this.role = new Role(data.role)
     if (data.userRole) this.userRole = new UserRole(data.userRole)
 
