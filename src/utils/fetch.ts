@@ -16,8 +16,8 @@ export async function getPersonByDocumentId(
 
     const person = {
       documentId: data.documentId,
-      firstNames: data.surnames,
-      lastNames: data.names,
+      firstNames: data.names,
+      lastNames: data.surnames,
       fullName: data.fullName
     }
 
