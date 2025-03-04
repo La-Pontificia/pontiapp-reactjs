@@ -1,4 +1,4 @@
-import { Navigate, Route, Routes } from 'react-router'
+import { Route, Routes } from 'react-router'
 import ProtectedModule from '~/protected/module'
 import ResourceManagementLayout from './+layout'
 import ResourceManagementReportFilesPage from './report-files/+page'
@@ -6,6 +6,7 @@ import TeacherTrackingsPage from './tt/+page'
 import AcademicProgramsPage from './academic-programs/+page'
 import SectionsPage from './sections/+page'
 import PeriodsPage from './periods/+page'
+import ResourceManagementPage from './+page'
 
 export default function ResourceManagementRoutes() {
   return (
@@ -17,7 +18,14 @@ export default function ResourceManagementRoutes() {
           </ProtectedModule>
         }
       >
-        <Route index element={<Navigate to="tt" replace={true} />} />
+        <Route
+          index
+          element={
+            <ProtectedModule navigate="/" has="rm">
+              <ResourceManagementPage />
+            </ProtectedModule>
+          }
+        />
         <Route
           path="tt"
           element={
