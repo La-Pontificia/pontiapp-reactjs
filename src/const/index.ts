@@ -160,6 +160,7 @@ export const PRIVILEGES = {
   'assists:reportFiles': 'Ver reportes de asistencias',
   'assists:databases': 'Bases de datos de asistencias',
   'assists:assistTerminals': 'Terminales de asistencias',
+  'assists:tools': 'Herramientas de asistencias',
 
   // Attentions management
   'attentions:tickets': '(Tickets) - Ver tickets',

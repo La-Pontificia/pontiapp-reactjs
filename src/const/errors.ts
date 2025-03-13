@@ -8,5 +8,11 @@ export const ERRORS = {
     'No se encontro ningun usuario con el correo o usuario ingresado.',
   incorrect_password: 'Contraseña incorrecta, por favor intenta de nuevo.',
   account_disabled:
-    'Tu cuenta se encuentra deshabilitada, por favor contacta a soporte.'
+    'Tu cuenta se encuentra deshabilitada, por favor contacta a soporte.',
+  'Course code already exists':
+    'Hey, el código del curso ya existe en el sistema.',
+  already_exists:
+    'Ya existe un registro con los datos ingresados. Por favor, verifica e intenta de nuevo.',
+  not_found:
+    'No se encontraron resultados. Por favor, verifica e intenta de nuevo.'
 } as const
