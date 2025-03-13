@@ -13,7 +13,9 @@ import {
   PersonDeleteFilled,
   PersonDeleteRegular,
   TextBulletListSquareClockFilled,
-  TextBulletListSquareClockRegular
+  TextBulletListSquareClockRegular,
+  WindowDevToolsFilled,
+  WindowDevToolsRegular
 } from '@fluentui/react-icons'
 import { useAuth } from '~/store/auth'
 
@@ -92,6 +94,14 @@ export const AssistsSidebar = () => {
           href="/m/assists/databases"
         >
           Bases de datos
+        </ItemSidebarNav>
+        <ItemSidebarNav
+          has={['assists:tools']}
+          icon={WindowDevToolsRegular}
+          iconActive={WindowDevToolsFilled}
+          href="/m/assists/tools"
+        >
+          Tools
         </ItemSidebarNav>
       </nav>
     </ReusableSidebar>

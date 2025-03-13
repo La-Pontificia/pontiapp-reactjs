@@ -29,7 +29,7 @@ export default function AssistTerminalsPage() {
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
     AssistTerminal[]
   > | null>({
-    queryKey: ['roles/contract-types/relationship', q],
+    queryKey: ['partials/assist-terminals', q],
     queryFn: async () => {
       const res = await api.get<ResponsePaginate<AssistTerminal[]>>(query)
       if (!res.ok) return null

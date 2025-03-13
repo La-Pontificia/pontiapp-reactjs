@@ -11,6 +11,7 @@ import AssistsLayout from '~/pages/modules/assists/+layout'
 import { Route, Routes } from 'react-router'
 import ProtectedModule from '~/protected/module'
 import Protected from '~/protected/auth'
+import ToolsPage from './tools/+page'
 
 export default function AssistsRoutes() {
   return (
@@ -84,6 +85,14 @@ export default function AssistsRoutes() {
           element={
             <Protected has="assists:databases" navigate="/m/assists">
               <AssistsDatabasesPage />
+            </Protected>
+          }
+        />
+        <Route
+          path="tools"
+          element={
+            <Protected has="assists:tools" navigate="/m/assists">
+              <ToolsPage />
             </Protected>
           }
         />
