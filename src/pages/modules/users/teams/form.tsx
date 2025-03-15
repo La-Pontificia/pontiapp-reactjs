@@ -67,9 +67,7 @@ export default function TeamForm({
     if (!res.ok) {
       console.error(res.error)
       setValue('photoURL', '')
-      toast('No se pudo subir la imagen', {
-        description: res.error
-      })
+      toast.error(handleError(res.error))
       setUploading(false)
       return
     }
