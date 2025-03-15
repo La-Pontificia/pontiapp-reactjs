@@ -5,15 +5,18 @@ import ThemeProvider from '~/providers/theme'
 import TanstackProvider from './providers/tanstack'
 import UiProvider from './providers/ui'
 import MainRoutes from './pages/routes'
+import FluentUIProvider from './providers/fluentui'
 
 createRoot(document.body).render(
   <ThemeProvider>
-    <UiProvider>
-      <BrowserRouter>
-        <TanstackProvider>
-          <MainRoutes />
-        </TanstackProvider>
-      </BrowserRouter>
-    </UiProvider>
+    <FluentUIProvider>
+      <UiProvider>
+        <BrowserRouter>
+          <TanstackProvider>
+            <MainRoutes />
+          </TanstackProvider>
+        </BrowserRouter>
+      </UiProvider>
+    </FluentUIProvider>
   </ThemeProvider>
 )
