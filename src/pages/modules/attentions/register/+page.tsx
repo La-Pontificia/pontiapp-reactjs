@@ -11,7 +11,6 @@ import Selection from './selection'
 import { AddRegular } from '@fluentui/react-icons'
 import { getPersonByDocumentId } from '~/utils/fetch'
 import { createTicket } from '~/services/tickets'
-import { handleError } from '~/utils'
 import { Helmet } from 'react-helmet'
 import { AttentionPosition } from '~/types/attention-position'
 
@@ -145,9 +144,7 @@ export default function AttentionsRegisterPage() {
       }
     } catch (error) {
       console.error(error)
-      toast('Ops! Algo salió mal', {
-        description: handleError(error)
-      })
+      toast.error('Ops! Algo salió mal')
     } finally {
       setCreating(false)
       setSuccess(true)

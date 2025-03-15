@@ -93,11 +93,9 @@ export const Ticket = ({ ticket }: { ticket: FirebaseAttentionTicket }) => {
 
   const handleCalled = () => {
     setCallingTicket(new FirebaseAttentionTicket(ticket))
-    callTicket(ticket.id).catch((error) => {
+    callTicket(ticket.id).catch(() => {
       setCallingTicket(null)
-      toast('oops, no se pudo llamar al ticket', {
-        description: error.message
-      })
+      toast.error('oops, no se pudo llamar al ticket')
     })
   }
 
@@ -161,11 +159,9 @@ export const TicketTranseferred = ({
 
   const handleCalled = () => {
     setCallingTicket(new FirebaseAttentionTicket(ticket))
-    callTicket(ticket.id).catch((error) => {
+    callTicket(ticket.id).catch(() => {
       setCallingTicket(null)
-      toast('oops, no se pudo llamar al ticket', {
-        description: error.message
-      })
+      toast.error('oops, no se pudo llamar al ticket')
     })
   }
 
