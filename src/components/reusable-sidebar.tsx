@@ -135,16 +135,16 @@ export const ItemSidebarNav = (props: ItemNav) => {
       className="block relative dark:text-neutral-300 max-lg:dark:text-stone-400 text-neutral-900 data-[active]:font-semibold group pl-1"
     >
       <div className="absolute max-lg:hidden pointer-events-none inset-y-0 left-0 flex items-center">
-        <span className="h-[10px] group-data-[active]:h-[5px] transition-all group-hover:h-[10px] group-data-[active]:bg-blue-600 dark:group-data-[active]:bg-[#7385ff] group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
+        <span className="h-[10px] group-data-[active]:h-[5px] transition-all group-hover:h-[10px] group-data-[active]:bg-blue-600 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
       </div>
-      <div className="flex dark:font-normal font-medium items-center transition-colors group-data-[active]:dark:text-white gap-2 py-1 rounded-lg group-hover:bg-white dark:group-hover:bg-stone-700/50 max-lg:text-base">
+      <div className="flex dark:font-semibold font-semibold items-center transition-colors group-data-[active]:dark:text-white gap-2 py-1 rounded-lg group-hover:bg-white dark:group-hover:bg-stone-700/50 max-lg:text-base">
         <div className="max-lg:hidden">
           {props.emptyIcon ? (
             <span className="block aspect-square"></span>
           ) : Icon ? (
             <Icon
               fontSize={23}
-              className="dark:text-neutral-200 group-data-[active]:dark:text-[#7385ff] group-data-[active]:text-blue-600"
+              className="dark:text-neutral-200 group-data-[active]:dark:text-blue-500 group-data-[active]:text-blue-600"
             />
           ) : (
             <Avatar
