@@ -81,7 +81,11 @@ async function fetchCore<T>(
       return handleError(await res.json())
     } else {
       const errorData = await res.json()
-      throw new Error(errorData.error || 'An error occurred')
+      throw new Error(
+        typeof errorData === 'string'
+          ? errorData
+          : JSON.stringify(errorData) || 'An error occurred'
+      )
     }
   }
 
