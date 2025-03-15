@@ -17,7 +17,7 @@ export const handleAuthError = (error: any) => {
 
 export const handleError = (error: any) => {
   const message = ERRORS[error as keyof typeof ERRORS]
-  return message || error
+  return message || (typeof error === 'string' ? error : JSON.stringify(error))
 }
 
 export const generateRandomPassword = () => {
