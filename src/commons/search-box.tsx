@@ -7,7 +7,7 @@ export const SearchBox = React.forwardRef<
   React.InputHTMLAttributes<HTMLInputElement> & {
     dismiss?: () => void
   }
->(({ className, ...props }, ref) => {
+>(({ className, dismiss, ...props }, ref) => {
   const [hover, setHover] = React.useState(false)
   return (
     <label className="flex relative group items-center gap-2">
@@ -18,7 +18,7 @@ export const SearchBox = React.forwardRef<
         readOnly={!hover}
         {...props}
         className={cn(
-          'w-full bg-transparent peer text-[13px] font-medium focus:border-blue-500 outline-none border rounded-full px-3 placeholder:text-stone-500 placeholder:font-medium py-1.5 border-stone-500/80 pl-8',
+          'w-full bg-stone-500/20 peer text-[13px] font-medium outline-none rounded-lg px-3 placeholder:text-stone-500 placeholder:font-medium py-2 pl-8',
           className
         )}
       />
@@ -29,7 +29,7 @@ export const SearchBox = React.forwardRef<
         <button
           type="button"
           className="text-stone-600 dark:text-stone-400"
-          onClick={props.dismiss}
+          onClick={dismiss}
         >
           <DismissFilled fontSize={18} />
         </button>
