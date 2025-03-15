@@ -14,26 +14,42 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
+  Field,
+  Input,
   Option,
-  Spinner
+  Persona,
+  Spinner,
+  Table,
+  TableBody,
+  TableCell,
+  TableCellLayout,
+  TableHeader,
+  TableHeaderCell,
+  TableRow
 } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { format } from '~/lib/dayjs'
 import {
   ClockRegular,
-  DatabaseWindowRegular,
-  GuestRegular,
+  CloudDatabaseRegular,
   MegaphoneRegular
 } from '@fluentui/react-icons'
 import { useAuth } from '~/store/auth'
 import { Link } from 'react-router'
 import { ExcelColored } from '~/icons'
+import { Helmet } from 'react-helmet'
+
+const SHEET_API_URL =
+  'https://docs.google.com/spreadsheets/d/e/2PACX-1vT3NJ2Sdi74uySfutPWUUnFBz-5pI57flWViZKplAo9IdlQ6k_J2KrIp3bcwSMx4OcNQHj1yMkre8pU/pub?output=csv'
+const SHEET_PUBLIC_URL =
+  'https://docs.google.com/spreadsheets/d/1x6XEqH58uLXxokXZBHlznhjczKBKGWrqCiQqqCk8c8U/edit?gid=0#gid=0'
 
 export default function EventsRegister() {
   const { user: authUser } = useAuth()
   const [openReport, setOpenReport] = React.useState(false)
   const [reporting, setReporting] = React.useState(false)
+  const [openDataSource, setOpenDataSource] = React.useState(false)
 
   const [people, setPeople] = React.useState<
     Array<{
@@ -42,12 +58,10 @@ export default function EventsRegister() {
       career: string
     }>
   >([])
-  const SHEET_URL =
-    'https://docs.google.com/spreadsheets/d/e/2PACX-1vT3NJ2Sdi74uySfutPWUUnFBz-5pI57flWViZKplAo9IdlQ6k_J2KrIp3bcwSMx4OcNQHj1yMkre8pU/pub?output=csv'
 
   React.useEffect(() => {
     const fetchData = async () => {
-      const csv = await fetch(SHEET_URL)
+      const csv = await fetch(SHEET_API_URL)
       const text = await csv.text()
       const people = text
         .split('\n')
@@ -99,7 +113,8 @@ export default function EventsRegister() {
   })
 
   const handleGetPerson = async (documentId: string) => {
-    if (documentId.length !== 8) return toast('Documento inválido')
+    if (documentId.length !== 8)
+      return toast.warning('Documento de identidad inválido')
 
     const resultPerson = people.find((p) => p.documentId === documentId)
     const person = resultPerson ?? {
@@ -172,172 +187,207 @@ export default function EventsRegister() {
   }
 
   return (
-    <div className="w-full flex py-2 flex-col overflow-y-auto h-full flex-grow">
-      <div className="flex items-center gap-4 py-4 w-full">
-        <Combobox
-          input={{
-            autoComplete: 'off'
-          }}
-          style={{
-            borderRadius: 7
-          }}
-          disabled={isLoading}
-          onOptionSelect={(_, data) => {
-            const ev = events?.find((e) => e.id === data.optionValue)
-            if (ev) setSelectedEvent(ev)
-          }}
-          value={selectedEvent?.name}
-          placeholder="Selecciona un evento"
-        >
-          {events?.map((event) => (
-            <Option key={event.id} text={event.name} value={event.id}>
-              {event.name}
-            </Option>
-          ))}
-        </Combobox>
-        <Combobox
-          input={{
-            autoComplete: 'off'
-          }}
-          disabled={isLoadingBusinessUnits}
-          onOptionSelect={(_, data) => {
-            const b = businessUnits?.find((b) => b.id === data.optionValue)
-            if (b) setSelectedBusinessUnit(b)
-          }}
-          style={{
-            borderRadius: 7
-          }}
-          value={selectedBusinessUnit?.name}
-          placeholder="Unidad de negocio"
-        >
-          {businessUnits?.map((business) => (
-            <Option key={business.id} text={business.name} value={business.id}>
-              {business.name}
-            </Option>
-          ))}
-        </Combobox>
-      </div>
-      <div className="flex-grow h-full overflow-y-auto flex border-t border-stone-500/40">
-        {!selectedEvent || !selectedBusinessUnit ? (
-          <div className="flex-grow h-full grid place-content-center">
-            <p className="text-sm max-w-[30ch] text-center mx-auto opacity-70">
-              Seleccione un evento y una unidad de negocio para comenzar.
-            </p>
-          </div>
-        ) : (
-          <div className="w-full overflow-y-auto flex flex-col">
-            <div className="py-5 px-2">
-              <div className="relative flex items-center gap-2">
-                <input
-                  ref={inputRef}
-                  onChange={onChange}
-                  autoFocus
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter') handleEnter()
-                  }}
-                  placeholder="DNI o código de barras"
-                  className="dark:bg-blue-800 shadow-black/60 shadow-lg font-semibold outline-none min-w-[400px] text-sm placeholder:text-blue-400 rounded-lg p-3"
-                  value={capturedText}
-                />
-                <div className="flex items-center gap-2">
-                  <DatabaseWindowRegular fontSize={25} />
-                  <input
-                    readOnly
-                    className="line-clamp-1 p-2.5 outline-none rounded-md dark:bg-neutral-700/50 text-white"
-                    value="https://docs.google.com/spreadsheets/d/e/2PACX-1vT3NJ2Sdi74uySfutPWUUnFBz-5pI57flWViZKplAo9IdlQ6k_J2KrIp3bcwSMx4OcNQHj1yMkre8pU/pub?output=csv"
+    <div className="flex flex-col flex-grow overflow-y-auto">
+      <Helmet>
+        <title>Eventos {'>'} Registrar asistentes | Pontiapp</title>
+      </Helmet>
+      <div className="w-full flex py-2 flex-col overflow-y-auto h-full flex-grow">
+        <nav className="flex items-center gap-3 flex-wrap w-full px-3 max-lg:py-2">
+          <h1 className="font-semibold flex-grow text-lg">
+            Registrar asistentes
+          </h1>
+          <div className="flex items-center gap-4 w-full">
+            <Combobox
+              input={{
+                autoComplete: 'off'
+              }}
+              style={{
+                borderRadius: 7
+              }}
+              disabled={isLoading}
+              onOptionSelect={(_, data) => {
+                const ev = events?.find((e) => e.id === data.optionValue)
+                if (ev) setSelectedEvent(ev)
+              }}
+              value={selectedEvent?.name}
+              placeholder="Selecciona un evento"
+            >
+              {events?.map((event) => (
+                <Option key={event.id} text={event.name} value={event.id}>
+                  {event.name}
+                </Option>
+              ))}
+            </Combobox>
+            <Combobox
+              input={{
+                autoComplete: 'off'
+              }}
+              disabled={isLoadingBusinessUnits}
+              onOptionSelect={(_, data) => {
+                const b = businessUnits?.find((b) => b.id === data.optionValue)
+                if (b) setSelectedBusinessUnit(b)
+              }}
+              style={{
+                borderRadius: 7
+              }}
+              value={selectedBusinessUnit?.name}
+              placeholder="Unidad de negocio"
+            >
+              {businessUnits?.map((business) => (
+                <Option
+                  key={business.id}
+                  text={business.name}
+                  value={business.id}
+                >
+                  <Persona
+                    avatar={{
+                      className: '!rounded-md',
+                      image: {
+                        src: business.logoURL
+                      }
+                    }}
+                    primaryText={business.name}
                   />
-                </div>
-              </div>
-              <p className="text-xs pt-1 dark:text-neutral-400">
-                Escribe el DNI, o simplemente escanea el código de barras.
+                </Option>
+              ))}
+            </Combobox>
+            <div className="flex ml-auto items-center gap-2">
+              <Button
+                appearance="transparent"
+                onClick={() => setOpenDataSource(true)}
+                icon={<CloudDatabaseRegular />}
+              >
+                Fuente de datos
+              </Button>
+            </div>
+          </div>
+        </nav>
+        <div className="flex-grow h-full overflow-y-auto flex">
+          {!selectedEvent || !selectedBusinessUnit ? (
+            <div className="flex-grow h-full grid place-content-center">
+              <p className="text-sm max-w-[30ch] text-center mx-auto opacity-70">
+                Seleccione un evento y una unidad de negocio para comenzar.
               </p>
             </div>
-            {records.length > 0 && (
-              <div className="flex pb-3 items-center justify-between">
-                <h1 className="px-1 font-medium">
-                  Registros{' '}
-                  <span className="text-xs opacity-70">({records.length})</span>
-                </h1>
-                {authUser.hasPrivilege('events:records:report') && (
-                  <div className="ml-auto">
-                    <Button
-                      disabled={isLoading || reporting}
-                      onClick={() => setOpenReport(true)}
-                      icon={<ExcelColored />}
-                      appearance="subtle"
-                    >
-                      <span className="hidden xl:block">Exportar excel</span>
-                    </Button>
+          ) : (
+            <div className="w-full px-3 overflow-y-auto flex flex-col">
+              <div className="py-5">
+                <div className="relative flex items-center gap-2">
+                  <input
+                    ref={inputRef}
+                    onChange={onChange}
+                    autoFocus
+                    onKeyDown={(e) => {
+                      if (e.key === 'Enter') handleEnter()
+                    }}
+                    placeholder="DNI o código de barras"
+                    className="dark:bg-blue-800 bg-blue-600 shadow-blue-800/20 dark:shadow-black/60 shadow-lg font-semibold outline-none min-w-[400px] text-sm text-white placeholder:text-blue-400 rounded-lg p-3"
+                    value={capturedText}
+                  />
+                </div>
+                <p className="text-xs px-1 pt-1 dark:text-neutral-400">
+                  Escribe el DNI, o simplemente escanea el código de barras.
+                </p>
+              </div>
+              {records.length > 0 && (
+                <div className="flex pt-1 border-t border-stone-500/30 items-center justify-between">
+                  <h1 className="px-1 font-medium">
+                    Registros{' '}
+                    <span className="text-xs opacity-70">
+                      ({records.length})
+                    </span>
+                  </h1>
+                  {authUser.hasPrivilege('events:records:report') && (
+                    <div className="ml-auto">
+                      <Button
+                        disabled={isLoading || reporting}
+                        onClick={() => setOpenReport(true)}
+                        icon={<ExcelColored />}
+                        appearance="subtle"
+                      >
+                        excel
+                      </Button>
+                    </div>
+                  )}
+                </div>
+              )}
+              <div className="w-full overflow-y-auto flex-grow rounded-2xl">
+                {records.length > 0 ? (
+                  <Table>
+                    <TableHeader>
+                      <TableRow>
+                        <TableHeaderCell className="w-[280px]">
+                          Asistente
+                        </TableHeaderCell>
+                        <TableHeaderCell>Unidad</TableHeaderCell>
+                        <TableHeaderCell>Evento</TableHeaderCell>
+                        <TableHeaderCell>Hora ingreso</TableHeaderCell>
+                      </TableRow>
+                    </TableHeader>
+                    <TableBody>
+                      {records?.map((record) => (
+                        <TableRow>
+                          <TableCell>
+                            <TableCellLayout
+                              media={
+                                <Avatar color="colorful" name={record.names} />
+                              }
+                            >
+                              <p className="capitalize pt-1">
+                                {record.names?.toLowerCase()}
+                              </p>
+                              <p className="text-xs capitalize text-blue-600 dark:text-blue-400">
+                                {record.career?.toLowerCase()}
+                              </p>
+                            </TableCellLayout>
+                          </TableCell>
+                          <TableCell>
+                            <TableCellLayout
+                              media={
+                                <Avatar
+                                  color="colorful"
+                                  className="!rounded-md"
+                                  image={{
+                                    src: selectedBusinessUnit.logoURL
+                                  }}
+                                />
+                              }
+                            >
+                              <p className="capitalize pt-1">
+                                {selectedBusinessUnit.name}
+                              </p>
+                            </TableCellLayout>
+                          </TableCell>
+                          <TableCell>
+                            <p className="capitalize flex items-center gap-2">
+                              <MegaphoneRegular fontSize={20} />
+                              {selectedEvent.name}
+                            </p>
+                          </TableCell>
+                          <TableCell>
+                            <p className="capitalize flex items-center gap-1">
+                              <ClockRegular fontSize={20} />
+                              {format(record.created_at, 'h:mm A')}
+                            </p>
+                          </TableCell>
+                        </TableRow>
+                      ))}
+                    </TableBody>
+                  </Table>
+                ) : (
+                  <div className="h-full grid place-content-center text-sm font-medium">
+                    <p>
+                      Aún no hay registros de asistentes en este evento y
+                      unidad.
+                    </p>
                   </div>
                 )}
               </div>
-            )}
-            <div className="w-full overflow-y-auto bg-white dark:bg-[#292827] flex-grow rounded-2xl">
-              {records.length > 0 ? (
-                <table className="w-full relative">
-                  <thead>
-                    <tr className="font-semibold [&>td]:px-3 [&>td]:py-3 border-b border-neutral-500/20 [&>td]:text-nowrap dark:text-neutral-400 text-left">
-                      <td className="min-w-[300px]">Persona</td>
-                      <td>Unidad</td>
-                      <td>Evento</td>
-                      <td>Ingresó</td>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y overflow-y-auto divide-neutral-500/30">
-                    {records?.map((record) => (
-                      <tr className="[&>td]:p-2">
-                        <td>
-                          <div className="flex items-center gap-2">
-                            <Avatar
-                              color="royal-blue"
-                              size={40}
-                              icon={<GuestRegular fontSize={27} />}
-                            />
-                            <div>
-                              <p className="line-clamp-3 font-medium text-base capitalize">
-                                {record.names.toLowerCase()}
-                              </p>
-                              <p className="text-sm capitalize opacity-70">
-                                {record.career}
-                              </p>
-                            </div>
-                          </div>
-                        </td>
-                        <td>
-                          <div>
-                            <p className="capitalize opacity-80 text-nowrap">
-                              {selectedBusinessUnit?.name}
-                            </p>
-                          </div>
-                        </td>
-                        <td>
-                          <p className="capitalize opacity-70 flex items-center gap-2">
-                            <MegaphoneRegular fontSize={20} />
-                            {selectedEvent.name}
-                          </p>
-                        </td>
-                        <td>
-                          <p className="capitalize opacity-70 flex items-center gap-2">
-                            <ClockRegular fontSize={20} />
-                            {format(record.created_at, 'MMMM D, YYYY h:mm A')}
-                          </p>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <div className="h-full grid place-content-center text-sm font-medium">
-                  <p>No hay registros aun</p>
-                </div>
-              )}
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
 
-      {/* dialogs */}
-      {openReport && (
+        {/* dialogs */}
         <Dialog
           open={openReport}
           onOpenChange={(_, e) => setOpenReport(e.open)}
@@ -379,7 +429,73 @@ export default function EventsRegister() {
             </DialogBody>
           </DialogSurface>
         </Dialog>
-      )}
+
+        <Dialog
+          open={openDataSource}
+          onOpenChange={(_, e) => setOpenDataSource(e.open)}
+          modalType="alert"
+        >
+          <DialogSurface>
+            <DialogBody>
+              <DialogTitle>
+                Fuente de datos de los asistentes al evento.
+              </DialogTitle>
+              <DialogContent className="space-y-2">
+                <p className="w-full pb-5">
+                  La lista de asistentes al evento se encuentra en una hoja de
+                  cálculo de Google Sheets, puedes verla en el siguiente enlace.
+                </p>
+                <Field label="Enlace de la hoja de cálculo">
+                  <Input
+                    contentAfter={
+                      <Button
+                        onClick={() => {
+                          navigator.clipboard.writeText(SHEET_PUBLIC_URL)
+                          toast(
+                            'Enlace de la hoja de cálculo copiado al portapapeles.'
+                          )
+                        }}
+                        size="small"
+                        appearance="subtle"
+                      >
+                        Copiar enlace
+                      </Button>
+                    }
+                    readOnly
+                    defaultValue={SHEET_PUBLIC_URL}
+                  />
+                </Field>
+                <Field label="Enlace de descarga directa (API)">
+                  <Input
+                    readOnly
+                    contentAfter={
+                      <Button
+                        onClick={() => {
+                          navigator.clipboard.writeText(SHEET_API_URL)
+                          toast(
+                            'Enlace de la hoja de cálculo copiado al portapapeles.'
+                          )
+                        }}
+                        size="small"
+                        appearance="subtle"
+                      >
+                        Copiar enlace
+                      </Button>
+                    }
+                    defaultValue={SHEET_API_URL}
+                    className="line-clamp-1"
+                  />
+                </Field>
+              </DialogContent>
+              <DialogActions>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button appearance="secondary">Aceptar</Button>
+                </DialogTrigger>
+              </DialogActions>
+            </DialogBody>
+          </DialogSurface>
+        </Dialog>
+      </div>
     </div>
   )
 }

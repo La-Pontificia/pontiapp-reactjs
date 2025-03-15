@@ -5,9 +5,7 @@ import {
   GuestAddFilled,
   GuestAddRegular,
   MegaphoneCircleFilled,
-  MegaphoneCircleRegular,
-  TaskListSquarePersonFilled,
-  TaskListSquarePersonRegular
+  MegaphoneCircleRegular
 } from '@fluentui/react-icons'
 
 export default function AssistsEvents() {
@@ -29,14 +27,6 @@ export default function AssistsEvents() {
           href="/m/events/register"
         >
           Registrar asistencia
-        </ItemSidebarNav>
-        <ItemSidebarNav
-          has={['events:records:view']}
-          icon={TaskListSquarePersonRegular}
-          iconActive={TaskListSquarePersonFilled}
-          href="/m/events/records"
-        >
-          Registros
         </ItemSidebarNav>
         <ItemSidebarNav
           has={['events:records:reportFiles']}

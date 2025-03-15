@@ -34,7 +34,10 @@ export default function EventsPage() {
     queryFn: async () => {
       const res = await api.get<ResponsePaginate<Event[]>>(query)
       if (!res.ok) return null
-      return res.data
+      return {
+        ...res.data,
+        data: res.data.data.map((item) => new Event(item))
+      }
     }
   })
 

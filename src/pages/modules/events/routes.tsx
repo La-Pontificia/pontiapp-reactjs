@@ -1,12 +1,13 @@
 import EventsLayout from '~/pages/modules/events/+layout'
 import EventsPage from '~/pages/modules/events/+page'
 import EventsRegister from '~/pages/modules/events/register/+page'
-import EventsRecordsPage from '~/pages/modules/events/records/+page'
 import EventsReportFilesPage from '~/pages/modules/events/report-files/+page'
 
 import { Route, Routes } from 'react-router'
 import ProtectedModule from '~/protected/module'
 import Protected from '~/protected/auth'
+import EventSlugLayout from './[slug]/+layout'
+import RecordsPage from './[slug]/records/+page'
 
 export default function EventsRoutes() {
   return (
@@ -26,19 +27,21 @@ export default function EventsRoutes() {
             </ProtectedModule>
           }
         />
+        <Route path=":eventId" element={<EventSlugLayout />}>
+          <Route
+            path="records"
+            element={
+              <Protected has="events:records:view" navigate="/m/events">
+                <RecordsPage />
+              </Protected>
+            }
+          />
+        </Route>
         <Route
           path="register"
           element={
             <Protected has="events:records:register" navigate="/m/events">
               <EventsRegister />
-            </Protected>
-          }
-        />
-        <Route
-          path="records"
-          element={
-            <Protected has="events:records:view" navigate="/m/events">
-              <EventsRecordsPage />
             </Protected>
           }
         />

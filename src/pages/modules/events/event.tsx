@@ -11,18 +11,21 @@ import {
   TableCell,
   TableRow
 } from '@fluentui/react-components'
-import { DeleteRegular, PenRegular } from '@fluentui/react-icons'
+import {
+  DeleteRegular,
+  FolderPeopleRegular,
+  PenRegular
+} from '@fluentui/react-icons'
 import React from 'react'
-import { format } from '~/lib/dayjs'
+import { format, timeAgo } from '~/lib/dayjs'
 import { api } from '~/lib/api'
 import { handleError } from '~/utils'
 import { toast } from 'anni'
 
 import { useAuth } from '~/store/auth'
 import { Event } from '~/types/event'
-import { Link } from 'react-router'
 import Form from './form'
-import UserHoverInfo from '~/components/user-hover-info'
+import { useNavigate } from 'react-router'
 
 export default function Item({
   item,
@@ -33,6 +36,8 @@ export default function Item({
 }) {
   const [openDelete, setOpenDelete] = React.useState(false)
   const [deleting, setDeleting] = React.useState(false)
+
+  const navigate = useNavigate()
 
   const { user: authUser } = useAuth()
 
@@ -67,23 +72,18 @@ export default function Item({
           </p>
         </TableCell>
         <TableCell>
-          <Link
-            to={`/events/records/${item.id}`}
-            className="hover:underline text-nowrap text-sm dark:text-blue-400 text-blue-600"
+          <Button
+            onClick={() => navigate(`/m/events/${item.id}/records`)}
+            size="small"
+            icon={<FolderPeopleRegular />}
           >
-            {item.recordsCount} asistente{item.recordsCount === 1 ? '' : 's'}
-          </Link>
+            Asistentes
+          </Button>
         </TableCell>
         <TableCell>
-          <UserHoverInfo slug={item.creator.username}>
-            <a
-              target="_blank"
-              href={`/${item.creator.username}`}
-              className="hover:underline text-nowrap font-medium"
-            >
-              {item.creator?.displayName}
-            </a>
-          </UserHoverInfo>
+          <p>
+            {item.creator?.displayName} {timeAgo(item.created_at)}
+          </p>
         </TableCell>
         <TableCell>
           <div className="flex items-center gap-2">
