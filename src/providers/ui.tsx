@@ -1,6 +1,7 @@
 /* eslint-disable react-refresh/only-export-components */
 import React from 'react'
 import { Toaster } from 'anni'
+import { useTheme } from './theme'
 
 type UIContextValue = {
   contentRef: React.RefObject<HTMLDivElement>
@@ -17,13 +18,14 @@ export default function UiProvider({
   children: React.ReactNode
 }>) {
   const contentRef = React.useRef<HTMLDivElement>(null)
+  const { theme } = useTheme()
   return (
     <UIContext.Provider
       value={{
         contentRef
       }}
     >
-      <Toaster />
+      <Toaster theme={theme} appearance="invert" />
       {children}
     </UIContext.Provider>
   )
