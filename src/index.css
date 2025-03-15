@@ -318,4 +318,93 @@ body {
   border-bottom: 1px solid rgb(194, 194, 194);
 }
 
-/* dark */
+/* Fullcalendar styles */
+.fc {
+  display: flex;
+  overflow: auto;
+  flex-direction: column;
+  flex: 1;
+
+  .fc-daygrid-body {
+    flex: 1;
+    height: 100%;
+    table {
+      height: 100% !important;
+    }
+  }
+
+  .fc-scrollgrid {
+    @apply !border-0;
+  }
+
+  .fc-col-header {
+    thead {
+      tr {
+        th {
+          @apply font-normal p-2;
+        }
+      }
+    }
+  }
+  table {
+    thead {
+      @apply border-b border-neutral-500/20;
+      tr {
+        @apply divide-x divide-neutral-500/20;
+      }
+    }
+    tbody {
+      @apply divide-y divide-neutral-500/20;
+      tr {
+        @apply divide-x divide-neutral-500/20;
+      }
+    }
+  }
+}
+.fc-theme-standard td,
+.fc-theme-standard th {
+  @apply border-0;
+}
+
+.fc-timegrid-divider {
+  @apply border-0 !p-0 !bg-yellow-500;
+}
+
+.fc-timegrid-slot {
+  @apply !py-1;
+}
+
+.fc-col-header-cell-cushion {
+  @apply !p-0 font-normal opacity-70 capitalize;
+}
+
+.fc-daygrid-day.fc-day-today,
+.fc-timegrid-col.fc-day-today {
+  @apply !bg-transparent;
+}
+
+.fc-timegrid-now-indicator-arrow {
+  @apply !border-0 rounded-full w-1.5 aspect-square bg-pink-400;
+}
+.fc-timegrid-now-indicator-line {
+  @apply !border-pink-300 !border-b-2;
+}
+.fc-list-empty {
+  @apply !bg-transparent;
+}
+
+.fc-theme-standard .fc-list {
+  @apply border-0;
+}
+
+.fc-timegrid-event-harness-inset .fc-timegrid-event {
+  @apply shadow-none rounded-lg p-1 dark:!border-2 dark:border-[#21201d];
+}
+
+.fc-highlight {
+  @apply rounded-lg border-blue-500 !bg-blue-500/10 z-10;
+}
+
+.fc-daygrid-day-number {
+  @apply !text-sm opacity-70;
+}
