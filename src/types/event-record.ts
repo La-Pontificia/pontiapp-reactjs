@@ -11,7 +11,7 @@ export class EventRecord {
   gender: string | null
   period: string | null
   email: string | null
-  business: BusinessUnit
+  businessUnit: BusinessUnit
   created_at: string
   updated_at: string
   constructor(data: EventRecord) {
@@ -24,13 +24,14 @@ export class EventRecord {
     this.gender = data.gender
     this.period = data.period
     this.email = data.email
-    this.business = data.business
+    this.businessUnit = data.businessUnit
     this.event = data.event
 
     this.created_at = data.created_at
     this.updated_at = data.updated_at
 
-    if (data.business) this.business = new BusinessUnit(data.business)
+    if (data.businessUnit)
+      this.businessUnit = new BusinessUnit(data.businessUnit)
     if (data.event) this.event = new Event(data.event)
   }
 
