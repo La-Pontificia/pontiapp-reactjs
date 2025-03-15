@@ -122,19 +122,35 @@ export class User {
     return allPrivileges?.includes(PRIVILEGE_DEVELOPER) ?? false
   }
 
-  hasPrivilege(privilege: string): boolean {
+  hasPrivilege(
+    privilege: string | string[],
+    type: 'or' | 'equals' = 'or'
+  ): boolean {
+    if (this.isDeveloper) return true
+
     const allPrivileges = [
       ...(this.userRole?.privileges || []),
       ...(this.customPrivileges || [])
     ]
-    return allPrivileges.includes(privilege) || this.isDeveloper
+    if (Array.isArray(privilege)) {
+      if (type === 'or') {
+        return privilege.some((p) => allPrivileges.includes(p))
+      } else if (type === 'equals') {
+        return privilege.every((p) => allPrivileges.includes(p))
+      }
+    } else {
+      return allPrivileges.includes(privilege)
+    }
+    return false
   }
 
   hasModule(module: string): boolean {
+    if (this.isDeveloper) return true
+
     const allPrivileges = [
       ...(this.userRole?.privileges || []),
       ...(this.customPrivileges || [])
     ]
-    return allPrivileges.some((p) => p.startsWith(module)) || this.isDeveloper
+    return allPrivileges.some((p) => p.startsWith(module))
   }
 }
