@@ -86,7 +86,7 @@ export default function LoginPage() {
               alt="Sede Ayacucho Escuela la Pontificia"
             />
           </div>
-          <div className="bg-yellow-50/50 text-black flex flex-col md:px-5 md:w-[550px] md:min-w-[550px] md:max-w-[550px] flex-grow h-full">
+          <div className="bg-yellow-50/50 text-black flex flex-col lg:px-5 lg:w-[550px] lg:min-w-[550px] lg:max-w-[550px] flex-grow h-full">
             <nav className="p-10 flex justify-center basis-0">
               <Link to="/login" className="flex items-center gap-1">
                 <img
@@ -116,7 +116,7 @@ export default function LoginPage() {
               <button
                 disabled={loadingId}
                 onClick={handleID}
-                className="mx-auto relative lg:hover:scale-105 active:scale-95 transition-transform font-semibold text-black group w-full bg-yellow-400 h-14 px-10 rounded-xl flex items-center gap-2 justify-center"
+                className="mx-auto relative lg:hover:scale-105 active:scale-95 transition-transform font-semibold text-black group w-full bg-cyan-400 h-14 px-10 rounded-xl flex items-center gap-2 justify-center"
               >
                 {loadingId ? (
                   <Spinner />
@@ -138,7 +138,7 @@ export default function LoginPage() {
               <div className="w-full">
                 <form
                   onSubmit={handleCredential}
-                  className="rounded-xl border-2 border-black group divide-y-2 transition-transform overflow-hidden divide-black bg-white w-full"
+                  className="rounded-xl border group shadow-[0_0px_15px_rgba(0,0,0,.1)] divide-y transition-transform overflow-hidden bg-white w-full"
                 >
                   <input
                     disabled={!!loadingCredential}
@@ -147,7 +147,7 @@ export default function LoginPage() {
                     data-fillable
                     autoComplete="off"
                     placeholder="Correo o nombre de usuario"
-                    className="p-4 px-5 placeholder:text-neutral-500 outline-none bg-transparent w-full"
+                    className="p-4 px-5 outline-none bg-transparent w-full"
                   />
                   <div className="relative">
                     <input
@@ -157,7 +157,7 @@ export default function LoginPage() {
                       type={passwordVisible ? 'text' : 'password'}
                       autoComplete="off"
                       placeholder="Contraseña"
-                      className="p-4 px-5 placeholder:text-neutral-500 outline-none bg-transparent w-full"
+                      className="p-4 px-5 outline-none bg-transparent w-full"
                     />
                     <div className="absolute inset-y-0 right-0 px-3 flex items-center">
                       <button
@@ -173,12 +173,12 @@ export default function LoginPage() {
                       </button>
                       <button
                         disabled={!!loadingCredential}
-                        className="aspect-square dark:text-yellow-500 text-yellow-500 hover:scale-110 rounded-full"
+                        className="aspect-square dark:text-cyan-500 text-cyan-500 hover:scale-110 rounded-full"
                       >
                         {loadingCredential ? (
                           <Spinner size="medium" />
                         ) : (
-                          <ArrowCircleRightRegular fontSize={40} />
+                          <ArrowCircleRightRegular fontSize={35} />
                         )}
                       </button>
                     </div>
