@@ -3,6 +3,7 @@ import QuickSchedules from './_components/quick-schedules'
 import QuickContactInformation from './_components/quick-contact-information'
 import QuickOrganization from './_components/quick-organization'
 import QuickInfo from './_components/quick-info'
+import QuickSessions from './_components/quick-sessions'
 
 export default function UsersSlugPage() {
   const params = useParams<{
@@ -15,6 +16,7 @@ export default function UsersSlugPage() {
       <QuickSchedules slug={slug} />
       <QuickContactInformation />
       <QuickOrganization slug={slug} />
+      <QuickSessions />
       <QuickInfo />
     </div>
   )
