@@ -150,6 +150,7 @@ export const PRIVILEGES = {
   'users:contractTypes': 'Tipos de contratos de usuarios',
   'users:schedules:archived': 'Horarios archivados',
   'users:files:all': 'Visualizar todos los archivos de reportes',
+  'users:sessions': 'Ver sesiones de usuarios',
 
   // Assistances management
   'assists:schedules': 'Asistencias con horarios',
