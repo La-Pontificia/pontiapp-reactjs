@@ -3,6 +3,7 @@ import { Role } from './role'
 import { UserRole } from './user-role'
 import { ContractType } from './contract-type'
 import { RmBranch } from './rm-branch'
+import { Session } from './user/session'
 
 export type ContactType = {
   value: string
@@ -31,6 +32,7 @@ export class User {
   customPrivileges: string[]
   subordinates: User[]
   coworkers: User[]
+  sessions?: Session[]
   created_at?: Date
   updated_at?: Date
   createdBy?: string
@@ -89,6 +91,8 @@ export class User {
 
     if (data.coworkers)
       this.coworkers = data.coworkers.map((c: User) => new User(c))
+    if (data.sessions)
+      this.sessions = data.sessions.map((s: Session) => new Session(s))
   }
 
   get displayName() {
