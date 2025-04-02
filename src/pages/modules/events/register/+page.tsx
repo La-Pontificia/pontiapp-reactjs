@@ -78,6 +78,8 @@ export default function EventsRegister() {
     }
 
     fetchData()
+    const interval = setInterval(fetchData, 120000) // 2 minutes in milliseconds
+    return () => clearInterval(interval)
   }, [])
 
   const [selectedEvent, setSelectedEvent] = React.useState<Event | null>(null)
