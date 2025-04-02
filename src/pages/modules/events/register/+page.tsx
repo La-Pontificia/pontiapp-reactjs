@@ -67,18 +67,18 @@ export default function EventsRegister() {
         .split('\n')
         .splice(1)
         .map((row) => {
-          const [, names, documentId, , , career] = row.split(',')
-          return {
-            names,
-            documentId,
-            career
-          }
+          const columns = row.match(/(".*?"|[^,]+)(?=\s*,|\s*$)/g) || []
+          const names = columns[0]?.replace(/"/g, '') || ''
+          const documentId = columns[1] || ''
+          const career = columns[4] || ''
+
+          return { names, documentId, career }
         })
       setPeople(people)
     }
 
     fetchData()
-    const interval = setInterval(fetchData, 120000) // 2 minutes in milliseconds
+    const interval = setInterval(fetchData, 120000)
     return () => clearInterval(interval)
   }, [])
 
