@@ -3,12 +3,14 @@ import { User } from './user'
 
 export class Schedule {
   id: string
+  type: 'available' | 'unavailable'
   from: Date
   to: Date
   title: string
   days?: string[]
   startDate: Date
   endDate?: Date
+  dates?: Date[]
   userId: string
   user: User
   archived: boolean
@@ -21,8 +23,10 @@ export class Schedule {
   updatedBy?: string
   createdUser?: User
   updatedUser?: User
+
   constructor(data: Schedule) {
     this.id = data.id
+    this.type = data.type
     this.from = data.from
     this.to = data.to
     this.title = data.title
@@ -35,6 +39,7 @@ export class Schedule {
     this.terminalId = data.terminalId
     this.terminal = data.terminal
     this.tolerance = data.tolerance
+    this.dates = data.dates
     this.created_at = data.created_at
     this.updated_at = data.updated_at
     this.createdBy = data.createdBy
