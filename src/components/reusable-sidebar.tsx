@@ -52,34 +52,37 @@ export const ReusableSidebar = React.forwardRef<
         onMouseLeave={() => setSidebarHover(false)}
         style={{
           transform: isSidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
-          marginLeft: isSidebarOpen ? '0' : '-200px'
+          marginLeft: isSidebarOpen ? '0' : '-250px'
         }}
         ref={ref}
         className={cn(
-          'h-full max-lg:fixed max-lg:h-svh max-lg:pb-[65px] max-lg:top-[50px] max-lg:w-full max-lg:z-[9999] max-lg:dark:bg-[#21201d] max-lg:bg-[#f5f0f0] max-lg:mb-[65px] overflow-y-auto transition-all w-[200px] min-w-[200px]',
+          'h-full max-lg:fixed px-3 max-lg:h-svh max-lg:pb-[65px] max-lg:top-[50px] max-lg:w-full max-lg:z-[9999] max-lg:dark:bg-[#21201d] max-lg:bg-[#f5f0f0] max-lg:mb-[65px] overflow-y-auto transition-all w-[250px] min-w-[250px]',
           className
         )}
       >
-        <nav className="pl-6 pr-2 pt-4 flex justify-between">
-          <h2 className="font-semibold dark:text-blue-400 text-blue-700 text-xs">
-            {title}
-          </h2>
-          <Tooltip
-            content={
-              isModuleMaximized ? 'Restaurar tamaño' : 'Maximizar módulo actual'
-            }
-            relationship="label"
-          >
-            <button
-              onClick={toggleModuleMaximized}
-              data-active={sidebarHover ? '' : undefined}
-              data-maximized={isModuleMaximized ? '' : undefined}
-              className="opacity-0 max-lg:hidden text-stone-500 data-[maximized]:rotate-180 data-[maximized]:opacity-100 data-[maximized]:dark:text-[#5e67ed] data-[maximized]:text-blue-600 data-[active]:opacity-100 transition-opacity"
+        <SidebarTitle
+          leftContent={
+            <Tooltip
+              content={
+                isModuleMaximized
+                  ? 'Restaurar tamaño'
+                  : 'Maximizar módulo actual'
+              }
+              relationship="label"
             >
-              <OpenFilled fontSize={20} />
-            </button>
-          </Tooltip>
-        </nav>
+              <button
+                onClick={toggleModuleMaximized}
+                data-active={sidebarHover ? '' : undefined}
+                data-maximized={isModuleMaximized ? '' : undefined}
+                className="opacity-0 max-lg:hidden text-stone-500 data-[maximized]:rotate-180 data-[maximized]:opacity-100 data-[maximized]:dark:text-[#5e67ed] data-[maximized]:text-blue-600 data-[active]:opacity-100 transition-opacity"
+              >
+                <OpenFilled fontSize={20} />
+              </button>
+            </Tooltip>
+          }
+        >
+          {title}
+        </SidebarTitle>
         {children}
       </aside>
     </ContextReusableSidebar.Provider>
@@ -124,6 +127,7 @@ export const ItemSidebarNav = (props: ItemNav) => {
   const Icon = isActive ? props.iconActive : props.icon
 
   const isExternal = props.href.startsWith('http')
+
   return (
     <Link
       data-active={isActive ? '' : undefined}
@@ -132,12 +136,9 @@ export const ItemSidebarNav = (props: ItemNav) => {
       onClick={() => {
         if (isMediumDevice) toggleSidebar()
       }}
-      className="block relative dark:text-neutral-300 max-lg:dark:text-stone-400 text-neutral-900 data-[active]:font-semibold group pl-1"
+      className="block relative dark:text-neutral-300 max-lg:dark:text-stone-400 text-neutral-900 group"
     >
-      <div className="absolute max-lg:hidden pointer-events-none inset-y-0 left-0 flex items-center">
-        <span className="h-[10px] group-data-[active]:h-[5px] transition-all group-hover:h-[10px] group-data-[active]:bg-blue-600 dark:group-data-[active]:bg-blue-500 group-data-[active]:opacity-100 w-[3px] rounded-full bg-neutral-500/30 group-hover:opacity-100 opacity-0" />
-      </div>
-      <div className="flex dark:font-semibold font-semibold items-center transition-colors group-data-[active]:dark:text-white gap-2 py-1 rounded-lg group-hover:bg-white dark:group-hover:bg-stone-700/50 max-lg:text-base">
+      <div className="flex items-center transition-colors group-data-[active]:font-medium group-data-[active]:dark:text-white gap-2 py-[6px] rounded-lg group-hover:bg-white dark:group-hover:bg-black max-lg:text-base px-2">
         <div className="max-lg:hidden">
           {props.emptyIcon ? (
             <span className="block aspect-square"></span>
@@ -168,3 +169,24 @@ export const ItemSidebarNav = (props: ItemNav) => {
     </Link>
   )
 }
+
+export const SidebarTitle = React.forwardRef<
+  HTMLDivElement,
+  React.HTMLProps<HTMLDivElement> & {
+    leftContent?: React.ReactNode
+  }
+>(({ children, className, leftContent, ...props }, ref) => {
+  return (
+    <div
+      ref={ref}
+      {...props}
+      className={cn(
+        'flex items-center gap-2 font-semibold dark:text-white text-black text-sm pr-2 pl-1 pb-2 pt-4 justify-between',
+        className
+      )}
+    >
+      {children}
+      {leftContent}
+    </div>
+  )
+})

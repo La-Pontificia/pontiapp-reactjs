@@ -1,5 +1,4 @@
 import { toast } from 'anni'
-import { useDebounced } from '~/hooks/use-debounced'
 import { api } from '~/lib/api'
 import { useAuth } from '~/store/auth'
 import { User } from '~/types/user'
@@ -14,10 +13,11 @@ import {
   DrawerHeaderTitle,
   Spinner
 } from '@fluentui/react-components'
-import { Dismiss24Regular } from '@fluentui/react-icons'
+import { Dismiss24Regular, FolderPeopleRegular } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
 import * as React from 'react'
 import SearchBox from '~/commons/search-box'
+import { useDebounce } from 'hothooks'
 
 type UserDrawerProps = {
   title?: string
@@ -78,7 +78,7 @@ export default function UserDrawer(props: UserDrawerProps) {
               setSelectedUsers={setSelectedUsers}
             />
           )}
-          <footer className="border-t py-4 flex gap-3 dark:border-neutral-500">
+          <footer className="border-t py-4 flex gap-3 dark:border-neutral-500/30">
             <Button onClick={handleSubmit} appearance="primary">
               {props.onSubmitTitle}
             </Button>
@@ -129,9 +129,9 @@ export function Users(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [query])
 
-  const { handleChange, value: searchValue } = useDebounced({
+  const { setValue } = useDebounce({
     delay: 700,
-    onCompleted: setQuery
+    onFinish: setQuery
   })
 
   const handleAddOrRemoveUser = (u: User) => {
@@ -142,7 +142,7 @@ export function Users(
     }
 
     if (selectedUsers.length >= max && !selected) {
-      toast(`Solo puedes seleccionar ${max} usuarios`)
+      toast.warning(`Solo puedes seleccionar ${max} usuarios`)
       return
     }
 
@@ -159,12 +159,7 @@ export function Users(
     <div className="flex flex-col flex-grow h-full overflow-y-auto gap-2">
       <nav className="pb-3 flex items-center gap-4 border-b dark:border-stone-700">
         <SearchBox
-          onChange={(e) => handleChange(e.target.value)}
-          value={searchValue}
-          dismiss={() => {
-            setQuery(null)
-            handleChange('')
-          }}
+          onSearch={setValue}
           className="w-[400px] max-lg:w-full"
           placeholder="Filtrar por nombre o correo"
         />
@@ -201,22 +196,23 @@ export function Users(
                     </div>
                     <Avatar
                       color="colorful"
-                      size={28}
-                      name={u.displayName}
+                      size={40}
+                      name={u?.displayName}
                       image={{
-                        src: u.photoURL
+                        src: u?.photoURL
                       }}
                     />
-                    <div className="flex-grow font-semibold">
-                      <p>{u.displayName}</p>
+                    <div className="flex-grow text-base font-semibold">
+                      <p>{u?.displayName}</p>
                     </div>
                   </label>
                 )
               })}
               {list && list.length < 1 && (
                 <div className="py-3 h-full font-semibold grid place-content-center">
-                  <p className="text-center opacity-70 text-sm">
-                    No se encontraron colaboradores
+                  <FolderPeopleRegular fontSize={40} className="mx-auto" />
+                  <p className="text-center pt-2 text-sm">
+                    No se encontraron usuarios
                   </p>
                 </div>
               )}
@@ -233,7 +229,7 @@ export function Users(
                 return (
                   <div key={u.id} className="flex px-4 items-center gap-2 py-3">
                     <Avatar
-                      size={36}
+                      size={40}
                       color="colorful"
                       name={u.displayName}
                       image={{

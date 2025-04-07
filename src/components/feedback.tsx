@@ -1,4 +1,3 @@
-import { DialogFooter } from '@fluentui/react'
 import {
   Button,
   Dialog,
@@ -6,6 +5,7 @@ import {
   DialogContent,
   DialogSurface,
   DialogTitle,
+  DialogActions,
   Textarea
 } from '@fluentui/react-components'
 import {
@@ -89,7 +89,7 @@ export default function Feedback({
     })
 
     if (res.ok) {
-      toast('Mensaje enviado correctamente')
+      toast.success('Mensaje enviado correctamente')
       onOpenChange(false)
       setForm({
         type: 'error',
@@ -194,7 +194,7 @@ export default function Feedback({
                   error, por favor envíalo.
                 </p>
               </div>
-              <DialogFooter className="flex">
+              <DialogActions className="flex">
                 <Button
                   appearance="primary"
                   disabled={!form.message || waiting}
@@ -203,7 +203,7 @@ export default function Feedback({
                   Enviar {type === 'error' ? 'error' : 'sugerencia'}
                 </Button>
                 <Button onClick={() => onOpenChange(false)}>Cerrar</Button>
-              </DialogFooter>
+              </DialogActions>
             </DialogContent>
           </DialogBody>
         </DialogSurface>
