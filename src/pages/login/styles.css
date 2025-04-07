@@ -1,0 +1,17 @@
+.login-page input:-webkit-autofill,
+.login-page input:-webkit-autofill:hover,
+.login-page input:-webkit-autofill:focus,
+.login-page input:-webkit-autofill:active {
+  -webkit-box-shadow: 0 0 0 30px white inset !important;
+}
+.login-page input:-webkit-autofill {
+  -webkit-text-fill-color: black !important;
+}
+
+.login-page input {
+  caret-color: black;
+}
+
+.login-page html {
+  color-scheme: light;
+}

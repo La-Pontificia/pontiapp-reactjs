@@ -11,6 +11,8 @@ import { PiEyeClosedDuotone } from 'react-icons/pi'
 import { PiEye } from 'react-icons/pi'
 import { businesses } from '~/const'
 import { lightTheme } from '~/utils/themes'
+import { Microsoft } from '~/icons'
+import './styles.css'
 
 const host = VITE_HOST
 const apiHost = VITE_API_HOST
@@ -58,7 +60,7 @@ export default function LoginPage() {
       return
     }
     setLoadingCredential(false)
-    toast(handleAuthError(res.error))
+    toast.error(handleAuthError(res.error))
   }
 
   React.useEffect(() => {
@@ -68,7 +70,7 @@ export default function LoginPage() {
 
   return (
     <FluentProvider theme={lightTheme}>
-      <div className="min-h-svh flex bg-white">
+      <div className="min-h-svh login-page flex bg-white">
         <Helmet>
           <title>Ponti App | Iniciar Sesión</title>
         </Helmet>
@@ -77,17 +79,24 @@ export default function LoginPage() {
           Instituto La Pontificia, Educación Continua, Escuela Cybernet
         </h2>
         <div className="flex w-full text-black flex-grow">
-          <div className="flex-grow lg:flex hidden">
-            <img
-              fetchPriority="high"
-              loading="lazy"
-              src="/night.webp"
-              className="w-full h-full object-cover"
-              alt="Sede Ayacucho Escuela la Pontificia"
+          <div className="flex-grow relative lg:flex hidden">
+            <div className="absolute z-[1] bg-gradient-to-b from-transparent to-black/30 inset-0 " />
+            <div
+              style={{
+                backgroundImage: 'url(/background.webp)'
+              }}
+              className="absolute bg-no-repeat bg-fixed inset-0 bg-center bg-cover"
             />
           </div>
-          <div className="bg-yellow-50/50 text-black flex flex-col lg:px-5 lg:w-[550px] lg:min-w-[550px] lg:max-w-[550px] flex-grow h-full">
-            <nav className="p-10 flex justify-center basis-0">
+          <div
+            style={{
+              backgroundPosition: 'center',
+              background:
+                'linear-gradient(rgba(255,255,255,.95),rgba(255,255,255,.6)), url(/background-gradient.webp)'
+            }}
+            className=" relative text-black flex flex-col lg:px-5 lg:w-[550px] lg:min-w-[550px] lg:max-w-[550px] flex-grow h-full"
+          >
+            <nav className="p-10 relative flex justify-center basis-0">
               <Link to="/login" className="flex items-center gap-1">
                 <img
                   src="_lp-only-logo.webp"
@@ -103,7 +112,7 @@ export default function LoginPage() {
                 />
               </Link>
             </nav>
-            <header className="lg:py-8 pb-5 lg:pb-8">
+            <header className="lg:py-8 relative pb-5 lg:pb-8">
               <h1 className="font-bold pb-2 tracking-tight text-2xl text-center">
                 PontiApp
               </h1>
@@ -112,23 +121,18 @@ export default function LoginPage() {
                 de EDA
               </p>
             </header>
-            <div className="flex-grow px-4 my-auto">
+            <div className="flex-grow relative px-4 my-auto">
               <button
                 disabled={loadingId}
                 onClick={handleID}
-                className="mx-auto relative lg:hover:scale-105 active:scale-95 transition-transform font-semibold text-black group w-full bg-cyan-400 h-14 px-10 rounded-xl flex items-center gap-2 justify-center"
+                className="mx-auto relative lg:hover:scale-105 active:scale-95 transition-transform font-semibold text-black group w-full bg-gradient-to-r shadow-black/5 shadow-lg from-purple-300 via-blue-300 to-lime-300 h-14 px-10 rounded-xl flex items-center gap-2 justify-center"
               >
                 {loadingId ? (
                   <Spinner />
                 ) : (
                   <>
-                    Continuar con
-                    <img
-                      src="/_microsoft.png"
-                      width={90}
-                      alt="Microsoft Logo"
-                      className="group-hover:scale-105 transition-transform"
-                    />
+                    Continuar con microsoft
+                    <Microsoft size={30} />
                   </>
                 )}
               </button>
@@ -138,7 +142,7 @@ export default function LoginPage() {
               <div className="w-full">
                 <form
                   onSubmit={handleCredential}
-                  className="rounded-xl border group shadow-[0_0px_15px_rgba(0,0,0,.1)] divide-y transition-transform overflow-hidden bg-white w-full"
+                  className="rounded-xl border-black text-black divide-black/10 shadow-black/10 shadow-md bg-white group divide-y transition-transform overflow-hidden w-full"
                 >
                   <input
                     disabled={!!loadingCredential}
@@ -147,7 +151,7 @@ export default function LoginPage() {
                     data-fillable
                     autoComplete="off"
                     placeholder="Correo o nombre de usuario"
-                    className="p-4 px-5 outline-none bg-transparent w-full"
+                    className="p-4 px-5 bg-transparent outline-none w-full"
                   />
                   <div className="relative">
                     <input
@@ -192,8 +196,8 @@ export default function LoginPage() {
                 </a>
               </div>
             </div>
-            <footer className="p-10">
-              <div className="grayscale flex flex-wrap justify-center items-center gap-10">
+            <footer className="p-10 relative">
+              <div className="flex flex-wrap justify-center items-center gap-10">
                 {Object.entries(businesses).map(
                   ([url, { acronym, logo, name }]) => (
                     <Link
