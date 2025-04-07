@@ -48,11 +48,11 @@ export default function Item({
     const res = await api.post(`partials/user-roles/${item?.id}/delete`)
     if (!res.ok) {
       setDeleting(false)
-      return toast(handleError(res.error))
+      return toast.error(handleError(res.error))
     }
     setDeleting(false)
     setOpenDelete(false)
-    toast(`${item.title} eliminado correctamente`)
+    toast.success(`${item.title} eliminado correctamente`)
     refetch()
   }
 
@@ -190,9 +190,9 @@ const TransferForm = ({
   const { user } = useAuth()
 
   const handleTransfer = async () => {
-    if (!transferItem.id) return toast('Seleccione un rol')
+    if (!transferItem.id) return toast.success('Seleccione un rol')
     if (transferItem.id === item.id)
-      return toast('No puedes transferir usuarios al mismo rol')
+      return toast.success('No puedes transferir usuarios al mismo rol')
 
     setTransferring(true)
     const res = await api.post(`partials/roles-roles/${item?.id}/transfer`, {
@@ -202,11 +202,11 @@ const TransferForm = ({
     })
     if (!res.ok) {
       setTransferring(false)
-      return toast(handleError(res.error))
+      return toast.error(handleError(res.error))
     }
     setTransferring(false)
     setOpenTransfer(false)
-    toast(`Usuarios transferidos correctamente`)
+    toast.success(`Usuarios transferidos correctamente`)
     refetch()
   }
 

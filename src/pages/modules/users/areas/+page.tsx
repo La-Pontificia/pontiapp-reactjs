@@ -26,7 +26,7 @@ export default function CollaboratorsAreasPage() {
   })
 
   const { handleChange, value: searchValue } = useDebounced({
-    delay: 300,
+    delay: 500,
     onCompleted: (value) => setQ(value)
   })
 

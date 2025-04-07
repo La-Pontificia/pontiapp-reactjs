@@ -43,7 +43,7 @@ export default function AreaItem({
     const res = await api.post(`partials/areas/${area?.id}/delete`)
     if (!res.ok) {
       setDeleting(false)
-      return toast(handleError(res.error))
+      return toast.error(handleError(res.error))
     }
     setDeleting(false)
     setOpenDelete(false)

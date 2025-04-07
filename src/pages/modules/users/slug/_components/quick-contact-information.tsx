@@ -101,7 +101,9 @@ export const InfoItem = ({
 
   const handleCopy = () => {
     navigator.clipboard.writeText(textValue || '')
-    toast('Copiado al portapapeles')
+    toast('Copiado al portapapeles', {
+      media: '📋'
+    })
   }
   return (
     <div className="flex rounded-md group hover:bg-stone-500/10 p-1.5 items-center gap-4">

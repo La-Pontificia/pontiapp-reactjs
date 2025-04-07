@@ -95,7 +95,7 @@ export default function TeamForm({
       })
     })
     if (!res.ok) {
-      toast(handleError(res.error))
+      toast.error(handleError(res.error))
       setSubmitting(false)
       return
     }

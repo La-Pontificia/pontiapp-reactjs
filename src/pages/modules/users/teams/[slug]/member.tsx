@@ -126,7 +126,7 @@ export const UserGridOptions = ({ member }: { member: UserTeamMember }) => {
     )
     if (!res.ok) {
       setRemovingMember(false)
-      return toast(handleError(res.error))
+      return toast.error(handleError(res.error))
     }
     setRemovingMember(false)
     setIRemoveAlertOpen(false)

@@ -48,7 +48,7 @@ export default function CollaboratorsContractTypesPage() {
         data: []
       })
     } else {
-      toast(handleError(res.error))
+      toast.error(handleError(res.error))
     }
     setLoadingMore(false)
   }
@@ -60,7 +60,7 @@ export default function CollaboratorsContractTypesPage() {
   }, [data])
 
   const { handleChange, value: searchValue } = useDebounced({
-    delay: 300,
+    delay: 500,
     onCompleted: (value) => setQ(value)
   })
 

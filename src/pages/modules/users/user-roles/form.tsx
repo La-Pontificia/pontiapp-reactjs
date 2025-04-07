@@ -61,12 +61,12 @@ export default function Form({
     })
 
     if (!res.ok) {
-      toast(handleError(res.error))
+      toast.error(handleError(res.error))
     } else {
       refetch()
       setOpen(false)
       reset()
-      toast(
+      toast.success(
         defaultValues
           ? 'Rol actualizado correctamente'
           : 'Rol registrado correctamente'

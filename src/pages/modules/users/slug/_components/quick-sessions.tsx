@@ -36,7 +36,7 @@ export default function QuickSessions() {
                 <div>{session.ip}</div>
               </div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex items-center gap-2 max-lg:hidden">
               <session.Device
                 fontSize={28}
                 className="text-black dark:text-neutral-400"

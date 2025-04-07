@@ -2,16 +2,24 @@ import { api } from '~/lib/api'
 import { ResponsePaginate } from '~/types/paginate-response'
 import { User } from '~/types/user'
 import * as React from 'react'
-import { Spinner, Tooltip } from '@fluentui/react-components'
-import { FilterAddFilled, FolderPeopleRegular } from '@fluentui/react-icons'
-import UsersGrid from './grid'
-import { useDebounced } from '~/hooks/use-debounced'
+import { Tooltip } from '@fluentui/react-components'
+import { FilterAddFilled } from '@fluentui/react-icons'
 import CollaboratorsFilters from './filters'
 import { useQuery } from '@tanstack/react-query'
 import SearchBox from '~/commons/search-box'
 import { Helmet } from 'react-helmet'
 import Pagination from '~/commons/pagination'
-
+import { useDebounce } from 'hothooks'
+import { TableContainer } from '~/components/table-container'
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
+  TableSelectionCell
+} from '~/components/table'
+import UserGrid from './user-grid'
 export type FiltersValues = {
   q: string | null
   job: string | null
@@ -64,76 +72,85 @@ export default function DisabledUsersPage() {
     }
   })
 
-  const { handleChange, value: searchValue } = useDebounced({
-    delay: 300,
-    onCompleted: (value) => setFilters((prev) => ({ ...prev, q: value }))
+  const { setValue } = useDebounce<string | null>({
+    delay: 500,
+    onFinish: (value) => setFilters((prev) => ({ ...prev, q: value }))
   })
 
   return (
-    <div className="flex flex-col flex-grow overflow-y-auto">
+    <>
       <Helmet>
         <title>Usuarios inactivos | PontiApp</title>
       </Helmet>
-      <nav className="flex items-center gap-2 w-full py-2 px-2 max-lg:py-2">
-        <h1 className="font-semibold flex-grow text-lg">Usuarios inactivos</h1>
-        <Tooltip content="Mas filtros" relationship="description">
-          <button
-            onClick={() => setOpenFilters(true)}
-            className="flex items-center gap-1"
-          >
-            <FilterAddFilled
-              fontSize={25}
-              className="dark:text-blue-500 text-blue-700"
-            />
-            <p className="max-md:hidden">Filtros</p>
-          </button>
-        </Tooltip>
-        {openFilters && (
-          <CollaboratorsFilters
-            filters={filters}
-            setFilters={setFilters}
-            setSidebarIsOpen={setOpenFilters}
-            sidebarIsOpen={openFilters}
-          />
-        )}
-        <div className="ml-auto">
-          <SearchBox
-            value={searchValue}
-            dismiss={() => {
-              setFilters((prev) => ({ ...prev, q: null }))
-              handleChange('')
-            }}
-            onChange={(e) => {
-              if (e.target.value === '')
-                setFilters((prev) => ({ ...prev, q: null }))
-              handleChange(e.target.value)
-            }}
-            placeholder="Filtrar por DNI, nombres"
-          />
-        </div>
-      </nav>
-      <div className="w-full h-full flex-col flex flex-grow overflow-auto">
-        {loading ? (
-          <div className="flex-grow grid place-content-center">
-            <Spinner size="large" />
-          </div>
-        ) : data?.data && data.data?.length > 0 ? (
-          <>
-            <div className="flex-grow overflow-y-auto">
-              <UsersGrid refetch={refetch} users={data.data} />
+      <TableContainer
+        nav={
+          <nav className="flex items-center gap-2 w-full ">
+            <h1 className="font-semibold flex-grow text-lg">
+              Usuarios inactivos
+            </h1>
+            <Tooltip content="Mas filtros" relationship="description">
+              <button
+                onClick={() => setOpenFilters(true)}
+                className="flex items-center gap-1"
+              >
+                <FilterAddFilled
+                  fontSize={25}
+                  className="dark:text-blue-500 text-blue-700"
+                />
+                <p className="max-md:hidden">Filtros</p>
+              </button>
+            </Tooltip>
+            {openFilters && (
+              <CollaboratorsFilters
+                filters={filters}
+                setFilters={setFilters}
+                setSidebarIsOpen={setOpenFilters}
+                sidebarIsOpen={openFilters}
+              />
+            )}
+            <div className="ml-auto">
+              <SearchBox
+                onSearch={setValue}
+                placeholder="Filtrar por DNI, nombres"
+              />
             </div>
+          </nav>
+        }
+        isLoading={loading}
+        isEmpty={data?.data?.length === 0}
+        footer={
+          data && (
             <Pagination
               state={data}
               onChangePage={(page) => setFilters((prev) => ({ ...prev, page }))}
             />
-          </>
-        ) : (
-          <div className="grid place-content-center flex-grow w-full h-full text-xs opacity-80">
-            <FolderPeopleRegular fontSize={50} className="mx-auto opacity-70" />
-            <p className="pt-2">No hay nada que mostrar</p>
-          </div>
-        )}
-      </div>
-    </div>
+          )
+        }
+      >
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableSelectionCell type="radio" invisible />
+              <TableHeaderCell>Usuario</TableHeaderCell>
+              <TableHeaderCell className="!max-sm:hidden">
+                Cargo
+              </TableHeaderCell>
+              <TableHeaderCell className="!max-xl:hidden">
+                Email
+              </TableHeaderCell>
+              <TableHeaderCell className="!max-xl:hidden">
+                Jefe (Manager)
+              </TableHeaderCell>
+              <TableHeaderCell></TableHeaderCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data?.data?.map((user) => (
+              <UserGrid refetch={refetch} user={user} key={user.id} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   )
 }

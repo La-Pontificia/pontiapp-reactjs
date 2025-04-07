@@ -15,10 +15,6 @@ import {
   DialogTitle,
   DialogTrigger,
   Spinner,
-  TableCell,
-  TableCellLayout,
-  TableRow,
-  TableSelectionCell,
   Tooltip
 } from '@fluentui/react-components'
 import {
@@ -31,6 +27,12 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router'
 import UserHoverInfo from '~/components/user-hover-info'
 import ResetPassword from '~/components/reset-password'
+import {
+  TableCell,
+  TableCellLayout,
+  TableRow,
+  TableSelectionCell
+} from '~/components/table'
 
 export default function UserGrid({
   user: userProp,
@@ -154,85 +156,6 @@ export default function UserGrid({
         <UserGridOptions refetch={refetch} setUser={setUser} user={user} />
       </TableCell>
     </TableRow>
-    // <tr className="relative [&>td]:text-nowrap group [&>td]:p-2 [&>td]:px-3">
-    //   <td>
-    //     <UserHoverInfo slug={user.username}>
-    //       <div className="flex items-center gap-2">
-    //         <Avatar
-    //           size={40}
-    //           color="colorful"
-    //           name={user.displayName}
-    //           aria-label={user.displayName}
-    //           image={{
-    //             src: user.photoURL
-    //           }}
-    //         />
-    //         <Link
-    //           className="hover:underline font-semibold relative"
-    //           to={`/m/users/${user.username}`}
-    //         >
-    //           {user.displayName}
-    //         </Link>
-    //       </div>
-    //     </UserHoverInfo>
-    //   </td>
-    //   <td className="max-sm:hidden">
-    //     <div className="max-w-[30ch] opacity-70 text-ellipsis overflow-hidden">
-    //       {user.role.name}
-    //     </div>
-    //   </td>
-    //   <td className="max-lg:hidden">
-    //     <p className="dark:text-white relative max-xl:max-w-[20ch] text-ellipsis overflow-hidden">
-    //       <a href={`mailto:${user.email}`} className="hover:underline">
-    //         {user.email}
-    //       </a>
-    //     </p>
-    //   </td>
-    //   <td className="max-xl:hidden">
-    //     <UserDrawer
-    //       max={1}
-    //       users={user.manager ? [user.manager] : []}
-    //       title="Jefe inmediato"
-    //       onSubmitTitle="Cambiar jefe"
-    //       onSubmit={(v) => handleManager(v[0])}
-    //       triggerProps={{
-    //         appearance: 'transparent',
-    //         style: {
-    //           padding: 0,
-    //           'box-shadow': 'none !important',
-    //           border: 'none !important',
-    //           borderRadius: '12px !important'
-    //         } as React.CSSProperties,
-    //         disabled:
-    //           !!managerUpdating || !authUser.hasPrivilege('users:asignManager'),
-    //         children: managerUpdating ? (
-    //           <Spinner size="extra-tiny" />
-    //         ) : user.manager ? (
-    //           <div className="flex rounded-xl items-center p-1  shadow-black/80 dark:shadow-lg">
-    //             <Avatar
-    //               size={20}
-    //               color="steel"
-    //               name={user.manager.displayName}
-    //               image={{
-    //                 src: user.manager.photoURL
-    //               }}
-    //             />
-    //             <span className="px-1 font-medium dark:text-white text-black">
-    //               {user.manager.displayName}
-    //             </span>
-    //           </div>
-    //         ) : (
-    //           <div className="p-2">
-    //             <span className="px-1 py-1 block">Sin jefe</span>
-    //           </div>
-    //         )
-    //       }}
-    //     />
-    //   </td>
-    //   <td className="">
-    //     <UserGridOptions refetch={refetch} setUser={setUser} user={user} />
-    //   </td>
-    // </tr>
   )
 }
 

@@ -33,7 +33,7 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import React, { createContext } from 'react'
 import { Helmet } from 'react-helmet'
-import { Outlet, useLocation, useNavigate, useParams } from 'react-router'
+import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router'
 import { FaWhatsapp } from 'react-icons/fa'
 import { useAuth } from '~/store/auth'
 import ExpiryStatusRenderer from '~/components/expiry-status-renderer'
@@ -209,9 +209,14 @@ export default function UsersSlugLayout(): JSX.Element {
                       />
                     </div>
                     <div className="lg:space-y-2">
-                      <h1 className="text-xl lg:text-3xl font-bold lg:line-clamp-1">
-                        {user.displayName}
-                      </h1>
+                      <Link
+                        to={`${rootURL}/${params.slug}`}
+                        className="hover:underline"
+                      >
+                        <h1 className="text-xl lg:text-3xl font-bold lg:line-clamp-1">
+                          {user.displayName}
+                        </h1>
+                      </Link>
                       {user.role && (
                         <p className="lg:line-clamp-1 line-clamp-2 overflow-hidden text-ellipsis gap-2 hover:[&>a]:underline">
                           {user.role.name} • {user.role.department.name}

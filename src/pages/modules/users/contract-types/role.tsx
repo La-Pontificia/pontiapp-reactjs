@@ -39,7 +39,7 @@ export default function Item({
     const res = await api.post(`partials/contract-types/${item?.id}/delete`)
     if (!res.ok) {
       setDeleting(false)
-      return toast(handleError(res.error))
+      return toast.error(handleError(res.error))
     }
     setDeleting(false)
     setOpenDelete(false)

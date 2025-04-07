@@ -37,7 +37,7 @@ export default function CollaboratorsTeamSlugNav() {
     const res = await api.post(`partials/teams/${team?.id}/delete`)
     if (!res.ok) {
       setDeleting(false)
-      return toast(handleError(res.error))
+      return toast.error(handleError(res.error))
     }
     setDeleting(false)
     toast('Equipo eliminado correctamente')
@@ -53,7 +53,7 @@ export default function CollaboratorsTeamSlugNav() {
     })
     if (!res.ok) {
       setAddingMembers(false)
-      return toast(handleError(res.error))
+      return toast.error(handleError(res.error))
     }
     refetchMembers()
     toast('Miembros añadidos correctamente')
@@ -69,7 +69,7 @@ export default function CollaboratorsTeamSlugNav() {
     })
     if (!res.ok) {
       setAddingOwners(false)
-      return toast(handleError(res.error))
+      return toast.error(handleError(res.error))
     }
     refetchMembers()
     toast('Propietarios añadidos correctamente')

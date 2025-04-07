@@ -5,9 +5,9 @@ import { Schedule } from '~/types/schedule'
 import { useQuery } from '@tanstack/react-query'
 import { api } from '~/lib/api'
 import { cn } from '~/utils'
-import { ScheduleItem } from './schedule'
 import { PenRegular } from '@fluentui/react-icons'
 import { useAuth } from '~/store/auth'
+import { ScheduleItem } from '../edit/schedule'
 
 export default function UsersSlugSchedulesPage() {
   const params = useParams<{
@@ -75,7 +75,12 @@ export default function UsersSlugSchedulesPage() {
             </>
           ) : (
             schedules?.map((schedule) => (
-              <ScheduleItem key={schedule.id} schedule={schedule} />
+              <ScheduleItem
+                refetch={() => {}}
+                hasEdit={false}
+                key={schedule.id}
+                schedule={schedule}
+              />
             ))
           )}
         </div>
