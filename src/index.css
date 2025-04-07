@@ -68,6 +68,7 @@ body {
   margin: 0;
   padding: 0;
   font-family: 'Roboto', sans-serif;
+  color-scheme: light dark;
 }
 
 .grid-background {
@@ -325,6 +326,10 @@ body {
   flex-direction: column;
   flex: 1;
 
+  .fc-event-main {
+    overflow: hidden !important;
+  }
+
   .fc-daygrid-body {
     flex: 1;
     height: 100%;
@@ -398,7 +403,7 @@ body {
 }
 
 .fc-timegrid-event-harness-inset .fc-timegrid-event {
-  @apply shadow-none rounded-lg p-1 dark:!border-2 dark:border-[#21201d];
+  @apply shadow-md shadow-black/20 rounded-xl p-1 dark:!border-2 dark:border-[#21201d] border-[#f2f2f2] cursor-pointer hover:scale-105 transition-transform;
 }
 
 .fc-highlight {
