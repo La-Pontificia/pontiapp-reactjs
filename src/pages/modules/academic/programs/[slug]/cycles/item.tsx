@@ -41,7 +41,7 @@ export default function Item({
   const [openDelete, setOpenDelete] = React.useState(false)
 
   const { mutate, isPending } = useMutation({
-    mutationFn: () => api.post(`academic/plans/${item.id}/delete`),
+    mutationFn: () => api.post(`academic/cycles/${item.id}/delete`),
     onSuccess: () => {
       setOpenDelete(false)
       refetch()
