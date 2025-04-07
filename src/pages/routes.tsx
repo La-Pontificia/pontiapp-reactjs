@@ -11,7 +11,6 @@ import ModulesRoutes from '~/pages/modules/routes'
 // import DocsPage from './docs/+page'
 // import SlugDocsPage from './docs/slug/+page'
 import CreatePasswordPage from './create-password/+page'
-import FluentUIProvider from '~/providers/fluentui'
 import SearchPage from './search/+page'
 
 export default function MainRoutes() {
@@ -20,13 +19,11 @@ export default function MainRoutes() {
       <Route path="/login" element={<LoginPage />} />
       <Route
         element={
-          <FluentUIProvider>
-            <AuthProvider>
-              <AuthMiddleware>
-                <Outlet />
-              </AuthMiddleware>
-            </AuthProvider>
-          </FluentUIProvider>
+          <AuthProvider>
+            <AuthMiddleware>
+              <Outlet />
+            </AuthMiddleware>
+          </AuthProvider>
         }
       >
         <Route path="/create-password" element={<CreatePasswordPage />} />
@@ -37,17 +34,6 @@ export default function MainRoutes() {
           <Route path="*" element={<SlugRoutes />} />
         </Route>
       </Route>
-      {/* <Route
-        path="docs"
-        element={
-          <AuthProvider redirectWithoutSession={false}>
-            <DocsLayout />
-          </AuthProvider>
-        }
-      >
-        <Route index element={<DocsPage />} />
-        <Route path=":slug*" element={<SlugDocsPage />} />
-      </Route> */}
       <Route path="*" element={<NotFounPage />} />
     </Routes>
   )
