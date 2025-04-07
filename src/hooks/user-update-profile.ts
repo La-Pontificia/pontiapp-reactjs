@@ -29,7 +29,7 @@ export const useUpdateProfile = (user: User, props: Props | undefined) => {
     )
 
     if (!res.ok) {
-      toast(handleError(res.error))
+      toast.success(handleError(res.error))
     } else {
       onCompleted?.(res.data)
     }
