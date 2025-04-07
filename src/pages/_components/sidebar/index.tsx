@@ -9,11 +9,16 @@ import {
   DocumentFlowchartRegular,
   type FluentIcon,
   GridDotsRegular,
+  HatGraduationSparkleFilled,
+  HatGraduationSparkleRegular,
+  HomeFilled,
   HomeRegular,
   MegaphoneLoudFilled,
   MegaphoneLoudRegular,
-  PersonFilled,
-  PersonRegular,
+  PeopleFilled,
+  PeopleRegular,
+  // PersonFilled,
+  // PersonRegular,
   SearchRegular,
   // StoreMicrosoftFilled,
   // StoreMicrosoftRegular,
@@ -21,9 +26,9 @@ import {
   TabletRegular
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
-import React from 'react'
 import SettingsDrawer from './settings'
 import { cn } from '~/utils'
+// import { Lp } from '~/icons'
 // import { Lp } from '~/icons'
 
 type ItemNav = {
@@ -43,9 +48,8 @@ const ItemNav = (props: ItemNav) => {
     props.href === '/'
       ? pathname === props.href
       : pathname.startsWith(props.href)
-  const [hover, setHover] = React.useState(false)
 
-  const Icon = isActive || hover ? props.activeIcon : props.icon
+  const Icon = isActive ? props.activeIcon : props.icon
 
   return (
     <Tooltip
@@ -54,8 +58,6 @@ const ItemNav = (props: ItemNav) => {
       content={props.tooltip}
     >
       <Link
-        onMouseEnter={() => setHover(true)}
-        onMouseLeave={() => setHover(false)}
         data-active={isActive ? '' : undefined}
         to={props.href}
         className={cn(
@@ -64,13 +66,13 @@ const ItemNav = (props: ItemNav) => {
         )}
       >
         <div className="absolute inset-y-0 transition-all group-hover:py-5 group-data-[active]:py-4 py-7 left-0">
-          <div className="h-full w-[3px] group-hover:bg-[#1d02ec] group-hover:dark:bg-[#7385ff] group-data-[active]:bg-[#1d02ec] group-data-[active]:dark:bg-[#7385ff] rounded-xl"></div>
+          <div className="h-full w-[3px] group-hover:bg-blue-700 group-hover:dark:bg-violet-600 group-data-[active]:bg-blue-700 group-data-[active]:dark:bg-violet-600 rounded-xl"></div>
         </div>
         <div className="w-[57px] transition-colors min-w-[57px] flex group-data-[active]:shadow-sm border-transparent border group-data-[active]:border-stone-200 group-data-[active]:dark:border-stone-700/70 items-center flex-col justify-center aspect-[10/9] text-center rounded-[14px] group-data-[active]:bg-white group-hover:dark:bg-[#1a1a1a] hover:bg-white group-data-[active]:dark:bg-[#1a1a1a]">
           {Icon ? (
             <Icon
               fontSize={28}
-              className="group-data-[active]:dark:text-[#7385ff] group-hover:dark:text-[#7385ff] group-hover:text-[#1d02ec] group-data-[active]:text-[#1d02ec]"
+              className="group-data-[active]:dark:text-violet-600 transition-all group-hover:scale-105 group-hover:dark:text-violet-600 group-hover:text-blue-700 group-data-[active]:text-blue-700"
             />
           ) : (
             <Avatar
@@ -112,20 +114,28 @@ export const RootSidebar = () => {
     }
   }
   return (
-    <header className="flex max-lg:w-full max-lg:bottom-0 max-lg:h-[65px] max-lg:dark:bg-[#312f2c] max-lg:bg-[#f5f0f0] max-lg:fixed flex-col gap-5 min-w-[70px] relative justify-between z-[1] overflow-x-hidden overflow-y-auto lg:py-2 h-full">
+    <header className="flex max-lg:w-full max-lg:border-t dark:border-black max-lg:bottom-0 max-lg:h-[65px] max-lg:fixed flex-col gap-5 min-w-[70px] relative justify-between z-[1] overflow-x-hidden overflow-y-auto lg:py-2 h-full">
       <nav className="pl-1 hidden lg:flex flex-col flex-grow space-y-4 overflow-y-auto">
+        {/* <Link to="/" className=" flex items-center justify-center pt-2">
+          <Lp
+            size={35}
+            className="dark:text-violet-500 lg:block hidden text-violet-700"
+          />
+        </Link> */}
         <ItemNav
           tooltip={authUser.displayName}
           text={authUser.displayName}
-          image={authUser.photoURL}
+          // image={authUser.photoURL}
+          icon={HomeRegular}
+          activeIcon={HomeFilled}
           href={`/${authUser.username}`}
         />
         {authUser.hasModule('users') && (
           <ItemNav
             tooltip="Gestión de usuarios"
             text="Usuarios"
-            icon={PersonRegular}
-            activeIcon={PersonFilled}
+            icon={PeopleRegular}
+            activeIcon={PeopleFilled}
             href="/m/users"
           />
         )}
@@ -176,6 +186,15 @@ export const RootSidebar = () => {
             href="/m/inventories"
           />
         )} */}
+        {authUser.hasModule('academic') && (
+          <ItemNav
+            tooltip="Gestión Académica"
+            text="Académica"
+            icon={HatGraduationSparkleRegular}
+            activeIcon={HatGraduationSparkleFilled}
+            href="/m/academic"
+          />
+        )}
         {authUser.hasModule('rm') && (
           <ItemNav
             tooltip="Gestión de recursos"
