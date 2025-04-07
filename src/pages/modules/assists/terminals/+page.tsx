@@ -3,13 +3,13 @@ import { useQuery } from '@tanstack/react-query'
 import { AddFilled } from '@fluentui/react-icons'
 import Form from './form'
 import {
-  Spinner,
   Table,
   TableBody,
   TableHeader,
   TableHeaderCell,
-  TableRow
-} from '@fluentui/react-components'
+  TableRow,
+  TableSelectionCell
+} from '~/components/table'
 import React from 'react'
 import { useDebounced } from '~/hooks/use-debounced'
 import Item from './terminal'
@@ -17,6 +17,8 @@ import { ResponsePaginate } from '~/types/paginate-response'
 import { AssistTerminal } from '~/types/assist-terminal'
 import SearchBox from '~/commons/search-box'
 import Pagination from '~/commons/pagination'
+import { TableContainer } from '~/components/table-container'
+import { Helmet } from 'react-helmet'
 
 export default function AssistTerminalsPage() {
   const [page, setPage] = React.useState(1)
@@ -43,65 +45,71 @@ export default function AssistTerminalsPage() {
   })
 
   return (
-    <div className="flex w-full px-3 flex-col overflow-y-auto h-full">
-      <nav className="pb-3 pt-4 flex flex-wrap w-full border-b border-neutral-500/30 items-center gap-4">
-        <div className="flex-grow flex flex-wrap">
-          <h2 className="font-semibold text-xl pr-2">Terminales biométricos</h2>
-          <Form
-            refetch={refetch}
-            triggerProps={{
-              disabled: isLoading,
-              appearance: 'primary',
-              size: 'small',
-              icon: <AddFilled />,
-              children: <span>Nuevo</span>
-            }}
-          />
-        </div>
-        <SearchBox
-          className="min-w-[400px]"
-          disabled={isLoading}
-          value={searchValue}
-          dismiss={() => setQ('')}
-          onChange={(e) => {
-            if (e.target.value === '') setQ(undefined)
-            handleChange(e.target.value)
-          }}
-          placeholder="Filtrar por nombre"
-        />
-      </nav>
-      <div className="overflow-auto rounded-xl pt-2 h-full">
-        {isLoading ? (
-          <div className="h-full grid place-content-center">
-            <Spinner size="huge" />
-          </div>
-        ) : (
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHeaderCell>Nombre</TableHeaderCell>
-                <TableHeaderCell>Base de datos</TableHeaderCell>
-                <TableHeaderCell>Fecha creación</TableHeaderCell>
-                <TableHeaderCell></TableHeaderCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {!isLoading &&
-                data?.data?.map((item) => (
-                  <Item refetch={refetch} key={item.id} item={item} />
-                ))}
-            </TableBody>
-          </Table>
-        )}
-      </div>
-      {data?.data && (
-        <Pagination
-          state={data}
-          onChangePage={(page) => {
-            setPage(page)
-          }}
-        />
-      )}
-    </div>
+    <>
+      <Helmet>
+        <title>Terminales biométricos | Pontiapp</title>
+      </Helmet>
+      <TableContainer
+        isLoading={isLoading}
+        isEmpty={!data?.data?.length}
+        footer={
+          data && (
+            <Pagination
+              state={data}
+              onChangePage={(page) => {
+                setPage(page)
+              }}
+            />
+          )
+        }
+        nav={
+          <nav className="flex flex-wrap w-full items-center">
+            <div className="flex-grow flex flex-wrap">
+              <h2 className="font-semibold text-xl pr-2">
+                Terminales biométricos
+              </h2>
+            </div>
+            <Form
+              refetch={refetch}
+              triggerProps={{
+                disabled: isLoading,
+                appearance: 'transparent',
+                icon: <AddFilled />,
+                children: <span>Nuevo</span>
+              }}
+            />
+            <SearchBox
+              className="w-[300px]"
+              disabled={isLoading}
+              value={searchValue}
+              dismiss={() => setQ('')}
+              onChange={(e) => {
+                if (e.target.value === '') setQ(undefined)
+                handleChange(e.target.value)
+              }}
+              placeholder="Filtrar por nombre"
+            />
+          </nav>
+        }
+      >
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableSelectionCell type="radio" />
+              <TableHeaderCell>Nombre</TableHeaderCell>
+              <TableHeaderCell>Base de datos</TableHeaderCell>
+              <TableHeaderCell>Fecha creación</TableHeaderCell>
+              <TableHeaderCell></TableHeaderCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {!isLoading &&
+              data?.data?.map((item) => (
+                <Item refetch={refetch} key={item.id} item={item} />
+              ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   )
 }

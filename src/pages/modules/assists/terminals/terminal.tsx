@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Button,
   Dialog,
   DialogActions,
@@ -7,14 +6,12 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
-  Spinner,
-  TableCell,
-  TableRow
+  Spinner
 } from '@fluentui/react-components'
 import {
-  BuildingPeopleRegular,
   CloudDatabaseRegular,
   DeleteRegular,
+  DocumentRegular,
   PenRegular
 } from '@fluentui/react-icons'
 import React from 'react'
@@ -25,6 +22,12 @@ import { toast } from 'anni'
 
 import Form from './form'
 import { AssistTerminal } from '~/types/assist-terminal'
+import {
+  TableSelectionCell,
+  TableCell,
+  TableRow,
+  TableCellLayout
+} from '~/components/table'
 
 export default function Item({
   item,
@@ -41,7 +44,7 @@ export default function Item({
     const res = await api.post(`partials/assist-terminals/${item?.id}/delete`)
     if (!res.ok) {
       setDeleting(false)
-      return toast(handleError(res.error))
+      return toast.error(handleError(res.error))
     }
     setDeleting(false)
     setOpenDelete(false)
@@ -52,21 +55,15 @@ export default function Item({
   return (
     <>
       <TableRow>
+        <TableSelectionCell type="radio" />
         <TableCell>
-          <div className="flex items-center gap-2">
-            <Avatar
-              icon={<BuildingPeopleRegular />}
-              color="colorful"
-              size={32}
-              name={item.name}
-              aria-label={item.name}
-            />
+          <TableCellLayout media={<DocumentRegular fontSize={25} />}>
             <p className="line-clamp-3 font-semibold">{item.name}</p>
-          </div>
+          </TableCellLayout>
         </TableCell>
         <TableCell>
-          <div className="opacity-80 flex items-center gap-2">
-            <CloudDatabaseRegular fontSize={24} />
+          <div className="flex items-center gap-2">
+            <CloudDatabaseRegular fontSize={25} />
             {item.database}
           </div>
         </TableCell>
