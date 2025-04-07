@@ -8,6 +8,7 @@ import EventsRoutes from './events/routes'
 import AttentionsRoutes from './attentions/route'
 import InventoriesRoutes from './inventories/routes'
 import ResourceManagementRoutes from './rm/routes'
+import AcademicRoutes from './academic/routes'
 
 export default function ModulesRoutes() {
   return (
@@ -21,6 +22,7 @@ export default function ModulesRoutes() {
         <Route path="attentions/*" element={<AttentionsRoutes />} />
         <Route path="inventories/*" element={<InventoriesRoutes />} />
         <Route path="rm/*" element={<ResourceManagementRoutes />} />
+        <Route path="academic/*" element={<AcademicRoutes />} />
       </Route>
     </Routes>
   )
