@@ -1,14 +1,22 @@
 import { api } from '~/lib/api'
 import { ResponsePaginate } from '~/types/paginate-response'
 import * as React from 'react'
-import { Spinner } from '@fluentui/react-components'
-import CollaboratorsGrid from './grid'
-import { useDebounced } from '~/hooks/use-debounced'
 import { useQuery } from '@tanstack/react-query'
 import SearchBox from '~/commons/search-box'
 import { Collaborator } from '~/types/collaborator'
-// import { FilterAddFilled } from '@fluentui/react-icons'
 import Pagination from '~/commons/pagination'
+import { TableContainer } from '~/components/table-container'
+import { useDebounce } from 'hothooks'
+import {
+  Table,
+  TableBody,
+  TableHeader,
+  TableHeaderCell,
+  TableRow,
+  TableSelectionCell
+} from '~/components/table'
+import UserGrid from './user-grid'
+import { Helmet } from 'react-helmet'
 
 export type FiltersValues = {
   q: string | null
@@ -27,7 +35,6 @@ const filterButtons = {
 }
 
 export default function CollaboratorsPage() {
-  // const { user: authUser } = useAuth()
   const [filters, setFilters] = React.useState<FiltersValues>({
     q: null,
     job: null,
@@ -63,68 +70,72 @@ export default function CollaboratorsPage() {
     }
   })
 
-  const { handleChange, value: searchValue } = useDebounced({
+  const { setValue } = useDebounce<string | null>({
     delay: 300,
-    onCompleted: (value) => setFilters((prev) => ({ ...prev, q: value }))
+    onFinish: (value) => setFilters((prev) => ({ ...prev, q: value }))
   })
 
   return (
-    <div className="flex px-2 flex-col flex-grow overflow-auto">
-      <nav className="flex items-center flex-wrap gap-2 w-full py-4 px-3 max-lg:py-2">
-        <h2 className="font-semibold text-xl pr-2">Bajo tu supervisión</h2>
-        {Object.entries(filterButtons).map(([key, value]) => (
-          <button
-            onClick={() => {
-              setFilters((prev) => ({ ...prev, edas: key }))
-            }}
-            data-active={filters.edas === key ? '' : undefined}
-            key={key}
-            className="border text-nowrap outline outline-2 outline-transparent data-[active]:border-transparent data-[active]:dark:border-transparent data-[active]:outline-blue-600 data-[active]:dark:outline-blue-600 data-[active]:bg-blue-700/10 data-[active]:dark:bg-blue-700/20 border-stone-300 dark:border-stone-500 rounded-full py-1 px-3 font-medium"
-          >
-            {value}
-          </button>
-        ))}
-        <div className="ml-auto flex items-center gap-2">
-          {/* <button>
-            <FilterAddFilled fontSize={25} />
-          </button> */}
-          <SearchBox
-            value={searchValue}
-            onChange={(e) => {
-              if (e.target.value === '')
-                setFilters((prev) => ({ ...prev, q: null }))
-              handleChange(e.target.value)
-            }}
-            className="w-[270px]"
-            placeholder="Filtrar por nombre o persona"
-            dismiss={() => {
-              setFilters((prev) => ({ ...prev, q: null }))
-              handleChange('')
-            }}
-          />
-        </div>
-      </nav>
-      <div className="w-full h-full flex-col flex flex-grow overflow-auto">
-        {isLoading ? (
-          <div className="h-full grid place-content-center">
-            <Spinner size="large" />
-          </div>
-        ) : data?.data && data.data.length > 0 ? (
-          <>
-            <div className="flex-grow rounded-xl overflow-y-auto">
-              <CollaboratorsGrid refetch={refetch} users={data.data} />
+    <>
+      <Helmet>
+        <title>Colaboradores | Pontiapp</title>
+      </Helmet>
+      <TableContainer
+        isLoading={isLoading}
+        isEmpty={data?.data.length === 0}
+        nav={
+          <nav className="flex items-center flex-wrap gap-2 w-full">
+            <h2 className="font-semibold text-xl pr-2">Bajo tu supervisión</h2>
+            {Object.entries(filterButtons).map(([key, value]) => (
+              <button
+                onClick={() => {
+                  setFilters((prev) => ({ ...prev, edas: key }))
+                }}
+                data-active={filters.edas === key ? '' : undefined}
+                key={key}
+                className="border text-nowrap outline outline-2 outline-transparent data-[active]:border-transparent data-[active]:dark:border-transparent data-[active]:outline-blue-600 data-[active]:dark:outline-blue-600 data-[active]:bg-blue-700/10 data-[active]:dark:bg-blue-700/20 border-stone-300 dark:border-stone-500 rounded-full py-1 px-3 font-medium"
+              >
+                {value}
+              </button>
+            ))}
+            <div className="ml-auto">
+              <SearchBox
+                onSearch={setValue}
+                placeholder="Filtrar por nombre o correo"
+              />
             </div>
+          </nav>
+        }
+        footer={
+          data && (
             <Pagination
               state={data}
               onChangePage={(page) => setFilters((prev) => ({ ...prev, page }))}
             />
-          </>
-        ) : (
-          <div className="grid place-content-center text-sm opacity-60 h-full">
-            No hay nada que mostrar
-          </div>
-        )}
-      </div>
-    </div>
+          )
+        }
+      >
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableSelectionCell type="radio" invisible />
+              <TableHeaderCell>Colaborador</TableHeaderCell>
+              <TableHeaderCell>Cargo</TableHeaderCell>
+              <TableHeaderCell>Área</TableHeaderCell>
+              <TableHeaderCell className="max-xl:!hidden">Edas</TableHeaderCell>
+              <TableHeaderCell className="max-xl:!hidden">
+                Administrador
+              </TableHeaderCell>
+              <TableHeaderCell></TableHeaderCell>
+            </TableRow>
+          </TableHeader>
+          <TableBody>
+            {data?.data.map((user) => (
+              <UserGrid refetch={refetch} user={user} key={user.id} />
+            ))}
+          </TableBody>
+        </Table>
+      </TableContainer>
+    </>
   )
 }

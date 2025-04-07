@@ -13,26 +13,22 @@ export const EdasSidebar = () => {
   const { user: authUser } = useAuth()
   return (
     <ReusableSidebar homePath="/m/edas" title="Edas">
-      <nav className="pr-2 py-2 px-3">
-        <ItemSidebarNav
-          has={['edas:my']}
-          avatar={authUser.photoURL}
-          href={`/m/edas/${authUser.username}`}
-        >
-          Mis edas
-        </ItemSidebarNav>
-        <ItemSidebarNav
-          has={[
-            'edas:collaborators:inHisSupervision',
-            'edas:collaborators:all'
-          ]}
-          icon={PersonRegular}
-          iconActive={PersonFilled}
-          href="/m/edas/collaborators"
-        >
-          Colaboradores
-        </ItemSidebarNav>
-        {/* <ItemSidebarNav
+      <ItemSidebarNav
+        has={['edas:my']}
+        avatar={authUser.photoURL}
+        href={`/m/edas/${authUser.username}`}
+      >
+        Mis edas
+      </ItemSidebarNav>
+      <ItemSidebarNav
+        has={['edas:collaborators:inHisSupervision', 'edas:collaborators:all']}
+        icon={PersonRegular}
+        iconActive={PersonFilled}
+        href="/m/edas/collaborators"
+      >
+        Colaboradores
+      </ItemSidebarNav>
+      {/* <ItemSidebarNav
           has={['edas:show']}
           icon={FolderRegular}
           iconActive={FolderFilled}
@@ -40,10 +36,10 @@ export const EdasSidebar = () => {
         >
           Edas
         </ItemSidebarNav> */}
-        {/* <div className="font-semibold pl-4 pt-5 pb-2 dark:text-blue-400 text-blue-700 text-xs">
+      {/* <div className="font-semibold pl-4 pt-5 pb-2 dark:text-blue-400 text-blue-700 text-xs">
           Ajustes y otros
         </div> */}
-        {/* <ItemSidebarNav
+      {/* <ItemSidebarNav
           has={['edas:years']}
           icon={DocumentRegular}
           iconActive={DocumentFilled}
@@ -59,7 +55,6 @@ export const EdasSidebar = () => {
         >
           Cuestionarios
         </ItemSidebarNav> */}
-      </nav>
     </ReusableSidebar>
   )
 }

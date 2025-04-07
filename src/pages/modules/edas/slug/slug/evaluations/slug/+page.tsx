@@ -10,7 +10,6 @@ import React from 'react'
 import { EdaObjetiveEvaluation } from '~/types/eda-objetive-evaluation'
 import { SlugCollaboratorEdaSlugContext } from '../../+layout'
 import { useAuth } from '~/store/auth'
-import Swal from 'sweetalert2'
 import { toast } from 'anni'
 
 export default function SlugCollaboratorSlugEdaEvaluationSlugPage() {
@@ -196,12 +195,7 @@ export default function SlugCollaboratorSlugEdaEvaluationSlugPage() {
               icon={selftQualifing ? <Spinner size="tiny" /> : undefined}
               onClick={() =>
                 !allSelftQualify
-                  ? Swal.fire({
-                      title: 'Heyy',
-                      text: 'No has autocalificado todos los objetivos',
-                      icon: 'warning',
-                      confirmButtonText: 'Ok'
-                    })
+                  ? toast.warning('No has autocalificado todos los objetivos')
                   : selftQualify({
                       objetives,
                       total: Number(totalSelftQualification)
@@ -218,12 +212,7 @@ export default function SlugCollaboratorSlugEdaEvaluationSlugPage() {
               icon={qualifing ? <Spinner size="tiny" /> : undefined}
               onClick={() =>
                 !allQualify
-                  ? Swal.fire({
-                      title: 'Heyy',
-                      text: 'No has calificado todos los objetivos',
-                      icon: 'warning',
-                      confirmButtonText: 'Ok'
-                    })
+                  ? toast.warning('No has calificado todos los objetivos')
                   : qualify({
                       objetives,
                       total: Number(totalQualification)
