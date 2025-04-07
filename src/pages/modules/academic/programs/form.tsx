@@ -51,8 +51,8 @@ export default function Form({
     mutationFn: (values: object) =>
       api.post(
         defaultProp
-          ? `rm/academic-programs/${defaultProp.id}`
-          : 'rm/academic-programs',
+          ? `academic/programs/${defaultProp.id}`
+          : 'academic/programs',
         {
           alreadyHandleError: false,
           data: JSON.stringify(values)
@@ -62,7 +62,7 @@ export default function Form({
       toast.error(handleError(error.message))
     },
     onSuccess: () => {
-      toast('Guardado correctamente')
+      toast.success('Guardado correctamente')
       reset()
       refetch()
       onOpenChange(false)
