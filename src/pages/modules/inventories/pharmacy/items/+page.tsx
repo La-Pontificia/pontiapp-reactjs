@@ -88,7 +88,7 @@ export default function PharmacyItemsPage() {
   // }
 
   const { handleChange, value: searchValue } = useDebounced({
-    delay: 300,
+    delay: 500,
     onCompleted: (value) => setFilters((prev) => ({ ...prev, q: value }))
   })
 
