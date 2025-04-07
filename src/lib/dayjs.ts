@@ -100,3 +100,29 @@ export function timeAgoShort(d: any): string {
   const diffInYears = now.diff(targetDate, 'year')
   return `${diffInYears} año${diffInYears > 1 ? 's' : ''}`
 }
+
+export const concatDateWithTime = (date: Date, time: Date): Date => {
+  const d = parse(date)
+  const t = parse(time)
+  d.setHours(t.getHours())
+  d.setMinutes(t.getMinutes())
+  d.setSeconds(t.getSeconds())
+  return d
+}
+
+export const getDays = (daysOfWeek: string[]): string => {
+  const daysMap: Record<string, string> = {
+    '1': 'Lunes',
+    '2': 'Martes',
+    '3': 'Miércoles',
+    '4': 'Jueves',
+    '5': 'Viernes',
+    '6': 'Sábado',
+    '7': 'Domingo'
+  }
+
+  return daysOfWeek
+    .map((day) => daysMap[day])
+    .filter((day): day is string => Boolean(day))
+    .join(', ')
+}
