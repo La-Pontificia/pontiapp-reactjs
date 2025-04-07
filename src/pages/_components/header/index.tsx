@@ -7,12 +7,13 @@ import {
   // NotebookQuestionMarkRegular,
   SearchRegular
 } from '@fluentui/react-icons'
-import { Link, useLocation } from 'react-router'
+import { useLocation } from 'react-router'
 import UserMenu from './menu'
 import UserFeedback from './feedback'
-import { useAuth } from '~/store/auth'
+// import { useAuth } from '~/store/auth'
 import RootSearch from './search'
-import { Lp } from '~/icons'
+// import { Lp } from '~/icons'
+import BusinessUnitToggle from './business-unit'
 
 const Toggles = () => {
   const toggleSidebar = useUi((s) => s.toggleSidebar)
@@ -42,29 +43,19 @@ const Toggles = () => {
 export default function RootHeader() {
   const isHeaderOpen = useUi((s) => s.isHeaderOpen)
   const toggleHeader = useUi((s) => s.toggleHeader)
-  const { user: authUser } = useAuth()
+  // const { user: authUser } = useAuth()
   return (
     <header
       style={{
         marginTop: isHeaderOpen ? '0' : '-56px'
       }}
       data-hidden={!isHeaderOpen ? '' : undefined}
-      className="h-[50px] min-h-[50px] lg:dark:bg-[#1c1a17] lg:bg-[#f5f0f0] relative dark:shadow-sm border-b dark:border-black dark:shadow-black/10 justify-between gap-4 w-full z-10 flex items-center px-2"
+      className="h-[50px] min-h-[50px] relative dark:shadow-sm dark:shadow-black/10 justify-between gap-4 w-full z-10 flex items-center px-2"
     >
       <nav className="flex relative flex-grow items-center basis-0">
         <Toggles />
-        <nav className="px-1">
-          <Link
-            to={`/${authUser.username}`}
-            className="flex justify-center drop-shadow-[0_0_10px_rgba(0,0,0,.1)] dark:drop-shadow-[0_0_10px_rgba(0,0,0,.5)] items-center gap-1"
-          >
-            <Lp
-              size={25}
-              className="dark:text-sky-500 lg:block hidden text-sky-700"
-            />
-          </Link>
-        </nav>
-        <h1 className="font-semibold text-base">PontiApp</h1>
+
+        <BusinessUnitToggle />
       </nav>
       <nav className="max-lg:w-full">
         <RootSearch />

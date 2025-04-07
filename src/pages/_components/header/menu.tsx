@@ -50,7 +50,7 @@ export default function UserMenu() {
     })
 
     if (!res.ok) {
-      toast(handleError(res.error))
+      toast.error(handleError(res.error))
     } else {
       setUser((prev) => new User({ ...prev, photoURL: res.data } as User))
     }
@@ -181,7 +181,7 @@ export const ChangePassword = () => {
     })
 
     if (!res.ok) {
-      toast(handleError(res.error))
+      toast.error(handleError(res.error))
     } else {
       reset()
       toast('Contraseña cambiada correctamente')
