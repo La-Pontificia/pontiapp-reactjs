@@ -50,7 +50,7 @@ export default function Item({
     onSuccess: () => {
       setOpenDelete(false)
       refetch()
-      toast.success('Eliminado correctamente')
+      toast.success('Plan de estudio eliminado correctamente')
     },
     onError: (error) => {
       toast.error(handleError(error.message))

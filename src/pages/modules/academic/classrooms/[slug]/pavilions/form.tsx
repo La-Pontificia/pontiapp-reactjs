@@ -61,7 +61,7 @@ export default function Form({
       toast.error(handleError(error.message))
     },
     onSuccess: () => {
-      toast(
+      toast.success(
         'En hora buena! El pabellón ha sido guardado o actualizado con éxito.'
       )
       reset()

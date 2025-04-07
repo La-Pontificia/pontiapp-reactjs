@@ -61,7 +61,7 @@ export default function Form({
       toast.error(handleError(error.message))
     },
     onSuccess: () => {
-      toast('Guardado correctamente')
+      toast.success('Plan de estudio guardado correctamente')
       reset()
       refetch()
       onOpenChange(false)

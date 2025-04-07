@@ -47,7 +47,12 @@ export default function Item({
     onSuccess: () => {
       setOpenDelete(false)
       refetch()
-      toast.success('Eliminado correctamente')
+      toast.success(
+        <p>
+          En hora buena! El programa <strong>{item.name}</strong> ha sido
+          eliminado con éxito.
+        </p>
+      )
     },
     onError: (error) => {
       toast.error(handleError(error.message))

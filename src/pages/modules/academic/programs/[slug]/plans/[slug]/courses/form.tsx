@@ -110,7 +110,7 @@ export default function Form({
       toast.error(handleError(error.message))
     },
     onSuccess: () => {
-      toast(
+      toast.success(
         'En hora buena!, El curso ha sido agregago o actualizado al plan con éxito'
       )
       reset()

@@ -49,7 +49,7 @@ export default function Item({
     onSuccess: () => {
       setOpenDelete(false)
       refetch()
-      toast.success('En hora buena! El periodo ha sido eliminado con éxito.')
+      toast.success('En hora buena! El pabellón ha sido eliminado con éxito.')
     },
     onError: (error) => {
       toast.error(handleError(error.message))

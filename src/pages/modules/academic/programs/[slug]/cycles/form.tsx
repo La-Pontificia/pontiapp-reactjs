@@ -60,7 +60,7 @@ export default function Form({
       toast.error(handleError(error.message))
     },
     onSuccess: () => {
-      toast.success('Ciclo académico registrado correctamente.')
+      toast.success('Ciclo académico guardado correctamente.')
       reset()
       refetch()
       onOpenChange(false)

@@ -62,7 +62,7 @@ export default function Form({
       toast.error(handleError(error.message))
     },
     onSuccess: () => {
-      toast.success('Guardado correctamente')
+      toast.success('El programa ha sido guardado correctamente')
       reset()
       refetch()
       onOpenChange(false)

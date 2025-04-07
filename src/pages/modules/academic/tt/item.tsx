@@ -49,7 +49,7 @@ export default function Item({
     }
     seTableCelleleting(false)
     setOpenDelete(false)
-    toast.success(`Eliminado correctamente`)
+    toast.success(`Evaluacion eliminado correctamente`)
     refetch()
   }
 

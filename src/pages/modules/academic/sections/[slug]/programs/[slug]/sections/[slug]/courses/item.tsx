@@ -73,7 +73,7 @@ export default function Item({
       refetch()
       toast.success(
         <p>
-          En hora buena! El profesor del curso <b>{item.planCourse?.name}</b> ha
+          En hora buena! El docente del curso <b>{item.planCourse?.name}</b> ha
           sido actualizado con éxito.
         </p>
       )

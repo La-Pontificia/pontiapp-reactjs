@@ -50,11 +50,11 @@ export default function Item({
   const [openDialogCalendar, setOpenDialogCalendar] = React.useState(false)
 
   const { mutate, isPending } = useMutation({
-    mutationFn: () => api.post(`academic/pavilions/${item.id}/delete`),
+    mutationFn: () => api.post(`academic/classrooms/${item.id}/delete`),
     onSuccess: () => {
       setOpenDelete(false)
       refetch()
-      toast.success('En hora buena! El periodo ha sido elimino con éxito.')
+      toast.success('En hora buena! El aula ha sido eliminado con éxito.')
     },
     onError: (error) => {
       toast.error(handleError(error.message))
