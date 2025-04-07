@@ -28,6 +28,9 @@ export default function ThemeProvider({
   React.useEffect(() => {
     document.body.classList.remove('light', 'dark')
     document.body.classList.add(isDark ? 'dark' : 'light')
+
+    // add color-scheme in body style
+    document.body.style.colorScheme = isDark ? 'dark' : 'light'
   }, [isDark])
 
   const toggleTheme = () => {
