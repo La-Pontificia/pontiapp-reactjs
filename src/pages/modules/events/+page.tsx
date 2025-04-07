@@ -2,13 +2,13 @@ import { api } from '~/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { AddFilled } from '@fluentui/react-icons'
 import {
-  Spinner,
   Table,
   TableBody,
   TableHeader,
   TableHeaderCell,
-  TableRow
-} from '@fluentui/react-components'
+  TableRow,
+  TableSelectionCell
+} from '~/components/table'
 import React from 'react'
 import { useDebounced } from '~/hooks/use-debounced'
 import { ResponsePaginate } from '~/types/paginate-response'
@@ -18,6 +18,7 @@ import Form from './form'
 import { useAuth } from '~/store/auth'
 import SearchBox from '~/commons/search-box'
 import Pagination from '~/commons/pagination'
+import { TableContainer } from '~/components/table-container'
 
 export default function EventsPage() {
   const { user: authUser } = useAuth()
@@ -42,78 +43,69 @@ export default function EventsPage() {
   })
 
   const { handleChange, value: searchValue } = useDebounced({
-    delay: 300,
+    delay: 500,
     onCompleted: (value) => setQ(value)
   })
 
   return (
-    <div className="flex flex-col w-full pb-3 overflow-auto h-full">
-      <nav className="pb-3 pt-4 flex border-b border-neutral-500/30 items-center">
-        {authUser.hasPrivilege('events:create') && (
-          <Form
-            refetch={refetch}
-            triggerProps={{
-              disabled: isLoading,
-              appearance: 'transparent',
-              icon: <AddFilled className="dark:text-blue-500 text-blue-700" />,
-              children: 'Nuevo'
-            }}
-          />
-        )}
-        <SearchBox
-          disabled={isLoading}
-          value={searchValue}
-          dismiss={() => {
-            setQ(undefined)
-            handleChange('')
-          }}
-          onChange={(e) => {
-            if (e.target.value === '') setQ(undefined)
-            handleChange(e.target.value)
-          }}
-          placeholder="Buscar evento"
-        />
-      </nav>
-      <div className="overflow-auto flex flex-col flex-grow rounded-xl pt-2 h-full">
-        {isLoading ? (
-          <div className="h-full grid place-content-center">
-            <Spinner size="huge" />
-          </div>
-        ) : data && data.data?.length < 1 ? (
-          <div className="grid place-content-center flex-grow">
-            <img
-              src="/search.webp"
-              width={80}
-              alt="No se encontraron resultados"
-              className="mx-auto"
+    <TableContainer
+      isLoading={isLoading}
+      isEmpty={!data?.data?.length}
+      nav={
+        <nav className="flex items-center ">
+          <h1 className="text-lg font-semibold grow">Eventos</h1>
+          {authUser.hasPrivilege('events:create') && (
+            <Form
+              refetch={refetch}
+              triggerProps={{
+                disabled: isLoading,
+                appearance: 'transparent',
+                icon: (
+                  <AddFilled className="dark:text-blue-500 text-blue-700" />
+                ),
+                children: 'Nuevo'
+              }}
             />
-            <p className="text-xs opacity-60 pt-5">
-              No se encontraron resultados para la búsqueda
-            </p>
-          </div>
-        ) : (
-          <Table className="w-full relative">
-            <TableHeader>
-              <TableRow>
-                <TableHeaderCell>Evento</TableHeaderCell>
-                <TableHeaderCell>Fecha</TableHeaderCell>
-                <TableHeaderCell>Registros</TableHeaderCell>
-                <TableHeaderCell>Registrado por</TableHeaderCell>
-                <TableHeaderCell></TableHeaderCell>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {!isLoading &&
-                data?.data?.map((item) => (
-                  <Item refetch={refetch} key={item.id} item={item} />
-                ))}
-            </TableBody>
-          </Table>
-        )}
-      </div>
-      {data && (
-        <Pagination state={data} onChangePage={(page) => setPage(page)} />
-      )}
-    </div>
+          )}
+          <SearchBox
+            disabled={isLoading}
+            value={searchValue}
+            dismiss={() => {
+              setQ(undefined)
+              handleChange('')
+            }}
+            onChange={(e) => {
+              if (e.target.value === '') setQ(undefined)
+              handleChange(e.target.value)
+            }}
+            placeholder="Buscar evento"
+          />
+        </nav>
+      }
+      footer={
+        data && (
+          <Pagination state={data} onChangePage={(page) => setPage(page)} />
+        )
+      }
+    >
+      <Table>
+        <TableHeader>
+          <TableRow>
+            <TableSelectionCell type="radio" />
+            <TableHeaderCell>Evento</TableHeaderCell>
+            <TableHeaderCell>Fecha</TableHeaderCell>
+            <TableHeaderCell>Registros</TableHeaderCell>
+            <TableHeaderCell>Registrado por</TableHeaderCell>
+            <TableHeaderCell></TableHeaderCell>
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {!isLoading &&
+            data?.data?.map((item) => (
+              <Item refetch={refetch} key={item.id} item={item} />
+            ))}
+        </TableBody>
+      </Table>
+    </TableContainer>
   )
 }

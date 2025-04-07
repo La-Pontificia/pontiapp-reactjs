@@ -7,9 +7,7 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
-  Spinner,
-  TableCell,
-  TableRow
+  Spinner
 } from '@fluentui/react-components'
 import {
   DeleteRegular,
@@ -26,6 +24,7 @@ import { useAuth } from '~/store/auth'
 import { Event } from '~/types/event'
 import Form from './form'
 import { useNavigate } from 'react-router'
+import { TableSelectionCell, TableCell, TableRow } from '~/components/table'
 
 export default function Item({
   item,
@@ -46,7 +45,7 @@ export default function Item({
     const res = await api.post(`events/${item?.id}/delete`)
     if (!res.ok) {
       setDeleting(false)
-      return toast(handleError(res.error))
+      return toast.error(handleError(res.error))
     }
     setDeleting(false)
     setOpenDelete(false)
@@ -57,6 +56,7 @@ export default function Item({
   return (
     <>
       <TableRow>
+        <TableSelectionCell type="radio" />
         <TableCell>
           <div className="flex items-center gap-2">
             <Avatar color="colorful" size={32} name={item.name} />

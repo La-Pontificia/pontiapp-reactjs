@@ -74,6 +74,7 @@ export default function EventsRegister() {
 
           return { names, documentId, career }
         })
+      console.log(JSON.stringify(people, null, 2))
       setPeople(people)
     }
 
