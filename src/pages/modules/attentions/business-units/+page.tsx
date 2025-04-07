@@ -56,7 +56,7 @@ export default function AttentionsBusinessUnitsPage() {
     })
 
     if (!res.ok) {
-      toast(handleError(res.error))
+      toast.error(handleError(res.error))
     } else {
       refetch()
       toast('Unidades de negocio actualizadas correctamente')

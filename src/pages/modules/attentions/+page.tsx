@@ -59,7 +59,7 @@ export default function AttentionsPage() {
         data: []
       })
     } else {
-      toast(handleError(res.error))
+      toast.error(handleError(res.error))
     }
     setLoadingMore(false)
   }

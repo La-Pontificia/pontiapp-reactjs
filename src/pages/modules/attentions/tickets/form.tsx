@@ -68,7 +68,7 @@ export default function Form({
     })
 
     if (!res.ok) {
-      toast(handleError(res.error))
+      toast.error(handleError(res.error))
     } else {
       refetch()
       setOpen(false)

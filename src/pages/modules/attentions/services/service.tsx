@@ -37,7 +37,7 @@ export default function Item({
     const res = await api.post(`attentions/services/${item?.id}/delete`)
     if (!res.ok) {
       setDeleting(false)
-      return toast(handleError(res.error))
+      return toast.error(handleError(res.error))
     }
     setDeleting(false)
     setOpenDelete(false)
