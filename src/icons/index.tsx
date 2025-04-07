@@ -103,14 +103,14 @@ export const Microsoft = React.forwardRef<SVGSVGElement, IconProps>(
         ref={forwardRef}
         width={size}
         height={size}
-        viewBox="0 0 32 32"
-        fill="none"
+        viewBox="0 0 16 16"
         xmlns="http://www.w3.org/2000/svg"
+        fill="none"
       >
-        <rect x="17" y="17" width="10" height="10" fill="#FEBA08"></rect>{' '}
-        <rect x="5" y="17" width="10" height="10" fill="#05A6F0"></rect>{' '}
-        <rect x="17" y="5" width="10" height="10" fill="#80BC06"></rect>{' '}
-        <rect x="5" y="5" width="10" height="10" fill="#F25325"></rect>{' '}
+        <path fill="#F35325" d="M1 1h6.5v6.5H1V1z"></path>
+        <path fill="#81BC06" d="M8.5 1H15v6.5H8.5V1z"></path>
+        <path fill="#05A6F0" d="M1 8.5h6.5V15H1V8.5z"></path>
+        <path fill="#FFBA08" d="M8.5 8.5H15V15H8.5V8.5z"></path>
       </svg>
     )
   }
