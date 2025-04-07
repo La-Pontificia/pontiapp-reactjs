@@ -232,3 +232,21 @@ export const BIRTHDAY_MESSAGE: string[] = [
   'Que este nuevo ciclo esté lleno de éxitos, salud y felicidad.',
   'Que cada día del año esté lleno de momentos inolvidables para ti.'
 ] as const
+
+export const PATHNAMES = {
+  programs: 'Programas',
+  plans: 'Planes de Estudio',
+  cycles: 'Ciclos',
+  courses: 'Cursos',
+  sections: 'Secciones',
+  periods: 'Periodos',
+  classrooms: 'Aulas',
+  pavilions: 'Pabellones'
+} as const
+
+export const CLASSROOM_TYPES = [
+  'Aula',
+  'Laboratorio',
+  'Virtual',
+  'Taller'
+] as const
