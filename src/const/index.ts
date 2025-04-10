@@ -211,17 +211,17 @@ export const PRIVILEGES = {
   settings: 'Acceso a configuraciones del sistema',
 
   // Resource management
-  'academic:trakingTeachers': '(Academica) Seguimiento de docentes',
-  'academic:schedules': '(Academica) Horarios académicos',
-  'academic:programs': '(Academica) Programas académicos',
-  'academic:plans': '(Academica) Planes de estudio',
-  'academic:periods': '(Academica) Periodos académicos',
-  'academic:sections': '(Academica) Secciones académicas',
-  'academic:cycles': '(Academica) Ciclos académicos',
-  'academic:courses': '(Academica) Cursos académicos',
-  'academic:pavilionsClassrooms': '(Academica) Pabellones y aulas',
-  'academic:reportFiles': '(Academica) Archivo de reportes',
-  'academic:areas': '(Academica) Areas academicas'
+  'academic:trakingTeachers': '(Académica) Seguimiento de docentes',
+  'academic:schedules': '(Académica) Horarios académicos',
+  'academic:programs': '(Académica) Programas académicos',
+  'academic:plans': '(Académica) Planes de estudio',
+  'academic:periods': '(Académica) Periodos académicos',
+  'academic:sections': '(Académica) Secciones académicas',
+  'academic:cycles': '(Académica) Ciclos académicos',
+  'academic:courses': '(Académica) Cursos académicos',
+  'academic:pavilionsClassrooms': '(Académica) Pabellones y aulas',
+  'academic:reportFiles': '(Académica) Archivo de reportes',
+  'academic:areas': '(Académica) Areas académicas'
 }
 
 export const BIRTHDAY_MESSAGE: string[] = [
