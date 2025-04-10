@@ -117,7 +117,7 @@ export default function UsersEditSchedules() {
 
 type ScheduleFormValue = {
   startDate: Date
-  endDate: Date
+  endDate: Date | null
   days: string[]
   type: Schedule['type']
   from?: Date
@@ -146,9 +146,7 @@ export function ScheduleForm(props: {
         : new Date(),
       tolerance: props.default?.tolerance || '5',
       type: props.default?.type || 'available',
-      endDate: props.default?.endDate
-        ? parse(props.default?.endDate)
-        : new Date()
+      endDate: props.default?.endDate ? parse(props.default?.endDate) : null
     }
   })
 
