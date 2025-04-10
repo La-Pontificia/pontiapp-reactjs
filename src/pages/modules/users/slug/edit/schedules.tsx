@@ -185,7 +185,10 @@ export function ScheduleForm(props: {
         days: values.days,
         tolerance: values.tolerance ? Number(values.tolerance) : 0,
         startDate: format(values.startDate, 'YYYY-MM-DD'),
-        endDate: values.endDate ? format(values.endDate, 'YYYY-MM-DD') : null
+        endDate:
+          values.type === 'unavailable'
+            ? format(values.endDate, 'YYYY-MM-DD')
+            : null
       })
     })
   })
