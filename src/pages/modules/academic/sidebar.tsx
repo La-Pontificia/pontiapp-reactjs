@@ -29,7 +29,7 @@ export const AcademicSidebar = () => {
         icon={PeopleEyeRegular}
         iconActive={PeopleEyeFilled}
         href="/m/academic/tt"
-        has={['academic:tt']}
+        has={['academic:trakingTeachers']}
       >
         Seguimiento docentes
       </ItemSidebarNav>
@@ -55,7 +55,7 @@ export const AcademicSidebar = () => {
           'academic:periods',
           'academic:sections',
           'academic:courses',
-          'academic:classrooms',
+          'academic:pavilionsClassrooms',
           'academic:areas'
         ],
         'or'
@@ -98,7 +98,7 @@ export const AcademicSidebar = () => {
             icon={BuildingRegular}
             iconActive={BuildingFilled}
             href="/m/academic/classrooms"
-            has={['academic:classrooms']}
+            has={['academic:pavilionsClassrooms']}
           >
             Aulas y pabellones
           </ItemSidebarNav>

@@ -211,13 +211,17 @@ export const PRIVILEGES = {
   settings: 'Acceso a configuraciones del sistema',
 
   // Resource management
-  'rm:reportFiles': 'Ver archivos de reportes de Administración de Recursos',
-  'rm:tt': 'Visualizar seguimiento a docentes',
-  'rm:tt:report': 'Generar reportes de seguimiento a docentes',
-  'rm:tt:create': 'Registrar seguimiento a docentes',
-  'rm:tt:update': 'Actualizar seguimiento a docentes',
-  'rm:tt:delete': 'Eliminar seguimiento a docentes',
-  'rm:club': 'App Descuentos'
+  'academic:trakingTeachers': '(Academica) Seguimiento de docentes',
+  'academic:schedules': '(Academica) Horarios académicos',
+  'academic:programs': '(Academica) Programas académicos',
+  'academic:plans': '(Academica) Planes de estudio',
+  'academic:periods': '(Academica) Periodos académicos',
+  'academic:sections': '(Academica) Secciones académicas',
+  'academic:cycles': '(Academica) Ciclos académicos',
+  'academic:courses': '(Academica) Cursos académicos',
+  'academic:pavilionsClassrooms': '(Academica) Pabellones y aulas',
+  'academic:reportFiles': '(Academica) Archivo de reportes',
+  'academic:areas': '(Academica) Areas academicas'
 }
 
 export const BIRTHDAY_MESSAGE: string[] = [

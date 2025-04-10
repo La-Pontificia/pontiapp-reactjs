@@ -45,7 +45,7 @@ export default function AcademicRoutes() {
         <Route
           index
           element={
-            <ProtectedModule has="academic" navigate="/academic/schedules">
+            <ProtectedModule has="academic" navigate="/">
               <AcademicPage />
             </ProtectedModule>
           }
@@ -71,7 +71,7 @@ export default function AcademicRoutes() {
         <Route
           path="tt"
           element={
-            <Protected has="academic:tt" navigate="/">
+            <Protected has="academic:trakingTeachers" navigate="/">
               <TeacherTrackingsPage />
             </Protected>
           }
@@ -89,16 +89,37 @@ export default function AcademicRoutes() {
           <Route
             index
             element={
-              <ProtectedModule has="academic:programs" navigate="/">
+              <ProtectedModule has="academic:programs" navigate="/m/academic">
                 <ProgramPage />
               </ProtectedModule>
             }
           />
           <Route path=":programId" element={<LayoutSlugPrograms />}>
-            <Route path="cycles" element={<CyclesPage />} />
+            <Route
+              path="cycles"
+              element={
+                <Protected has="academic:cycles" navigate="/m/academic">
+                  <CyclesPage />
+                </Protected>
+              }
+            />
             <Route path="plans">
-              <Route index element={<PlansPage />} />
-              <Route path=":planId" element={<LayoutSlugPlan />}>
+              <Route
+                index
+                element={
+                  <Protected has="academic:plans" navigate="/m/academic">
+                    <PlansPage />
+                  </Protected>
+                }
+              />
+              <Route
+                path=":planId"
+                element={
+                  <Protected has="academic:plans" navigate="/m/academic">
+                    <LayoutSlugPlan />
+                  </Protected>
+                }
+              >
                 <Route path="courses" element={<PlansCoursesPage />} />
               </Route>
             </Route>
@@ -107,17 +128,17 @@ export default function AcademicRoutes() {
         <Route
           path="periods"
           element={
-            <ProtectedModule has="academic:periods" navigate="/">
+            <Protected has="academic:periods" navigate="/m/academic">
               <PeriodsPage />
-            </ProtectedModule>
+            </Protected>
           }
         />
         <Route
           path="courses"
           element={
-            <ProtectedModule has="academic:courses" navigate="/">
+            <Protected has="academic:courses" navigate="/m/academic">
               <CoursesPage />
-            </ProtectedModule>
+            </Protected>
           }
         />
 
@@ -125,44 +146,19 @@ export default function AcademicRoutes() {
           <Route
             index
             element={
-              <ProtectedModule has="academic:classrooms" navigate="/">
+              <Protected
+                has="academic:pavilionsClassrooms"
+                navigate="/m/academic"
+              >
                 <ClassroomsPeriodsPage />
-              </ProtectedModule>
+              </Protected>
             }
           />
-          <Route
-            path=":periodId"
-            element={
-              <ProtectedModule has="academic:classrooms" navigate="/">
-                <ClassroomSlugLayout />
-              </ProtectedModule>
-            }
-          >
+          <Route path=":periodId" element={<ClassroomSlugLayout />}>
             <Route path="pavilions">
-              <Route
-                index
-                element={
-                  <ProtectedModule has="academic:pavilions" navigate="/">
-                    <PavilionsPage />
-                  </ProtectedModule>
-                }
-              />
-              <Route
-                path=":pavilionId"
-                element={
-                  <ProtectedModule has="academic:pavilions" navigate="/">
-                    <PavilionSlugLayout />
-                  </ProtectedModule>
-                }
-              >
-                <Route
-                  path="classrooms"
-                  element={
-                    <ProtectedModule has="academic:classrooms" navigate="/">
-                      <ClassroomsPage />
-                    </ProtectedModule>
-                  }
-                ></Route>
+              <Route index element={<PavilionsPage />} />
+              <Route path=":pavilionId" element={<PavilionSlugLayout />}>
+                <Route path="classrooms" element={<ClassroomsPage />}></Route>
               </Route>
             </Route>
           </Route>
@@ -171,7 +167,7 @@ export default function AcademicRoutes() {
           <Route
             index
             element={
-              <ProtectedModule has="academic:sections" navigate="/">
+              <ProtectedModule has="academic:sections" navigate="/m/academic">
                 <SectionPeriodsPage />
               </ProtectedModule>
             }
@@ -196,9 +192,9 @@ export default function AcademicRoutes() {
         <Route
           path="areas"
           element={
-            <ProtectedModule has="academic:areas" navigate="/">
+            <Protected has="academic:areas" navigate="/m/academic">
               <AreasPage />
-            </ProtectedModule>
+            </Protected>
           }
         />
       </Route>
