@@ -93,7 +93,7 @@ export default function Form({
                 </DialogTrigger>
               }
             >
-              {defaultProp ? 'Editar plan' : 'Registrar nuevo plan'}
+              {defaultProp ? 'Editar ciclo' : 'Registrar nuevo ciclo'}
             </DialogTitle>
             <DialogContent className="grid gap-2">
               <Field
