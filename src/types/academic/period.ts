@@ -1,3 +1,4 @@
+import { BusinessUnit } from '../business-unit'
 import { User } from '../user'
 import { Program } from './program'
 
@@ -8,6 +9,7 @@ export class Period {
   endDate: Date
   programId: string
   program: Program
+  businessUnit: BusinessUnit
   creatorId: string
   creator: User
   created_at: Date
@@ -20,11 +22,13 @@ export class Period {
     this.endDate = data.endDate
     this.programId = data.programId
     this.program = data.program
+    this.businessUnit = data.businessUnit
     this.creatorId = data.creatorId
     this.creator = data.creator
     this.created_at = data.created_at
     this.updated_at = data.updated_at
 
+    if (this.businessUnit) this.businessUnit = new BusinessUnit(this.businessUnit)
     if (this.program) this.program = new Program(this.program)
     if (this.creator) this.creator = new User(this.creator)
   }

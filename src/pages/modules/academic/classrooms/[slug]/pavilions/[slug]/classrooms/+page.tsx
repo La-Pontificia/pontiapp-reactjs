@@ -66,12 +66,16 @@ export default function ClassroomsPage() {
 
   return (
     <>
-      <Helmet>
-        <title>
-          Aulas y pabellones {'>'} {period.name} {'>'} {pavilion?.name} |
-          Pontiapp
-        </title>
-      </Helmet>
+      {
+        period && pavilion && (
+          <Helmet>
+            <title>
+              Aulas y pabellones {'>'} {period?.name} {'>'} {pavilion?.name} |
+              Pontiapp
+            </title>
+          </Helmet>
+        )
+      }
       <TableContainer
         isLoading={isLoading}
         isEmpty={!data?.data.length}

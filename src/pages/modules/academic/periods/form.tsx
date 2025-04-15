@@ -17,6 +17,7 @@ import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'anni'
+import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { calendarStrings } from '~/const'
 import { api } from '~/lib/api'
@@ -35,7 +36,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => {},
+  refetch = () => { },
   defaultProp,
   readOnly = false
 }: {
@@ -49,11 +50,11 @@ export default function Form({
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-          cloneByPeriod: null,
-          name: defaultProp.name,
-          startDate: defaultProp.startDate,
-          endDate: defaultProp.endDate
-        }
+        cloneByPeriod: null,
+        name: defaultProp.name,
+        startDate: defaultProp.startDate,
+        endDate: defaultProp.endDate
+      }
       : { name: '', startDate: null, endDate: null, cloneByPeriod: null }
   })
 
@@ -82,7 +83,7 @@ export default function Form({
     enabled: open,
     queryFn: async () => {
       const res = await api.get<Period[]>(
-        `academic/periods?businessUnitId=${businessUnit?.id}`
+        `academic/periods`
       )
       if (!res.ok) return []
       return res.data
@@ -98,6 +99,17 @@ export default function Form({
       cloneByPeriodId: values.cloneByPeriod?.id
     })
   })
+
+  const periodsGroupedByBusinessUnit = React.useMemo(() => {
+    return periods?.reduce((acc: Record<string, Period[]>, period: Period) => {
+      const unitId = period.businessUnit.id
+      if (!acc[unitId]) {
+        acc[unitId] = []
+      }
+      acc[unitId].push(period)
+      return acc
+    }, {} as Record<string, Period[]>)
+  }, [periods])
 
   return (
     <>
@@ -205,7 +217,6 @@ export default function Form({
                     name="cloneByPeriod"
                     render={({ field, fieldState: { error } }) => (
                       <Field
-                        required
                         validationState={error ? 'error' : 'none'}
                         orientation="horizontal"
                         validationMessage={
@@ -223,11 +234,29 @@ export default function Form({
                           }}
                           value={field.value?.id}
                         >
-                          {periods?.map((period) => (
-                            <option key={period.id} value={period.id}>
-                              {period.name}
-                            </option>
-                          )) ?? []}
+                          <option value=''>
+                            -- Selecciona un periodo --
+                          </option>
+                          {
+                            Object.entries(periodsGroupedByBusinessUnit ?? {}).map(
+                              ([unitId, unitPeriods]) => (
+                                <optgroup
+                                  key={unitId}
+                                  label={
+                                    periods?.find(
+                                      (period) => period.businessUnit.id === unitId
+                                    )?.businessUnit.name
+                                  }
+                                >
+                                  {unitPeriods.map((period) => (
+                                    <option key={period.id} value={period.id}>
+                                      {period.name}
+                                    </option>
+                                  ))}
+                                </optgroup>
+                              )
+                            ) ?? []}
+
                         </Select>
                       </Field>
                     )}
