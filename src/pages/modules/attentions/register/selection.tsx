@@ -1,4 +1,4 @@
-import { AttentionPosition } from '~/types/attention-position'
+import { AttentionPosition } from '@/types/attention-position'
 
 export default function Selection({
   person,

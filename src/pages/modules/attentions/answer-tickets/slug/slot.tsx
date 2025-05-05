@@ -10,11 +10,11 @@ import {
 } from '@fluentui/react-components'
 import { useSlugAttentionTicket } from './page'
 import React from 'react'
-import { attendTicket, cancelTicket } from '~/services/tickets'
+import { attendTicket, cancelTicket } from '@/services/tickets'
 import { toast } from 'anni'
 import AttendingTicket from './attending'
-import { FirebaseAttentionTicket } from '~/types/attention-ticket'
-import { format } from '~/lib/dayjs'
+import { FirebaseAttentionTicket } from '@/types/attention-ticket'
+import { format } from '@/lib/dayjs'
 
 export default function SlotSlugTicket() {
   const { callingTicket, setAttending, setCallingTicket, attending } =

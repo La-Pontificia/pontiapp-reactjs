@@ -1,12 +1,12 @@
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { GlobeRegular } from '@fluentui/react-icons'
 import { Avatar, Button, Checkbox, Spinner } from '@fluentui/react-components'
 import React from 'react'
-import { BusinessUnit } from '~/types/business-unit'
-import { useAuth } from '~/store/auth'
+import { BusinessUnit } from '@/types/business-unit'
+import { useAuth } from '@/store/auth'
 import { toast } from 'anni'
-import { handleError } from '~/utils'
+import { handleError } from '@/utils'
 
 export default function AttentionsBusinessUnitsPage() {
   const { user: authUser } = useAuth()
@@ -152,7 +152,7 @@ export default function AttentionsBusinessUnitsPage() {
                     isLoading ||
                     !authUser.hasPrivilege('attentions:businessUnits:update') ||
                     selectedIds.length ===
-                      data?.atttentionBusinessUnits.length ||
+                    data?.atttentionBusinessUnits.length ||
                     fetching
                   }
                   onClick={onUpdate}

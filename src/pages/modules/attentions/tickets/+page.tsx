@@ -1,4 +1,4 @@
-// import { api } from '~/lib/api'
+// import { api } from '@/lib/api'
 // import { useQuery } from '@tanstack/react-query'
 // import { AddFilled, Search20Regular } from '@fluentui/react-icons'
 // import { SearchBox, Spinner } from '@fluentui/react-components'
@@ -11,24 +11,24 @@ import {
   where
 } from 'firebase/firestore'
 import React from 'react'
-import { fdb } from '~/lib/firebase'
-import { FirebaseAttentionTicket } from '~/types/attention-ticket'
+import { fdb } from '@/lib/firebase'
+import { FirebaseAttentionTicket } from '@/types/attention-ticket'
 import Item from './ticket'
 import { useQuery } from '@tanstack/react-query'
-import { BusinessUnit } from '~/types/business-unit'
-import { api } from '~/lib/api'
+import { BusinessUnit } from '@/types/business-unit'
+import { api } from '@/lib/api'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { format } from '~/lib/dayjs'
-import { localizedStrings } from '~/const'
+import { format } from '@/lib/dayjs'
+import { localizedStrings } from '@/const'
 import { Helmet } from 'react-helmet'
-// import { useDebounced } from '~/hooks/use-debounced'
-// import { ResponsePaginate } from '~/types/paginate-response'
+// import { useDebounced } from '@/hooks/use-debounced'
+// import { ResponsePaginate } from '@/types/paginate-response'
 // import { toast } from 'anni'
-// import { handleError } from '~/utils'
-// import { useAuth } from '~/store/auth'
+// import { handleError } from '@/utils'
+// import { useAuth } from '@/store/auth'
 // import Form from './form'
 // import Item from './ticket'
-// import { AttentionTicket } from '~/types/attention-ticket'
+// import { AttentionTicket } from '@/types/attention-ticket'
 
 export default function AttentionsTicketsPage() {
   const [tickets, setTickets] = React.useState<FirebaseAttentionTicket[]>([])
@@ -144,8 +144,8 @@ export default function AttentionsTicketsPage() {
           value={
             filters.attentionPositionBusinessId
               ? businessUnits?.find(
-                  (b) => b.id === filters.attentionPositionBusinessId
-                )?.name
+                (b) => b.id === filters.attentionPositionBusinessId
+              )?.name
               : ''
           }
           placeholder="Unidad de negocio"

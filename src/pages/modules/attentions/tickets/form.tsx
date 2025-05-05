@@ -1,9 +1,9 @@
 import { toast } from 'anni'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
-import { BusinessUnit } from '~/types/business-unit'
-import { AttentionPosition } from '~/types/attention-position'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
+import { BusinessUnit } from '@/types/business-unit'
+import { AttentionPosition } from '@/types/attention-position'
+import { handleError } from '@/utils'
 import {
   Button,
   ButtonProps,

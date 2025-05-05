@@ -11,14 +11,14 @@ import {
   Spinner
 } from '@fluentui/react-components'
 import React from 'react'
-import { api } from '~/lib/api'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { handleError } from '@/utils'
 import { toast } from 'anni'
 
 import { DeleteFilled, PenFilled } from '@fluentui/react-icons'
 import Form from './form-service'
-import { useAuth } from '~/store/auth'
-import { AttentionService } from '~/types/attention-service'
+import { useAuth } from '@/store/auth'
+import { AttentionService } from '@/types/attention-service'
 
 export default function ServiceItem({
   item,

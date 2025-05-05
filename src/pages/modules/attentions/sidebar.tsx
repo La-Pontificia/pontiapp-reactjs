@@ -2,7 +2,7 @@ import {
   ItemSidebarNav,
   ReusableSidebar,
   SidebarTitle
-} from '~/components/reusable-sidebar'
+} from '@/components/reusable-sidebar'
 import {
   BoardSplitFilled,
   BoardSplitRegular,

@@ -9,9 +9,9 @@ import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { Link } from 'react-router'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
-import { AttentionPosition } from '~/types/attention-position'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
+import { AttentionPosition } from '@/types/attention-position'
 
 export default function AttentionsAnswerTickets() {
   const { user } = useAuth()

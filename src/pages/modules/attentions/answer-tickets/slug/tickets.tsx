@@ -1,10 +1,10 @@
 import React from 'react'
 import { useSlugAttentionTicket } from './page'
-import { timeAgoShort } from '~/lib/dayjs'
-import { FirebaseAttentionTicket } from '~/types/attention-ticket'
+import { timeAgoShort } from '@/lib/dayjs'
+import { FirebaseAttentionTicket } from '@/types/attention-ticket'
 import { Avatar, Badge } from '@fluentui/react-components'
 import { TicketDiagonalRegular } from '@fluentui/react-icons'
-import { callTicket } from '~/services/tickets'
+import { callTicket } from '@/services/tickets'
 import { toast } from 'anni'
 
 const states = {
@@ -114,8 +114,8 @@ export const Ticket = ({ ticket }: { ticket: FirebaseAttentionTicket }) => {
               importance === 'very-important'
                 ? 'dark-red'
                 : importance === 'important'
-                ? 'gold'
-                : 'royal-blue'
+                  ? 'gold'
+                  : 'royal-blue'
             }
           />
         </div>
@@ -129,8 +129,8 @@ export const Ticket = ({ ticket }: { ticket: FirebaseAttentionTicket }) => {
               importance === 'very-important'
                 ? 'danger'
                 : importance === 'important'
-                ? 'warning'
-                : 'success'
+                  ? 'warning'
+                  : 'success'
             }
             appearance="tint"
           >

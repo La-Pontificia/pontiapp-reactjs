@@ -1,7 +1,7 @@
 import { toast } from 'anni'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
-import { AttentionPosition } from '~/types/attention-position'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
+import { AttentionPosition } from '@/types/attention-position'
 import {
   Button,
   ButtonProps,
@@ -22,8 +22,8 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { AttentionService } from '~/types/attention-service'
-import { handleError } from '~/utils'
+import { AttentionService } from '@/types/attention-service'
+import { handleError } from '@/utils'
 
 type FormValues = {
   name: string

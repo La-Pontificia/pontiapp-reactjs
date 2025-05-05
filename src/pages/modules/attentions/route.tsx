@@ -1,7 +1,7 @@
 import { Route, Routes } from 'react-router'
-import ProtectedModule from '~/protected/module'
+import ProtectedModule from '@/protected/module'
 import AttentionsLayout from './+layout'
-import Protected from '~/protected/auth'
+import Protected from '@/protected/auth'
 
 import AttentionsPage from './+page'
 import AttentionsRegisterPage from './register/+page'

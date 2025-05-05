@@ -1,4 +1,4 @@
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { AddFilled } from '@fluentui/react-icons'
 import {
@@ -9,13 +9,13 @@ import {
   Spinner
 } from '@fluentui/react-components'
 import React from 'react'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 import Form from './form'
 import Item from './position'
-import { AttentionPosition } from '~/types/attention-position'
+import { AttentionPosition } from '@/types/attention-position'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
-import { useDebounced } from '~/hooks/use-debounced'
+import SearchBox from '@/commons/search-box'
+import { useDebounced } from '@/hooks/use-debounced'
 
 export default function AttentionsPositionsPage() {
   const { user: authUser } = useAuth()

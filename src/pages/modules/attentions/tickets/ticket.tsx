@@ -12,14 +12,14 @@ import {
   Spinner
 } from '@fluentui/react-components'
 import React from 'react'
-import { handleError } from '~/utils'
+import { handleError } from '@/utils'
 import { toast } from 'anni'
 
 import { DeleteFilled, TicketDiagonalFilled } from '@fluentui/react-icons'
-import { useAuth } from '~/store/auth'
-import { FirebaseAttentionTicket } from '~/types/attention-ticket'
-import { timeAgoShort } from '~/lib/dayjs'
-import { deleteTicket } from '~/services/tickets'
+import { useAuth } from '@/store/auth'
+import { FirebaseAttentionTicket } from '@/types/attention-ticket'
+import { timeAgoShort } from '@/lib/dayjs'
+import { deleteTicket } from '@/services/tickets'
 
 const Status = {
   pending: {

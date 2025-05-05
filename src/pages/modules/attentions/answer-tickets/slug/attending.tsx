@@ -1,4 +1,4 @@
-import { useElapsedTime } from '~/hooks/use-elapsed-time'
+import { useElapsedTime } from '@/hooks/use-elapsed-time'
 import { useSlugAttentionTicket } from './page'
 import {
   Badge,
@@ -17,12 +17,12 @@ import {
   Spinner,
   Textarea
 } from '@fluentui/react-components'
-import { cancelTicket, finishTicket, transferTicket } from '~/services/tickets'
+import { cancelTicket, finishTicket, transferTicket } from '@/services/tickets'
 import React from 'react'
 import { toast } from 'anni'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '~/lib/api'
-import { AttentionPosition } from '~/types/attention-position'
+import { api } from '@/lib/api'
+import { AttentionPosition } from '@/types/attention-position'
 import { Controller, useForm } from 'react-hook-form'
 
 export default function AttendingTicket() {
@@ -307,7 +307,7 @@ export const DialogTransferredTicket = ({
                             <Option
                               disabled={
                                 position.id ===
-                                  attending!.ticket.attentionPositionId ||
+                                attending!.ticket.attentionPositionId ||
                                 !position.available
                               }
                               text={position.name}

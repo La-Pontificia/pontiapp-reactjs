@@ -1,15 +1,15 @@
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { AddFilled, Search20Regular } from '@fluentui/react-icons'
 import { SearchBox, Spinner } from '@fluentui/react-components'
 import React from 'react'
-import { useDebounced } from '~/hooks/use-debounced'
-import { ResponsePaginate } from '~/types/paginate-response'
+import { useDebounced } from '@/hooks/use-debounced'
+import { ResponsePaginate } from '@/types/paginate-response'
 import { toast } from 'anni'
-import { handleError } from '~/utils'
-import { useAuth } from '~/store/auth'
+import { handleError } from '@/utils'
+import { useAuth } from '@/store/auth'
 import Form from './form'
-import { AttentionService } from '~/types/attention-service'
+import { AttentionService } from '@/types/attention-service'
 import Item from './service'
 import { Helmet } from 'react-helmet'
 
@@ -22,9 +22,8 @@ export default function AttentionsServicesPage() {
   const [loadingMore, setLoadingMore] = React.useState(false)
   const [q, setQ] = React.useState<string>()
 
-  const query = `attentions/services/all?paginate=true&relationship=position,position.business${
-    q ? `&q=${q}` : ''
-  }`
+  const query = `attentions/services/all?paginate=true&relationship=position,position.business${q ? `&q=${q}` : ''
+    }`
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
     AttentionService[]
   > | null>({

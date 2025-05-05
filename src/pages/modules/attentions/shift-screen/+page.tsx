@@ -7,9 +7,9 @@ import {
 } from 'firebase/firestore'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import { format } from '~/lib/dayjs'
-import { fdb } from '~/lib/firebase'
-import { FirebaseAttentionTicket } from '~/types/attention-ticket'
+import { format } from '@/lib/dayjs'
+import { fdb } from '@/lib/firebase'
+import { FirebaseAttentionTicket } from '@/types/attention-ticket'
 
 export default function AttentionsShiftScreen() {
   const [realtime, setRealtime] = React.useState<string>(
