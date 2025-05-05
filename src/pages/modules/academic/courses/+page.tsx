@@ -7,22 +7,22 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import { AddFilled } from '@fluentui/react-icons'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import Form from './form'
 import { useQuery } from '@tanstack/react-query'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { api } from '~/lib/api'
-import Pagination from '~/commons/pagination'
-import { Course } from '~/types/academic/course'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { api } from '@/lib/api'
+import Pagination from '@/commons/pagination'
+import { Course } from '@/types/academic/course'
 import Item from './item'
-import { TableContainer } from '~/components/table-container'
+import { TableContainer } from '@/components/table-container'
 import { useDebounce } from 'hothooks'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 
 export type FiltersValues = {
   q: string | null
@@ -106,20 +106,16 @@ export default function CoursesPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableSelectionCell type="radio" invisible />
-              <TableHeaderCell>Código</TableHeaderCell>
+              <TableSelectionCell type="radio" />
+              <TableHeaderCell className='max-w-[130px]'>Código</TableHeaderCell>
               <TableHeaderCell>Nombre</TableHeaderCell>
-              <TableHeaderCell className="max-lg:!hidden">
-                H. Teoricas
-              </TableHeaderCell>
-              <TableHeaderCell className="max-lg:!hidden">
-                H. Practicas
-              </TableHeaderCell>
-              <TableHeaderCell>N° creditos</TableHeaderCell>
-              <TableHeaderCell className="max-lg:!hidden">
+              <TableHeaderCell className='max-w-[40px] max-lg:!hidden'>HT</TableHeaderCell>
+              <TableHeaderCell className='max-w-[40px] max-lg:!hidden'>HP </TableHeaderCell>
+              <TableHeaderCell className='max-w-[40px]'>Cred</TableHeaderCell>
+              <TableHeaderCell className="max-lg:!hidden max-w-[100px]">
                 Registrado
               </TableHeaderCell>
-              <TableHeaderCell></TableHeaderCell>
+              <TableHeaderCell className='max-w-[200px]'></TableHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -15,10 +15,10 @@ import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
-import { Course } from '~/types/academic/course'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
+import { Course } from '@/types/academic/course'
+import { handleError } from '@/utils'
 
 type FormValues = {
   name: string
@@ -31,7 +31,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => {},
+  refetch = () => { },
   defaultProp,
   readOnly = false
 }: {
@@ -45,19 +45,19 @@ export default function Form({
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-          name: defaultProp.name,
-          code: defaultProp.code,
-          teoricHours: defaultProp.teoricHours?.toString(),
-          practiceHours: defaultProp.practiceHours?.toString(),
-          credits: defaultProp.credits?.toString()
-        }
+        name: defaultProp.name,
+        code: defaultProp.code,
+        teoricHours: defaultProp.teoricHours?.toString(),
+        practiceHours: defaultProp.practiceHours?.toString(),
+        credits: defaultProp.credits?.toString()
+      }
       : {
-          name: '',
-          code: '',
-          teoricHours: '0',
-          practiceHours: '0',
-          credits: '0'
-        }
+        name: '',
+        code: '',
+        teoricHours: '0',
+        practiceHours: '0',
+        credits: '0'
+      }
   })
 
   const { mutate: fetch, isPending: fetching } = useMutation({

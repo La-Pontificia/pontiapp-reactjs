@@ -14,20 +14,20 @@ import {
   TableCellLayout,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 import {
   DeleteRegular,
   DocumentRegular,
   PenRegular
 } from '@fluentui/react-icons'
 import React from 'react'
-import { timeAgo } from '~/lib/dayjs'
+import { timeAgo } from '@/lib/dayjs'
 import Form from './form'
 import { useMutation } from '@tanstack/react-query'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { toast } from 'anni'
-import { handleError } from '~/utils'
-import { Course } from '~/types/academic/course'
+import { handleError } from '@/utils'
+import { Course } from '@/types/academic/course'
 
 export default function Item({
   item,
@@ -60,24 +60,23 @@ export default function Item({
     <>
       <TableRow>
         <TableSelectionCell type="radio" />
-        <TableCell>
+        <TableCell className='max-w-[130px]'>
           <TableCellLayout media={<DocumentRegular fontSize={25} />}>
             {item.code}
           </TableCellLayout>
         </TableCell>
-        <TableCell>{item.name}</TableCell>
-        <TableCell className="max-lg:!hidden">
+        <TableCell >{item.name}</TableCell>
+        <TableCell className="max-lg:!hidden max-w-[40px]">
           {item.teoricHours ?? '-'}
         </TableCell>
-        <TableCell className="max-lg:!hidden">
+        <TableCell className="max-lg:!hidden max-w-[40px]">
           {item.practiceHours ?? '-'}
         </TableCell>
-        <TableCell>{item.credits ?? '-'}</TableCell>
-        <TableCell className="max-lg:!hidden">
-          <p className="font-medium">{item.creator?.displayName} </p>
-          <span className="opacity-70">{timeAgo(item.created_at)}</span>
+        <TableCell className='max-w-[40px]'>{item.credits ?? '-'}</TableCell>
+        <TableCell className="max-lg:!hidden max-w-[200px]">
+          <p className="font-medium">{item.creator?.displayName} <span className="opacity-70">{timeAgo(item.created_at)}</span></p>
         </TableCell>
-        <TableCell>
+        <TableCell className='max-w-[100px]'>
           <div>
             <Tooltip content="Editar" relationship="description">
               <Button
