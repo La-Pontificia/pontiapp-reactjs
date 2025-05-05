@@ -26,25 +26,25 @@ import {
 } from '@fluentui/react-timepicker-compat'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { Controller, useForm } from 'react-hook-form'
-import { localizedStrings } from '~/const'
-import { api } from '~/lib/api'
-import { format, parse, getDays } from '~/lib/dayjs'
-import { useAuth } from '~/store/auth'
-import { User } from '~/types/user'
-import { parseTime } from '~/utils'
+import { localizedStrings } from '@/const'
+import { api } from '@/lib/api'
+import { format, parse, getDays } from '@/lib/dayjs'
+import { useAuth } from '@/store/auth'
+import { User } from '@/types/user'
+import { parseTime } from '@/utils'
 import { useER } from './state'
 import FirstRubric from './first-rubric'
 import SecondRubric from './second-rubric'
 import { toast } from 'anni'
-import { Program } from '~/types/academic/program'
-import { Period } from '~/types/academic/period'
-import { Section } from '~/types/academic/section'
-import { SectionCourse } from '~/types/academic/section-course'
-import { Classroom } from '~/types/academic/classroom'
-import { Pavilion } from '~/types/academic/pavilion'
-import { Branch } from '~/types/rm/branch'
-import { SectionCourseSchedule } from '~/types/academic/section-course-schedule'
-import { TeacherTraking } from '~/types/academic/teacher-traking'
+import { Program } from '@/types/academic/program'
+import { Period } from '@/types/academic/period'
+import { Section } from '@/types/academic/section'
+import { SectionCourse } from '@/types/academic/section-course'
+import { Classroom } from '@/types/academic/classroom'
+import { Pavilion } from '@/types/academic/pavilion'
+import { Branch } from '@/types/rm/branch'
+import { SectionCourseSchedule } from '@/types/academic/section-course-schedule'
+import { TeacherTraking } from '@/types/academic/teacher-traking'
 
 type Props = {
   title?: string
@@ -90,13 +90,13 @@ export type FormValues = {
 
 export default function TeacherTrackingForm(props?: Props) {
   const {
-    refetch = () => {},
+    refetch = () => { },
     open = false,
     readOnly = false,
     defaultFirstProp,
     defaultSecondProp,
     defaultValues,
-    setOpen = () => {},
+    setOpen = () => { },
     title = 'Registrar nueva evaluación',
     onSubmitTitle = 'Guardar'
   } = props || {}

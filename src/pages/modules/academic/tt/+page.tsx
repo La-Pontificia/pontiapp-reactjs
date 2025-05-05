@@ -17,7 +17,7 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import {
   AddFilled,
@@ -26,21 +26,20 @@ import {
 } from '@fluentui/react-icons'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
-import { useAuth } from '~/store/auth'
+import SearchBox from '@/commons/search-box'
 import TeacherTrackingForm from './form'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { api } from '~/lib/api'
-import { ResponsePaginate } from '~/types/paginate-response'
+import { api } from '@/lib/api'
+import { ResponsePaginate } from '@/types/paginate-response'
 import TTFilters from './filters'
 import Item from './item'
-import Pagination from '~/commons/pagination'
-import { format } from '~/lib/dayjs'
+import Pagination from '@/commons/pagination'
+import { format } from '@/lib/dayjs'
 import { Link } from 'react-router'
 import { toast } from 'anni'
-import { TableContainer } from '~/components/table-container'
+import { TableContainer } from '@/components/table-container'
 import { useDebounce } from 'hothooks'
-import { TeacherTraking } from '~/types/academic/teacher-traking'
+import { TeacherTraking } from '@/types/academic/teacher-traking'
 
 export type Filter = {
   q: string | null
@@ -52,7 +51,6 @@ export type Filter = {
 }
 
 export default function TeacherTrackingsPage() {
-  const { user: authUser } = useAuth()
   const [openFilters, setOpenFilters] = React.useState(false)
   const [openReport, setOpenReport] = React.useState(false)
   const [openForm, setOpenForm] = React.useState(false)
@@ -130,26 +128,21 @@ export default function TeacherTrackingsPage() {
             <h1 className="font-semibold flex-grow text-xl">
               Evaluación de docentes
             </h1>
-            {authUser.hasPrivilege('rm:tt:create') && (
-              <>
-                <button
-                  className="flex font-semibold items-center gap-1"
-                  onClick={() => setOpenForm(true)}
-                >
-                  <AddFilled
-                    fontSize={20}
-                    className="dark:text-blue-600 text-blue-700"
-                  />
-                  Nuevo
-                </button>
-                <TeacherTrackingForm
-                  refetch={refetch}
-                  open={openForm}
-                  setOpen={setOpenForm}
-                />
-              </>
-            )}
-
+            <button
+              className="flex font-semibold items-center gap-1"
+              onClick={() => setOpenForm(true)}
+            >
+              <AddFilled
+                fontSize={20}
+                className="dark:text-blue-600 text-blue-700"
+              />
+              Nuevo
+            </button>
+            <TeacherTrackingForm
+              refetch={refetch}
+              open={openForm}
+              setOpen={setOpenForm}
+            />
             <Tooltip content="Mas filtros" relationship="description">
               <button
                 onClick={() => setOpenFilters(true)}
@@ -162,23 +155,21 @@ export default function TeacherTrackingsPage() {
                 Filtros
               </button>
             </Tooltip>
-            {authUser.hasPrivilege('rm:tt:report') && (
-              <Tooltip content="Exportar excel" relationship="description">
-                <button
-                  disabled={
-                    isLoading || !evaluations || evaluations?.data?.length === 0
-                  }
-                  className="flex disabled:opacity-50 disabled:grayscale font-semibold items-center gap-1"
-                  onClick={() => setOpenReport(true)}
-                >
-                  <DocumentTableRegular
-                    fontSize={20}
-                    className="dark:text-blue-600 text-blue-700"
-                  />
-                  Excel
-                </button>
-              </Tooltip>
-            )}
+            <Tooltip content="Exportar excel" relationship="description">
+              <button
+                disabled={
+                  isLoading || !evaluations || evaluations?.data?.length === 0
+                }
+                className="flex disabled:opacity-50 disabled:grayscale font-semibold items-center gap-1"
+                onClick={() => setOpenReport(true)}
+              >
+                <DocumentTableRegular
+                  fontSize={20}
+                  className="dark:text-blue-600 text-blue-700"
+                />
+                Excel
+              </button>
+            </Tooltip>
             <TTFilters
               filters={filters}
               setFilters={setFilters}

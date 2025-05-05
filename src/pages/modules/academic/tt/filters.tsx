@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import {
   Avatar,
   Button,
@@ -16,10 +16,10 @@ import { Broom20Filled, Dismiss24Regular } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Filter } from './+page'
-import { RmData } from '~/types/RmData'
+import { RmData } from '@/types/RmData'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { localizedStrings } from '~/const'
-import { format } from '~/lib/dayjs'
+import { localizedStrings } from '@/const'
+import { format } from '@/lib/dayjs'
 
 export default function TTFilters({
   sidebarIsOpen,

@@ -13,18 +13,18 @@ import {
   Tooltip
 } from '@fluentui/react-components'
 
-import { TableCell, TableRow, TableSelectionCell } from '~/components/table'
+import { TableCell, TableRow, TableSelectionCell } from '@/components/table'
 
 import { DeleteRegular, EyeRegular, PenRegular } from '@fluentui/react-icons'
 import React from 'react'
-// import { format } from '~/lib/dayjs'
+// import { format } from '@/lib/dayjs'
 import TeacherTrackingForm from './form'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { toast } from 'anni'
-import { handleError } from '~/utils'
-import { useAuth } from '~/store/auth'
-import { TeacherTraking } from '~/types/academic/teacher-traking'
+import { handleError } from '@/utils'
+import { useAuth } from '@/store/auth'
+import { TeacherTraking } from '@/types/academic/teacher-traking'
 
 export default function Item({
   evaluation,
