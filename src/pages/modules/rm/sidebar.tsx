@@ -2,7 +2,7 @@ import {
   ItemSidebarNav,
   ReusableSidebar,
   SidebarTitle
-} from '~/components/reusable-sidebar'
+} from '@/components/reusable-sidebar'
 import {
   DocumentTableFilled,
   DocumentTableRegular,
@@ -11,7 +11,7 @@ import {
   TabDesktopNewPageFilled,
   TabDesktopNewPageRegular
 } from '@fluentui/react-icons'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 
 export default function ResourceManagementSidebar() {
   const { user: authUser } = useAuth()
@@ -44,58 +44,58 @@ export default function ResourceManagementSidebar() {
         authUser.hasPrivilege('rm:departments') ||
         authUser.hasPrivilege('rm:positions') ||
         authUser.hasPrivilege('rm:roles')) && (
-        <>
-          <SidebarTitle>Meta datos pontiapp</SidebarTitle>
-          <ItemSidebarNav
-            icon={FolderOpenRegular}
-            iconActive={FolderOpenFilled}
-            href="/m/rm/business-units"
-            has={['rm:businessUnits']}
-          >
-            Unidad de negocios
-          </ItemSidebarNav>
-          <ItemSidebarNav
-            icon={FolderOpenRegular}
-            iconActive={FolderOpenFilled}
-            href="/m/rm/locations"
-            has={['rm:locations']}
-          >
-            Sedes
-          </ItemSidebarNav>
-          <ItemSidebarNav
-            icon={FolderOpenRegular}
-            iconActive={FolderOpenFilled}
-            href="/m/rm/areas"
-            has={['rm:areas']}
-          >
-            Áreas
-          </ItemSidebarNav>
-          <ItemSidebarNav
-            icon={FolderOpenRegular}
-            iconActive={FolderOpenFilled}
-            href="/m/rm/departments"
-            has={['rm:departments']}
-          >
-            Departamentos
-          </ItemSidebarNav>
-          <ItemSidebarNav
-            icon={FolderOpenRegular}
-            iconActive={FolderOpenFilled}
-            href="/m/rm/positions"
-            has={['rm:positions']}
-          >
-            Puestos
-          </ItemSidebarNav>
-          <ItemSidebarNav
-            icon={FolderOpenRegular}
-            iconActive={FolderOpenFilled}
-            href="/m/rm/roles"
-            has={['rm:roles']}
-          >
-            Cargos
-          </ItemSidebarNav>
-        </>
-      )}
+          <>
+            <SidebarTitle>Meta datos pontiapp</SidebarTitle>
+            <ItemSidebarNav
+              icon={FolderOpenRegular}
+              iconActive={FolderOpenFilled}
+              href="/m/rm/business-units"
+              has={['rm:businessUnits']}
+            >
+              Unidad de negocios
+            </ItemSidebarNav>
+            <ItemSidebarNav
+              icon={FolderOpenRegular}
+              iconActive={FolderOpenFilled}
+              href="/m/rm/locations"
+              has={['rm:locations']}
+            >
+              Sedes
+            </ItemSidebarNav>
+            <ItemSidebarNav
+              icon={FolderOpenRegular}
+              iconActive={FolderOpenFilled}
+              href="/m/rm/areas"
+              has={['rm:areas']}
+            >
+              Áreas
+            </ItemSidebarNav>
+            <ItemSidebarNav
+              icon={FolderOpenRegular}
+              iconActive={FolderOpenFilled}
+              href="/m/rm/departments"
+              has={['rm:departments']}
+            >
+              Departamentos
+            </ItemSidebarNav>
+            <ItemSidebarNav
+              icon={FolderOpenRegular}
+              iconActive={FolderOpenFilled}
+              href="/m/rm/positions"
+              has={['rm:positions']}
+            >
+              Puestos
+            </ItemSidebarNav>
+            <ItemSidebarNav
+              icon={FolderOpenRegular}
+              iconActive={FolderOpenFilled}
+              href="/m/rm/roles"
+              has={['rm:roles']}
+            >
+              Cargos
+            </ItemSidebarNav>
+          </>
+        )}
     </ReusableSidebar>
   )
 }

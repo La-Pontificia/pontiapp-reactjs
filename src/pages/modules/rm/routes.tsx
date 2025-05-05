@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router'
-import ProtectedModule from '~/protected/module'
+import ProtectedModule from '@/protected/module'
 import ResourceManagementLayout from './+layout'
 import ResourceManagementReportFilesPage from './report-files/+page'
 import ResourceManagementPage from './+page'
