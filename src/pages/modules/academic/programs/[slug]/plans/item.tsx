@@ -16,7 +16,7 @@ import {
   TableCellLayout,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import {
   DeleteRegular,
@@ -25,13 +25,13 @@ import {
   PenRegular
 } from '@fluentui/react-icons'
 import React from 'react'
-import { timeAgo } from '~/lib/dayjs'
+import { timeAgo } from '@/lib/dayjs'
 import Form from './form'
 import { useMutation } from '@tanstack/react-query'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { toast } from 'anni'
-import { handleError } from '~/utils'
-import { Plan } from '~/types/academic/plan'
+import { handleError } from '@/utils'
+import { Plan } from '@/types/academic/plan'
 import { useNavigate } from 'react-router'
 
 export default function Item({
@@ -88,8 +88,7 @@ export default function Item({
           </Button>
         </TableCell>
         <TableCell>
-          <p className="font-medium">{item.creator?.displayName} </p>
-          <span className="opacity-70">{timeAgo(item.created_at)}</span>
+          <p className="font-medium">{item.creator?.displayName} <span className="opacity-70 font-normal">{timeAgo(item.created_at)}</span> </p>
         </TableCell>
         <TableCell>
           <div>

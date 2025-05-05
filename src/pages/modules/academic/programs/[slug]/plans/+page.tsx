@@ -7,22 +7,22 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import { AddFilled } from '@fluentui/react-icons'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import Form from './form'
 import { useQuery } from '@tanstack/react-query'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { api } from '~/lib/api'
-import Pagination from '~/commons/pagination'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { api } from '@/lib/api'
+import Pagination from '@/commons/pagination'
 import Item from './item'
-import { Plan } from '~/types/academic/plan'
+import { Plan } from '@/types/academic/plan'
 import { useSlugProgram } from '../+layout'
 import { useDebounce } from 'hothooks'
-import { TableContainer } from '~/components/table-container'
+import { TableContainer } from '@/components/table-container'
 
 export type FiltersValues = {
   q: string | null

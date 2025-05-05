@@ -6,22 +6,22 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import { AddFilled } from '@fluentui/react-icons'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import Form from './form'
 import { useQuery } from '@tanstack/react-query'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { api } from '~/lib/api'
-import Pagination from '~/commons/pagination'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { api } from '@/lib/api'
+import Pagination from '@/commons/pagination'
 import Item from './item'
 import { useSlugProgram } from '../../../+layout'
-import { PlanCourse } from '~/types/academic/plan'
+import { PlanCourse } from '@/types/academic/plan'
 import { useDebounce } from 'hothooks'
-import { TableContainer } from '~/components/table-container'
+import { TableContainer } from '@/components/table-container'
 
 export type FiltersValues = {
   q: string | null
@@ -104,17 +104,17 @@ export default function CoursesPage() {
           <TableHeader>
             <TableRow>
               <TableSelectionCell type="radio" invisible />
-              <TableHeaderCell>Código</TableHeaderCell>
+              <TableHeaderCell className='max-w-[140px]'>Código</TableHeaderCell>
               <TableHeaderCell>Nombre</TableHeaderCell>
-              <TableHeaderCell>Ciclo</TableHeaderCell>
-              <TableHeaderCell className="max-lg:!hidden">HT</TableHeaderCell>
-              <TableHeaderCell className="max-lg:!hidden">HP</TableHeaderCell>
-              <TableHeaderCell>Cred</TableHeaderCell>
-              <TableHeaderCell>Estado</TableHeaderCell>
-              <TableHeaderCell className="max-lg:!hidden">
+              <TableHeaderCell className='max-w-[140px]'>Ciclo</TableHeaderCell>
+              <TableHeaderCell className="max-lg:!hidden max-w-[50px]">HT</TableHeaderCell>
+              <TableHeaderCell className="max-lg:!hidden max-w-[50px]">HP</TableHeaderCell>
+              <TableHeaderCell className='max-w-[50px]'>Cred</TableHeaderCell>
+              <TableHeaderCell className='max-w-[120px]'>Estado</TableHeaderCell>
+              <TableHeaderCell className="max-lg:!hidden max-w-[200px]">
                 Registrado
               </TableHeaderCell>
-              <TableHeaderCell></TableHeaderCell>
+              <TableHeaderCell className='max-w-[140px]'></TableHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>

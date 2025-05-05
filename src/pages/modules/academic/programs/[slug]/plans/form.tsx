@@ -16,9 +16,9 @@ import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '~/lib/api'
-import { handleError } from '~/utils'
-import { Plan } from '~/types/academic/plan'
+import { api } from '@/lib/api'
+import { handleError } from '@/utils'
+import { Plan } from '@/types/academic/plan'
 import { useSlugProgram } from '../+layout'
 
 type FormValues = {
@@ -29,7 +29,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => {},
+  refetch = () => { },
   defaultProp,
   readOnly = false
 }: {
@@ -42,9 +42,9 @@ export default function Form({
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-          name: defaultProp.name,
-          status: defaultProp.status
-        }
+        name: defaultProp.name,
+        status: defaultProp.status
+      }
       : { name: '', status: true }
   })
 

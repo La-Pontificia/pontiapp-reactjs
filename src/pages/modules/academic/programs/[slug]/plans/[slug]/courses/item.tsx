@@ -21,16 +21,16 @@ import {
   TableCellLayout,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import React from 'react'
-import { timeAgo } from '~/lib/dayjs'
+import { timeAgo } from '@/lib/dayjs'
 import Form from './form'
 import { useMutation } from '@tanstack/react-query'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { toast } from 'anni'
-import { handleError } from '~/utils'
-import { PlanCourse } from '~/types/academic/plan'
+import { handleError } from '@/utils'
+import { PlanCourse } from '@/types/academic/plan'
 
 export default function Item({
   item,
@@ -78,34 +78,33 @@ export default function Item({
     <>
       <TableRow>
         <TableSelectionCell type="radio" />
-        <TableCell>
+        <TableCell className='max-w-[140px]'>
           <TableCellLayout media={<DocumentRegular fontSize={25} />}>
             {item.course.code}
           </TableCellLayout>
         </TableCell>
         <TableCell>{item.name}</TableCell>
-        <TableCell className="max-lg:!hidden">
+        <TableCell className="max-lg:!hidden max-w-[140px]" >
           {item.cycle.code} - {item.cycle.name}
         </TableCell>
-        <TableCell className="max-lg:!hidden">
+        <TableCell className="max-lg:!hidden max-w-[50px]">
           {item.teoricHours ?? '-'}
         </TableCell>
-        <TableCell className="max-lg:!hidden">
+        <TableCell className="max-lg:!hidden max-w-[50px]">
           {item.practiceHours ?? '-'}
         </TableCell>
-        <TableCell>{item.credits ?? '-'}</TableCell>
-        <TableCell>
+        <TableCell className='max-w-[50px]'>{item.credits ?? '-'}</TableCell>
+        <TableCell className='max-w-[120px]'>
           <Button onClick={() => toggleStatus()} appearance="transparent">
             <Badge color={item.status ? 'danger' : 'success'}>
               {item.status ? 'Deshabilitar' : 'Habilitar'}
             </Badge>
           </Button>
         </TableCell>
-        <TableCell className="max-lg:!hidden">
-          <p className="font-medium">{item.creator?.displayName} </p>
-          <span className="opacity-70">{timeAgo(item.created_at)}</span>
+        <TableCell className="max-lg:!hidden max-w-[200px]">
+          <p className="font-medium">{item.creator?.displayName} <span className="opacity-70">{timeAgo(item.created_at)}</span></p>
         </TableCell>
-        <TableCell>
+        <TableCell className='max-w-[140px]'>
           <Tooltip content="Editar" relationship="description">
             <Button
               icon={<PenRegular />}

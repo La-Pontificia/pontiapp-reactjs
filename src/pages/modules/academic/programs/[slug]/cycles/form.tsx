@@ -15,10 +15,10 @@ import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '~/lib/api'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { handleError } from '@/utils'
 import { useSlugProgram } from '../+layout'
-import { Cycle } from '~/types/academic/cycle'
+import { Cycle } from '@/types/academic/cycle'
 
 type FormValues = {
   name: string
@@ -28,7 +28,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => {},
+  refetch = () => { },
   defaultProp,
   readOnly = false
 }: {
@@ -41,9 +41,9 @@ export default function Form({
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-          name: defaultProp.name,
-          code: defaultProp.code
-        }
+        name: defaultProp.name,
+        code: defaultProp.code
+      }
       : { name: '', code: '' }
   })
 

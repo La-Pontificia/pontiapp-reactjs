@@ -1,8 +1,8 @@
 import { Button, Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import { Outlet, useParams } from 'react-router'
-import { api } from '~/lib/api'
-import { Plan } from '~/types/academic/plan'
+import { api } from '@/lib/api'
+import { Plan } from '@/types/academic/plan'
 import { useSlugProgram } from '../../+layout'
 import React from 'react'
 

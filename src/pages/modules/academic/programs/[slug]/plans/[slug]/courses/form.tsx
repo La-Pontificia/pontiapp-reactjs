@@ -17,11 +17,11 @@ import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '~/lib/api'
-import { Course } from '~/types/academic/course'
-import { Cycle } from '~/types/academic/cycle'
-import { PlanCourse } from '~/types/academic/plan'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { Course } from '@/types/academic/course'
+import { Cycle } from '@/types/academic/cycle'
+import { PlanCourse } from '@/types/academic/plan'
+import { handleError } from '@/utils'
 import { useSlugProgram } from '../../../+layout'
 
 type FormValues = {
@@ -37,7 +37,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => {},
+  refetch = () => { },
   defaultProp,
   readOnly = false
 }: {
@@ -53,23 +53,23 @@ export default function Form({
     {
       values: defaultProp
         ? {
-            course: defaultProp.course,
-            cycle: defaultProp.cycle,
-            name: defaultProp.name,
-            teoricHours: defaultProp.teoricHours.toString(),
-            credits: defaultProp.credits.toString(),
-            practiceHours: defaultProp.practiceHours.toString(),
-            status: defaultProp.status
-          }
+          course: defaultProp.course,
+          cycle: defaultProp.cycle,
+          name: defaultProp.name,
+          teoricHours: defaultProp.teoricHours.toString(),
+          credits: defaultProp.credits.toString(),
+          practiceHours: defaultProp.practiceHours.toString(),
+          status: defaultProp.status
+        }
         : {
-            cycle: null,
-            course: null,
-            name: '',
-            teoricHours: '0',
-            practiceHours: '0',
-            credits: '0',
-            status: true
-          }
+          cycle: null,
+          course: null,
+          name: '',
+          teoricHours: '0',
+          practiceHours: '0',
+          credits: '0',
+          status: true
+        }
     }
   )
 

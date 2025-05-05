@@ -1,5 +1,6 @@
 import {
   Button,
+  Combobox,
   Dialog,
   DialogActions,
   DialogBody,
@@ -9,25 +10,28 @@ import {
   DialogTrigger,
   Field,
   Input,
+  Option,
   Spinner
 } from '@fluentui/react-components'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '~/lib/api'
-import { handleError } from '~/utils'
-import { Program } from '~/types/academic/program'
-import { useAuth } from '~/store/auth'
+import { api } from '@/lib/api'
+import { handleError } from '@/utils'
+import { Program } from '@/types/academic/program'
+import { useAuth } from '@/store/auth'
 import { Dismiss24Regular } from '@fluentui/react-icons'
+import { Area } from '@/types/academic/area'
 
 type FormValues = {
   name: string
+  area?: Area | null
 }
 
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => {},
+  refetch = () => { },
   defaultProp,
   readOnly = false
 }: {
@@ -40,9 +44,10 @@ export default function Form({
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-          name: defaultProp.name
-        }
-      : { name: '' }
+        name: defaultProp.name,
+        area: defaultProp.area
+      }
+      : { name: '', area: null }
   })
 
   const { businessUnit } = useAuth()
@@ -69,10 +74,20 @@ export default function Form({
     }
   })
 
+  const { data: areas } = useQuery<Area[]>({
+    queryKey: ['areas'],
+    queryFn: async () => {
+      const res = await api.get<Area[]>('academic/areas')
+      if (!res.ok) return []
+      return res.data.map((area) => new Area(area))
+    },
+  })
+
   const onSubmit = handleSubmit((values) => {
     fetch({
       name: values.name,
-      businessUnitId: businessUnit?.id
+      businessUnitId: businessUnit?.id,
+      areaId: values.area?.id
     })
   })
 
@@ -119,6 +134,38 @@ export default function Form({
                     required
                   >
                     <Input {...field} readOnly={readOnly} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                rules={{
+                  required: 'Requerido'
+                }}
+                name='area'
+                render={({ field, fieldState: { error } }) => (
+                  <Field
+                    orientation="horizontal"
+                    validationState={error ? 'error' : 'none'}
+                    validationMessage={error?.message}
+                    label="Area:"
+                    required
+                  >
+                    <Combobox
+                      clearable
+                      value={field.value ? field.value.name : ''}
+                      selectedOptions={field.value ? [field.value.id] : []}
+                      onOptionSelect={(_, data) => {
+                        field.onChange(areas?.find((p) => p.id === data.optionValue));
+                      }}
+                      placeholder="Seleciona una area"
+                    >
+                      {areas?.map((area) => (
+                        <Option key={area.id} value={area.id}>
+                          {area.name}
+                        </Option>
+                      ))}
+                    </Combobox>
                   </Field>
                 )}
               />

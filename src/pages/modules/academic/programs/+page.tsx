@@ -2,16 +2,16 @@ import { Tooltip } from '@fluentui/react-components'
 import { AddFilled } from '@fluentui/react-icons'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import Form from './form'
 import { useQuery } from '@tanstack/react-query'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { api } from '~/lib/api'
-import Pagination from '~/commons/pagination'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { api } from '@/lib/api'
+import Pagination from '@/commons/pagination'
 import Item from './item'
-import { Program } from '~/types/academic/program'
-import { useAuth } from '~/store/auth'
-import { TableContainer } from '~/components/table-container'
+import { Program } from '@/types/academic/program'
+import { useAuth } from '@/store/auth'
+import { TableContainer } from '@/components/table-container'
 import {
   Table,
   TableBody,
@@ -19,7 +19,7 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 import { useDebounce } from 'hothooks'
 
 export type FiltersValues = {
@@ -107,8 +107,8 @@ export default function AcademicPage() {
                 <TableSelectionCell type="radio" invisible />
                 <TableHeaderCell>Programa</TableHeaderCell>
                 <TableHeaderCell>Registrado por</TableHeaderCell>
-                <TableHeaderCell></TableHeaderCell>
-                <TableHeaderCell></TableHeaderCell>
+                <TableHeaderCell className='max-w-[200px]'></TableHeaderCell>
+                <TableHeaderCell className='max-w-[100px]'></TableHeaderCell>
               </TableRow>
             </TableHeader>
             <TableBody>

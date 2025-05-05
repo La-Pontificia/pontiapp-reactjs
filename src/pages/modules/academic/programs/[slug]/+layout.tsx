@@ -3,11 +3,11 @@ import { Button, Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Outlet, useLocation, useParams } from 'react-router'
-import Breadcrumbs, { BreadcrumbType } from '~/components/breadcrumbs'
-import { PATHNAMES } from '~/const'
-import { api } from '~/lib/api'
-import { Plan } from '~/types/academic/plan'
-import { Program } from '~/types/academic/program'
+import Breadcrumbs, { BreadcrumbType } from '@/components/breadcrumbs'
+import { PATHNAMES } from '@/const'
+import { api } from '@/lib/api'
+import { Plan } from '@/types/academic/plan'
+import { Program } from '@/types/academic/program'
 
 type ContextSlugProgram = {
   breadcrumbsComp: React.ReactNode
@@ -50,8 +50,16 @@ export default function LayoutSlugProgram() {
   React.useEffect(() => {
     const [one, two, three, four] = pathname.split('/').slice(4)
 
+    setBreadcrumbs([
+      {
+        name: 'Programas',
+        to: `/m/academic/programs`
+      }
+    ])
+
     if (one && program) {
-      setBreadcrumbs([
+      setBreadcrumbs((prev) => [
+        ...prev,
         {
           name: program.name,
           to: `/m/academic/programs`
