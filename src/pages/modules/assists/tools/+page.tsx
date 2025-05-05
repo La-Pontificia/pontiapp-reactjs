@@ -21,9 +21,9 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'anni'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '~/lib/api'
-import { AssistTerminal } from '~/types/assist-terminal'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { AssistTerminal } from '@/types/assist-terminal'
+import { handleError } from '@/utils'
 
 export default function ToolsPage() {
   const { control, handleSubmit, reset } = useForm<{

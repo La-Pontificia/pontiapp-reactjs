@@ -10,10 +10,10 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
-import { TableContainer } from '~/components/table-container'
-import { api } from '~/lib/api'
-import { format } from '~/lib/dayjs'
+} from '@/components/table'
+import { TableContainer } from '@/components/table-container'
+import { api } from '@/lib/api'
+import { format } from '@/lib/dayjs'
 
 export type AssistDatabase = {
   name: string

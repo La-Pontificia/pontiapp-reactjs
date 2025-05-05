@@ -2,7 +2,7 @@ import {
   ItemSidebarNav,
   ReusableSidebar,
   SidebarTitle
-} from '~/components/reusable-sidebar'
+} from '@/components/reusable-sidebar'
 import {
   ClockFilled,
   ClockRegular,
@@ -21,7 +21,7 @@ import {
   WindowDevToolsFilled,
   WindowDevToolsRegular
 } from '@fluentui/react-icons'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 
 export const AssistsSidebar = () => {
   const { user: authUser } = useAuth()

@@ -27,20 +27,20 @@ import {
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { Dismiss24Regular, FilterAddFilled } from '@fluentui/react-icons'
 import React from 'react'
-import { localizedStrings } from '~/const'
-import { AssistTerminal } from '~/types/assist-terminal'
+import { localizedStrings } from '@/const'
+import { AssistTerminal } from '@/types/assist-terminal'
 import { Filter } from './+page'
-import { format } from '~/lib/dayjs'
+import { format } from '@/lib/dayjs'
 import { Link } from 'react-router'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { toast } from 'anni'
-import { Job } from '~/types/job'
-import { Area } from '~/types/area'
-import { useAuth } from '~/store/auth'
-import SearchBox from '~/commons/search-box'
-import { UIContext } from '~/providers/ui'
-import { ExcelColored } from '~/icons'
-import { useDebounced } from '~/hooks/use-debounced'
+import { Job } from '@/types/job'
+import { Area } from '@/types/area'
+import { useAuth } from '@/store/auth'
+import SearchBox from '@/commons/search-box'
+import { UIContext } from '@/providers/ui'
+import { ExcelColored } from '@/icons'
+import { useDebounced } from '@/hooks/use-debounced'
 
 export default function AssistFilters({
   isTerminalsLoading,
@@ -328,9 +328,9 @@ export default function AssistFilters({
                       selected
                         ? prev.filter((t) => t.id !== data.value)
                         : [
-                            ...prev,
-                            terminals!.find((t) => t.id === data.value)!
-                          ]
+                          ...prev,
+                          terminals!.find((t) => t.id === data.value)!
+                        ]
                     )
                   }}
                   selectedOptions={selectedTerminals.map((o) => o.id)}

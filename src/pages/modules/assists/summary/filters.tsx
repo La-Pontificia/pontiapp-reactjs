@@ -17,11 +17,11 @@ import {
 } from '@fluentui/react-components'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import React from 'react'
-import { localizedStrings } from '~/const'
-import { AssistTerminal } from '~/types/assist-terminal'
+import { localizedStrings } from '@/const'
+import { AssistTerminal } from '@/types/assist-terminal'
 import { Filter } from './+page'
-import { format } from '~/lib/dayjs'
-import { UIContext } from '~/providers/ui'
+import { format } from '@/lib/dayjs'
+import { UIContext } from '@/providers/ui'
 import { Dismiss24Regular, FilterAddFilled } from '@fluentui/react-icons'
 
 export default function AssistSummaryFilters({

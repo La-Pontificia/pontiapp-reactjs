@@ -1,6 +1,6 @@
 import { toast } from 'anni'
-import { api } from '~/lib/api'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { handleError } from '@/utils'
 import {
   Button,
   ButtonProps,
@@ -21,7 +21,7 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useQuery } from '@tanstack/react-query'
 import { AssistDatabase } from '../databases/+page'
-import { AssistTerminal } from '~/types/assist-terminal'
+import { AssistTerminal } from '@/types/assist-terminal'
 
 type FormValues = {
   name: string

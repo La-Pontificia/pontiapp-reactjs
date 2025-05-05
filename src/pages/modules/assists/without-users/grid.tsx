@@ -1,4 +1,4 @@
-import { format } from '~/lib/dayjs'
+import { format } from '@/lib/dayjs'
 import {
   Avatar,
   Table,
@@ -10,8 +10,8 @@ import {
 import { CalendarRegular, ClockRegular } from '@fluentui/react-icons'
 import { AssistSingle } from './+page'
 import React from 'react'
-import { AssistTerminal } from '~/types/assist-terminal'
-import Pagination from '~/commons/pagination'
+import { AssistTerminal } from '@/types/assist-terminal'
+import Pagination from '@/commons/pagination'
 
 export default function AssistsGrid({
   assists,

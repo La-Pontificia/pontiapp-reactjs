@@ -1,15 +1,15 @@
 import { useQuery } from '@tanstack/react-query'
-import { api } from '~/lib/api'
-import { format } from '~/lib/dayjs'
+import { api } from '@/lib/api'
+import { format } from '@/lib/dayjs'
 import AssistFilters from './filters'
-import { Area } from '~/types/area'
-import { Job } from '~/types/job'
+import { Area } from '@/types/area'
+import { Job } from '@/types/job'
 import React from 'react'
 import { Spinner, Tab, TabList } from '@fluentui/react-components'
-import { Assist } from '~/types/assist'
+import { Assist } from '@/types/assist'
 import AssistsGrid from './grid'
 import RestAssistsGrid from './rest-grid'
-import { RestAssist } from '~/types/rest-assist'
+import { RestAssist } from '@/types/rest-assist'
 
 export type Filter = {
   startDate: Date | null

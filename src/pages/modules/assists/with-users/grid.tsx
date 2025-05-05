@@ -1,4 +1,4 @@
-import { format } from '~/lib/dayjs'
+import { format } from '@/lib/dayjs'
 import {
   Avatar,
   Table,
@@ -10,10 +10,10 @@ import {
 } from '@fluentui/react-components'
 import { CalendarRegular, ClockRegular } from '@fluentui/react-icons'
 import React from 'react'
-import { AssistWithUser } from '~/types/assist-withuser'
+import { AssistWithUser } from '@/types/assist-withuser'
 import { Link } from 'react-router'
-import UserHoverInfo from '~/components/user-hover-info'
-import Pagination from '~/commons/pagination'
+import UserHoverInfo from '@/components/user-hover-info'
+import Pagination from '@/commons/pagination'
 
 export default function AssistsGrid({
   assists

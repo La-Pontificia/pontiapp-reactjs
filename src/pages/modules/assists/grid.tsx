@@ -11,10 +11,10 @@ import {
 import { CalendarRegular, ClockRegular } from '@fluentui/react-icons'
 import React from 'react'
 import { Link } from 'react-router'
-import Pagination from '~/commons/pagination'
-import UserHoverInfo from '~/components/user-hover-info'
-import { format } from '~/lib/dayjs'
-import { Assist } from '~/types/assist'
+import Pagination from '@/commons/pagination'
+import UserHoverInfo from '@/components/user-hover-info'
+import { format } from '@/lib/dayjs'
+import { Assist } from '@/types/assist'
 
 export default function AssistsGrid({ data }: { data: Assist[] }) {
   const assists = data.map((item) => new Assist(item))
@@ -62,12 +62,12 @@ export default function AssistsGrid({ data }: { data: Assist[] }) {
               const arriveAfternoonLate =
                 assist.afternoonMarkedIn &&
                 new Date(assist.afternoonMarkedIn) >
-                  new Date(assist.afternoonFrom)
+                new Date(assist.afternoonFrom)
 
               const outAfternoonBefore =
                 assist.afternoonMarkedOut &&
                 new Date(assist.afternoonMarkedOut) <
-                  new Date(assist.afternoonTo)
+                new Date(assist.afternoonTo)
 
               return (
                 <TableRow key={key}>
@@ -125,8 +125,8 @@ export default function AssistsGrid({ data }: { data: Assist[] }) {
                             !assist.morningMarkedIn
                               ? 'informative'
                               : arriveMorningLate
-                              ? 'warning'
-                              : 'success'
+                                ? 'warning'
+                                : 'success'
                           }
                         >
                           {assist.morningMarkedIn
@@ -139,8 +139,8 @@ export default function AssistsGrid({ data }: { data: Assist[] }) {
                             !assist.morningMarkedOut
                               ? 'informative'
                               : outMorningBefore
-                              ? 'warning'
-                              : 'success'
+                                ? 'warning'
+                                : 'success'
                           }
                         >
                           {assist.morningMarkedOut
@@ -175,8 +175,8 @@ export default function AssistsGrid({ data }: { data: Assist[] }) {
                             !assist.afternoonMarkedIn
                               ? 'informative'
                               : arriveAfternoonLate
-                              ? 'warning'
-                              : 'success'
+                                ? 'warning'
+                                : 'success'
                           }
                         >
                           {assist.afternoonMarkedIn
@@ -189,8 +189,8 @@ export default function AssistsGrid({ data }: { data: Assist[] }) {
                             !assist.afternoonMarkedOut
                               ? 'informative'
                               : outAfternoonBefore
-                              ? 'warning'
-                              : 'success'
+                                ? 'warning'
+                                : 'success'
                           }
                         >
                           {assist.afternoonMarkedOut

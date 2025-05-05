@@ -2,12 +2,12 @@ import { Spinner } from '@fluentui/react-components'
 
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
-import { api } from '~/lib/api'
-import { AssistTerminal } from '~/types/assist-terminal'
+import { api } from '@/lib/api'
+import { AssistTerminal } from '@/types/assist-terminal'
 
 import AssistsGrid from './grid'
 import AssistFilters from './filters'
-import { format } from '~/lib/dayjs'
+import { format } from '@/lib/dayjs'
 
 export type AssistSingle = {
   datetime: string
@@ -80,7 +80,7 @@ export default function AssistsWithoutUsersPage() {
       </header>
       <div className="overflow-auto flex flex-col flex-grow rounded-xl">
         {(!filters.endDate && !filters.startDate) ||
-        !filters.terminalsIds.length ? (
+          !filters.terminalsIds.length ? (
           <div className="flex-grow grid place-content-center h-full">
             <p className="text-xs text-center opacity-60">
               Por favor, selecciona un rango de fechas y terminales para filtrar

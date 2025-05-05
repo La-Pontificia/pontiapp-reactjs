@@ -15,19 +15,19 @@ import {
   PenRegular
 } from '@fluentui/react-icons'
 import React from 'react'
-import { format, timeAgo } from '~/lib/dayjs'
-import { api } from '~/lib/api'
-import { handleError } from '~/utils'
+import { format, timeAgo } from '@/lib/dayjs'
+import { api } from '@/lib/api'
+import { handleError } from '@/utils'
 import { toast } from 'anni'
 
 import Form from './form'
-import { AssistTerminal } from '~/types/assist-terminal'
+import { AssistTerminal } from '@/types/assist-terminal'
 import {
   TableSelectionCell,
   TableCell,
   TableRow,
   TableCellLayout
-} from '~/components/table'
+} from '@/components/table'
 
 export default function Item({
   item,

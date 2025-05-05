@@ -1,5 +1,5 @@
 import React from 'react'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 
 export default function WebSocketExample() {
   const [message] = React.useState<string | null>(null)

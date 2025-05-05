@@ -1,4 +1,4 @@
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import {
   Avatar,
@@ -12,8 +12,8 @@ import {
   TableRow
 } from '@fluentui/react-components'
 import React from 'react'
-import { format } from '~/lib/dayjs'
-import { AssistTerminal } from '~/types/assist-terminal'
+import { format } from '@/lib/dayjs'
+import { AssistTerminal } from '@/types/assist-terminal'
 import AssistSummaryFilters from './filters'
 import { CalendarLtrRegular } from '@fluentui/react-icons'
 

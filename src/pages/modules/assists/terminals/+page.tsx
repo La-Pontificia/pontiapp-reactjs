@@ -1,4 +1,4 @@
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { AddFilled } from '@fluentui/react-icons'
 import Form from './form'
@@ -9,24 +9,23 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 import React from 'react'
-import { useDebounced } from '~/hooks/use-debounced'
+import { useDebounced } from '@/hooks/use-debounced'
 import Item from './terminal'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { AssistTerminal } from '~/types/assist-terminal'
-import SearchBox from '~/commons/search-box'
-import Pagination from '~/commons/pagination'
-import { TableContainer } from '~/components/table-container'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { AssistTerminal } from '@/types/assist-terminal'
+import SearchBox from '@/commons/search-box'
+import Pagination from '@/commons/pagination'
+import { TableContainer } from '@/components/table-container'
 import { Helmet } from 'react-helmet'
 
 export default function AssistTerminalsPage() {
   const [page, setPage] = React.useState(1)
   const [q, setQ] = React.useState<string>()
 
-  const query = `partials/assist-terminals/all?paginate=true&relationship=schedulesCount${
-    q ? `&q=${q}` : ''
-  } ${page ? `&page=${page}` : ''}`
+  const query = `partials/assist-terminals/all?paginate=true&relationship=schedulesCount${q ? `&q=${q}` : ''
+    } ${page ? `&page=${page}` : ''}`
 
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
     AssistTerminal[]

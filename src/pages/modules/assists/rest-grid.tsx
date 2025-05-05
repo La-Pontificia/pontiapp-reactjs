@@ -15,10 +15,10 @@ import {
 } from '@fluentui/react-icons'
 import React from 'react'
 import { Link } from 'react-router'
-import Pagination from '~/commons/pagination'
-import UserHoverInfo from '~/components/user-hover-info'
-import { format } from '~/lib/dayjs'
-import { RestAssist } from '~/types/rest-assist'
+import Pagination from '@/commons/pagination'
+import UserHoverInfo from '@/components/user-hover-info'
+import { format } from '@/lib/dayjs'
+import { RestAssist } from '@/types/rest-assist'
 
 export default function RestAssistsGrid({ data }: { data: RestAssist[] }) {
   const assists = data.map((item) => new RestAssist(item))
