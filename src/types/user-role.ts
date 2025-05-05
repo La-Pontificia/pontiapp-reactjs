@@ -1,4 +1,4 @@
-import { PRIVILEGE_DEVELOPER } from '~/const'
+import { PRIVILEGE_DEVELOPER } from '@/const'
 import { User } from './user'
 
 export class UserRole {
