@@ -1,4 +1,4 @@
-import { cn } from '~/utils'
+import { cn } from '@/utils'
 import React from 'react'
 
 export const Listeng = React.forwardRef<

@@ -1,7 +1,7 @@
 import { Spinner } from '@fluentui/react-components'
 import { FolderProhibitedRegular } from '@fluentui/react-icons'
 import React from 'react'
-import { cn } from '~/utils'
+import { cn } from '@/utils'
 
 export const TableContainer = React.forwardRef<
   HTMLDivElement,
@@ -13,13 +13,13 @@ export const TableContainer = React.forwardRef<
   }
 >(({ children, className, nav, footer, isLoading, isEmpty, ...props }, ref) => {
   return (
-    <div className="p-2 gap-3 flex overflow-auto flex-col grow">
+    <div className="gap-2 relative pt-2 flex overflow-auto flex-col grow">
       {nav && <div className="px-2">{nav}</div>}
       <div
         {...props}
         ref={ref}
         className={cn(
-          'bg-white dark:bg-[#232323] flex flex-col overflow-auto grow rounded-2xl',
+          'flex flex-col overflow-auto grow rounded-md',
           className
         )}
       >

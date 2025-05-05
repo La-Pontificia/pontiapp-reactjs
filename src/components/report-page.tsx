@@ -4,15 +4,16 @@ import {
   TableCell,
   TableCellLayout,
   TableRow
-} from '~/components/table'
+} from '@/components/table'
 import { ArrowCircleDownRegular } from '@fluentui/react-icons'
 import React from 'react'
-import { ExcelColored } from '~/icons'
-import { format } from '~/lib/dayjs'
-import { Report } from '~/types/report'
+import { ExcelColored } from '@/icons'
+import { format, isIquals } from '@/lib/dayjs'
+import { Report } from '@/types/report'
 import { TableContainer } from './table-container'
 import { Helmet } from 'react-helmet'
 import { TableSelectionCell } from '@fluentui/react-components'
+import { VITE_API_HOST } from '@/config/env'
 
 export default function ReportPage({ reports }: { reports?: Report[] }) {
   const grouped = reports?.reduce((acc, item) => {
@@ -22,6 +23,8 @@ export default function ReportPage({ reports }: { reports?: Report[] }) {
     acc[key].push(item)
     return acc
   }, {} as Record<string, Report[]>)
+
+
 
   return (
     <>
@@ -39,61 +42,64 @@ export default function ReportPage({ reports }: { reports?: Report[] }) {
         {grouped &&
           Object.entries(grouped)
             .slice(0, 10)
-            .map(([key, items]) => (
-              <React.Fragment key={key}>
-                <nav className="border-b border-stone-500/40 p-2 opacity-60">
-                  <h2>{format(new Date(key), 'DD MMM YYYY')}</h2>
-                </nav>
-                <Table>
-                  <TableBody>
-                    {reports &&
-                      items.map((item) => (
-                        <TableRow key={item.id}>
-                          <TableSelectionCell type="radio" />
-                          <TableCell>
-                            <TableCellLayout
-                              media={
-                                <ExcelColored
-                                  size={25}
-                                  className="min-w-[25px]"
-                                />
-                              }
-                            >
-                              <a
-                                href={item.downloadLink}
-                                target="_blank"
-                                className="hover:underline"
+            .map(([key, items]) => {
+              const isToday = isIquals(key, new Date())
+              return (
+                <React.Fragment key={key}>
+                  <nav className="border-b border-stone-500/40 p-2 opacity-60">
+                    <h2>{isToday ? 'Hoy' : format(new Date(key), 'DD MMM YYYY')}</h2>
+                  </nav>
+                  <Table>
+                    <TableBody>
+                      {reports &&
+                        items.map((item) => (
+                          <TableRow key={item.id}>
+                            <TableSelectionCell type="radio" />
+                            <TableCell>
+                              <TableCellLayout
+                                media={
+                                  <ExcelColored
+                                    size={25}
+                                    className="min-w-[25px]"
+                                  />
+                                }
                               >
-                                {item.title}
+                                <a
+                                  href={item.downloadLink}
+                                  target="_blank"
+                                  className="hover:underline"
+                                >
+                                  {item.title}
+                                </a>
+                              </TableCellLayout>
+                            </TableCell>
+                            <TableCell className='max-w-[180px] max-sm:!hidden'>
+                              <p className="">
+                                <span className="opacity-60">
+                                  {format(item.created_at, 'DD MMM YYYY h:mm A')}
+                                </span>
+                              </p>
+                            </TableCell>
+                            <TableCell className='max-w-[150px] max-lg:!hidden'>
+                              <p className="">{item.user.displayName} </p>
+                            </TableCell>
+                            <TableCell className='max-w-[150px]'>
+                              <a
+                                href={VITE_API_HOST + '/api/tools/downloadReportFile/' + item.id}
+                                target="_blank"
+                                className="flex items-center hover:underline dark:text-stone-300 text-stone-800 font-medium relative gap-1"
+                              >
+                                <ArrowCircleDownRegular fontSize={25} />
+                                Descargar
                               </a>
-                            </TableCellLayout>
-                          </TableCell>
-                          <TableCell>
-                            <p className="">
-                              <span className="opacity-60">
-                                {format(item.created_at, 'DD MMM YYYY h:mm A')}
-                              </span>
-                            </p>
-                          </TableCell>
-                          <TableCell>
-                            <p className="">{item.user.displayName} </p>
-                          </TableCell>
-                          <TableCell>
-                            <a
-                              href={item.downloadLink}
-                              target="_blank"
-                              className="flex items-center hover:underline dark:text-stone-300 text-stone-800 font-medium relative gap-1"
-                            >
-                              <ArrowCircleDownRegular fontSize={25} />
-                              Descargar
-                            </a>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                  </TableBody>
-                </Table>
-              </React.Fragment>
-            ))}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                    </TableBody>
+                  </Table>
+                </React.Fragment>
+              )
+            })}
       </TableContainer>
     </>
   )

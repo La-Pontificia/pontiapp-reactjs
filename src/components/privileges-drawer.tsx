@@ -1,5 +1,5 @@
-import { PRIVILEGE_DEVELOPER, PRIVILEGES } from '~/const'
-import { useAuth } from '~/store/auth'
+import { PRIVILEGE_DEVELOPER, PRIVILEGES } from '@/const'
+import { useAuth } from '@/store/auth'
 import {
   Badge,
   Button,

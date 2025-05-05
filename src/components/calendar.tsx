@@ -19,8 +19,8 @@ import {
   ChevronLeftFilled,
   ChevronRightFilled
 } from '@fluentui/react-icons'
-import { format } from '~/lib/dayjs'
-import { cn } from '~/utils'
+import { format } from '@/lib/dayjs'
+import { cn } from '@/utils'
 import { EventImpl } from '@fullcalendar/core/internal'
 
 type Views =
@@ -62,9 +62,9 @@ export default function Calendar({
   nav,
   className,
   defaultView = 'dayGridMonth',
-  onDateSelect = () => {},
+  onDateSelect = () => { },
   events = [],
-  onEventClick = () => {}
+  onEventClick = () => { }
 }: ScheduleCalendarProps) {
   const calendarRef = React.useRef<FullCalendar>(null)
   const [view, setView] = React.useState<Views>(defaultView)
@@ -120,13 +120,16 @@ export default function Calendar({
     if (calendarApi) {
       calendarApi.removeAllEvents()
       calendarApi.addEventSource(events)
+      console.log(events)
     }
   }, [events])
 
   return (
     <div className={cn('overflow-auto w-full flex flex-col grow', className)}>
-      <header className="flex justify-between items-center p-2 pb-px pt-0">
-        <nav className="flex basis-0 grow"></nav>
+      <header className="flex justify-between gap-3 items-center p-2 pb-px pt-0">
+        <nav className="flex basis-0 grow">
+          {nav}
+        </nav>
         <nav className="flex items-center gap-2">
           <h2 className="capitalize text-xl font-normal">
             <span className="font-bold">{title.split(' ')[0]} </span>
@@ -156,7 +159,6 @@ export default function Calendar({
           />
         </nav>
       </header>
-      {nav && <header>{nav}</header>}
       <div className="flex w-full grow gap-2 overflow-auto">
         <FullCalendar
           ref={calendarRef}

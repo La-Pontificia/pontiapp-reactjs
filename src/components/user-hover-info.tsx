@@ -13,11 +13,11 @@ import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger
-} from '~/commons/hover-card'
+} from '@/commons/hover-card'
 import { toast } from 'anni'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
-import { User } from '~/types/user'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
+import { User } from '@/types/user'
 
 export default function UserHoverInfo({
   children,

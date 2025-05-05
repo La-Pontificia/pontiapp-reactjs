@@ -1,14 +1,14 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useUi } from '~/store/ui'
-import { cn } from '~/utils'
+import { useUi } from '@/store/ui'
+import { cn } from '@/utils'
 import React from 'react'
 
 import { useMediaQuery } from '@uidotdev/usehooks'
 import { Link, useLocation } from 'react-router'
-import { Avatar, Badge, Tooltip } from '@fluentui/react-components'
+import { Avatar, Badge } from '@fluentui/react-components'
 import ExpiryStatusRenderer from './expiry-status-renderer'
-import { FluentIcon, OpenFilled, OpenRegular } from '@fluentui/react-icons'
-import { useAuth } from '~/store/auth'
+import { FluentIcon, OpenRegular } from '@fluentui/react-icons'
+import { useAuth } from '@/store/auth'
 
 type ContextReusableSidebar = {
   homePath: string
@@ -26,9 +26,6 @@ export const ReusableSidebar = React.forwardRef<
 >(({ children, className, homePath, title, ...props }, ref) => {
   const isSidebarOpen = useUi((state) => state.isSidebarOpen)
   const toggleSidebar = useUi((state) => state.toggleSidebar)
-  const toggleModuleMaximized = useUi((state) => state.toggleModuleMaximized)
-  const isModuleMaximized = useUi((state) => state.isModuleMaximized)
-  const [sidebarHover, setSidebarHover] = React.useState(false)
 
   const isMediumDevice = useMediaQuery(
     'only screen and (min-width : 169px) and (max-width : 992px)'
@@ -48,8 +45,6 @@ export const ReusableSidebar = React.forwardRef<
     >
       <aside
         {...props}
-        onMouseEnter={() => setSidebarHover(true)}
-        onMouseLeave={() => setSidebarHover(false)}
         style={{
           transform: isSidebarOpen ? 'translateX(0)' : 'translateX(-100%)',
           marginLeft: isSidebarOpen ? '0' : '-250px'
@@ -60,27 +55,7 @@ export const ReusableSidebar = React.forwardRef<
           className
         )}
       >
-        <SidebarTitle
-          leftContent={
-            <Tooltip
-              content={
-                isModuleMaximized
-                  ? 'Restaurar tamaño'
-                  : 'Maximizar módulo actual'
-              }
-              relationship="label"
-            >
-              <button
-                onClick={toggleModuleMaximized}
-                data-active={sidebarHover ? '' : undefined}
-                data-maximized={isModuleMaximized ? '' : undefined}
-                className="opacity-0 max-lg:hidden text-stone-500 data-[maximized]:rotate-180 data-[maximized]:opacity-100 data-[maximized]:dark:text-[#5e67ed] data-[maximized]:text-blue-600 data-[active]:opacity-100 transition-opacity"
-              >
-                <OpenFilled fontSize={20} />
-              </button>
-            </Tooltip>
-          }
-        >
+        <SidebarTitle>
           {title}
         </SidebarTitle>
         {children}
@@ -92,7 +67,7 @@ export const ReusableSidebar = React.forwardRef<
 ReusableSidebar.displayName = 'ReusableSidebar'
 
 type ItemNav = {
-  has: string[]
+  has?: string[]
   icon?: FluentIcon
   iconActive?: FluentIcon
   href: string
@@ -115,8 +90,9 @@ export const ItemSidebarNav = (props: ItemNav) => {
     'only screen and (min-width : 169px) and (max-width : 992px)'
   )
 
-  const hasPrivilege = props.has.some((p) => privileges.includes(p))
+  const hasPrivilege = props.has ? props.has.some((p) => privileges.includes(p)) : true
   const toggleSidebar = useUi((state) => state.toggleSidebar)
+
   if (!hasPrivilege && !user.isDeveloper) return null
 
   const isActive =
@@ -138,14 +114,14 @@ export const ItemSidebarNav = (props: ItemNav) => {
       }}
       className="block relative dark:text-neutral-300 max-lg:dark:text-stone-400 text-neutral-900 group"
     >
-      <div className="flex items-center transition-colors group-data-[active]:font-medium group-data-[active]:dark:text-white gap-2 py-[6px] rounded-lg group-hover:bg-white dark:group-hover:bg-black max-lg:text-base px-2">
+      <div className="flex items-center transition-colors group-data-[active]:font-medium group-data-[active]:dark:text-[#479ef5] gap-2 py-[6px] rounded-lg group-hover:bg-white dark:group-hover:bg-black max-lg:text-base px-2">
         <div className="max-lg:hidden">
           {props.emptyIcon ? (
             <span className="block aspect-square"></span>
           ) : Icon ? (
             <Icon
               fontSize={23}
-              className="dark:text-neutral-200 group-data-[active]:dark:text-blue-500 group-data-[active]:text-blue-600"
+              className="dark:text-neutral-200 group-data-[active]:dark:text-[#479ef5] group-data-[active]:text-blue-600"
             />
           ) : (
             <Avatar

@@ -15,9 +15,9 @@ import {
 } from '@fluentui/react-icons'
 import { toast } from 'anni'
 import React from 'react'
-import { useScreenshot } from '~/hooks/use-screen-capture'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
+import { useScreenshot } from '@/hooks/use-screen-capture'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
 
 const options = {
   error: {

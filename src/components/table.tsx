@@ -11,14 +11,14 @@ import {
   TableCellLayout as TableCellLayoutPrimitive,
   TableCell as TableCellPrimitive
 } from '@fluentui/react-components'
-
-import { cn } from '~/utils'
+// import { FaCheck } from "react-icons/fa";
+import { cn } from '@/utils'
 
 const Table = React.forwardRef<
   React.ElementRef<typeof TablePrimitive>,
   React.ComponentPropsWithoutRef<typeof TablePrimitive>
 >(({ className, ...props }, ref) => (
-  <TablePrimitive ref={ref} className={cn(className)} {...props} />
+  <TablePrimitive ref={ref} noNativeElements className={cn('p-2', className)} {...props} />
 ))
 Table.displayName = 'Table'
 
@@ -28,10 +28,7 @@ const TableBody = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TableBodyPrimitive
     ref={ref}
-    className={cn(
-      'divide-y !divide-stone-500/10 dark:!divide-stone-500/60',
-      className
-    )}
+    className={cn(className)}
     {...props}
   />
 ))
@@ -61,7 +58,7 @@ const TableRow = React.forwardRef<
   React.ElementRef<typeof TableRowPrimitive>,
   React.ComponentPropsWithoutRef<typeof TableRowPrimitive>
 >(({ className, ...props }, ref) => (
-  <TableRowPrimitive ref={ref} className={cn(className)} {...props} />
+  <TableRowPrimitive ref={ref} className={cn('group relative before:content-[""] hover:before:bg-neutral-500/10 before:pointer-events-none before:absolute before:inset-0 aria-selected:dark:before:bg-[#082338] aria-selected:dark:hover:before:bg-[#0c3b5e] aria-selected:before:bg-[#e3f0fe] aria-selected:hover:before:bg-[#cfe4fa] before:rounded-lg dark:!border-b-neutral-500/30 !border-b-neutral-500/20 hover:!bg-transparent', className)} {...props} />
 ))
 TableRow.displayName = 'TableRow'
 
@@ -71,9 +68,14 @@ const TableSelectionCell = React.forwardRef<
 >(({ className, ...props }, ref) => (
   <TableSelectionCellPrimitive
     ref={ref}
-    className={cn('!py-1 semibold', className)}
+    checkboxIndicator={{
+      shape: 'circular',
+      // indicator: <FaCheck className='' size={10} />
+    }}
+    className={cn('[&>span>div]:w-4 [&>span>div]:h-4', className)}
     {...props}
-  />
+  >
+  </TableSelectionCellPrimitive>
 ))
 TableSelectionCell.displayName = 'TableSelectionCell'
 
@@ -93,7 +95,7 @@ const TableCell = React.forwardRef<
   React.ElementRef<typeof TableCellPrimitive>,
   React.ComponentPropsWithoutRef<typeof TableCellPrimitive>
 >(({ className, ...props }, ref) => (
-  <TableCellPrimitive ref={ref} className={cn('!py-1', className)} {...props} />
+  <TableCellPrimitive ref={ref} className={cn('', className)} {...props} />
 ))
 TableCell.displayName = 'TableCell'
 

@@ -1,12 +1,12 @@
 import { useLocalStorage, useWindowSize } from '@uidotdev/usehooks'
 import Modal from './modals'
 import Confetti from 'react-confetti'
-import { User } from '~/types/user'
-import { useAuth } from '~/store/auth'
+import { User } from '@/types/user'
+import { useAuth } from '@/store/auth'
 import { Avatar } from '@fluentui/react-components'
 import { AddRegular, PersonRegular } from '@fluentui/react-icons'
-import { getRandomMessageBirthday } from '~/utils'
-import { format } from '~/lib/dayjs'
+import { getRandomMessageBirthday } from '@/utils'
+import { format } from '@/lib/dayjs'
 
 const Card3 = ({ user }: { user: User }) => {
   return (

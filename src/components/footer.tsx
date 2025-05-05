@@ -1,5 +1,5 @@
-import { businesses } from '~/const'
-import { Lp } from '~/icons'
+import { businesses } from '@/const'
+import { Lp } from '@/icons'
 
 export default function Footer() {
   return (

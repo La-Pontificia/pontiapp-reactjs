@@ -18,9 +18,9 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'anni'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '~/lib/api'
-import { User } from '~/types/user'
-import { generateRandomPassword } from '~/utils'
+import { api } from '@/lib/api'
+import { User } from '@/types/user'
+import { generateRandomPassword } from '@/utils'
 
 type Values = {
   password: string

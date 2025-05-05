@@ -1,7 +1,7 @@
 import { toast } from 'anni'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
-import { User } from '~/types/user'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
+import { User } from '@/types/user'
 import {
   Avatar,
   Badge,
@@ -16,7 +16,7 @@ import {
 import { Dismiss24Regular, FolderPeopleRegular } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
 import * as React from 'react'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import { useDebounce } from 'hothooks'
 
 type UserDrawerProps = {
