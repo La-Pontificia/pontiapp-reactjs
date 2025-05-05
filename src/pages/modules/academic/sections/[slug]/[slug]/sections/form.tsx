@@ -220,7 +220,8 @@ export default function Form({
                     <Select
                       onChange={(_, d) => {
                         const cycle = cycles?.find((c) => c.id === d.value)
-                        setValue('courses', [])
+                        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                        setValue('courses', [] as any[])
                         setQ(null)
                         if (cycle) {
                           field.onChange(cycle)
@@ -256,7 +257,7 @@ export default function Form({
                     <Select
                       onChange={(_, d) => {
                         const plan = plans?.find((c) => c.id === d.value)
-                        setValue('courses', [])
+                        // setValue('courses', [])
                         setQ(null)
                         if (plan) {
                           field.onChange(plan)
