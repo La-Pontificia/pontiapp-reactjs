@@ -4,7 +4,7 @@ import {
   VITE_JOB_DEVELOPER_ID,
   VITE_PRIVILEGE_DEVELOPER,
   VITE_ROLE_DEVELOPER_ID
-} from '~/config/env'
+} from '@/config/env'
 
 export const businesses = {
   'https://www.elp.edu.pe': {
