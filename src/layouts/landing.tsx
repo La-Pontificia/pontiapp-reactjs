@@ -1,4 +1,4 @@
-import { businesses } from '~/const'
+import { businesses } from '@/const'
 import { Link, Outlet } from 'react-router'
 
 export default function LandingLayout() {
