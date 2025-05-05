@@ -1,8 +1,8 @@
 import { toast } from 'anni'
 import React from 'react'
-import { api } from '~/lib/api'
-import { User } from '~/types/user'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { User } from '@/types/user'
+import { handleError } from '@/utils'
 
 type Props = {
   onCompleted?: (url: string) => void
