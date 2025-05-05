@@ -7,8 +7,8 @@ import {
 import { AlertRegular } from '@fluentui/react-icons'
 import React from 'react'
 import { Link } from 'react-router'
-import { timeAgoShort } from '~/lib/dayjs'
-import { UserNotification } from '~/types/user-notification'
+import { timeAgoShort } from '@/lib/dayjs'
+import { UserNotification } from '@/types/user-notification'
 
 export default function UserNotifications() {
   const [open, setOpen] = React.useState(false)

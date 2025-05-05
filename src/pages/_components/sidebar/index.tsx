@@ -1,4 +1,4 @@
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 import { Avatar, Tooltip } from '@fluentui/react-components'
 import {
   ClockFilled,
@@ -22,14 +22,14 @@ import {
   SearchRegular,
   // StoreMicrosoftFilled,
   // StoreMicrosoftRegular,
-  TabletFilled,
-  TabletRegular
+  // TabletFilled,
+  // TabletRegular
 } from '@fluentui/react-icons'
 import { Link, useLocation } from 'react-router'
-import SettingsDrawer from './settings'
-import { cn } from '~/utils'
-// import { Lp } from '~/icons'
-// import { Lp } from '~/icons'
+import { cn } from '@/utils'
+import Theme from './theme'
+// import { Lp } from '@/icons'
+// import { Lp } from '@/icons'
 
 type ItemNav = {
   icon?: FluentIcon
@@ -84,7 +84,7 @@ const ItemNav = (props: ItemNav) => {
               }}
             />
           )}
-          <p className="text-[10px] leading-4 line-clamp-1 text-ellipsis">
+          <p className="text-[10px] max-w-[9ch] leading-4 line-clamp-1 text-ellipsis">
             {props.text}
           </p>
         </div>
@@ -167,7 +167,7 @@ export const RootSidebar = () => {
           />
         )}
 
-        {authUser.hasModule('attentions') && (
+        {/* {authUser.hasModule('attentions') && (
           <ItemNav
             tooltip="Control de atención de tickets"
             text="Tickets"
@@ -175,7 +175,7 @@ export const RootSidebar = () => {
             activeIcon={TabletFilled}
             href="/m/attentions"
           />
-        )}
+        )} */}
 
         {/* {authUser.hasModule('inventories') && (
           <ItemNav
@@ -222,7 +222,7 @@ export const RootSidebar = () => {
         })}
       </nav>
       <nav className="flex max-lg:hidden justify-center">
-        <SettingsDrawer />
+        <Theme />
       </nav>
     </header>
   )

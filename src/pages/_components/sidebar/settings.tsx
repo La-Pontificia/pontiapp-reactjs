@@ -9,8 +9,8 @@ import {
 } from '@fluentui/react-components'
 import { Dismiss24Regular, SettingsRegular } from '@fluentui/react-icons'
 import React from 'react'
-import { useTheme } from '~/providers/theme'
-import { UIContext } from '~/providers/ui'
+import { useTheme } from '@/providers/theme'
+import { UIContext } from '@/providers/ui'
 
 export default function SettingsDrawer() {
   const [open, setOpen] = React.useState(false)

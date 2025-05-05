@@ -1,18 +1,19 @@
-import { useUi } from '~/store/ui'
+import { useUi } from '@/store/ui'
 
 import { Tooltip } from '@fluentui/react-components'
 import {
   CaretDownFilled,
-  GridDotsFilled,
+  PanelLeftFilled,
+  PanelLeftRegular,
   // NotebookQuestionMarkRegular,
   SearchRegular
 } from '@fluentui/react-icons'
 import { useLocation } from 'react-router'
 import UserMenu from './menu'
 import UserFeedback from './feedback'
-// import { useAuth } from '~/store/auth'
+// import { useAuth } from '@/store/auth'
 import RootSearch from './search'
-// import { Lp } from '~/icons'
+// import { Lp } from '@/icons'
 import BusinessUnitToggle from './business-unit'
 
 const Toggles = () => {
@@ -23,20 +24,28 @@ const Toggles = () => {
   const isHome = !locaction.pathname.startsWith(`/m`)
 
   return (
-    <div className="flex items-center">
+    <>
       {!isHome && (
-        <Tooltip
-          content={
-            isSidebarOpen ? 'Ocultar barra lateral' : 'Mostrar barra lateral'
-          }
-          relationship="label"
-        >
-          <button onClick={toggleSidebar} className="px-2">
-            <GridDotsFilled fontSize={25} />
-          </button>
-        </Tooltip>
+        <div className="flex pl-2 items-center">
+          <Tooltip
+            content={
+              isSidebarOpen ? 'Ocultar barra lateral' : 'Mostrar barra lateral'
+            }
+            relationship="label"
+          >
+            <button onClick={toggleSidebar} className="p-0.5">
+              {
+                isSidebarOpen ? (
+                  <PanelLeftFilled fontSize={25} />
+                ) : (
+                  <PanelLeftRegular fontSize={25} />
+                )
+              }
+            </button>
+          </Tooltip>
+        </div>
       )}
-    </div>
+    </>
   )
 }
 
@@ -50,17 +59,16 @@ export default function RootHeader() {
         marginTop: isHeaderOpen ? '0' : '-56px'
       }}
       data-hidden={!isHeaderOpen ? '' : undefined}
-      className="h-[50px] min-h-[50px] relative dark:shadow-sm dark:shadow-black/10 justify-between gap-4 w-full z-10 flex items-center px-2"
+      className="h-[50px] min-h-[50px] relative dark:shadow-sm dark:shadow-black/10 justify-between gap-4 w-full z-10 flex items-center"
     >
       <nav className="flex relative flex-grow items-center basis-0">
         <Toggles />
-
         <BusinessUnitToggle />
       </nav>
       <nav className="max-lg:w-full">
         <RootSearch />
       </nav>
-      <nav className="flex flex-grow items-center dark:text-[#eaa8ff] text-[#0e37cd] basis-0 gap-5 justify-end">
+      <nav className="flex px-2 flex-grow items-center dark:text-[#eaa8ff] text-[#0e37cd] basis-0 gap-5 justify-end">
         {/* <Tooltip
           content="Manual de usuario (Docs PontiApp)"
           relationship="label"

@@ -12,8 +12,8 @@ import {
 } from '@fluentui/react-components'
 import React from 'react'
 import { Link } from 'react-router'
-import echo from '~/lib/echo'
-import { useAuth } from '~/store/auth'
+import echo from '@/lib/echo'
+import { useAuth } from '@/store/auth'
 
 type UserNotice = {
   title: string

@@ -11,13 +11,13 @@ import {
 import { useQuery } from '@tanstack/react-query'
 import * as React from 'react'
 import { useNavigate } from 'react-router'
-import { useDebounced } from '~/hooks/use-debounced'
-import { ExcelColored } from '~/icons'
-import { api } from '~/lib/api'
-import { timeAgo } from '~/lib/dayjs'
-import { useAuth } from '~/store/auth'
-import { Report } from '~/types/report'
-import { User } from '~/types/user'
+import { useDebounced } from '@/hooks/use-debounced'
+import { ExcelColored } from '@/icons'
+import { api } from '@/lib/api'
+import { timeAgo } from '@/lib/dayjs'
+import { useAuth } from '@/store/auth'
+import { Report } from '@/types/report'
+import { User } from '@/types/user'
 
 type State = {
   users: User[]
@@ -52,7 +52,7 @@ export default function RootSearch() {
           input={{
             onFocus: () => setOpen(true),
             autoComplete: 'off',
-            width: '100%'
+            width: '100%',
           }}
           onMouseEnter={() => setHover(true)}
           onMouseLeave={() => setHover(false)}
@@ -73,11 +73,9 @@ export default function RootSearch() {
           placeholder="Buscar"
           className="lg:w-[500px] max-md:w-[300px] max-lg:w-full"
           style={{
-            borderRadius: '7px',
             height: '35px'
           }}
           contentBefore={<Search20Regular className="text-blue-500" />}
-          size="medium"
         />
         {open && <SearchContent q={q} setOpen={setOpen} />}
       </div>
@@ -147,8 +145,8 @@ const SearchContent = ({
 
       const modulesFiltered = q
         ? modules.filter((module) =>
-            module.text.toLowerCase().includes(q.toLowerCase())
-          )
+          module.text.toLowerCase().includes(q.toLowerCase())
+        )
         : modules
 
       if (!res.ok)

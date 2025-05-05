@@ -26,10 +26,10 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { Link } from 'react-router'
 import { toast } from 'anni'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
-import { User } from '~/types/user'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
+import { User } from '@/types/user'
+import { handleError } from '@/utils'
 
 export default function UserMenu() {
   const { user, signOut, setUser } = useAuth()

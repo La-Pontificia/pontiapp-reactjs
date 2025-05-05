@@ -9,7 +9,7 @@ import {
 } from '@fluentui/react-components'
 import { CaretDownFilled } from '@fluentui/react-icons'
 import React from 'react'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 
 export default function BusinessUnitToggle() {
   const { businessUnits, businessUnit, handleToggleBusinessUnit } = useAuth()
@@ -27,7 +27,7 @@ export default function BusinessUnitToggle() {
         <MenuTrigger disableButtonEnhancement>
           <button
             onClick={() => setOpen(!open)}
-            className="flex overflow-hidden items-center gap-2"
+            className="flex bg-sky-400/40 dark:bg-sky-500/20 p-1.5 rounded-xl overflow-hidden items-center gap-2"
           >
             <Avatar
               size={28}

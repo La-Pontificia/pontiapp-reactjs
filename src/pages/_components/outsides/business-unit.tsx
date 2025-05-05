@@ -6,7 +6,7 @@ import {
   DialogTitle,
   Persona
 } from '@fluentui/react-components'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 
 export default function BusinessUnitVerify() {
   const { businessUnit, businessUnits, user, handleToggleBusinessUnit } =
