@@ -3,11 +3,11 @@ import { Button, Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Outlet, useLocation, useParams } from 'react-router'
-import Breadcrumbs, { BreadcrumbType } from '~/components/breadcrumbs'
-import { PATHNAMES } from '~/const'
-import { api } from '~/lib/api'
-import { Period } from '~/types/academic/period'
-import { Program } from '~/types/academic/program'
+import Breadcrumbs, { BreadcrumbType } from '@/components/breadcrumbs'
+import { PATHNAMES } from '@/const'
+import { api } from '@/lib/api'
+import { Period } from '@/types/academic/period'
+import { Program } from '@/types/academic/program'
 
 type ContextSlugScheduleState = {
   breadcrumbsComp: React.ReactNode
@@ -47,43 +47,41 @@ export default function SchedulesSlugLayout() {
   }, [breadcrumbs])
 
   React.useEffect(() => {
-    const [one, two, three, four] = pathname.split('/').slice(4)
+    const [one, two, three] = pathname.split('/').slice(4)
+
+    setBreadcrumbs([
+      {
+        name: 'Horarios',
+        to: `/m/academic/schedules`
+      }
+    ])
 
     if (one && period) {
-      setBreadcrumbs([
-        {
-          name: period.name,
-          to: `/m/academic/schedules`
-        }
-      ])
-    }
-
-    if (two) {
       setBreadcrumbs((prev) => [
         ...prev,
         {
-          name: PATHNAMES[two as keyof typeof PATHNAMES] ?? two,
-          to: `/m/academic/schedules/${period?.id}/programs`
+          name: period.name,
+          to: `/m/academic/schedules/${period.id}`
         }
       ])
     }
 
-    if (three && program) {
+    if (two && program) {
       setBreadcrumbs((prev) => [
         ...prev,
         {
           name: program.name,
-          to: `/m/academic/schedules/${period?.id}/programs`
+          to: `/m/academic/schedules/${period?.id}`
         }
       ])
     }
 
-    if (four) {
+    if (three) {
       setBreadcrumbs((prev) => [
         ...prev,
         {
-          name: PATHNAMES[four as keyof typeof PATHNAMES] ?? four,
-          to: `/m/academic/schedules/${period?.id}/programs/${program?.id}/sections`
+          name: PATHNAMES[three as keyof typeof PATHNAMES] ?? three,
+          to: `/m/academic/schedules/${period?.id}/${program?.id}/sections`
         }
       ])
     }
