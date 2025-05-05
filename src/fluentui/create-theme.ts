@@ -1,4 +1,4 @@
-import { createTheme } from '@fluentui/react/'
+import { createTheme } from '@fluentui/react'
 
 import * as colors from './colors'
 import componentOverrides from './component-overrides'
@@ -8,11 +8,7 @@ const createFluentTheme = (themePreference: keyof typeof colors) => {
     ...colors[themePreference],
     components: {}
   })
-
   theme.components = componentOverrides(theme)
-
-  console.log(theme)
-
   return theme
 }
 
