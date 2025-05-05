@@ -1,10 +1,10 @@
 import { Button, Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import { Outlet, useParams } from 'react-router'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import React from 'react'
 import { useSlugClassroom } from '../../+layout'
-import { Pavilion } from '~/types/academic/pavilion'
+import { Pavilion } from '@/types/academic/pavilion'
 
 export default function PavilionSlugLayout() {
   const params = useParams()

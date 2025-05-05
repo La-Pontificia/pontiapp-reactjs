@@ -6,21 +6,21 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import { AddFilled } from '@fluentui/react-icons'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import Form from './form'
 import { useQuery } from '@tanstack/react-query'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { api } from '~/lib/api'
-import Pagination from '~/commons/pagination'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { api } from '@/lib/api'
+import Pagination from '@/commons/pagination'
 import { useSlugClassroom } from '../+layout'
-import { Pavilion } from '~/types/academic/pavilion'
+import { Pavilion } from '@/types/academic/pavilion'
 import Item from './item'
-import { TableContainer } from '~/components/table-container'
+import { TableContainer } from '@/components/table-container'
 import { useDebounce } from 'hothooks'
 
 export type FiltersValues = {

@@ -17,7 +17,7 @@ import {
   TableCellLayout,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import {
   BreakoutRoomRegular,
@@ -27,15 +27,15 @@ import {
   PenRegular
 } from '@fluentui/react-icons'
 import React from 'react'
-import { concatDateWithTime, format, timeAgo } from '~/lib/dayjs'
+import { concatDateWithTime, format, timeAgo } from '@/lib/dayjs'
 import Form from './form'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { toast } from 'anni'
-import { handleError } from '~/utils'
-import { Classroom } from '~/types/academic/classroom'
-import Calendar from '~/components/calendar'
-import { SectionCourseSchedule } from '~/types/academic/section-course-schedule'
+import { handleError } from '@/utils'
+import { Classroom } from '@/types/academic/classroom'
+import Calendar from '@/components/calendar'
+import { SectionCourseSchedule } from '@/types/academic/section-course-schedule'
 import { EventSourceInput } from '@fullcalendar/core'
 
 export default function Item({
@@ -142,16 +142,15 @@ export default function Item({
             {item.code}
           </TableCellLayout>
         </TableCell>
-        <TableCell>
+        <TableCell className='max-w-[70px]'>
           <Badge>{item.floor ?? '-'}</Badge>
         </TableCell>
-        <TableCell>{item.type ?? '-'}</TableCell>
-        <TableCell>{item.capacity ?? '-'}</TableCell>
-        <TableCell className="max-lg:!hidden">
-          <p className="font-medium">{item.creator?.displayName} </p>
-          <span className="opacity-70">{timeAgo(item.created_at)}</span>
+        <TableCell className='max-w-[100px]'>{item.type ?? '-'}</TableCell>
+        <TableCell className='max-w-[80px]'>{item.capacity ?? '-'}</TableCell>
+        <TableCell className="max-lg:!hidden max-w-[130px]">
+          <p className="font-medium">{item.creator?.displayName} <span className="opacity-70 font-normal">{timeAgo(item.created_at)}</span></p>
         </TableCell>
-        <TableCell>
+        <TableCell className='max-w-[100px]'>
           <Button
             onClick={() => setOpenDialogCalendar(true)}
             icon={<CalendarEditRegular />}
@@ -160,7 +159,7 @@ export default function Item({
             Horarios
           </Button>
         </TableCell>
-        <TableCell>
+        <TableCell className='max-w-[100px]'>
           <div>
             <Tooltip content="Editar" relationship="description">
               <Button

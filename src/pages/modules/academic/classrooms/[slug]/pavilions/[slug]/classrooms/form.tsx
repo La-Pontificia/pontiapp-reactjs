@@ -16,11 +16,11 @@ import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '~/lib/api'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { handleError } from '@/utils'
 import { useSlugClassroom } from '../../../+layout'
-import { Classroom } from '~/types/academic/classroom'
-import { CLASSROOM_TYPES } from '~/const'
+import { Classroom } from '@/types/academic/classroom'
+import { CLASSROOM_TYPES } from '@/const'
 
 type FormValues = {
   code: string
@@ -32,7 +32,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => {},
+  refetch = () => { },
   defaultProp,
   readOnly = false
 }: {
@@ -46,16 +46,16 @@ export default function Form({
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-          ...defaultProp,
-          capacity: defaultProp.capacity?.toString(),
-          floor: defaultProp.floor?.toString()
-        }
+        ...defaultProp,
+        capacity: defaultProp.capacity?.toString(),
+        floor: defaultProp.floor?.toString()
+      }
       : {
-          capacity: '',
-          code: '',
-          floor: '',
-          type: ''
-        }
+        capacity: '',
+        code: '',
+        floor: '',
+        type: ''
+      }
   })
 
   const { mutate: fetch, isPending: fetching } = useMutation({

@@ -3,11 +3,11 @@ import { Button, Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Outlet, useLocation, useParams } from 'react-router'
-import Breadcrumbs, { BreadcrumbType } from '~/components/breadcrumbs'
-import { PATHNAMES } from '~/const'
-import { api } from '~/lib/api'
-import { Pavilion } from '~/types/academic/pavilion'
-import { Period } from '~/types/academic/period'
+import Breadcrumbs, { BreadcrumbType } from '@/components/breadcrumbs'
+import { PATHNAMES } from '@/const'
+import { api } from '@/lib/api'
+import { Pavilion } from '@/types/academic/pavilion'
+import { Period } from '@/types/academic/period'
 
 type ContextSlugClassroom = {
   period: Period
@@ -48,8 +48,16 @@ export default function ClassroomSlugLayout() {
   React.useEffect(() => {
     const [one, two, three, four] = pathname.split('/').slice(4)
 
+    setBreadcrumbs([
+      {
+        name: 'Pabellones',
+        to: `/m/academic/classrooms`
+      }
+    ])
+
     if (one && period) {
-      setBreadcrumbs([
+      setBreadcrumbs((prev) => [
+        ...prev,
         {
           name: period.name,
           to: `/m/academic/classrooms`
@@ -86,26 +94,6 @@ export default function ClassroomSlugLayout() {
         }
       ])
     }
-
-    // if (five && section) {
-    //   setBreadcrumbs((prev) => [
-    //     ...prev,
-    //     {
-    //       name: section.code,
-    //       to: `/m/academic/sections/${period?.id}/programs/${program?.id}/sections`
-    //     }
-    //   ])
-    // }
-
-    // if (six) {
-    //   setBreadcrumbs((prev) => [
-    //     ...prev,
-    //     {
-    //       name: PATHNAMES[six as keyof typeof PATHNAMES] ?? six,
-    //       to: `/m/academic/sections`
-    //     }
-    //   ])
-    // }
   }, [pathname, pavilion, period])
 
   if (isLoading)

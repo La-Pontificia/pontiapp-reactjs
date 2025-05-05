@@ -7,21 +7,21 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import { AddFilled } from '@fluentui/react-icons'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import Form from './form'
 import { useQuery } from '@tanstack/react-query'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { api } from '~/lib/api'
-import Pagination from '~/commons/pagination'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { api } from '@/lib/api'
+import Pagination from '@/commons/pagination'
 import { useSlugClassroom } from '../../../+layout'
-import { Classroom } from '~/types/academic/classroom'
+import { Classroom } from '@/types/academic/classroom'
 import Item from './item'
-import { TableContainer } from '~/components/table-container'
+import { TableContainer } from '@/components/table-container'
 import { useDebounce } from 'hothooks'
 
 export type FiltersValues = {
@@ -115,15 +115,15 @@ export default function ClassroomsPage() {
           <TableHeader>
             <TableRow>
               <TableSelectionCell type="radio" invisible />
-              <TableHeaderCell>Código</TableHeaderCell>
-              <TableHeaderCell># Piso</TableHeaderCell>
-              <TableHeaderCell>Tipo</TableHeaderCell>
-              <TableHeaderCell>Capacidad</TableHeaderCell>
-              <TableHeaderCell className="max-lg:!hidden">
+              <TableHeaderCell>Aula</TableHeaderCell>
+              <TableHeaderCell className='max-w-[70px]'># Piso</TableHeaderCell>
+              <TableHeaderCell className='max-w-[100px]'>Tipo</TableHeaderCell>
+              <TableHeaderCell className='max-w-[80px]'>Capacidad</TableHeaderCell>
+              <TableHeaderCell className="max-lg:!hidden max-w-[130px]">
                 Registrado por
               </TableHeaderCell>
-              <TableHeaderCell>Horarios</TableHeaderCell>
-              <TableHeaderCell></TableHeaderCell>
+              <TableHeaderCell className='max-w-[100px]'>Horarios</TableHeaderCell>
+              <TableHeaderCell className='max-w-[100px]'></TableHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>

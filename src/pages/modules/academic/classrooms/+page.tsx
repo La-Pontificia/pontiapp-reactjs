@@ -1,25 +1,25 @@
-import { Table } from '@fluentui/react-components'
 
 import {
+  Table,
   TableBody,
   TableHeader,
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import { useQuery } from '@tanstack/react-query'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { api } from '~/lib/api'
-import Pagination from '~/commons/pagination'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { api } from '@/lib/api'
+import Pagination from '@/commons/pagination'
 import Item from './item'
-import { Period } from '~/types/academic/period'
-import { TableContainer } from '~/components/table-container'
+import { Period } from '@/types/academic/period'
+import { TableContainer } from '@/components/table-container'
 import { useDebounce } from 'hothooks'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 
 export type FiltersValues = {
   q: string | null
@@ -82,9 +82,8 @@ export default function ClassroomsPeriodsPage() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableSelectionCell type="radio" invisible />
+              <TableSelectionCell type="radio" />
               <TableHeaderCell>Periodo</TableHeaderCell>
-              <TableHeaderCell>Pabellones</TableHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>
