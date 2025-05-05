@@ -1,7 +1,7 @@
 import { createRoot } from 'react-dom/client'
 import './index.css'
 import { BrowserRouter } from 'react-router'
-import ThemeProvider from '~/providers/theme'
+import ThemeProvider from '@/providers/theme'
 import TanstackProvider from './providers/tanstack'
 import UiProvider from './providers/ui'
 import MainRoutes from './pages/routes'
