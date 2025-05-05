@@ -5,7 +5,7 @@ import {
   VITE_REVERB_HOST,
   VITE_REVERB_PORT,
   VITE_REVERB_SCHEME
-} from '~/config/env'
+} from '@/config/env'
 
 declare global {
   interface Window {

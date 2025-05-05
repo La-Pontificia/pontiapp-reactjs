@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { Time } from '~/types'
+import { Time } from '@/types'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import dayjs from 'dayjs'
@@ -12,11 +12,20 @@ export const parse = (date: any, format?: string): Date => {
   return dayjs(date, format).toDate()
 }
 
-export const format = (date: any, format?: string): string => {
+export const format = (date: any, format?: string, label?: string): string => {
+  if (!date) {
+    return label ?? ''
+  }
   if (!format) {
     return dayjs(date).locale('es').format()
   }
   return dayjs(date).locale('es').format(format)
+}
+
+export const isIquals = (date1: any, date2: any): boolean => {
+  const d1 = dayjs(date1).format('YYYY-MM-DD')
+  const d2 = dayjs(date2).format('YYYY-MM-DD')
+  return d1 === d2
 }
 
 export const timeAgo = (date: any): string => {

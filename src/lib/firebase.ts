@@ -8,7 +8,7 @@ import {
   VITE_FIREBASE_MESSAGING_SENDER_ID,
   VITE_FIREBASE_PROJECT_ID,
   VITE_FIREBASE_STORAGE_BUCKET
-} from '~/config/env'
+} from '@/config/env'
 
 const firebaseConfig = {
   apiKey: VITE_FIREBASE_API_KEY,

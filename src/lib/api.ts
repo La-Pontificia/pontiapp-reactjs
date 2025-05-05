@@ -1,4 +1,4 @@
-import { VITE_API_HOST } from '~/config/env'
+import { VITE_API_HOST } from '@/config/env'
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export type ExtendedRequestInit = RequestInit & {
