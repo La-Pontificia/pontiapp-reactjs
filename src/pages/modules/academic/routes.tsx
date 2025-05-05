@@ -1,8 +1,8 @@
 import { Route, Routes } from 'react-router'
-import ProtectedModule from '~/protected/module'
+import ProtectedModule from '@/protected/module'
 import AcademicLayout from './+layout'
 import ProgramPage from './programs/+page'
-import Protected from '~/protected/auth'
+import Protected from '@/protected/auth'
 import SchedulesPage from './schedules/+page'
 import PeriodsPage from './periods/+page'
 import AcademicPage from './+page'
@@ -17,18 +17,20 @@ import PavilionsPage from './classrooms/[slug]/pavilions/+page'
 import PavilionSlugLayout from './classrooms/[slug]/pavilions/[slug]/+layout'
 import ClassroomsPage from './classrooms/[slug]/pavilions/[slug]/classrooms/+page'
 import PlansCoursesPage from './programs/[slug]/plans/[slug]/courses/+page'
+import CyclesPage from './programs/[slug]/cycles/+page'
+
 import SectionPeriodsPage from './sections/+page'
 import SectionSlugLayout from './sections/[slug]/+layout'
-import SectionProgramsPage from './sections/[slug]/programs/+page'
-import SectionProgramSlugLayout from './sections/[slug]/programs/[slug]/+layout'
-import SectionsPage from './sections/[slug]/programs/[slug]/sections/+page'
-import CyclesPage from './programs/[slug]/cycles/+page'
-import SectionCoursesPage from './sections/[slug]/programs/[slug]/sections/[slug]/courses/+page'
-import SectionProgramSectionSlugLayout from './sections/[slug]/programs/[slug]/sections/[slug]/+layout'
+import SectionProgramSlugLayout from './sections/[slug]/[slug]/+layout'
+import SectionProgramsPage from './sections/[slug]/+page'
+import SectionsPage from './sections/[slug]/[slug]/sections/+page'
+import SectionCoursesPage from './sections/[slug]/[slug]/sections/[slug]/courses/+page'
+import SectionProgramSectionSlugLayout from './sections/[slug]/[slug]/sections/[slug]/+layout'
+
 import SchedulesSlugLayout from './schedules/[slug]/+layout'
-import ScheduleProgramsPage from './schedules/[slug]/programs/+page'
-import ScheduleProgramSlugLayout from './schedules/[slug]/programs/[slug]/+layout'
-import SchedulesProgramSchedulesPage from './schedules/[slug]/programs/[slug]/+page'
+import ScheduleProgramsPage from './schedules/[slug]/+page'
+import ScheduleProgramSlugLayout from './schedules/[slug]/[slug]/+layout'
+import SchedulesProgramSchedulesPage from './schedules/[slug]/[slug]/+page'
 import AreasPage from './areas/+page'
 import AcademicReportFilesPage from './report-files/+page'
 
@@ -60,11 +62,9 @@ export default function AcademicRoutes() {
             }
           />
           <Route path=":periodId" element={<SchedulesSlugLayout />}>
-            <Route path="programs">
-              <Route index element={<ScheduleProgramsPage />} />
-              <Route path=":programId" element={<ScheduleProgramSlugLayout />}>
-                <Route index element={<SchedulesProgramSchedulesPage />} />
-              </Route>
+            <Route index element={<ScheduleProgramsPage />} />
+            <Route path=":programId" element={<ScheduleProgramSlugLayout />}>
+              <Route index element={<SchedulesProgramSchedulesPage />} />
             </Route>
           </Route>
         </Route>
@@ -163,6 +163,7 @@ export default function AcademicRoutes() {
             </Route>
           </Route>
         </Route>
+
         <Route path="sections">
           <Route
             index
@@ -172,18 +173,20 @@ export default function AcademicRoutes() {
               </ProtectedModule>
             }
           />
-          <Route path=":periodId" element={<SectionSlugLayout />}>
-            <Route path="programs">
-              <Route index element={<SectionProgramsPage />} />
-              <Route path=":programId" element={<SectionProgramSlugLayout />}>
-                <Route path="sections">
-                  <Route index element={<SectionsPage />} />
-                  <Route
-                    path=":sectionId"
-                    element={<SectionProgramSectionSlugLayout />}
-                  >
-                    <Route path="courses" element={<SectionCoursesPage />} />
-                  </Route>
+          <Route path=":periodId" element={
+            <Protected has="academic:sections" navigate="/m/academic">
+              <SectionSlugLayout />
+            </Protected>
+          }>
+            <Route index element={<SectionProgramsPage />} />
+            <Route path=":programId" element={<SectionProgramSlugLayout />}>
+              <Route path="sections">
+                <Route index element={<SectionsPage />} />
+                <Route
+                  path=":sectionId"
+                  element={<SectionProgramSectionSlugLayout />}
+                >
+                  <Route path="courses" element={<SectionCoursesPage />} />
                 </Route>
               </Route>
             </Route>
