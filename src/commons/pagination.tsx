@@ -1,5 +1,7 @@
 import { ChevronLeftFilled, ChevronRightFilled } from '@fluentui/react-icons'
-import { ResponsePaginate } from '~/types/paginate-response'
+import ReactPaginate from 'react-paginate'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { cn } from '@/utils'
 
 export default function Pagination({
   state,
@@ -8,55 +10,34 @@ export default function Pagination({
   state: Omit<ResponsePaginate<unknown>, 'data'>
   onChangePage?: (page: number) => void
 }) {
-  const { current_page, from, links, next_page_url, prev_page_url, to, total } =
+  const { current_page, per_page, total } =
     state
   return (
-    <div className="flex w-full items-center justify-start gap-3">
-      <footer className="flex items-center gap-2 max-lg:w-full overflow-hidden disabled:[&>button]:!pointer-events-none disabled:[&>button]:!opacity-20 dark:text-stone-300 text-stone-700">
-        <button
-          className="max-lg:mr-auto border dark:border-stone-500/30 rounded-md flex items-center gap-2 justify-center h-[30px] aspect-[16/14]"
-          onClick={() => {
-            onChangePage?.(current_page - 1)
-          }}
-          disabled={!prev_page_url}
-        >
-          <ChevronLeftFilled fontSize={25} />
-        </button>
-        {links?.slice(1, links.length - 1).map((link, key) => {
-          return (
-            <button
-              disabled={!link.url}
-              data-active={link.active ? '' : undefined}
-              key={key}
-              onClick={() => {
-                if (current_page === Number(link.label)) return
-                onChangePage?.(Number(link.label))
-              }}
-              className="w-[30px] aspect-square font-medium text-base data-[active]:dark:text-blue-400 data-[active]:dark:bg-blue-700/30 data-[active]:dark:border-blue-600 data-[active]:text-blue-700 data-[active]:bg-blue-400/10 data-[active]:border-blue-700 border dark:border-stone-500/30 rounded-md flex items-center justify-center"
-            >
-              {link.label}
-            </button>
-          )
-        })}
-        <button
-          className="max-lg:ml-auto border dark:border-stone-500/30 rounded-md flex items-center gap-2 justify-center h-[30px] aspect-[16/14]"
-          onClick={() => {
-            onChangePage?.(current_page + 1)
-          }}
-          disabled={!next_page_url}
-        >
-          <ChevronRightFilled fontSize={20} />
-        </button>
-      </footer>
-      {from && to && total && (
-        <p className="max-lg:hidden font-medium text-sm">
-          <span>{from}</span>
-          {'-'}
-          <span>{to}</span>
-          {' de '}
-          <span>{total}</span>
-        </p>
-      )}
+    <div className="flex w-full items-center justify-center gap-3">
+      <ReactPaginate
+        className={cn([
+          'flex items-center justify-center',
+          'border rounded-md divide-x text-sm text-blue-700 dark:text-blue-500 divide-neutral-500/40 border-neutral-500/40 font-semibold',
+          '[&>li>a]:transition-colors [&>li>a]:flex [&>li>a]:justify-center [&>li>a]:items-center [&>li>a]:w-9 [&>li>a]:aspect-square',
+          'hover:[&>li>a]:bg-neutral-500/20',
+        ])}
+        breakLabel="..."
+        previousLabel={<ChevronLeftFilled fontSize={20} />}
+        nextLabel={<ChevronRightFilled fontSize={20} />}
+        onPageChange={({ selected }) => {
+          onChangePage?.(selected + 1)
+          console.log(selected + 1)
+        }}
+        forcePage={current_page ? current_page - 1 : 0}
+        pageRangeDisplayed={4}
+        disabledClassName='opacity-50 pointer-events-none'
+        activeClassName='dark:bg-blue-500 bg-blue-700 text-white'
+        marginPagesDisplayed={1}
+        pageCount={
+          Math.ceil(total ? total / per_page : 0) || 1
+        }
+        renderOnZeroPageCount={null}
+      />
     </div>
   )
 }

@@ -1,5 +1,5 @@
 import { DismissFilled } from '@fluentui/react-icons'
-import { cn } from '~/utils'
+import { cn } from '@/utils'
 
 import { useControllableState } from 'hothooks'
 import React from 'react'

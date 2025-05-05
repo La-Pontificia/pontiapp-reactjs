@@ -10,7 +10,7 @@ import {
   TextItalicFilled,
   TextNumberListLtrFilled
 } from '@fluentui/react-icons'
-import { cn } from '~/utils'
+import { cn } from '@/utils'
 import React from 'react'
 
 const MenuBar = ({ disabled = false }: { disabled?: boolean }) => {
