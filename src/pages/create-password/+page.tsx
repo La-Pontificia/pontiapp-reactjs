@@ -5,10 +5,10 @@ import { toast } from 'anni'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useSearchParams } from 'react-router'
-import Footer from '~/components/footer'
-import { Lp } from '~/icons'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
+import Footer from '@/components/footer'
+import { Lp } from '@/icons'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
 
 type Values = {
   password: string
