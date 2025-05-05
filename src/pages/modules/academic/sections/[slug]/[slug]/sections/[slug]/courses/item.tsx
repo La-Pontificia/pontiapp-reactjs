@@ -15,7 +15,7 @@ import {
   TableCellLayout,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import {
   CheckmarkCircleFilled,
@@ -26,14 +26,14 @@ import {
   PersonLightbulbRegular
 } from '@fluentui/react-icons'
 import React from 'react'
-import { timeAgo } from '~/lib/dayjs'
+import { timeAgo } from '@/lib/dayjs'
 import Form from './form'
 import { useMutation } from '@tanstack/react-query'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { toast } from 'anni'
-import { handleError } from '~/utils'
-import { SectionCourse } from '~/types/academic/section-course'
-import UserDrawer from '~/components/user-drawer'
+import { handleError } from '@/utils'
+import { SectionCourse } from '@/types/academic/section-course'
+import UserDrawer from '@/components/user-drawer'
 
 export default function Item({
   item,
@@ -89,13 +89,13 @@ export default function Item({
         <TableSelectionCell type="radio" />
         <TableCell>
           <TableCellLayout media={<DocumentRegular fontSize={25} />}>
-            {item.planCourse?.name}
+            {item.planCourse?.course.code} - {item.planCourse?.name}
           </TableCellLayout>
         </TableCell>
-        <TableCell className="font-semibold">
+        <TableCell className="font-semibold max-w-[200px]">
           {item.planCourse?.plan?.name}
         </TableCell>
-        <TableCell className="font-semibold">
+        <TableCell className="font-semibold max-w-[200px]">
           <UserDrawer
             onSubmit={(users) => {
               asignTeacher({
@@ -121,20 +121,14 @@ export default function Item({
                 ? item.teacher?.displayName
                 : 'Sin asignar',
               appearance: 'transparent',
-              className: '!px-1'
+              className: '!px-1 !text-left !text-nowrap'
             }}
           />
         </TableCell>
-        {/* <TableCell>
-          <Button icon={<CalendarEditRegular />} appearance="transparent">
-            Horarios
-          </Button>
-        </TableCell> */}
-        <TableCell className="max-lg:!hidden">
-          <p className="font-medium">{item.creator?.displayName} </p>
-          <span className="opacity-70">{timeAgo(item.created_at)}</span>
+        <TableCell className="max-lg:!hidden max-w-[200px]">
+          <p className="font-medium">{item.creator?.displayName} <span className="opacity-70 font-normal">{timeAgo(item.created_at)}</span></p>
         </TableCell>
-        <TableCell>
+        <TableCell className='max-w-[100px]'>
           <div>
             <Tooltip content="Editar" relationship="description">
               <Button

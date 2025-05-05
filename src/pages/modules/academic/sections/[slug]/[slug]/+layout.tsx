@@ -1,32 +1,32 @@
 import { Button, Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import { Outlet, useParams } from 'react-router'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import React from 'react'
-import { useSlugSection } from '../../../../+layout'
-import { Section } from '~/types/academic/section'
+import { useSlugSection } from '../+layout'
+import { Program } from '@/types/academic/program'
 
-export default function SectionProgramCoursesSlugLayout() {
+export default function SectionProgramSlugLayout() {
   const params = useParams()
 
-  const { program, setSection } = useSlugSection()
-  const { data, isLoading, refetch } = useQuery<Section | null>({
-    queryKey: ['academic/sections', params.sectionId],
+  const { program, setProgram } = useSlugSection()
+  const { data, isLoading, refetch } = useQuery<Program | null>({
+    queryKey: ['academic/programs', params.programId],
     queryFn: async () => {
-      const res = await api.get<Section>(
-        'academic/sections/' + params.sectionId
+      const res = await api.get<Program>(
+        'academic/programs/' + params.programId
       )
       if (!res.ok) return null
-      return new Section(res.data)
+      return new Program(res.data)
     }
   })
 
   React.useEffect(() => {
-    if (data) setSection(data)
+    if (data) setProgram(data)
     return () => {
-      setSection(null)
+      setProgram(null)
     }
-  }, [data, setSection])
+  }, [data, setProgram])
 
   if (isLoading)
     return (

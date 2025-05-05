@@ -5,19 +5,19 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import { useQuery } from '@tanstack/react-query'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { api } from '~/lib/api'
-import Pagination from '~/commons/pagination'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { api } from '@/lib/api'
+import Pagination from '@/commons/pagination'
 import Item from './item'
-import { Period } from '~/types/academic/period'
-import { TableContainer } from '~/components/table-container'
+import { Period } from '@/types/academic/period'
+import { TableContainer } from '@/components/table-container'
 import { useDebounce } from 'hothooks'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 
 export type FiltersValues = {
   q: string | null
@@ -81,7 +81,6 @@ export default function SectionPeriodsPage() {
             <TableRow>
               <TableSelectionCell type="radio" />
               <TableHeaderCell>Periodo</TableHeaderCell>
-              <TableHeaderCell>Programas</TableHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>

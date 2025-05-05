@@ -18,15 +18,15 @@ import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '~/lib/api'
-import { Section } from '~/types/academic/section'
-import { handleError } from '~/utils'
-import { useSlugSection } from '../../../+layout'
-// import { Cycle } from '~/types/academic/cycle'
-import { Plan, PlanCourse } from '~/types/academic/plan'
+import { api } from '@/lib/api'
+import { Section } from '@/types/academic/section'
+import { handleError } from '@/utils'
+import { useSlugSection } from '../../+layout'
+// import { Cycle } from '@/types/academic/cycle'
+import { Plan, PlanCourse } from '@/types/academic/plan'
 import React from 'react'
 import { useDebounce } from 'hothooks'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import {
   Table,
   TableBody,
@@ -35,8 +35,8 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
-import { Cycle } from '~/types/academic/cycle'
+} from '@/components/table'
+import { Cycle } from '@/types/academic/cycle'
 
 type FormValues = {
   code: string
@@ -48,7 +48,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => {},
+  refetch = () => { },
   defaultProp,
   readOnly = false
 }: {
@@ -65,11 +65,11 @@ export default function Form({
     {
       values: defaultProp
         ? {
-            code: defaultProp.code,
-            cycle: defaultProp.cycle,
-            courses: [],
-            plan: defaultProp.plan
-          }
+          code: defaultProp.code,
+          cycle: defaultProp.cycle,
+          courses: [],
+          plan: defaultProp.plan
+        }
         : { code: '', plan: null, cycle: null, courses: [] }
     }
   )
@@ -143,8 +143,7 @@ export default function Form({
     enabled: open && !!plan,
     queryFn: async () => {
       const res = await api.get<PlanCourse[]>(
-        `academic/plans/courses?planId=${plan?.id}${q ? `&q=${q}` : ''}${
-          cycle ? `&cycleId=${cycle?.id}` : ''
+        `academic/plans/courses?planId=${plan?.id}${q ? `&q=${q}` : ''}${cycle ? `&cycleId=${cycle?.id}` : ''
         }`
       )
       if (!res.ok) return []
@@ -305,11 +304,11 @@ export default function Form({
                                   <TableSelectionCell
                                     checked={
                                       field.value?.length ===
-                                      planCourses?.length
+                                        planCourses?.length
                                         ? true
                                         : field.value.length !== 0
-                                        ? 'mixed'
-                                        : false
+                                          ? 'mixed'
+                                          : false
                                     }
                                     onClick={() => {
                                       if (field.value?.length) {

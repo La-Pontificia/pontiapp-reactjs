@@ -3,12 +3,12 @@ import { Button, Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Outlet, useLocation, useParams } from 'react-router'
-import Breadcrumbs, { BreadcrumbType } from '~/components/breadcrumbs'
-import { PATHNAMES } from '~/const'
-import { api } from '~/lib/api'
-import { Period } from '~/types/academic/period'
-import { Program } from '~/types/academic/program'
-import { Section } from '~/types/academic/section'
+import Breadcrumbs, { BreadcrumbType } from '@/components/breadcrumbs'
+import { PATHNAMES } from '@/const'
+import { api } from '@/lib/api'
+import { Period } from '@/types/academic/period'
+import { Program } from '@/types/academic/program'
+import { Section } from '@/types/academic/section'
 
 type ContextSlugSectionState = {
   breadcrumbsComp: React.ReactNode
@@ -51,62 +51,59 @@ export default function SectionSlugLayout() {
   }, [breadcrumbs])
 
   React.useEffect(() => {
-    const [one, two, three, four, five, six] = pathname.split('/').slice(4)
+    const [one, two, three, four, five] = pathname.split('/').slice(4)
 
+    setBreadcrumbs([
+      {
+        name: 'Secciones',
+        to: `/m/academic/sections`
+      }
+    ])
     if (one && period) {
-      setBreadcrumbs([
-        {
-          name: period.name,
-          to: `/m/academic/sections`
-        }
-      ])
-    }
-
-    if (two) {
       setBreadcrumbs((prev) => [
         ...prev,
         {
-          name: PATHNAMES[two as keyof typeof PATHNAMES] ?? two,
-          to: `/m/academic/sections/${period?.id}/programs`
+          name: period.name,
+          to: `/m/academic/sections/${period.id}`
         }
       ])
     }
 
-    if (three && program) {
+    if (two && program) {
       setBreadcrumbs((prev) => [
         ...prev,
         {
           name: program.name,
-          to: `/m/academic/sections/${period?.id}/programs`
+          to: `/m/academic/sections/${period?.id}/${program?.id}/sections`
         }
       ])
     }
 
-    if (four) {
+    if (three) {
       setBreadcrumbs((prev) => [
         ...prev,
         {
-          name: PATHNAMES[four as keyof typeof PATHNAMES] ?? four,
-          to: `/m/academic/sections/${period?.id}/programs/${program?.id}/sections`
+          name: PATHNAMES[three as keyof typeof PATHNAMES] ?? three,
+          to: `/m/academic/sections/${period?.id}/${program?.id}/sections`
         }
       ])
     }
 
-    if (five && section) {
+    if (four && section) {
       setBreadcrumbs((prev) => [
         ...prev,
         {
           name: section.code,
-          to: `/m/academic/sections/${period?.id}/programs/${program?.id}/sections`
+          to: `/m/academic/sections/${period?.id}/${program?.id}/sections`
         }
       ])
     }
 
-    if (six) {
+    if (five) {
       setBreadcrumbs((prev) => [
         ...prev,
         {
-          name: PATHNAMES[six as keyof typeof PATHNAMES] ?? six,
+          name: PATHNAMES[five as keyof typeof PATHNAMES] ?? five,
           to: `/m/academic/sections`
         }
       ])

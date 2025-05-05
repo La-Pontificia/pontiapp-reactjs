@@ -1,14 +1,13 @@
-import { Button } from '@fluentui/react-components'
 import {
   TableCell,
   TableCellLayout,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
-import { FolderOpenRegular, HatGraduationRegular } from '@fluentui/react-icons'
+} from '@/components/table'
+import { FolderOpenRegular } from '@fluentui/react-icons'
 import { useNavigate } from 'react-router'
 
-import { Period } from '~/types/academic/period'
+import { Period } from '@/types/academic/period'
 
 export default function Item({ item }: { item: Period }) {
   const navigate = useNavigate()
@@ -17,18 +16,9 @@ export default function Item({ item }: { item: Period }) {
       <TableRow>
         <TableSelectionCell type="radio" />
         <TableCell>
-          <TableCellLayout media={<FolderOpenRegular fontSize={25} />}>
+          <TableCellLayout onClick={() => navigate(`/m/academic/sections/${item.id}`)} className='hover:underline cursor-pointer hover:text-blue-800 dark:hover:text-blue-400' media={<FolderOpenRegular fontSize={25} />}>
             {item.name}
           </TableCellLayout>
-        </TableCell>
-        <TableCell>
-          <Button
-            size="small"
-            onClick={() => navigate(`/m/academic/sections/${item.id}/programs`)}
-            icon={<HatGraduationRegular />}
-          >
-            Programas académicos
-          </Button>
         </TableCell>
       </TableRow>
     </>

@@ -16,13 +16,13 @@ import { Dismiss24Regular, PersonLightbulbRegular } from '@fluentui/react-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '~/lib/api'
-import { PlanCourse } from '~/types/academic/plan'
-import { SectionCourse } from '~/types/academic/section-course'
-import { User } from '~/types/user'
-import { handleError } from '~/utils'
-import { useSlugSection } from '../../../../../+layout'
-import UserDrawer from '~/components/user-drawer'
+import { api } from '@/lib/api'
+import { PlanCourse } from '@/types/academic/plan'
+import { SectionCourse } from '@/types/academic/section-course'
+import { User } from '@/types/user'
+import { handleError } from '@/utils'
+import { useSlugSection } from '../../../../+layout'
+import UserDrawer from '@/components/user-drawer'
 
 type FormValues = {
   teacher?: User | null
@@ -32,7 +32,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => {},
+  refetch = () => { },
   defaultProp,
   readOnly = false
 }: {
@@ -46,13 +46,13 @@ export default function Form({
   const { control, handleSubmit, reset, watch } = useForm<FormValues>({
     values: defaultProp
       ? {
-          teacher: defaultProp.teacher,
-          planCourse: defaultProp.planCourse
-        }
+        teacher: defaultProp.teacher,
+        planCourse: defaultProp.planCourse
+      }
       : {
-          teacher: null,
-          planCourse: null
-        }
+        teacher: null,
+        planCourse: null
+      }
   })
 
   const { mutate: fetch, isPending: fetching } = useMutation({

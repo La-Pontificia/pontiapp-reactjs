@@ -1,15 +1,15 @@
-import { Button, Persona } from '@fluentui/react-components'
-import { FolderGlobeRegular, FolderOpenRegular } from '@fluentui/react-icons'
+import { Persona } from '@fluentui/react-components'
+import { FolderOpenRegular } from '@fluentui/react-icons'
 
-import { Program } from '~/types/academic/program'
+import { Program } from '@/types/academic/program'
 import { useNavigate } from 'react-router'
-import { useSlugSection } from '../+layout'
+import { useSlugSection } from './+layout'
 import {
   TableSelectionCell,
   TableCell,
   TableCellLayout,
   TableRow
-} from '~/components/table'
+} from '@/components/table'
 
 export default function Item({ item }: { item: Program }) {
   const { period } = useSlugSection()
@@ -20,7 +20,11 @@ export default function Item({ item }: { item: Program }) {
       <TableRow>
         <TableSelectionCell type="radio" />
         <TableCell>
-          <TableCellLayout media={<FolderOpenRegular fontSize={25} />}>
+          <TableCellLayout onClick={() =>
+            navigate(
+              `/m/academic/sections/${period.id}/${item.id}/sections`
+            )
+          } className='hover:underline cursor-pointer hover:text-blue-800 dark:hover:text-blue-400' media={<FolderOpenRegular fontSize={25} />}>
             {item.name}
           </TableCellLayout>
         </TableCell>
@@ -37,19 +41,6 @@ export default function Item({ item }: { item: Program }) {
             name={item.businessUnit?.acronym}
             secondaryText={item.businessUnit?.name}
           />
-        </TableCell>
-        <TableCell>
-          <Button
-            onClick={() =>
-              navigate(
-                `/m/academic/sections/${period.id}/programs/${item.id}/sections`
-              )
-            }
-            icon={<FolderGlobeRegular />}
-            size="small"
-          >
-            Secciones
-          </Button>
         </TableCell>
       </TableRow>
     </>

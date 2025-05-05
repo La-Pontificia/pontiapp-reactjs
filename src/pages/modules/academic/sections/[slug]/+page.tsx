@@ -5,20 +5,20 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import { useQuery } from '@tanstack/react-query'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { api } from '~/lib/api'
-import Pagination from '~/commons/pagination'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { api } from '@/lib/api'
+import Pagination from '@/commons/pagination'
 import Item from './item'
-import { Program } from '~/types/academic/program'
-import { useAuth } from '~/store/auth'
-import { useSlugSection } from '../+layout'
-import { TableContainer } from '~/components/table-container'
+import { Program } from '@/types/academic/program'
+import { useAuth } from '@/store/auth'
+import { useSlugSection } from './+layout'
+import { TableContainer } from '@/components/table-container'
 import { useDebounce } from 'hothooks'
 
 export type FiltersValues = {
@@ -88,7 +88,6 @@ export default function SectionProgramsPage() {
               <TableSelectionCell type="radio" />
               <TableHeaderCell>Programa</TableHeaderCell>
               <TableHeaderCell>Unidad</TableHeaderCell>
-              <TableHeaderCell></TableHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -7,40 +7,43 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
+
 import { AddFilled } from '@fluentui/react-icons'
 import React from 'react'
 import { Helmet } from 'react-helmet'
-import SearchBox from '~/commons/search-box'
+import SearchBox from '@/commons/search-box'
 import Form from './form'
 import { useQuery } from '@tanstack/react-query'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { api } from '~/lib/api'
-import Pagination from '~/commons/pagination'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { api } from '@/lib/api'
+// import Pagination from '@/commons/pagination'
+import { useSlugSection } from '../../+layout'
+import { Section } from '@/types/academic/section'
 import Item from './item'
-import { TableContainer } from '~/components/table-container'
-import { useSlugSection } from '../../../../../+layout'
+import { TableContainer } from '@/components/table-container'
+import Pagination from '@/commons/pagination'
 import { useDebounce } from 'hothooks'
-import { SectionCourse } from '~/types/academic/section-course'
 
 export type FiltersValues = {
   q: string | null
   page: number
 }
-export default function CoursesPage() {
+export default function SectionsPage() {
+  const { period, program, breadcrumbsComp } = useSlugSection()
   const [openForm, setOpenForm] = React.useState(false)
-  const { breadcrumbsComp, section } = useSlugSection()
   const [filters, setFilters] = React.useState<FiltersValues>({
     q: null,
     page: 1
   })
   const query = React.useMemo(() => {
     let uri = '?paginate=true'
-    uri += `&sectionId=${section?.id}`
+    uri += `&periodId=${period.id}`
+    uri += `&programId=${program?.id}`
     if (filters.q) uri += `&q=${filters.q}`
     if (filters.page) uri += `&page=${filters.page}`
     return uri
-  }, [filters, section])
+  }, [filters, period, program])
 
   const { setValue } = useDebounce<string | null>({
     delay: 500,
@@ -48,17 +51,17 @@ export default function CoursesPage() {
   })
 
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
-    SectionCourse[]
+    Section[]
   > | null>({
-    queryKey: ['academic/sections/courses', filters, section],
+    queryKey: ['academic/sections', filters, period, program],
     queryFn: async () => {
-      const res = await api.get<ResponsePaginate<SectionCourse[]>>(
-        'academic/sections/courses' + query
+      const res = await api.get<ResponsePaginate<Section[]>>(
+        'academic/sections' + query
       )
       if (!res.ok) return null
       return {
         ...res.data,
-        data: res.data.data.map((e) => new SectionCourse(e))
+        data: res.data.data.map((d) => new Section(d))
       }
     }
   })
@@ -66,11 +69,21 @@ export default function CoursesPage() {
   return (
     <>
       <Helmet>
-        <title>Cursos académicos | Pontiapp</title>
+        <title>
+          Secciones {'|'} {period?.name} {'|'} {program?.name} | Pontiapp
+        </title>
       </Helmet>
       <TableContainer
         isLoading={isLoading}
         isEmpty={!data?.data.length}
+        footer={
+          data && (
+            <Pagination
+              onChangePage={(page) => setFilters((prev) => ({ ...prev, page }))}
+              state={data}
+            />
+          )
+        }
         nav={
           <nav className="flex items-center gap-3 flex-wrap w-full">
             {breadcrumbsComp}
@@ -91,29 +104,19 @@ export default function CoursesPage() {
               onOpenChange={setOpenForm}
               refetch={refetch}
             />
-            <SearchBox onSearch={setValue} placeholder="Filtrar " />
+            <SearchBox onSearch={setValue} placeholder="Filtrar" />
           </nav>
-        }
-        footer={
-          data && (
-            <Pagination
-              onChangePage={(page) => setFilters((prev) => ({ ...prev, page }))}
-              state={data}
-            />
-          )
         }
       >
         <Table>
           <TableHeader>
             <TableRow>
               <TableSelectionCell type="radio" invisible />
-              <TableHeaderCell>Unidad didactica</TableHeaderCell>
-              <TableHeaderCell>Plan</TableHeaderCell>
-              <TableHeaderCell>Docente</TableHeaderCell>
-              {/* <TableHeaderCell>Horarios</TableHeaderCell> */}
-              <TableHeaderCell className="max-lg:!hidden">
-                Registrado
-              </TableHeaderCell>
+              <TableHeaderCell>Sección</TableHeaderCell>
+              <TableHeaderCell>Plan de estudio</TableHeaderCell>
+              <TableHeaderCell>Ciclo</TableHeaderCell>
+              <TableHeaderCell>Cursos</TableHeaderCell>
+              <TableHeaderCell>Registrado por</TableHeaderCell>
               <TableHeaderCell></TableHeaderCell>
             </TableRow>
           </TableHeader>
