@@ -1,10 +1,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { ERRORS } from '~/const/errors'
-import { BIRTHDAY_MESSAGE } from '~/const/index'
+import { ERRORS } from '@/const/errors'
+import { BIRTHDAY_MESSAGE } from '@/const/index'
 
 import clsx, { type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { parse } from '~/lib/dayjs'
+import { parse } from '@/lib/dayjs'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -64,4 +64,15 @@ export const parseTime = (time: string): Date | null => {
   date.setMilliseconds(0)
 
   return parse(date)
+}
+
+export function capitalizeText(text: string) {
+  if (text.split(' ').length === 1) return text
+  return text
+    .toLowerCase()
+    .split(' ')
+    .map((word) => {
+      return word.charAt(0).toUpperCase() + word.slice(1)
+    })
+    .join(' ')
 }
