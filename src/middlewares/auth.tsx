@@ -1,5 +1,5 @@
-import RootLoading from '~/pages/+loading'
-import { useAuth } from '~/store/auth'
+import RootLoading from '@/pages/+loading'
+import { useAuth } from '@/store/auth'
 import { Navigate } from 'react-router'
 
 export default function AuthMiddleware({
