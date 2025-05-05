@@ -1,5 +1,5 @@
 import { Navigate, Route, Routes } from 'react-router'
-import ProtectedModule from '~/protected/module'
+import ProtectedModule from '@/protected/module'
 import InventoriesLayout from './+layout'
 import PharmacyRoutes from './pharmacy/routes'
 

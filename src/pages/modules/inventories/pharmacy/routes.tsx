@@ -1,5 +1,5 @@
 import { Route, Routes } from 'react-router'
-import Protected from '~/protected/auth'
+import Protected from '@/protected/auth'
 import PharmacyItemsPage from './items/+page'
 
 export default function PharmacyRoutes() {

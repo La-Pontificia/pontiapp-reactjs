@@ -1,7 +1,7 @@
 import { FilterAddFilled } from '@fluentui/react-icons'
 import React from 'react'
-import SearchBox from '~/commons/search-box'
-import { useDebounced } from '~/hooks/use-debounced'
+import SearchBox from '@/commons/search-box'
+import { useDebounced } from '@/hooks/use-debounced'
 
 export type FiltersValues = {
   q: string | null
