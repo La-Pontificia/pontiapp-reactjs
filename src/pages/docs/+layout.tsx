@@ -1,10 +1,10 @@
 import { Avatar } from '@fluentui/react-components'
 import { OpenRegular } from '@fluentui/react-icons'
 import { Link, Outlet } from 'react-router'
-import { Lp } from '~/icons'
-import { useAuth } from '~/store/auth'
+import { Lp } from '@/icons'
+import { useAuth } from '@/store/auth'
 import DocsSidebar from './sidebar'
-import Footer from '~/components/footer'
+import Footer from '@/components/footer'
 
 export default function DocsLayout() {
   const { user: authUser } = useAuth()
