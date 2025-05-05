@@ -1,11 +1,11 @@
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { AddFilled, Search20Regular } from '@fluentui/react-icons'
 import Form from './form'
 import { SearchBox, Spinner } from '@fluentui/react-components'
 import React from 'react'
-import { useDebounced } from '~/hooks/use-debounced'
-import { Department } from '~/types/department'
+import { useDebounced } from '@/hooks/use-debounced'
+import { Department } from '@/types/department'
 import Item from './department'
 
 export default function CollaboratorsDepartmentsPage() {

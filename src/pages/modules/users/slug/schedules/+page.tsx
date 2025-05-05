@@ -1,12 +1,12 @@
 import { Helmet } from 'react-helmet'
 import { useSlugUser } from '../+layout'
 import { Link, useParams } from 'react-router'
-import { Schedule } from '~/types/schedule'
+import { Schedule } from '@/types/schedule'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '~/lib/api'
-import { cn } from '~/utils'
+import { api } from '@/lib/api'
+import { cn } from '@/utils'
 import { PenRegular } from '@fluentui/react-icons'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 import { ScheduleItem } from '../edit/schedule'
 
 export default function UsersSlugSchedulesPage() {
@@ -76,7 +76,7 @@ export default function UsersSlugSchedulesPage() {
           ) : (
             schedules?.map((schedule) => (
               <ScheduleItem
-                refetch={() => {}}
+                refetch={() => { }}
                 hasEdit={false}
                 key={schedule.id}
                 schedule={schedule}

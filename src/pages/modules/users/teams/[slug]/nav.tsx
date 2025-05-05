@@ -13,12 +13,12 @@ import {
 import { AddRegular, DeleteRegular, PenRegular } from '@fluentui/react-icons'
 import React from 'react'
 import TeamForm from '../form'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { toast } from 'anni'
 import { useNavigate } from 'react-router'
-import { User } from '~/types/user'
-import UserDrawer from '~/components/user-drawer'
-import { handleError } from '~/utils'
+import { User } from '@/types/user'
+import UserDrawer from '@/components/user-drawer'
+import { handleError } from '@/utils'
 import { useTeamSlug } from './+page'
 
 export default function CollaboratorsTeamSlugNav() {

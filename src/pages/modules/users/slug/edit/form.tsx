@@ -1,21 +1,21 @@
 import { useForm } from 'react-hook-form'
 import { useUserEdit } from './+page'
 import AccountForm from './account-form'
-import { ContactType, User } from '~/types/user'
-import { Job } from '~/types/job'
-import { Role } from '~/types/role'
-import { ContractType } from '~/types/contract-type'
-import { UserRole } from '~/types/user-role'
+import { ContactType, User } from '@/types/user'
+import { Job } from '@/types/job'
+import { Role } from '@/types/role'
+import { ContractType } from '@/types/contract-type'
+import { UserRole } from '@/types/user-role'
 import { Button, Divider, Spinner } from '@fluentui/react-components'
 import { useNavigate } from 'react-router'
 import OrganizationForm from './organization-form'
 import PropertiesPersonForm from './properties-person-form'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { toast } from 'anni'
 import { useSlugUser } from '../+layout'
 import React from 'react'
 import UsersEditSchedules from './schedules'
-import { RmBranch } from '~/types/rm-branch'
+import { RmBranch } from '@/types/rm-branch'
 
 export type FormUserValues = {
   documentId: string
@@ -100,10 +100,10 @@ export default function FormUser() {
       refetch()
       slugRefetch()
       setFetching(false)
-      toast('Usuario actualizado correctamente.')
+      toast.success('Usuario actualizado correctamente.')
       return
     }
-    toast(res.error)
+    toast.error(res.error)
     setFetching(false)
   })
 

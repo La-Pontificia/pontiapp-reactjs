@@ -7,15 +7,15 @@ import {
 } from 'react-hook-form'
 import { FormUserValues } from './form'
 import { useQuery } from '@tanstack/react-query'
-import { Job } from '~/types/job'
-import { api } from '~/lib/api'
-import { Role } from '~/types/role'
-import { ContractType } from '~/types/contract-type'
+import { Job } from '@/types/job'
+import { api } from '@/lib/api'
+import { Role } from '@/types/role'
+import { ContractType } from '@/types/contract-type'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { format } from '~/lib/dayjs'
-import { calendarStrings } from '~/const'
-import { useAuth } from '~/store/auth'
-import { RmBranch } from '~/types/rm-branch'
+import { format } from '@/lib/dayjs'
+import { calendarStrings } from '@/const'
+import { useAuth } from '@/store/auth'
+import { RmBranch } from '@/types/rm-branch'
 
 export default function OrganizationForm({
   control,

@@ -12,22 +12,22 @@ import {
 import { Dismiss24Regular } from '@fluentui/react-icons'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { availableDomains } from '~/const'
-import { ContractType } from '~/types/contract-type'
-import { Job } from '~/types/job'
-import { Role } from '~/types/role'
-import { Schedule } from '~/types/schedule'
-import { ContactType, User } from '~/types/user'
-import { UserRole } from '~/types/user-role'
-import { generateRandomPassword } from '~/utils'
+import { availableDomains } from '@/const'
+import { ContractType } from '@/types/contract-type'
+import { Job } from '@/types/job'
+import { Role } from '@/types/role'
+import { Schedule } from '@/types/schedule'
+import { ContactType, User } from '@/types/user'
+import { UserRole } from '@/types/user-role'
+import { generateRandomPassword } from '@/utils'
 import AccountForm from './account-form'
 import PropertiesPersonForm, { UserContacts } from './properties-person-form'
 import OrganizationForm, { ScheduleForm } from './organization-form'
-import { format } from '~/lib/dayjs'
+import { format } from '@/lib/dayjs'
 import { toast } from 'anni'
 import { useNavigate } from 'react-router'
-import { api } from '~/lib/api'
-import { RmBranch } from '~/types/rm-branch'
+import { api } from '@/lib/api'
+import { RmBranch } from '@/types/rm-branch'
 
 type Props = {
   title?: string
@@ -69,7 +69,7 @@ export default function FormUser(props?: Props) {
   const navigate = useNavigate()
   const {
     open = false,
-    setOpen = () => {},
+    setOpen = () => { },
     readOnly = false,
     defaultUser
   } = props ?? {}
@@ -124,7 +124,7 @@ export default function FormUser(props?: Props) {
     if (res.ok) {
       return navigate(`/m/users/${res.data.username}`)
     }
-    toast(res.error)
+    toast.error(res.error)
 
     setFetching(false)
   })

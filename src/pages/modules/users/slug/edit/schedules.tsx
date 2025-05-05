@@ -1,8 +1,8 @@
 import { useParams } from 'react-router'
-import { Schedule } from '~/types/schedule'
+import { Schedule } from '@/types/schedule'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { api } from '~/lib/api'
-import { cn, handleError, parseTime } from '~/utils'
+import { api } from '@/lib/api'
+import { cn, handleError, parseTime } from '@/utils'
 import { ScheduleItem } from './schedule'
 import { Input, Select, Spinner } from '@fluentui/react-components'
 import {
@@ -20,16 +20,16 @@ import {
 import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'anni'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { calendarStrings, days } from '~/const'
+import { calendarStrings, days } from '@/const'
 import {
   formatDateToTimeString,
   TimePicker
 } from '@fluentui/react-timepicker-compat'
 import React from 'react'
-import { format, parse } from '~/lib/dayjs'
+import { format, parse } from '@/lib/dayjs'
 import { useUserEdit } from './+page'
 import { AddRegular } from '@fluentui/react-icons'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 
 export default function UsersEditSchedules() {
   const params = useParams<{
@@ -306,9 +306,8 @@ export function ScheduleForm(props: {
                   <Field
                     required
                     orientation="horizontal"
-                    label={`Días de la semana que se aplicará el horario ${
-                      type === 'unavailable' ? 'no disponible' : 'laboral'
-                    }:`}
+                    label={`Días de la semana que se aplicará el horario ${type === 'unavailable' ? 'no disponible' : 'laboral'
+                      }:`}
                     validationMessage={error?.message}
                     validationState={error ? 'error' : 'none'}
                   ></Field>
@@ -322,8 +321,8 @@ export function ScheduleForm(props: {
                               d.checked
                                 ? [...(field.value ?? []), key]
                                 : field.value
-                                ? field.value.filter((w) => w !== key)
-                                : []
+                                  ? field.value.filter((w) => w !== key)
+                                  : []
                             )
                           }}
                           label={day.short}

@@ -1,5 +1,5 @@
-import { api } from '~/lib/api'
-import { User } from '~/types/user'
+import { api } from '@/lib/api'
+import { User } from '@/types/user'
 import { Avatar, Spinner, Tooltip } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import { Link } from 'react-router'

@@ -2,14 +2,14 @@ import { Helmet } from 'react-helmet'
 import UserSlugAssistsFilter from './filters'
 import { useSlugUser } from '../+layout'
 import React from 'react'
-import { Assist } from '~/types/assist'
+import { Assist } from '@/types/assist'
 import { useQuery } from '@tanstack/react-query'
-import { format } from '~/lib/dayjs'
-import { api } from '~/lib/api'
+import { format } from '@/lib/dayjs'
+import { api } from '@/lib/api'
 import AssistsGrid from './grid'
 import RestAssistsGrid from './rest-grid'
 import { Spinner } from '@fluentui/react-components'
-import { RestAssist } from '~/types/rest-assist'
+import { RestAssist } from '@/types/rest-assist'
 
 export type Filter = {
   startDate: Date | null

@@ -1,7 +1,7 @@
 import { toast } from 'anni'
-import { api } from '~/lib/api'
-import { Job } from '~/types/job'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { Job } from '@/types/job'
+import { handleError } from '@/utils'
 import {
   Button,
   ButtonProps,

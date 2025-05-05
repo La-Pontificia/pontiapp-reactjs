@@ -8,7 +8,7 @@ import {
 } from '@fluentui/react-icons'
 
 import { Link } from 'react-router'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 
 export default function ModulePage() {
   const { user: authUser } = useAuth()

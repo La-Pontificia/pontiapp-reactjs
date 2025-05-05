@@ -1,7 +1,7 @@
 import { toast } from 'anni'
-import { api } from '~/lib/api'
-import { UserTeamMember } from '~/types/user-team'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { TeamMember } from '@/types/user/team'
+import { handleError } from '@/utils'
 import {
   Avatar,
   Badge,
@@ -34,10 +34,10 @@ const roles = {
   owner: 'Propietario'
 }
 
-export default function UserTeamMemberItem({
+export default function TeamMemberItem({
   member
 }: {
-  member: UserTeamMember
+  member: TeamMember
 }) {
   return (
     <tr className="relative bg-neutral-50/40 dark:bg-neutral-900 odd:bg-neutral-500/10 dark:even:bg-neutral-500/20 [&>td]:text-nowrap  group [&>td]:p-2.5 [&>td]:px-3 first:[&>td]:first:rounded-tl-xl last:[&>td]:first:rounded-tr-xl first:[&>td]:last:rounded-bl-xl last:[&>td]:last:rounded-br-xl">
@@ -48,21 +48,21 @@ export default function UserTeamMemberItem({
         <div className="flex items-center gap-2">
           <Avatar
             badge={{
-              status: member.user.status ? 'available' : 'blocked'
+              status: member.status ? 'available' : 'blocked'
             }}
             size={40}
             color="colorful"
-            name={member.user.displayName}
-            aria-label={member.user.displayName}
+            name={member.displayName}
+            aria-label={member.displayName}
             image={{
-              src: member.user.photoURL
+              src: member.photoURL
             }}
           />
           <Link
             className="hover:underline hover:dark:text-blue-500 relative"
-            to={`/m/users/${member.user.username}`}
+            to={`/${member.username}`}
           >
-            {member.user.displayName}
+            {member.displayName}
           </Link>
         </div>
       </td>
@@ -71,35 +71,35 @@ export default function UserTeamMemberItem({
           <FolderBriefcase20Regular />
           <div className="">
             <div className="max-w-[30ch] text-ellipsis overflow-hidden">
-              {member.user.role?.name}
+              {member.role?.name}
             </div>
             <div className="text-xs dark:text-neutral-400">
-              {member.user.role?.department?.name}
+              {member.role?.department?.name}
             </div>
           </div>
         </div>
       </td>
       <td>
         <p className="dark:text-blue-400 relative max-xl:max-w-[20ch] text-ellipsis overflow-hidden">
-          <a href={`mailto:${member.user.email}`} className="hover:underline">
-            {member.user.email}
+          <a href={`mailto:${member.email}`} className="hover:underline">
+            {member.email}
           </a>
         </p>
       </td>
       <td>
-        {member.role === 'member' ? (
+        {member.type === 'member' ? (
           <Badge color="brand" appearance="tint">
-            {roles[member.role]}
+            {roles[member.type]}
           </Badge>
         ) : (
           <Badge color="success" appearance="tint">
-            {roles[member.role]}
+            {roles[member.type]}
           </Badge>
         )}
       </td>
       <td>
         <Link
-          to={`/m/users/${member.user.username}`}
+          to={`/m/users/${member.username}`}
           className="flex items-center relative gap-2 dark:text-blue-500 hover:underline"
         >
           <OpenRegular fontSize={20} />
@@ -113,7 +113,7 @@ export default function UserTeamMemberItem({
   )
 }
 
-export const UserGridOptions = ({ member }: { member: UserTeamMember }) => {
+export const UserGridOptions = ({ member }: { member: TeamMember }) => {
   const { isOwnerLoading, isOwner, refetchMembers } = useTeamSlug()
 
   const [isRemoveAlertOpen, setIRemoveAlertOpen] = React.useState(false)
@@ -168,11 +168,11 @@ export const UserGridOptions = ({ member }: { member: UserTeamMember }) => {
         <DialogSurface>
           <DialogBody>
             <DialogTitle>
-              ¿Estás seguro de remover a {member.user.displayName} del equipo?
+              ¿Estás seguro de remover a {member.displayName} del equipo?
             </DialogTitle>
             <DialogContent>
               <p>
-                Al remover a {member.user.displayName} del equipo ya no
+                Al remover a {member.displayName} del equipo ya no
                 pertenerá a este.
               </p>
             </DialogContent>

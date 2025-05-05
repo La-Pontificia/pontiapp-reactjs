@@ -1,10 +1,10 @@
 import { Button, Field } from '@fluentui/react-components'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import React from 'react'
-import { localizedStrings } from '~/const'
-import { ExcelColored } from '~/icons'
-import { format } from '~/lib/dayjs'
-import { useAuth } from '~/store/auth'
+import { localizedStrings } from '@/const'
+import { ExcelColored } from '@/icons'
+import { format } from '@/lib/dayjs'
+import { useAuth } from '@/store/auth'
 import { Filter } from './+page'
 
 export default function UserSlugAssistsFilter({

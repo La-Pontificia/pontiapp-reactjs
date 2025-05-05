@@ -1,4 +1,4 @@
-import { Area } from '~/types/area'
+import { Area } from '@/types/area'
 import {
   Avatar,
   Badge,
@@ -18,15 +18,15 @@ import {
 } from '@fluentui/react-icons'
 import React from 'react'
 import AreaForm from './form'
-import { format, timeAgo } from '~/lib/dayjs'
-import { api } from '~/lib/api'
-import { handleError } from '~/utils'
+import { format, timeAgo } from '@/lib/dayjs'
+import { api } from '@/lib/api'
+import { handleError } from '@/utils'
 import { toast } from 'anni'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger
-} from '~/commons/hover-card'
+} from '@/commons/hover-card'
 
 export default function AreaItem({
   area,

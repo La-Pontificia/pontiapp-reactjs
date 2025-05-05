@@ -1,6 +1,6 @@
-import { format, timeAgo } from '~/lib/dayjs'
+import { format, timeAgo } from '@/lib/dayjs'
 import { useSlugUser } from '../+layout'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 
 export default function QuickSessions() {
   const { user } = useSlugUser()

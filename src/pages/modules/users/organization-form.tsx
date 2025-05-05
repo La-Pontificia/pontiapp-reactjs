@@ -23,13 +23,13 @@ import {
 } from 'react-hook-form'
 import { FormUserValues } from './form'
 import { useQuery } from '@tanstack/react-query'
-import { Job } from '~/types/job'
-import { api } from '~/lib/api'
-import { Role } from '~/types/role'
-import { ContractType } from '~/types/contract-type'
+import { Job } from '@/types/job'
+import { api } from '@/lib/api'
+import { Role } from '@/types/role'
+import { ContractType } from '@/types/contract-type'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { format, parse } from '~/lib/dayjs'
-import { calendarStrings, days } from '~/const'
+import { format, parse } from '@/lib/dayjs'
+import { calendarStrings, days } from '@/const'
 import {
   AddRegular,
   DeleteRegular,
@@ -39,10 +39,10 @@ import {
   formatDateToTimeString,
   TimePicker
 } from '@fluentui/react-timepicker-compat'
-import { useAuth } from '~/store/auth'
-import { Schedule } from '~/types/schedule'
-import { parseTime } from '~/utils'
-import { RmBranch } from '~/types/rm-branch'
+import { useAuth } from '@/store/auth'
+import { Schedule } from '@/types/schedule'
+import { parseTime } from '@/utils'
+import { RmBranch } from '@/types/rm-branch'
 
 export default function OrganizationForm({
   control,
@@ -431,8 +431,8 @@ export const ScheduleForm = ({
                               d.checked
                                 ? [...(field.value ?? []), key]
                                 : field.value
-                                ? field.value.filter((w) => w !== key)
-                                : []
+                                  ? field.value.filter((w) => w !== key)
+                                  : []
                             )
                           }}
                           label={day.label}

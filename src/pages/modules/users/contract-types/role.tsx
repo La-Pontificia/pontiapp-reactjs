@@ -16,13 +16,13 @@ import {
   PenFilled
 } from '@fluentui/react-icons'
 import React from 'react'
-import { format, timeAgo } from '~/lib/dayjs'
-import { api } from '~/lib/api'
-import { handleError } from '~/utils'
+import { format, timeAgo } from '@/lib/dayjs'
+import { api } from '@/lib/api'
+import { handleError } from '@/utils'
 import { toast } from 'anni'
 
 import Form from './form'
-import { ContractType } from '~/types/contract-type'
+import { ContractType } from '@/types/contract-type'
 
 export default function Item({
   item,

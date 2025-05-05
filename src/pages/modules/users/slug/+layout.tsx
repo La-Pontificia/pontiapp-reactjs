@@ -1,7 +1,7 @@
 import { toast } from 'anni'
-import { api } from '~/lib/api'
-import { User } from '~/types/user'
-import { handleAuthError } from '~/utils'
+import { api } from '@/lib/api'
+import { User } from '@/types/user'
+import { handleAuthError } from '@/utils'
 import {
   Avatar,
   Badge,
@@ -35,11 +35,11 @@ import React, { createContext } from 'react'
 import { Helmet } from 'react-helmet'
 import { Link, Outlet, useLocation, useNavigate, useParams } from 'react-router'
 import { FaWhatsapp } from 'react-icons/fa'
-import { useAuth } from '~/store/auth'
-import ExpiryStatusRenderer from '~/components/expiry-status-renderer'
-import { useUpdateProfile } from '~/hooks/user-update-profile'
+import { useAuth } from '@/store/auth'
+import ExpiryStatusRenderer from '@/components/expiry-status-renderer'
+import { useUpdateProfile } from '@/hooks/user-update-profile'
 import { useMediaQuery } from '@uidotdev/usehooks'
-import ResetPassword from '~/components/reset-password'
+import ResetPassword from '@/components/reset-password'
 
 type AuthState = {
   user?: User | null
@@ -78,8 +78,8 @@ export default function UsersSlugLayout(): JSX.Element {
     queryFn: async () => {
       const res = await api.get<User>(
         'users/' +
-          slug +
-          '?relationship=role,role.department,role.department.area,branch'
+        slug +
+        '?relationship=role,role.department,role.department.area,branch'
       )
       if (!res.ok) return null
       return new User(res.data)
@@ -184,10 +184,10 @@ export default function UsersSlugLayout(): JSX.Element {
                           status: updating
                             ? 'unknown'
                             : !user.status
-                            ? 'blocked'
-                            : hasEdit
-                            ? 'unknown'
-                            : 'available',
+                              ? 'blocked'
+                              : hasEdit
+                                ? 'unknown'
+                                : 'available',
                           icon: updating ? (
                             <Spinner size="tiny" />
                           ) : hasEdit ? (
@@ -359,8 +359,7 @@ export const UserOptions = ({ user }: { user: User }) => {
     setToglingStatus(false)
     setIsToggleStatusOpen(false)
     toast(
-      `Usuario ${user.displayName} ${
-        user.status ? 'deshabilitado' : 'habilitado'
+      `Usuario ${user.displayName} ${user.status ? 'deshabilitado' : 'habilitado'
       }.`
     )
     refetch()

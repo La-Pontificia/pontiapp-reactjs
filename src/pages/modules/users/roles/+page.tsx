@@ -1,15 +1,15 @@
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { AddFilled, Search20Regular } from '@fluentui/react-icons'
 import Form from './form'
 import { SearchBox, Spinner } from '@fluentui/react-components'
 import React from 'react'
-import { useDebounced } from '~/hooks/use-debounced'
+import { useDebounced } from '@/hooks/use-debounced'
 import Item from './role'
-import { Role } from '~/types/role'
-import { ResponsePaginate } from '~/types/paginate-response'
+import { Role } from '@/types/role'
+import { ResponsePaginate } from '@/types/paginate-response'
 import { toast } from 'anni'
-import { handleError } from '~/utils'
+import { handleError } from '@/utils'
 
 export default function CollaboratorsRolesPage() {
   const [items, setItems] = React.useState<Role[]>([])
@@ -19,9 +19,8 @@ export default function CollaboratorsRolesPage() {
   const [loadingMore, setLoadingMore] = React.useState(false)
   const [q, setQ] = React.useState<string>()
 
-  const query = `partials/roles/all?paginate=true&relationship=job,usersCount,department${
-    q ? `&q=${q}` : ''
-  }`
+  const query = `partials/roles/all?paginate=true&relationship=job,usersCount,department${q ? `&q=${q}` : ''
+    }`
 
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
     Role[]

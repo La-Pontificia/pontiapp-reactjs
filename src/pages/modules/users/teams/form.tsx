@@ -1,9 +1,9 @@
 import { toast } from 'anni'
-import UserDrawer from '~/components/user-drawer'
-import { api } from '~/lib/api'
-import { User } from '~/types/user'
-import { UserTeam } from '~/types/user-team'
-import { handleError } from '~/utils'
+import UserDrawer from '@/components/user-drawer'
+import { api } from '@/lib/api'
+import { User } from '@/types/user'
+import { UserTeam } from '@/types/user/team'
+import { handleError } from '@/utils'
 import {
   Avatar,
   Button,
@@ -137,8 +137,8 @@ export default function TeamForm({
                 {uploading
                   ? 'Subiendo foto'
                   : defaultValue
-                  ? 'Cambiar foto'
-                  : 'Subir foto'}
+                    ? 'Cambiar foto'
+                    : 'Subir foto'}
               </Button>
             </div>
           </div>

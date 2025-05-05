@@ -23,10 +23,10 @@ import {
 } from 'react-hook-form'
 import { FormUserValues } from './form'
 import { toast } from 'anni'
-import { getPersonByDocumentId } from '~/utils/fetch'
+import { getPersonByDocumentId } from '@/utils/fetch'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { format } from '~/lib/dayjs'
-import { calendarStrings, CONTACT_TYPES } from '~/const'
+import { format } from '@/lib/dayjs'
+import { calendarStrings, CONTACT_TYPES } from '@/const'
 import {
   AddRegular,
   ContactCardGroupRegular,
@@ -34,9 +34,9 @@ import {
   MailRegular,
   PhoneRegular
 } from '@fluentui/react-icons'
-import { emailRegex, phoneRegex } from '~/const/regex'
-import { ContactType } from '~/types/user'
-import { api } from '~/lib/api'
+import { emailRegex, phoneRegex } from '@/const/regex'
+import { ContactType } from '@/types/user'
+import { api } from '@/lib/api'
 import { FaWhatsapp } from 'react-icons/fa'
 
 export default function PropertiesPersonForm({
@@ -244,8 +244,8 @@ export default function PropertiesPersonForm({
                       contact.type === 'email'
                         ? MailRegular
                         : contact.type === 'phone'
-                        ? PhoneRegular
-                        : FaWhatsapp
+                          ? PhoneRegular
+                          : FaWhatsapp
                     return (
                       <div key={key} className="flex items-center gap-2 py-1">
                         <Icon

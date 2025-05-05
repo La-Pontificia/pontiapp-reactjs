@@ -1,9 +1,9 @@
 import { toast } from 'anni'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
-import { Area } from '~/types/area'
-import { Department } from '~/types/department'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
+import { Area } from '@/types/area'
+import { Department } from '@/types/department'
+import { handleError } from '@/utils'
 import {
   Button,
   ButtonProps,

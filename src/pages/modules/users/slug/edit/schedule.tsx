@@ -1,9 +1,9 @@
 import { toast } from 'anni'
-import { calendarStrings, days } from '~/const'
-import { api } from '~/lib/api'
-import { countRangeMinutes, format } from '~/lib/dayjs'
-import { Schedule } from '~/types/schedule'
-import { handleError } from '~/utils'
+import { calendarStrings, days } from '@/const'
+import { api } from '@/lib/api'
+import { countRangeMinutes, format } from '@/lib/dayjs'
+import { Schedule } from '@/types/schedule'
+import { handleError } from '@/utils'
 import {
   Button,
   Dialog,

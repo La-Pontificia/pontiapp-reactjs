@@ -3,9 +3,9 @@ import { Spinner, Tab, TabList, Tooltip } from '@fluentui/react-components'
 import { useSlugUser } from '../+layout'
 import React from 'react'
 import { PersonFeedbackRegular } from '@fluentui/react-icons'
-import { User } from '~/types/user'
+import { User } from '@/types/user'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import FormUser from './form'
 
 const TABS: Record<

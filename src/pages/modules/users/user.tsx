@@ -1,9 +1,9 @@
 import { toast } from 'anni'
-import UserDrawer from '~/components/user-drawer'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
-import { User } from '~/types/user'
-import { handleAuthError } from '~/utils'
+import UserDrawer from '@/components/user-drawer'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
+import { User } from '@/types/user'
+import { handleAuthError } from '@/utils'
 import {
   Avatar,
   Button,
@@ -21,18 +21,13 @@ import {
   KeyResetRegular,
   OpenRegular,
   PenRegular,
-  PersonAvailableRegular
+  PersonProhibitedRegular
 } from '@fluentui/react-icons'
 import React from 'react'
 import { Link, useNavigate } from 'react-router'
-import UserHoverInfo from '~/components/user-hover-info'
-import ResetPassword from '~/components/reset-password'
-import {
-  TableCell,
-  TableCellLayout,
-  TableRow,
-  TableSelectionCell
-} from '~/components/table'
+import UserHoverInfo from '@/components/user-hover-info'
+import ResetPassword from '@/components/reset-password'
+import { TableCell, TableCellLayout, TableRow, TableSelectionCell } from '@/components/table'
 
 export default function UserGrid({
   user: userProp,
@@ -48,9 +43,9 @@ export default function UserGrid({
   const handleManager = async (manager?: User) => {
     setManagerUpdating(true)
     const res = await api.post(`users/${user.id}/manager`, {
-      data: {
+      data: JSON.stringify({
         managerId: manager?.id
-      }
+      })
     })
     if (!res.ok) {
       setManagerUpdating(false)
@@ -68,94 +63,97 @@ export default function UserGrid({
     toast('Jefe actualizado correctamente.')
   }
   return (
-    <TableRow>
-      <TableSelectionCell type="radio" />
-      <TableCell>
-        <UserHoverInfo slug={user.username}>
-          <div className="flex items-center gap-2">
-            <TableCellLayout
-              media={
-                <Avatar
-                  badge={{
-                    status: 'blocked'
-                  }}
-                  name={user.displayName}
-                  color="colorful"
-                  image={{
-                    src: user.photoURL
-                  }}
-                />
-              }
-            >
-              <Link
-                className="hover:underline font-semibold relative"
-                to={`/m/users/${user.username}`}
+    <>
+      <TableRow>
+        <TableSelectionCell type="radio" />
+        <TableCell>
+          <UserHoverInfo slug={user.username}>
+            <div className="flex items-center gap-2">
+              <TableCellLayout
+                media={
+                  <Avatar
+                    name={user.displayName}
+                    color="colorful"
+                    badge={{
+                      status: user.status ? 'available' : 'away',
+                    }}
+                    image={{
+                      src: user.photoURL
+                    }}
+                  />
+                }
               >
-                {user.displayName}
-              </Link>
-            </TableCellLayout>
-          </div>
-        </UserHoverInfo>
-      </TableCell>
-      <TableCell className="max-sm:hidden">
-        <div className="line-clamp-2 opacity-60 text-ellipsis overflow-hidden">
-          {user.role?.name}
-        </div>
-      </TableCell>
-      <TableCell className="max-lg:hidden">
-        <p className="dark:text-white relative text-ellipsis overflow-hidden">
-          <a href={`mailto:${user.email}`} className="hover:underline">
-            {user.email}
-          </a>
-        </p>
-      </TableCell>
-      <TableCell className="max-xl:hidden">
-        <UserDrawer
-          max={1}
-          users={user.manager ? [user.manager] : []}
-          title="Jefe inmediato"
-          onSubmitTitle="Cambiar jefe"
-          onSubmit={(v) => handleManager(v[0])}
-          triggerProps={{
-            appearance: 'transparent',
-            style: {
-              padding: 0,
-              'box-shadow': 'none !important',
-              border: 'none !important',
-              borderRadius: '12px !important'
-            } as React.CSSProperties,
-            disabled:
-              !!managerUpdating || !authUser.hasPrivilege('users:asignManager'),
-            children: managerUpdating ? (
-              <Spinner size="extra-tiny" />
-            ) : user.manager ? (
-              <div className="flex rounded-xl items-center text-left p-1  shadow-black/80 dark:shadow-lg">
-                <TableCellLayout
-                  media={
-                    <Avatar
-                      name={user.manager.displayName}
-                      color="colorful"
-                      image={{
-                        src: user.manager.photoURL
-                      }}
-                    />
-                  }
+                <Link
+                  className="hover:underline font-semibold relative"
+                  to={`/m/users/${user.username}`}
                 >
-                  {user.manager.displayName}
-                </TableCellLayout>
-              </div>
-            ) : (
-              <div className="p-2">
-                <span className="px-1 py-1 block">Sin jefe</span>
-              </div>
-            )
-          }}
-        />
-      </TableCell>
-      <TableCell>
-        <UserGridOptions refetch={refetch} setUser={setUser} user={user} />
-      </TableCell>
-    </TableRow>
+                  {user.displayName}
+                </Link>
+              </TableCellLayout>
+            </div>
+          </UserHoverInfo>
+        </TableCell>
+        <TableCell className="max-sm:hidden">
+          <div className="line-clamp-2 opacity-60 text-ellipsis overflow-hidden">
+            {user.role?.name ?? ''}
+          </div>
+        </TableCell>
+        <TableCell className="max-lg:hidden">
+          <p className="dark:text-white relative text-ellipsis overflow-hidden">
+            <a href={`mailto:${user.email}`} className="hover:underline">
+              {user.email}
+            </a>
+          </p>
+        </TableCell>
+        <TableCell className="max-xl:hidden">
+          <UserDrawer
+            max={1}
+            users={user.manager ? [user.manager] : []}
+            title="Jefe inmediato"
+            onSubmitTitle="Cambiar jefe"
+            onSubmit={(v) => handleManager(v[0])}
+            triggerProps={{
+              appearance: 'transparent',
+              style: {
+                padding: 0,
+                'box-shadow': 'none !important',
+                border: 'none !important',
+                borderRadius: '12px !important'
+              } as React.CSSProperties,
+              disabled:
+                !!managerUpdating ||
+                !authUser.hasPrivilege('users:asignManager'),
+              children: managerUpdating ? (
+                <Spinner size="extra-tiny" />
+              ) : user.manager ? (
+                <div className="flex rounded-xl items-center text-left p-1  shadow-black/80 dark:shadow-lg">
+                  <TableCellLayout
+                    media={
+                      <Avatar
+                        name={user.manager.displayName}
+                        color="colorful"
+                        image={{
+                          src: user.manager.photoURL
+                        }}
+                      />
+                    }
+                  >
+                    {user.manager.displayName}
+                  </TableCellLayout>
+                </div>
+              ) : (
+                <div className="p-2">
+                  <span className="px-1 py-1 block">Sin jefe</span>
+                </div>
+              )
+            }}
+          />
+        </TableCell>
+        <TableCell>
+          <UserGridOptions refetch={refetch} setUser={setUser} user={user} />
+        </TableCell>
+      </TableRow>
+    </>
   )
 }
 
@@ -171,7 +169,6 @@ export const UserGridOptions = ({
   const navigate = useNavigate()
 
   const { user: authUser } = useAuth()
-
   const [isResetAlertOpen, setIsResetAlertOpen] = React.useState(false)
 
   const [isToggleStatusOpen, setIsToggleStatusOpen] = React.useState(false)
@@ -194,8 +191,7 @@ export const UserGridOptions = ({
         } as User)
     )
     toast(
-      `Usuario ${user.displayName} ${
-        user.status ? 'deshabilitado' : 'habilitado'
+      `Usuario ${user.displayName} ${user.status ? 'deshabilitado' : 'habilitado'
       }.`
     )
     refetch()
@@ -214,12 +210,11 @@ export const UserGridOptions = ({
         <Tooltip content="Editar usuario" relationship="description">
           <Button
             icon={<PenRegular />}
-            onClick={() => navigate(`/m/users/edit/${user.username}`)}
+            onClick={() => navigate(`/m/users/${user.username}/edit`)}
             appearance="transparent"
           />
         </Tooltip>
       )}
-
       {authUser.hasPrivilege('users:resetPassword') && (
         <Tooltip content="Restablecer contraseña" relationship="description">
           <Button
@@ -230,21 +225,19 @@ export const UserGridOptions = ({
         </Tooltip>
       )}
       {authUser.hasPrivilege('users:toggleStatus') && (
-        <Tooltip content={'Habilitar acceso'} relationship="description">
+        <Tooltip content={'Deshabilitar acceso'} relationship="description">
           <Button
-            icon={<PersonAvailableRegular />}
+            icon={<PersonProhibitedRegular />}
             onClick={() => setIsToggleStatusOpen(true)}
             appearance="transparent"
           />
         </Tooltip>
       )}
-
       <ResetPassword
         user={user}
         open={isResetAlertOpen}
         setOpen={setIsResetAlertOpen}
       />
-
       <Dialog
         open={isToggleStatusOpen}
         onOpenChange={(_, e) => setIsToggleStatusOpen(e.open)}

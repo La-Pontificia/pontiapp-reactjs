@@ -1,8 +1,8 @@
 import { toast } from 'anni'
-import PrivilegesDrawer from '~/components/privileges-drawer'
-import { api } from '~/lib/api'
-import { UserRole } from '~/types/user-role'
-import { handleError } from '~/utils'
+import PrivilegesDrawer from '@/components/privileges-drawer'
+import { api } from '@/lib/api'
+import { UserRole } from '@/types/user-role'
+import { handleError } from '@/utils'
 import {
   Button,
   ButtonProps,

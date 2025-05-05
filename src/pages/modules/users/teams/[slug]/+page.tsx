@@ -1,28 +1,28 @@
 /* eslint-disable react-refresh/only-export-components */
-import { api } from '~/lib/api'
-import { UserTeam, UserTeamMember } from '~/types/user-team'
+import { api } from '@/lib/api'
+import { Team, TeamMember } from '@/types/user/team'
 import { SearchBox, Spinner } from '@fluentui/react-components'
 import { Search20Regular } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { useParams } from 'react-router'
-import { ResponsePaginate } from '~/types/paginate-response'
-import UserTeamsMemersGrid from './grid'
+import { ResponsePaginate } from '@/types/paginate-response'
+import TeamsMemersGrid from './grid'
 import { toast } from 'anni'
-import { useDebounced } from '~/hooks/use-debounced'
+import { useDebounced } from '@/hooks/use-debounced'
 import CollaboratorsTeamSlugNav from './nav'
-import { handleError } from '~/utils'
-import { useAuth } from '~/store/auth'
+import { handleError } from '@/utils'
+import { useAuth } from '@/store/auth'
 
 type State = {
-  team?: UserTeam
+  team?: Team
   isOwner?: boolean
   isOwnerLoading: boolean
   refetch: () => void
   refetchMembers: () => void
   isLoading: boolean
   isLoadingMore: boolean
-  members: UserTeamMember[]
+  members: TeamMember[]
 }
 const TeamSlugContext = React.createContext<State>({} as State)
 
@@ -35,9 +35,9 @@ export default function CollaboratorsTeamSlugPage() {
     slug: string
   }>()
 
-  const [members, setMembers] = React.useState<UserTeamMember[]>([])
-  const [info, setInfo] = React.useState<ResponsePaginate<UserTeamMember[]>>(
-    {} as ResponsePaginate<UserTeamMember[]>
+  const [members, setMembers] = React.useState<TeamMember[]>([])
+  const [info, setInfo] = React.useState<ResponsePaginate<TeamMember[]>>(
+    {} as ResponsePaginate<TeamMember[]>
   )
 
   const [q, setQ] = React.useState<string>()
@@ -66,9 +66,9 @@ export default function CollaboratorsTeamSlugPage() {
   } = useQuery({
     queryKey: ['teams', params.slug],
     queryFn: async () => {
-      const res = await api.get<UserTeam>('partials/teams/' + params.slug)
+      const res = await api.get<Team>('partials/teams/' + params.slug)
       if (!res.ok) return
-      return new UserTeam(res.data)
+      return new Team(res.data)
     }
   })
 
@@ -76,10 +76,10 @@ export default function CollaboratorsTeamSlugPage() {
     data,
     isLoading: isMemberLoading,
     refetch: refetchMembers
-  } = useQuery<ResponsePaginate<UserTeamMember[]> | null>({
+  } = useQuery<ResponsePaginate<TeamMember[]> | null>({
     queryKey: ['teams/members', params.slug, getQuery()],
     queryFn: async () => {
-      const res = await api.get<ResponsePaginate<UserTeamMember[]>>(
+      const res = await api.get<ResponsePaginate<TeamMember[]>>(
         `partials/teams/${params.slug}/members${getQuery()}`
       )
       if (!res.ok) return null
@@ -89,15 +89,14 @@ export default function CollaboratorsTeamSlugPage() {
 
   const nextPage = async () => {
     setLoadingMore(true)
-    const res = await api.get<ResponsePaginate<UserTeamMember[]>>(
-      `partials/teams/${params.slug}/members${getQuery()}&page=${
-        info.current_page + 1
+    const res = await api.get<ResponsePaginate<TeamMember[]>>(
+      `partials/teams/${params.slug}/members${getQuery()}&page=${info.current_page + 1
       }`
     )
     if (res.ok) {
       setMembers((prev) => [
         ...prev,
-        ...res.data.data.map((user) => new UserTeamMember(user))
+        ...res.data.data.map((user) => new TeamMember(user))
       ])
       setInfo({
         ...res.data,
@@ -111,7 +110,7 @@ export default function CollaboratorsTeamSlugPage() {
 
   React.useEffect(() => {
     if (!data) return
-    setMembers(data.data.map((team) => new UserTeamMember(team)))
+    setMembers(data.data.map((team) => new TeamMember(team)))
     setInfo(data)
   }, [data])
 
@@ -175,7 +174,7 @@ export default function CollaboratorsTeamSlugPage() {
             {!isMemberLoading && members.length > 0 && (
               <>
                 <div className="flex flex-grow items-start">
-                  <UserTeamsMemersGrid />
+                  <TeamsMemersGrid />
                 </div>
                 {info && (
                   <footer className="flex p-5 justify-center">

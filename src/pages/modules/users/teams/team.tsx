@@ -1,6 +1,5 @@
-import { UserTeam } from '~/types/user-team'
+import { Team } from '@/types/user/team'
 import {
-  Avatar,
   Button,
   Menu,
   MenuItem,
@@ -17,7 +16,7 @@ export default function TeamItem({
   team: teamProp,
   refetch
 }: {
-  team: UserTeam
+  team: Team
   refetch: () => void
 }) {
   const [team, setTeam] = React.useState(teamProp)
@@ -29,15 +28,6 @@ export default function TeamItem({
       </td>
       <td>
         <div className="flex items-center gap-2">
-          <Avatar
-            size={40}
-            color="colorful"
-            name={team.name}
-            aria-label={team.name}
-            image={{
-              src: team.photoURL
-            }}
-          />
           <Link
             className="hover:underline hover:dark:text-blue-500 relative"
             to={`/m/users/teams/${team.id}`}
@@ -62,8 +52,8 @@ export default function TeamItem({
           to={`/m/users/teams/${team.id}`}
           className="text-center relative block dark:text-blue-500 hover:underline"
         >
-          {team.ownersCount}{' '}
-          {team.ownersCount === 1 ? 'propietario' : 'propietarios'}
+          {/* {team.ownersCount}{' '}
+          {team.ownersCount === 1 ? 'propietario' : 'propietarios'} */}
         </Link>
       </td>
       <td className="max-xl:hidden"></td>
@@ -77,11 +67,11 @@ export default function TeamItem({
 export const TeamGridOptions = ({
   team
 }: //   refetch
-{
-  team: UserTeam
-  setTeam: React.Dispatch<React.SetStateAction<UserTeam>>
-  refetch: () => void
-}) => {
+  {
+    team: Team
+    setTeam: React.Dispatch<React.SetStateAction<Team>>
+    refetch: () => void
+  }) => {
   const navigate = useNavigate()
 
   return (

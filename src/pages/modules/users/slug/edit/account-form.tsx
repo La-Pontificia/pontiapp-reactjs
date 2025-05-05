@@ -11,7 +11,7 @@ import {
 import React from 'react'
 import { Control, Controller } from 'react-hook-form'
 import { FormUserValues } from './form'
-import { availableDomains } from '~/const'
+import { availableDomains } from '@/const'
 import {
   AddRegular,
   ArrowSyncCircleRegular,
@@ -19,12 +19,12 @@ import {
   WrenchRegular
 } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
-import { UserRole } from '~/types/user-role'
-import { api } from '~/lib/api'
-import PrivilegesDrawer from '~/components/privileges-drawer'
-import UserDrawer from '~/components/user-drawer'
-import { useAuth } from '~/store/auth'
-import ResetPassword from '~/components/reset-password'
+import { UserRole } from '@/types/user-role'
+import { api } from '@/lib/api'
+import PrivilegesDrawer from '@/components/privileges-drawer'
+import UserDrawer from '@/components/user-drawer'
+import { useAuth } from '@/store/auth'
+import ResetPassword from '@/components/reset-password'
 import { useSlugUser } from '../+layout'
 
 export default function AccountForm({

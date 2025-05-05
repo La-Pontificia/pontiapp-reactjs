@@ -1,9 +1,9 @@
-import { User } from '~/types/user'
+import { User } from '@/types/user'
 import { Avatar } from '@fluentui/react-components'
 import { ArrowRightRegular } from '@fluentui/react-icons'
 import { useNavigate } from 'react-router'
 import { useSlugUser } from '../+layout'
-import UserHoverInfo from '~/components/user-hover-info'
+import UserHoverInfo from '@/components/user-hover-info'
 
 export const PersonItem = ({
   person,

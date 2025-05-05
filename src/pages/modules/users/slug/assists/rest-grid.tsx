@@ -10,8 +10,8 @@ import {
 } from '@fluentui/react-components'
 import { CalendarRegular, ClockRegular } from '@fluentui/react-icons'
 import React from 'react'
-import { format } from '~/lib/dayjs'
-import { RestAssist } from '~/types/rest-assist'
+import { format } from '@/lib/dayjs'
+import { RestAssist } from '@/types/rest-assist'
 
 export default function RestAssistsGrid({ data }: { data: RestAssist[] }) {
   const assists = data.map((item) => new RestAssist(item))

@@ -1,20 +1,19 @@
-import { Navigate, Route, Routes } from 'react-router'
-import ProtectedModule from '~/protected/module'
-import Protected from '~/protected/auth'
+import { Route, Routes } from 'react-router'
+import ProtectedModule from '@/protected/module'
+import Protected from '@/protected/auth'
 
-import UsersSlugHistoryPage from '~/pages/modules/users/slug/history/+page'
-import UsersTeamsPage from '~/pages/modules/users/teams/+page'
-import UsersTeamSlugPage from '~/pages/modules/users/teams/[slug]/+page'
-import UsersReportFilesPage from '~/pages/modules/users/report-files/+page'
-import UsersAreasPage from '~/pages/modules/users/areas/+page'
-import UsersDepartmentsPage from '~/pages/modules/users/departments/+page'
-import UsersJobsPage from '~/pages/modules/users/jobs/+page'
-import UsersRolesPage from '~/pages/modules/users/roles/+page'
-import UsersContractTypesPage from '~/pages/modules/users/contract-types/+page'
-import UsersUserRolesPage from '~/pages/modules/users/user-roles/+page'
-import DisabledUsersPage from '~/pages/modules/users/disabled/+page'
-import AllUsersPage from '~/pages/modules/users/all/+page'
-import UsersLayout from '~/pages/modules/users/+layout'
+import UsersSlugHistoryPage from '@/pages/modules/users/slug/history/+page'
+import UsersTeamsPage from '@/pages/modules/users/teams/+page'
+import UsersTeamSlugPage from '@/pages/modules/users/teams/[slug]/+page'
+import UsersReportFilesPage from '@/pages/modules/users/report-files/+page'
+import UsersAreasPage from '@/pages/modules/users/areas/+page'
+import UsersDepartmentsPage from '@/pages/modules/users/departments/+page'
+import UsersJobsPage from '@/pages/modules/users/jobs/+page'
+import UsersRolesPage from '@/pages/modules/users/roles/+page'
+import UsersContractTypesPage from '@/pages/modules/users/contract-types/+page'
+import UsersUserRolesPage from '@/pages/modules/users/user-roles/+page'
+import AllUsersPage from '@/pages/modules/users/+page'
+import UsersLayout from '@/pages/modules/users/+layout'
 import UsersSlugLayout from './slug/+layout'
 import UsersSlugPage from './slug/+page'
 import UsersSlugOrganizationPage from './slug/organization/+page'
@@ -33,23 +32,28 @@ export default function UsersRoutes() {
           </ProtectedModule>
         }
       >
-        <Route index element={<Navigate to={'/m/users/all'} />} />
-        <Route
-          path="all"
-          element={
-            <Protected has="users:show" navigate="/">
-              <AllUsersPage />
-            </Protected>
-          }
-        />
-        <Route
-          path="disabled"
-          element={
-            <Protected has="users:show" navigate="/m/users/all">
-              <DisabledUsersPage />
-            </Protected>
-          }
-        />
+        <Route index element={<Protected has="users:show" navigate="/">
+          <AllUsersPage />
+        </Protected>} />
+        <Route path="teams">
+          <Route
+            index
+            element={
+              <Protected has="users:teams" navigate="/">
+                <UsersTeamsPage />
+              </Protected>
+            }
+          />
+          <Route
+            path=":slug"
+            element={
+              <Protected has="users:teams" navigate="/">
+                <UsersTeamSlugPage />
+              </Protected>
+            }
+          />
+        </Route>
+
         <Route
           path="report-files"
           element={
@@ -101,29 +105,11 @@ export default function UsersRoutes() {
         <Route
           path="contract-types"
           element={
-            <Protected has="users:contractTypes" navigate="/m/users/all">
+            <Protected has="users:contractTypes" navigate="/">
               <UsersContractTypesPage />
             </Protected>
           }
         />
-        <Route path="teams">
-          <Route
-            index
-            element={
-              <Protected has="users:teams" navigate="/m/users/all">
-                <UsersTeamsPage />
-              </Protected>
-            }
-          />
-          <Route
-            path=":slug"
-            element={
-              <Protected has="users:teams" navigate="/m/users/all">
-                <UsersTeamSlugPage />
-              </Protected>
-            }
-          />
-        </Route>
         <Route path=":slug" element={<UsersSlugLayout />}>
           <Route index element={<UsersSlugPage />} />
           <Route path="organization" element={<UsersSlugOrganizationPage />} />

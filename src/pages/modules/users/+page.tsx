@@ -1,16 +1,22 @@
-import { api } from '~/lib/api'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { User } from '~/types/user'
+import { api } from '@/lib/api'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { User } from '@/types/user'
 import * as React from 'react'
 import { Tooltip } from '@fluentui/react-components'
-import { FilterAddFilled } from '@fluentui/react-icons'
+import {
+  FilterAddFilled,
+  PenRegular,
+  PersonAddRegular
+} from '@fluentui/react-icons'
+import { useDebounce } from 'hothooks'
 import CollaboratorsFilters from './filters'
 import { useQuery } from '@tanstack/react-query'
-import SearchBox from '~/commons/search-box'
+import { useAuth } from '@/store/auth'
+import SearchBox from '@/commons/search-box'
 import { Helmet } from 'react-helmet'
-import Pagination from '~/commons/pagination'
-import { useDebounce } from 'hothooks'
-import { TableContainer } from '~/components/table-container'
+// import Pagination from '@/commons/pagination'
+import FormUser from './form'
+import { TableContainer } from '@/components/table-container'
 import {
   Table,
   TableBody,
@@ -18,8 +24,10 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
-import UserGrid from './user-grid'
+} from '@/components/table'
+import Pagination from '@/commons/pagination'
+import UserGrid from './user'
+
 export type FiltersValues = {
   q: string | null
   job: string | null
@@ -29,10 +37,19 @@ export type FiltersValues = {
   hasManager: string | null
   hasSchedules: string | null
   page: number
+  status: string
 }
 
-export default function DisabledUsersPage() {
+const filterButtons = {
+  all: 'Todos',
+  actives: 'Activos',
+  inactives: 'Inactivos',
+}
+
+
+export default function AllUsersPage() {
   const [openFilters, setOpenFilters] = React.useState(false)
+  const [createFormOpen, setCreateFormOpen] = React.useState(false)
   const [filters, setFilters] = React.useState<FiltersValues>({
     q: null,
     job: null,
@@ -41,11 +58,12 @@ export default function DisabledUsersPage() {
     role: null,
     hasManager: null,
     hasSchedules: null,
-    page: 1
+    page: 1,
+    status: 'all'
   })
 
   const getFiltersQuery = () => {
-    let query = '?status=inactives&relationship=role,manager'
+    let query = '?relationship=role,manager'
     if (filters.page) query += `&page=${filters.page}`
     if (filters.q) query += `&q=${filters.q}`
     if (filters.job) query += `&job=${filters.job}`
@@ -54,15 +72,18 @@ export default function DisabledUsersPage() {
     if (filters.role) query += `&role=${filters.role}`
     if (filters.hasManager) query += `&hasManager=${filters.hasManager}`
     if (filters.hasSchedules) query += `&hasSchedules=${filters.hasSchedules}`
+    if (filters.status) query += `&status=${filters.status}`
     return query
   }
+
+  const { user: authUser } = useAuth()
 
   const {
     data,
     isLoading: loading,
     refetch
   } = useQuery<ResponsePaginate<User[]> | null>({
-    queryKey: ['users/disabled', getFiltersQuery()],
+    queryKey: ['users/all', filters],
     queryFn: async () => {
       const res = await api.get<ResponsePaginate<User[]>>(
         'users/all' + getFiltersQuery()
@@ -80,14 +101,67 @@ export default function DisabledUsersPage() {
   return (
     <>
       <Helmet>
-        <title>Usuarios inactivos | PontiApp</title>
+        <title>Usuarios | PontiApp</title>
       </Helmet>
       <TableContainer
+        isLoading={loading}
+        isEmpty={data?.data?.length === 0}
+        footer={
+          data && (
+            <Pagination
+              state={data}
+              onChangePage={(page) => setFilters((prev) => ({ ...prev, page }))}
+            />
+          )
+        }
         nav={
-          <nav className="flex items-center gap-2 w-full ">
-            <h1 className="font-semibold flex-grow text-lg">
-              Usuarios inactivos
-            </h1>
+          <nav className="flex items-center gap-4 w-full pt-2 px-1">
+            <h1 className="font-semibold text-lg">Usuarios</h1>
+            <div className='flex items-center grow gap-2'>
+              {Object.entries(filterButtons).map(([key, value]) => (
+                <button
+                  onClick={() => {
+                    setFilters((prev) => ({ ...prev, status: key }))
+                  }}
+                  data-active={filters.status === key ? '' : undefined}
+                  key={key}
+                  className="border text-nowrap outline outline-2 outline-transparent data-[active]:border-transparent data-[active]:dark:border-transparent data-[active]:outline-blue-600 data-[active]:dark:outline-blue-600 data-[active]:bg-blue-700/10 data-[active]:dark:bg-blue-700/20 border-stone-300 dark:border-stone-500 rounded-full py-1 px-3 font-medium"
+                >
+                  {value}
+                </button>
+              ))}
+            </div>
+            {authUser.hasPrivilege('users:create') && (
+              <>
+                <button
+                  onClick={() => setCreateFormOpen(true)}
+                  className="flex max-lg:hidden items-center gap-1"
+                >
+                  <PersonAddRegular
+                    fontSize={20}
+                    className="dark:text-blue-500 text-blue-700"
+                  />
+                  Nuevo
+                </button>
+                <FormUser open={createFormOpen} setOpen={setCreateFormOpen} />
+              </>
+            )}
+            {authUser.hasPrivilege('users:edit') && (
+              <>
+                <button
+                  disabled
+                  onClick={() => setCreateFormOpen(true)}
+                  className="flex disabled:grayscale disabled:opacity-40 max-lg:hidden items-center gap-1"
+                >
+                  <PenRegular
+                    fontSize={20}
+                    className="dark:text-blue-500 text-blue-700"
+                  />
+                  Editar
+                </button>
+                <FormUser open={createFormOpen} setOpen={setCreateFormOpen} />
+              </>
+            )}
             <Tooltip content="Mas filtros" relationship="description">
               <button
                 onClick={() => setOpenFilters(true)}
@@ -116,16 +190,6 @@ export default function DisabledUsersPage() {
             </div>
           </nav>
         }
-        isLoading={loading}
-        isEmpty={data?.data?.length === 0}
-        footer={
-          data && (
-            <Pagination
-              state={data}
-              onChangePage={(page) => setFilters((prev) => ({ ...prev, page }))}
-            />
-          )
-        }
       >
         <Table>
           <TableHeader>
@@ -145,7 +209,7 @@ export default function DisabledUsersPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.data?.map((user) => (
+            {data?.data.map((user) => (
               <UserGrid refetch={refetch} user={user} key={user.id} />
             ))}
           </TableBody>

@@ -9,11 +9,11 @@ import {
   Phone20Regular
 } from '@fluentui/react-icons'
 import { toast } from 'anni'
-import { format, timeAgo } from '~/lib/dayjs'
+import { format, timeAgo } from '@/lib/dayjs'
 import { useSlugUser } from '../+layout'
 import { useQuery } from '@tanstack/react-query'
-import { User } from '~/types/user'
-import { api } from '~/lib/api'
+import { User } from '@/types/user'
+import { api } from '@/lib/api'
 import { Link, useParams } from 'react-router'
 import { Helmet } from 'react-helmet'
 

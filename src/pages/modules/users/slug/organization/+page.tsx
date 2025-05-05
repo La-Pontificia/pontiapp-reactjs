@@ -1,10 +1,10 @@
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import { useSlugUser } from '../+layout'
-import { User } from '~/types/user'
+import { User } from '@/types/user'
 import { useParams } from 'react-router'
 import { useQuery } from '@tanstack/react-query'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { Badge } from '@fluentui/react-components'
 import { PersonItem } from './person'
 
@@ -39,7 +39,7 @@ export default function UsersSlugOrganizationPage() {
       <div className="max-w-7xl px-4 py-3 dark:text-neutral-400 w-full mx-auto">
         <div className="flex items-center gap-1">
           <p>
-            Jerarquía visual de la organización de {user?.displayName} {}
+            Jerarquía visual de la organización de {user?.displayName} { }
           </p>
           {
             // Not show badge if date is greater than 2025

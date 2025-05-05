@@ -1,11 +1,11 @@
-import { UserTeam } from '~/types/user-team'
+import { Team } from '@/types/user/team'
 import TeamItem from './team'
 
 export default function GridTeams({
   teams,
   refetch
 }: {
-  teams: UserTeam[]
+  teams: Team[]
   refetch: () => void
 }) {
   return (

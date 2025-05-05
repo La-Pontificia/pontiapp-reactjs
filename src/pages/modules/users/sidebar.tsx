@@ -2,13 +2,13 @@ import {
   ItemSidebarNav,
   ReusableSidebar,
   SidebarTitle
-} from '~/components/reusable-sidebar'
+} from '@/components/reusable-sidebar'
 import {
   FolderOpenFilled,
   FolderOpenRegular,
+  // PeopleFilled,
+  // PeopleRegular,
   PersonFilled,
-  PersonProhibitedFilled,
-  PersonProhibitedRegular,
   PersonRegular
 } from '@fluentui/react-icons'
 
@@ -19,34 +19,18 @@ export const UsersSidebar = () => {
         has={['users:show']}
         icon={PersonRegular}
         iconActive={PersonFilled}
-        href="/m/users/all"
+        href="/m/users"
       >
-        Activos
-      </ItemSidebarNav>
-      <ItemSidebarNav
-        has={['users:show']}
-        icon={PersonProhibitedRegular}
-        iconActive={PersonProhibitedFilled}
-        href="/m/users/disabled"
-      >
-        Inactivos
+        Usuarios
       </ItemSidebarNav>
       {/* <ItemSidebarNav
-          has={['users:collaborators:show']}
-          icon={PersonLightbulbRegular}
-          iconActive={PersonLightbulbFilled}
-          href="/m/users/collaborators"
-        >
-          Colaboradores
-        </ItemSidebarNav> */}
-      {/* <ItemSidebarNav
-          has={['users:teams']}
-          icon={PeopleRegular}
-          iconActive={PeopleFilled}
-          href="/m/users/teams"
-        >
-          Grupos
-        </ItemSidebarNav> */}
+        has={['users:teams']}
+        icon={PeopleRegular}
+        iconActive={PeopleFilled}
+        href="/m/users/teams"
+      >
+        Teams
+      </ItemSidebarNav> */}
       <SidebarTitle>Ajustes</SidebarTitle>
       <ItemSidebarNav
         has={['users:areas']}
