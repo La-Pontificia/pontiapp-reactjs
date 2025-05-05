@@ -15,16 +15,16 @@ import {
   PenRegular
 } from '@fluentui/react-icons'
 import React from 'react'
-import { format, timeAgo } from '~/lib/dayjs'
-import { api } from '~/lib/api'
-import { handleError } from '~/utils'
+import { format, timeAgo } from '@/lib/dayjs'
+import { api } from '@/lib/api'
+import { handleError } from '@/utils'
 import { toast } from 'anni'
 
-import { useAuth } from '~/store/auth'
-import { Event } from '~/types/event'
+import { useAuth } from '@/store/auth'
+import { Event } from '@/types/event'
 import Form from './form'
 import { useNavigate } from 'react-router'
-import { TableSelectionCell, TableCell, TableRow } from '~/components/table'
+import { TableSelectionCell, TableCell, TableRow } from '@/components/table'
 
 export default function Item({
   item,

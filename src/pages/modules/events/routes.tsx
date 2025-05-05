@@ -1,11 +1,11 @@
-import EventsLayout from '~/pages/modules/events/+layout'
-import EventsPage from '~/pages/modules/events/+page'
-import EventsRegister from '~/pages/modules/events/register/+page'
-import EventsReportFilesPage from '~/pages/modules/events/report-files/+page'
+import EventsLayout from '@/pages/modules/events/+layout'
+import EventsPage from '@/pages/modules/events/+page'
+import EventsRegister from '@/pages/modules/events/register/+page'
+import EventsReportFilesPage from '@/pages/modules/events/report-files/+page'
 
 import { Route, Routes } from 'react-router'
-import ProtectedModule from '~/protected/module'
-import Protected from '~/protected/auth'
+import ProtectedModule from '@/protected/module'
+import Protected from '@/protected/auth'
 import EventSlugLayout from './[slug]/+layout'
 import RecordsPage from './[slug]/records/+page'
 

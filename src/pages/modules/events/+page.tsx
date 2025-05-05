@@ -1,4 +1,4 @@
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { useQuery } from '@tanstack/react-query'
 import { AddFilled } from '@fluentui/react-icons'
 import {
@@ -8,26 +8,25 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 import React from 'react'
-import { useDebounced } from '~/hooks/use-debounced'
-import { ResponsePaginate } from '~/types/paginate-response'
-import { Event } from '~/types/event'
+import { useDebounced } from '@/hooks/use-debounced'
+import { ResponsePaginate } from '@/types/paginate-response'
+import { Event } from '@/types/event'
 import Item from './event'
 import Form from './form'
-import { useAuth } from '~/store/auth'
-import SearchBox from '~/commons/search-box'
-import Pagination from '~/commons/pagination'
-import { TableContainer } from '~/components/table-container'
+import { useAuth } from '@/store/auth'
+import SearchBox from '@/commons/search-box'
+import Pagination from '@/commons/pagination'
+import { TableContainer } from '@/components/table-container'
 
 export default function EventsPage() {
   const { user: authUser } = useAuth()
   const [q, setQ] = React.useState<string>()
   const [page, setPage] = React.useState(1)
 
-  const query = `events/all?paginate=true&relationship=recordsCount,creator${
-    q ? `&q=${q}` : ''
-  } ${page ? `&page=${page}` : ''}`
+  const query = `events/all?paginate=true&relationship=recordsCount,creator${q ? `&q=${q}` : ''
+    } ${page ? `&page=${page}` : ''}`
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
     Event[]
   > | null>({

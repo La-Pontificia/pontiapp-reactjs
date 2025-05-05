@@ -17,11 +17,11 @@ import {
 import { DeleteRegular } from '@fluentui/react-icons'
 import React from 'react'
 import { useMutation } from '@tanstack/react-query'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { toast } from 'anni'
-import { handleError } from '~/utils'
-import { EventRecord } from '~/types/event-record'
-import { format } from '~/lib/dayjs'
+import { handleError } from '@/utils'
+import { EventRecord } from '@/types/event-record'
+import { format } from '@/lib/dayjs'
 
 export default function Item({
   item,

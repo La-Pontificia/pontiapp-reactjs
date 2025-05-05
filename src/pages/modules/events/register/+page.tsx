@@ -1,8 +1,8 @@
 import { toast } from 'anni'
-import { useQrCodeReader } from '~/hooks/use-qr-reader'
-import { api } from '~/lib/api'
-import { BusinessUnit } from '~/types/business-unit'
-import { Event } from '~/types/event'
+import { useQrCodeReader } from '@/hooks/use-qr-reader'
+import { api } from '@/lib/api'
+import { BusinessUnit } from '@/types/business-unit'
+import { Event } from '@/types/event'
 import {
   Avatar,
   Button,
@@ -29,15 +29,15 @@ import {
 } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
-import { format } from '~/lib/dayjs'
+import { format } from '@/lib/dayjs'
 import {
   ClockRegular,
   CloudDatabaseRegular,
   MegaphoneRegular
 } from '@fluentui/react-icons'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 import { Link } from 'react-router'
-import { ExcelColored } from '~/icons'
+import { ExcelColored } from '@/icons'
 import { Helmet } from 'react-helmet'
 
 const SHEET_API_URL =

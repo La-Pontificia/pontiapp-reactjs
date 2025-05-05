@@ -1,4 +1,4 @@
-import { ItemSidebarNav, ReusableSidebar } from '~/components/reusable-sidebar'
+import { ItemSidebarNav, ReusableSidebar } from '@/components/reusable-sidebar'
 import {
   DocumentTableFilled,
   DocumentTableRegular,

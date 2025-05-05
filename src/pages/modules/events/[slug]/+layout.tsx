@@ -4,8 +4,8 @@ import { ChevronRightFilled } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Link, Outlet, useParams } from 'react-router'
-import { api } from '~/lib/api'
-import { Event } from '~/types/event'
+import { api } from '@/lib/api'
+import { Event } from '@/types/event'
 
 type breadcrumb = {
   name: string
