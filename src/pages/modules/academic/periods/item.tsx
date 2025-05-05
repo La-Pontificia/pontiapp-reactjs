@@ -15,7 +15,7 @@ import {
   TableCellLayout,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 
 import {
   BuildingRegular,
@@ -25,14 +25,15 @@ import {
   PenRegular
 } from '@fluentui/react-icons'
 import React from 'react'
-import { timeAgo } from '~/lib/dayjs'
+import { timeAgo } from '@/lib/dayjs'
 import Form from './form'
 import { useMutation } from '@tanstack/react-query'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { toast } from 'anni'
-import { handleError } from '~/utils'
-import { Period } from '~/types/academic/period'
+import { handleError } from '@/utils'
+import { Period } from '@/types/academic/period'
 import { useNavigate } from 'react-router'
+import { useAuth } from '@/store/auth'
 
 export default function Item({
   item,
@@ -44,7 +45,7 @@ export default function Item({
   const navigate = useNavigate()
   const [openForm, setOpenForm] = React.useState(false)
   const [openDelete, setOpenDelete] = React.useState(false)
-
+  const { user } = useAuth()
   const { mutate, isPending } = useMutation({
     mutationFn: () => api.post(`academic/periods/${item.id}/delete`),
     onSuccess: () => {
@@ -68,29 +69,32 @@ export default function Item({
         </TableCell>
         <TableCell>
           <div className="flex flex-wrap gap-1 py-1">
-            <Button
-              onClick={() =>
-                navigate(`/m/academic/classrooms/${item.id}/pavilions`)
-              }
-              icon={<BuildingRegular />}
-              size="small"
-            >
-              Aulas
-            </Button>
-            <Button
-              onClick={() =>
-                navigate(`/m/academic/sections/${item.id}/programs`)
-              }
-              icon={<FolderGlobeRegular />}
-              size="small"
-            >
-              Secciones
-            </Button>
+            {user.hasPrivilege('academic:pavilionsClassrooms') &&
+              <Button
+                onClick={() =>
+                  navigate(`/m/academic/classrooms/${item.id}/pavilions`)
+                }
+                icon={<BuildingRegular />}
+                size="small"
+              >
+                Aulas
+              </Button>
+            }
+            {user.hasPrivilege('academic:sections') &&
+              <Button
+                onClick={() =>
+                  navigate(`/m/academic/sections/${item.id}`)
+                }
+                icon={<FolderGlobeRegular />}
+                size="small"
+              >
+                Secciones
+              </Button>
+            }
           </div>
         </TableCell>
         <TableCell>
-          <p className="font-medium">{item.creator?.displayName} </p>
-          <span className="opacity-70">{timeAgo(item.created_at)}</span>
+          <p className="font-medium">{item.creator?.displayName} <span className="opacity-70 font-normal">{timeAgo(item.created_at)}</span></p>
         </TableCell>
         <TableCell>
           <div>

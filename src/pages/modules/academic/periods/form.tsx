@@ -19,12 +19,12 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'anni'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import { calendarStrings } from '~/const'
-import { api } from '~/lib/api'
-import { format } from '~/lib/dayjs'
-import { useAuth } from '~/store/auth'
-import { Period } from '~/types/academic/period'
-import { handleError } from '~/utils'
+import { calendarStrings } from '@/const'
+import { api } from '@/lib/api'
+import { format } from '@/lib/dayjs'
+import { useAuth } from '@/store/auth'
+import { Period } from '@/types/academic/period'
+import { handleError } from '@/utils'
 
 type FormValues = {
   name: string
