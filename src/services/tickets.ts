@@ -1,10 +1,10 @@
 import { deleteDoc, doc, setDoc } from 'firebase/firestore'
-import { api } from '~/lib/api'
-import { format } from '~/lib/dayjs'
-import { fdb } from '~/lib/firebase'
-import { TicketExtend } from '~/pages/modules/attentions/answer-tickets/slug/page'
-import { AttentionPosition } from '~/types/attention-position'
-import { FirebaseAttentionTicket } from '~/types/attention-ticket'
+import { api } from '@/lib/api'
+import { format } from '@/lib/dayjs'
+import { fdb } from '@/lib/firebase'
+import { TicketExtend } from '@/pages/modules/attentions/answer-tickets/slug/page'
+import { AttentionPosition } from '@/types/attention-position'
+import { FirebaseAttentionTicket } from '@/types/attention-ticket'
 
 export const createTicket = async (
   data: Omit<

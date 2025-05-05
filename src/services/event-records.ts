@@ -1,7 +1,7 @@
 import { doc, setDoc } from 'firebase/firestore'
-import { format } from '~/lib/dayjs'
-import { fdb } from '~/lib/firebase'
-import { EventRecord } from '~/types/event-record'
+import { format } from '@/lib/dayjs'
+import { fdb } from '@/lib/firebase'
+import { EventRecord } from '@/types/event-record'
 
 export const createEventRecord = async (
   data: Omit<EventRecord, 'id' | 'created_at' | 'updated_at' | 'business'>
