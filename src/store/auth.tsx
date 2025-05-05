@@ -1,8 +1,8 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { api } from '~/lib/api'
-import { User } from '~/types/user'
+import { api } from '@/lib/api'
+import { User } from '@/types/user'
 import React, { createContext } from 'react'
-import { BusinessUnit } from '~/types/rm/business-unit'
+import { BusinessUnit } from '@/types/rm/business-unit'
 
 interface AuthState {
   user: User
