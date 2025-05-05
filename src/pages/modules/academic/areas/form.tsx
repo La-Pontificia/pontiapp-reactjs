@@ -15,9 +15,9 @@ import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
-import { api } from '~/lib/api'
-import { Area } from '~/types/academic/area'
-import { handleError } from '~/utils'
+import { api } from '@/lib/api'
+import { Area } from '@/types/academic/area'
+import { handleError } from '@/utils'
 
 type FormValues = {
   name: string
@@ -26,7 +26,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => {},
+  refetch = () => { },
   defaultProp,
   readOnly = false
 }: {
@@ -39,11 +39,11 @@ export default function Form({
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-          name: defaultProp.name
-        }
+        name: defaultProp.name
+      }
       : {
-          name: ''
-        }
+        name: ''
+      }
   })
 
   const { mutate: fetch, isPending: fetching } = useMutation({
@@ -59,7 +59,7 @@ export default function Form({
       toast.error(handleError(error.message))
     },
     onSuccess: () => {
-      toast(
+      toast.success(
         'En hora buena!, El área ha sido registrado o actualizado con éxito'
       )
       reset()
