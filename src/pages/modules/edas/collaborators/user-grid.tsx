@@ -1,7 +1,7 @@
 // import { toast } from 'anni'
-// import { api } from '~/lib/api'
-// import { useAuth } from '~/store/auth'
-// import { handleAuthError } from '~/utils'
+// import { api } from '@/lib/api'
+// import { useAuth } from '@/store/auth'
+// import { handleAuthError } from '@/utils'
 import {
   Avatar,
   Button,
@@ -15,10 +15,10 @@ import { useMutation } from '@tanstack/react-query'
 import { toast } from 'anni'
 import React from 'react'
 import { Link } from 'react-router'
-import UserHoverInfo from '~/components/user-hover-info'
-import { api } from '~/lib/api'
-import { timeAgo } from '~/lib/dayjs'
-import { Collaborator } from '~/types/collaborator'
+import UserHoverInfo from '@/components/user-hover-info'
+import { api } from '@/lib/api'
+import { timeAgo } from '@/lib/dayjs'
+import { Collaborator } from '@/types/collaborator'
 
 export default function UserGrid({
   user: userProp,

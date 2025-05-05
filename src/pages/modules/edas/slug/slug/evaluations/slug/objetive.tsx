@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import parse from 'html-react-parser'
 import { Select, Tooltip } from '@fluentui/react-components'
-import { EdaObjetiveEvaluation } from '~/types/eda-objetive-evaluation'
+import { EdaObjetiveEvaluation } from '@/types/eda-objetive-evaluation'
 import React from 'react'
 
 const qualifications = [1, 2, 3, 4, 5]
@@ -12,15 +12,15 @@ export default function EvaluationObjetiveItem({
   hasQualify,
   hasSelftQualify
 }: // hasDelete,
-// hasEdit
-{
-  objetive: EdaObjetiveEvaluation
-  setObjetives: React.Dispatch<React.SetStateAction<EdaObjetiveEvaluation[]>>
-  hasQualify: boolean
-  hasSelftQualify: boolean
-  // hasEdit: boolean
-  // hasDelete: boolean
-}) {
+  // hasEdit
+  {
+    objetive: EdaObjetiveEvaluation
+    setObjetives: React.Dispatch<React.SetStateAction<EdaObjetiveEvaluation[]>>
+    hasQualify: boolean
+    hasSelftQualify: boolean
+    // hasEdit: boolean
+    // hasDelete: boolean
+  }) {
   return (
     <>
       <tr className="[&>td]:p-2 even:bg-stone-200/60 even:dark:bg-stone-500/10 [&>td]:py-3">
@@ -99,9 +99,9 @@ export default function EvaluationObjetiveItem({
                   prev.map((item) =>
                     item.objetive.id === objetive.objetive.id
                       ? {
-                          ...item,
-                          selftQualification: parseInt(e.target.value)
-                        }
+                        ...item,
+                        selftQualification: parseInt(e.target.value)
+                      }
                       : item
                   )
                 )

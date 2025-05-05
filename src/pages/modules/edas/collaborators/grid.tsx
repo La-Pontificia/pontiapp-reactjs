@@ -1,4 +1,4 @@
-import { Collaborator } from '~/types/collaborator'
+import { Collaborator } from '@/types/collaborator'
 import UserGrid from './user-grid'
 import {
   Table,

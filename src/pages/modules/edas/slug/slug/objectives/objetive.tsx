@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { EdaObjetive } from '~/types/eda-objetive'
+import { EdaObjetive } from '@/types/eda-objetive'
 import parse from 'html-react-parser'
 import React from 'react'
 import ObjetiveForm from './form'
@@ -45,9 +45,9 @@ export default function EdaObjetiveItem({
             prev.map((i) =>
               i.id === objetive.id
                 ? {
-                    ...i,
-                    ...objetive
-                  }
+                  ...i,
+                  ...objetive
+                }
                 : i
             )
           )

@@ -11,11 +11,11 @@ import {
 import { Dismiss24Regular } from '@fluentui/react-icons'
 import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
-import TextEditor from '~/commons/text-editor'
-import { useAuth } from '~/store/auth'
-import { EdaObjetive } from '~/types/eda-objetive'
+import TextEditor from '@/commons/text-editor'
+import { useAuth } from '@/store/auth'
+import { EdaObjetive } from '@/types/eda-objetive'
 import { SlugCollaboratorEdaSlugContext } from '../+layout'
-import { User } from '~/types/user'
+import { User } from '@/types/user'
 
 type FormValues = {
   title: string
@@ -47,19 +47,19 @@ export default function ObjetiveForm({
     disabled,
     values: defaultObjetive
       ? {
-          title: defaultObjetive.title,
-          description: defaultObjetive.description,
-          indicators: defaultObjetive.indicators,
-          percentage: defaultObjetive.percentage
-        }
+        title: defaultObjetive.title,
+        description: defaultObjetive.description,
+        indicators: defaultObjetive.indicators,
+        percentage: defaultObjetive.percentage
+      }
       : {
-          title: '',
-          description: '',
-          indicators: `<ol>
+        title: '',
+        description: '',
+        indicators: `<ol>
                     <li></li>
                 </ol>`,
-          percentage: 0
-        }
+        percentage: 0
+      }
   })
 
   const onSubmit = handleSubmit((data) => {

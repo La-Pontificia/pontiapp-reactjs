@@ -1,4 +1,4 @@
-import { ItemSidebarNav, ReusableSidebar } from '~/components/reusable-sidebar'
+import { ItemSidebarNav, ReusableSidebar } from '@/components/reusable-sidebar'
 import {
   // DocumentFilled,
   // DocumentRegular,
@@ -7,7 +7,7 @@ import {
   PersonFilled,
   PersonRegular
 } from '@fluentui/react-icons'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 
 export const EdasSidebar = () => {
   const { user: authUser } = useAuth()

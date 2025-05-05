@@ -6,16 +6,16 @@ import {
 } from '@fluentui/react-icons'
 import React from 'react'
 import { SlugCollaboratorEdaSlugContext } from '../+layout'
-import { EdaObjetive } from '~/types/eda-objetive'
+import { EdaObjetive } from '@/types/eda-objetive'
 import { useMutation, useQuery } from '@tanstack/react-query'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { Button, Spinner } from '@fluentui/react-components'
 import EdaObjetiveItem from './objetive'
 import ObjetiveForm from './form'
 import { toast } from 'anni'
-import { useAuth } from '~/store/auth'
-import { Eda } from '~/types/eda'
-import { format } from '~/lib/dayjs'
+import { useAuth } from '@/store/auth'
+import { Eda } from '@/types/eda'
+import { format } from '@/lib/dayjs'
 
 export default function SlugCollaboratorEdaSlugObjetivesPage() {
   const edactx = React.useContext(SlugCollaboratorEdaSlugContext)

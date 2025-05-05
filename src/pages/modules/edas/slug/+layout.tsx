@@ -3,10 +3,10 @@ import { Avatar, Button, Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import React from 'react'
 import { Link, Outlet, useParams } from 'react-router'
-import { api } from '~/lib/api'
-import { useAuth } from '~/store/auth'
-import { EdaYear } from '~/types/eda-year'
-import { User } from '~/types/user'
+import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
+import { EdaYear } from '@/types/eda-year'
+import { User } from '@/types/user'
 
 type SlugCollaboratorState = {
   collaborator: User

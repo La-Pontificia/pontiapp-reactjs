@@ -1,11 +1,11 @@
-import { api } from '~/lib/api'
-import { ResponsePaginate } from '~/types/paginate-response'
+import { api } from '@/lib/api'
+import { ResponsePaginate } from '@/types/paginate-response'
 import * as React from 'react'
 import { useQuery } from '@tanstack/react-query'
-import SearchBox from '~/commons/search-box'
-import { Collaborator } from '~/types/collaborator'
-import Pagination from '~/commons/pagination'
-import { TableContainer } from '~/components/table-container'
+import SearchBox from '@/commons/search-box'
+import { Collaborator } from '@/types/collaborator'
+import Pagination from '@/commons/pagination'
+import { TableContainer } from '@/components/table-container'
 import { useDebounce } from 'hothooks'
 import {
   Table,
@@ -14,7 +14,7 @@ import {
   TableHeaderCell,
   TableRow,
   TableSelectionCell
-} from '~/components/table'
+} from '@/components/table'
 import UserGrid from './user-grid'
 import { Helmet } from 'react-helmet'
 

@@ -2,14 +2,14 @@ import { Button, InfoLabel, Spinner } from '@fluentui/react-components'
 import { ArrowLeftFilled } from '@fluentui/react-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { useParams } from 'react-router'
-import { api } from '~/lib/api'
-import { EdaEvaluation } from '~/types/eda-evaluation'
+import { api } from '@/lib/api'
+import { EdaEvaluation } from '@/types/eda-evaluation'
 import EvaluationObjetiveItem from './objetive'
-import { format } from '~/lib/dayjs'
+import { format } from '@/lib/dayjs'
 import React from 'react'
-import { EdaObjetiveEvaluation } from '~/types/eda-objetive-evaluation'
+import { EdaObjetiveEvaluation } from '@/types/eda-objetive-evaluation'
 import { SlugCollaboratorEdaSlugContext } from '../../+layout'
-import { useAuth } from '~/store/auth'
+import { useAuth } from '@/store/auth'
 import { toast } from 'anni'
 
 export default function SlugCollaboratorSlugEdaEvaluationSlugPage() {
@@ -197,9 +197,9 @@ export default function SlugCollaboratorSlugEdaEvaluationSlugPage() {
                 !allSelftQualify
                   ? toast.warning('No has autocalificado todos los objetivos')
                   : selftQualify({
-                      objetives,
-                      total: Number(totalSelftQualification)
-                    })
+                    objetives,
+                    total: Number(totalSelftQualification)
+                  })
               }
             >
               Autocalificar
@@ -214,9 +214,9 @@ export default function SlugCollaboratorSlugEdaEvaluationSlugPage() {
                 !allQualify
                   ? toast.warning('No has calificado todos los objetivos')
                   : qualify({
-                      objetives,
-                      total: Number(totalQualification)
-                    })
+                    objetives,
+                    total: Number(totalQualification)
+                  })
               }
             >
               Calificar

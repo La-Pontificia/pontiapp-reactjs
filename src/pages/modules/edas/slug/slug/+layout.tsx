@@ -1,9 +1,9 @@
 /* eslint-disable react-refresh/only-export-components */
 import React from 'react'
 import { Navigate, Outlet, useNavigate, useParams } from 'react-router'
-import { EdaYear } from '~/types/eda-year'
+import { EdaYear } from '@/types/eda-year'
 import { SlugCollaboratorContext } from '../+layout'
-import { api } from '~/lib/api'
+import { api } from '@/lib/api'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import {
   AvatarGroup,
@@ -18,8 +18,8 @@ import {
   DialogTrigger,
   Spinner
 } from '@fluentui/react-components'
-import { useAuth } from '~/store/auth'
-import { Eda } from '~/types/eda'
+import { useAuth } from '@/store/auth'
+import { Eda } from '@/types/eda'
 
 import { toast } from 'anni'
 
