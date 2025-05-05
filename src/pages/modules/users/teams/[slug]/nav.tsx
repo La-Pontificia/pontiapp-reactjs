@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Button,
   Dialog,
   DialogActions,
@@ -85,15 +84,6 @@ export default function CollaboratorsTeamSlugNav() {
       )}
       {!isLoading && team && (
         <div className="flex items-center gap-5">
-          <Avatar
-            size={64}
-            color="colorful"
-            name={team.name}
-            aria-label={team.name}
-            image={{
-              src: team.photoURL
-            }}
-          />
           <div className="space-y-1.5 flex-grow">
             <h2 className="dark:font-bold font-semibold leading-4 tracking-tight text-lg line-clamp-1">
               {team.name}
@@ -235,14 +225,6 @@ export default function CollaboratorsTeamSlugNav() {
                   </DialogSurface>
                 </Dialog>
               )}
-            </div>
-            <div className="max-lg:hidden">
-              <h2 className="text-2xl font-semibold text-center">
-                {team.ownersCount}
-              </h2>
-              <p className="text-xs opacity-60">
-                {team.ownersCount === 1 ? 'Propietario' : 'Propietarios'}
-              </p>
             </div>
             <div className="max-lg:hidden">
               <h2 className="text-2xl font-semibold text-center">

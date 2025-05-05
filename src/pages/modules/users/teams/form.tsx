@@ -2,10 +2,9 @@ import { toast } from 'anni'
 import UserDrawer from '@/components/user-drawer'
 import { api } from '@/lib/api'
 import { User } from '@/types/user'
-import { UserTeam } from '@/types/user/team'
+import { Team } from '@/types/user/team'
 import { handleError } from '@/utils'
 import {
-  Avatar,
   Button,
   DialogActions,
   DialogBody,
@@ -22,10 +21,8 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 
 type FormValues = {
-  photoURL: string
   name: string
   description: string
-  owners: User[]
   members: User[]
 }
 export default function TeamForm({
@@ -33,22 +30,19 @@ export default function TeamForm({
   onOpenChange,
   refetch
 }: {
-  defaultValue?: UserTeam
+  defaultValue?: Team
   onOpenChange: (open: boolean) => void
   refetch: () => void
 }) {
   const [submitting, setSubmitting] = React.useState(false)
   const [uploading, setUploading] = React.useState(false)
-  const { watch, setValue, control, handleSubmit } = useForm<FormValues>({
+  const { control, handleSubmit } = useForm<FormValues>({
     defaultValues: {
-      photoURL: defaultValue?.photoURL || '',
       name: defaultValue?.name || '',
       description: defaultValue?.description || '',
-      owners: defaultValue?.owners || [],
       members: defaultValue?.members || []
     }
   })
-  const { photoURL } = watch()
   const imageRef = React.useRef<HTMLInputElement>(null)
 
   const handeImageChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -66,13 +60,11 @@ export default function TeamForm({
 
     if (!res.ok) {
       console.error(res.error)
-      setValue('photoURL', '')
       toast.error(handleError(res.error))
       setUploading(false)
       return
     }
 
-    setValue('photoURL', res.data)
     setUploading(false)
   }
 
@@ -81,17 +73,17 @@ export default function TeamForm({
       ? `partials/teams/${defaultValue.id}`
       : 'partials/teams'
     setSubmitting(true)
-    const res = await api.post<UserTeam>(URI, {
+    const res = await api.post<Team>(URI, {
       data: JSON.stringify({
         name: data.name,
         description: data.description,
-        owners: data.owners.map((u) => ({
-          id: u.id
-        })),
+        // owners: data.owners.map((u) => ({
+        //   id: u.id
+        // })),
         members: data.members.map((u) => ({
           id: u.id
         })),
-        photoURL: data.photoURL
+        // photoURL: data.photoURL
       })
     })
     if (!res.ok) {
@@ -115,13 +107,6 @@ export default function TeamForm({
         <DialogContent className="space-y-4">
           <div className="col-span-2">
             <div className="flex items-center gap-4">
-              <Avatar
-                size={96}
-                image={{
-                  src: photoURL,
-                  alt: 'Foto del colaborador'
-                }}
-              />
               <input
                 ref={imageRef}
                 onChange={handeImageChange}
@@ -177,7 +162,7 @@ export default function TeamForm({
 
           {!defaultValue && (
             <>
-              <Controller
+              {/* <Controller
                 control={control}
                 render={({ field, fieldState: { error } }) => (
                   <Field
@@ -216,7 +201,7 @@ export default function TeamForm({
                   </Field>
                 )}
                 name="owners"
-              />
+              /> */}
               <Controller
                 control={control}
                 render={({ field, fieldState: { error } }) => (
