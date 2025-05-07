@@ -51,6 +51,8 @@ const buttonsViews = {
 
 type ScheduleCalendarProps = {
   nav?: React.ReactNode
+  header?: React.ReactNode
+  footerFLoat?: React.ReactNode
   className?: string
   defaultView?: Views
   onDateSelect?: (selectInfo: DateSelectArg) => void
@@ -62,9 +64,11 @@ export default function Calendar({
   nav,
   className,
   defaultView = 'dayGridMonth',
-  onDateSelect = () => { },
+  onDateSelect = () => {},
+  header,
   events = [],
-  onEventClick = () => { }
+  footerFLoat,
+  onEventClick = () => {}
 }: ScheduleCalendarProps) {
   const calendarRef = React.useRef<FullCalendar>(null)
   const [view, setView] = React.useState<Views>(defaultView)
@@ -120,29 +124,32 @@ export default function Calendar({
     if (calendarApi) {
       calendarApi.removeAllEvents()
       calendarApi.addEventSource(events)
-      console.log(events)
     }
   }, [events])
 
   return (
-    <div className={cn('overflow-auto w-full flex flex-col grow', className)}>
-      <header className="flex justify-between gap-3 items-center p-2 pb-px pt-0">
-        <nav className="flex basis-0 grow">
-          {nav}
-        </nav>
+    <div
+      className={cn(
+        'overflow-auto relative border dark:border-transparent bg-white dark:bg-black/40 rounded-lg w-full flex flex-col grow',
+        className
+      )}
+    >
+      {header && header}
+      <header className="flex relative justify-between gap-3 items-center p-2 pb-px pt-0">
+        <nav className="flex basis-0 py-2 grow">{nav}</nav>
         <nav className="flex items-center gap-2">
           <h2 className="capitalize text-xl font-normal">
             <span className="font-bold">{title.split(' ')[0]} </span>
             {title.split(' ')[1]}
           </h2>
         </nav>
-        <nav className="flex items-center basis-0 gap-2 grow justify-end">
+        <nav className="flex items-center basis-0 gap-1 grow justify-end">
           {Object.entries(buttonsViews).map(([key, item]) => (
             <button
               key={key}
               data-current={view === key ? '' : undefined}
               onClick={() => handleViewChange(key as Views)}
-              className="data-[current]:!bg-blue-600 data-[current]:!text-white bg-stone-500/10 dark:bg-stone-500/20 hover:bg-stone-500/20 dark:hover:bg-stone-500/30 rounded-md p-1 px-2 hover:dark:text-stone-200 dark:text-stone-300 flex text-sm"
+              className="data-[current]:!bg-blue-500 data-[current]:!text-white bg-stone-500/10 dark:bg-stone-500/20 hover:bg-stone-500/20 dark:hover:bg-stone-500/30 rounded-md p-1 px-2 hover:dark:text-stone-200 border dark:text-stone-300 flex text-sm"
             >
               <p>{item.text}</p>
             </button>
@@ -159,7 +166,7 @@ export default function Calendar({
           />
         </nav>
       </header>
-      <div className="flex w-full grow gap-2 overflow-auto">
+      <div className="flex relative w-full grow gap-2 overflow-auto">
         <FullCalendar
           ref={calendarRef}
           editable={false}
@@ -195,6 +202,11 @@ export default function Calendar({
           }}
         />
       </div>
+      {footerFLoat && (
+        <div className="absolute bottom-2 z-[1] left-16 dark:bg-[#2f2e2b] bg-white p-2 py-1 rounded-md shadow-lg dark:shadow-black/40">
+          {footerFLoat}
+        </div>
+      )}
     </div>
   )
 }
@@ -202,6 +214,7 @@ export default function Calendar({
 function renderEventContent(eventInfo: EventContentArg) {
   return (
     <Tooltip
+      withArrow
       content={
         <div className="flex flex-col gap-px">
           <p className="font-medium text-sm">{eventInfo.event.title}</p>
@@ -211,14 +224,14 @@ function renderEventContent(eventInfo: EventContentArg) {
             {format(eventInfo.event.end, 'h:mm A')}
           </p>
           <div className="flex flex-col gap-1">
-            {Object.entries(eventInfo.event.extendedProps).map(
-              ([key, value]) => (
+            {Object.entries(eventInfo.event.extendedProps)
+              .filter(([key]) => key !== '$classNames')
+              .map(([key, value]) => (
                 <div className="text-sm">
                   <span className="font-semibold opacity-60">{key}: </span>
                   <span className="">{value}</span>
                 </div>
-              )
-            )}
+              ))}
           </div>
         </div>
       }
@@ -226,6 +239,7 @@ function renderEventContent(eventInfo: EventContentArg) {
     >
       <div
         className={cn(
+          eventInfo.event.extendedProps.$classNames,
           '!overflow-hidden h-full grow line-clamp-2',
           eventInfo.view.type === 'dayGridMonth'
             ? 'dark:text-white'
