@@ -1,11 +1,13 @@
 import { User } from '../user'
 import { Classroom } from './classroom'
+import { Program } from './program'
 import { SectionCourse } from './section-course'
 
 type DateSchedule = Date[]
 
 export class SectionCourseSchedule {
   id: string
+  program: Program
   sectionCourse: SectionCourse
   classroom: Classroom
   startTime: Date
@@ -33,8 +35,10 @@ export class SectionCourseSchedule {
     this.updated_at = data.updated_at
     this.creator = data.creator
     this.updater = data.updater
+    this.program = data.program
     if (data.creator) this.creator = new User(data.creator)
     if (data.updater) this.updater = new User(data.updater)
+    if (data.program) this.program = new Program(data.program)
     if (data.sectionCourse)
       this.sectionCourse = new SectionCourse(data.sectionCourse)
     if (data.classroom) this.classroom = new Classroom(data.classroom)
