@@ -22,7 +22,7 @@ export default function UsersSlugSchedulesPage() {
     queryKey: ['schedules', slug],
     queryFn: async () => {
       const res = await api.get<Schedule[]>(
-        `users/schedules/${slug}?archived=false`
+        `users/schedules/${slug}?archived=false&type=available`
       )
       if (!res.ok) return []
       return res.data.map((d) => new Schedule(d))
@@ -76,7 +76,7 @@ export default function UsersSlugSchedulesPage() {
           ) : (
             schedules?.map((schedule) => (
               <ScheduleItem
-                refetch={() => { }}
+                refetch={() => {}}
                 hasEdit={false}
                 key={schedule.id}
                 schedule={schedule}

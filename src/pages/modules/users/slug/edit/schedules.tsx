@@ -49,7 +49,9 @@ export default function UsersEditSchedules() {
   } = useQuery<Schedule[]>({
     queryKey: ['users', 'schedules', slug],
     queryFn: async () => {
-      const res = await api.get<Schedule[]>('users/schedules/' + slug)
+      const res = await api.get<Schedule[]>(
+        'users/schedules/' + slug + '?type=available'
+      )
       if (!res.ok) return []
       return res.data.map((d) => new Schedule(d))
     }
