@@ -7,28 +7,23 @@ import {
   DialogSurface,
   DialogTitle,
   DialogTrigger,
-  Divider,
   Field,
   Input,
-  Select,
   Spinner
 } from '@fluentui/react-components'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { Dismiss24Regular } from '@fluentui/react-icons'
-import { useMutation, useQuery } from '@tanstack/react-query'
+import { useMutation } from '@tanstack/react-query'
 import { toast } from 'anni'
-import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { calendarStrings } from '@/const'
 import { api } from '@/lib/api'
 import { format } from '@/lib/dayjs'
-import { useAuth } from '@/store/auth'
 import { Period } from '@/types/academic/period'
 import { handleError } from '@/utils'
 
 type FormValues = {
   name: string
-  cloneByPeriod: Period | null
   startDate: Date | null
   endDate: Date | null
 }
@@ -36,7 +31,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => { },
+  refetch = () => {},
   defaultProp,
   readOnly = false
 }: {
@@ -46,16 +41,14 @@ export default function Form({
   defaultProp?: Period | null
   readOnly?: boolean
 }) {
-  const { businessUnit } = useAuth()
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-        cloneByPeriod: null,
-        name: defaultProp.name,
-        startDate: defaultProp.startDate,
-        endDate: defaultProp.endDate
-      }
-      : { name: '', startDate: null, endDate: null, cloneByPeriod: null }
+          name: defaultProp.name,
+          startDate: defaultProp.startDate,
+          endDate: defaultProp.endDate
+        }
+      : { name: '', startDate: null, endDate: null }
   })
 
   const { mutate: fetch, isPending: fetching } = useMutation({
@@ -78,38 +71,13 @@ export default function Form({
     }
   })
 
-  const { data: periods } = useQuery<Period[]>({
-    queryKey: ['academic/periods', businessUnit],
-    enabled: open,
-    queryFn: async () => {
-      const res = await api.get<Period[]>(
-        `academic/periods`
-      )
-      if (!res.ok) return []
-      return res.data
-    }
-  })
-
   const onSubmit = handleSubmit((values) => {
     fetch({
       name: values.name,
       startDate: format(values.startDate, 'YYYY-MM-DD'),
-      endDate: format(values.endDate, 'YYYY-MM-DD'),
-      businessUnitId: businessUnit?.id,
-      cloneByPeriodId: values.cloneByPeriod?.id
+      endDate: format(values.endDate, 'YYYY-MM-DD')
     })
   })
-
-  const periodsGroupedByBusinessUnit = React.useMemo(() => {
-    return periods?.reduce((acc: Record<string, Period[]>, period: Period) => {
-      const unitId = period.businessUnit.id
-      if (!acc[unitId]) {
-        acc[unitId] = []
-      }
-      acc[unitId].push(period)
-      return acc
-    }, {} as Record<string, Period[]>)
-  }, [periods])
 
   return (
     <>
@@ -130,15 +98,6 @@ export default function Form({
               {defaultProp ? 'Editar periodo' : 'Registrar nuevo periodo'}
             </DialogTitle>
             <DialogContent className="grid gap-2">
-              <Field orientation="horizontal" label="Unidad:" required>
-                <Input
-                  defaultValue={
-                    businessUnit?.name + ' ' + businessUnit?.acronym
-                  }
-                  disabled
-                  readOnly={true}
-                />
-              </Field>
               <Controller
                 control={control}
                 rules={{ required: 'Requerido' }}
@@ -209,60 +168,6 @@ export default function Form({
                   </Field>
                 )}
               />
-              {!defaultProp && (
-                <>
-                  <Divider />
-                  <Controller
-                    control={control}
-                    name="cloneByPeriod"
-                    render={({ field, fieldState: { error } }) => (
-                      <Field
-                        validationState={error ? 'error' : 'none'}
-                        orientation="horizontal"
-                        validationMessage={
-                          error?.message ??
-                          'Por favor, selecciona el período del cual deseas clonar las aulas y pabellones.'
-                        }
-                        label="Clonar aulas:"
-                      >
-                        <Select
-                          onChange={(e) => {
-                            const selected = periods?.find(
-                              (period) => period.id === e.target.value
-                            )
-                            field.onChange(selected)
-                          }}
-                          value={field.value?.id}
-                        >
-                          <option value=''>
-                            -- Selecciona un periodo --
-                          </option>
-                          {
-                            Object.entries(periodsGroupedByBusinessUnit ?? {}).map(
-                              ([unitId, unitPeriods]) => (
-                                <optgroup
-                                  key={unitId}
-                                  label={
-                                    periods?.find(
-                                      (period) => period.businessUnit.id === unitId
-                                    )?.businessUnit.name
-                                  }
-                                >
-                                  {unitPeriods.map((period) => (
-                                    <option key={period.id} value={period.id}>
-                                      {period.name}
-                                    </option>
-                                  ))}
-                                </optgroup>
-                              )
-                            ) ?? []}
-
-                        </Select>
-                      </Field>
-                    )}
-                  />
-                </>
-              )}
             </DialogContent>
             <DialogActions className="pt-5">
               <Button
