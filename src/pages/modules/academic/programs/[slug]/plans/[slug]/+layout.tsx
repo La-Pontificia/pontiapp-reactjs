@@ -20,10 +20,7 @@ export default function LayoutSlugPlan() {
   })
 
   React.useEffect(() => {
-    if (data) setPlan(data)
-    return () => {
-      setPlan(null)
-    }
+    if (data) setPlan?.(data)
   }, [data, setPlan])
 
   if (isLoading)

@@ -1,5 +1,6 @@
 import {
   Button,
+  Combobox,
   Dialog,
   DialogActions,
   DialogBody,
@@ -9,6 +10,7 @@ import {
   DialogTrigger,
   Field,
   Input,
+  Option,
   Select,
   Spinner,
   Switch
@@ -23,6 +25,7 @@ import { Cycle } from '@/types/academic/cycle'
 import { PlanCourse } from '@/types/academic/plan'
 import { handleError } from '@/utils'
 import { useSlugProgram } from '../../../+layout'
+import React from 'react'
 
 type FormValues = {
   cycle: Cycle | null
@@ -37,7 +40,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => { },
+  refetch = () => {},
   defaultProp,
   readOnly = false
 }: {
@@ -49,39 +52,43 @@ export default function Form({
 }) {
   const { plan, program } = useSlugProgram()
 
-  const { control, handleSubmit, reset, setValue, watch } = useForm<FormValues>(
+  const { control, handleSubmit, reset, watch, setValue } = useForm<FormValues>(
     {
       values: defaultProp
         ? {
-          course: defaultProp.course,
-          cycle: defaultProp.cycle,
-          name: defaultProp.name,
-          teoricHours: defaultProp.teoricHours.toString(),
-          credits: defaultProp.credits.toString(),
-          practiceHours: defaultProp.practiceHours.toString(),
-          status: defaultProp.status
-        }
+            course: defaultProp.course,
+            cycle: defaultProp.cycle,
+            name: defaultProp.name,
+            teoricHours: defaultProp.teoricHours.toString(),
+            credits: defaultProp.credits.toString(),
+            practiceHours: defaultProp.practiceHours.toString(),
+            status: defaultProp.status
+          }
         : {
-          cycle: null,
-          course: null,
-          name: '',
-          teoricHours: '0',
-          practiceHours: '0',
-          credits: '0',
-          status: true
-        }
+            cycle: null,
+            course: null,
+            name: '',
+            teoricHours: '0',
+            practiceHours: '0',
+            credits: '0',
+            status: true
+          }
     }
   )
 
   const { data: courses } = useQuery<Course[]>({
-    queryKey: ['academic/courses'],
+    queryKey: ['academic/courses', program],
     enabled: open,
     queryFn: async () => {
-      const res = await api.get<Course[]>('academic/courses')
+      const query = `academic/courses?programId=${program.id}&status=true`
+      const res = await api.get<Course[]>(query)
       if (!res.ok) return []
       return res.data
     }
   })
+
+  // courses ordered by name
+  const coursesOrdered = courses?.sort((a, b) => a.name.localeCompare(b.name))
 
   const { data: cycles } = useQuery<Cycle[]>({
     queryKey: ['academic/cycles', program],
@@ -136,6 +143,39 @@ export default function Form({
     })
   })
 
+  // course query states
+  const [query, setQuery] = React.useState<string>(
+    defaultProp ? defaultProp?.course?.name : ''
+  )
+
+  const options = React.useMemo(() => {
+    if (!coursesOrdered)
+      return <Option disabled>No hay cursos disponibles</Option>
+
+    if (!query) {
+      return (
+        <div className="p-5 text-center">Por favor, realice una busqueda</div>
+      )
+    }
+    const filteredCourses = coursesOrdered.filter(
+      (course) =>
+        course.name.toLowerCase().includes(query.toLowerCase()) ||
+        course.code.toLowerCase().includes(query.toLowerCase())
+    )
+
+    if (filteredCourses.length === 0) {
+      return <Option disabled>No hay cursos disponibles</Option>
+    }
+
+    return filteredCourses.slice(0, 10).map((course) => (
+      <Option key={course.id} value={course.id} text={course.name}>
+        <p>
+          <span className="opacity-70">{course.code}</span> - {course.name}
+        </p>
+      </Option>
+    ))
+  }, [coursesOrdered, query])
+
   return (
     <>
       <Dialog open={open} onOpenChange={(_, { open }) => onOpenChange(open)}>
@@ -183,139 +223,139 @@ export default function Form({
                     label="Curso:"
                     required
                   >
-                    <Select
-                      onChange={(_, d) => {
-                        const course = courses?.find((c) => c.id === d.value)
-                        if (course) {
-                          field.onChange(course)
-                          setValue('teoricHours', course.teoricHours.toString())
-                          setValue(
-                            'practiceHours',
-                            course.practiceHours.toString()
-                          )
-                          setValue('credits', course.credits.toString())
-                          setValue('name', course.name)
-                        } else {
-                          field.onChange(null)
-                          setValue('teoricHours', '')
-                          setValue('practiceHours', '')
-                          setValue('credits', '')
-                          setValue('name', '')
-                        }
+                    <Combobox
+                      onOptionSelect={(_, d) => {
+                        const course = courses?.find(
+                          (c) => c.id === d.optionValue
+                        )
+                        setQuery(course ? course.name : '')
+                        setValue('name', course?.name ?? '')
+                        field.onChange(course ? course : null)
                       }}
-                      value={field.value?.id}
+                      defaultSelectedOptions={
+                        field.value ? [field.value?.id] : []
+                      }
+                      placeholder="Sleccionar un curso"
+                      onChange={(ev) => setQuery(ev.target.value)}
+                      value={query}
                     >
-                      <option value={''}>Seleccionar curso</option>
-                      {courses?.map((course) => (
-                        <option key={course.id} value={course.id}>
-                          {course.name}
-                        </option>
-                      ))}
-                    </Select>
+                      {options}
+                    </Combobox>
                   </Field>
                 )}
               />
-              <Field required orientation="horizontal" label="Codigo de curso:">
-                <Input
-                  disabled
-                  value={course?.code ?? ''}
-                  readOnly={readOnly}
-                />
-              </Field>
-              <Controller
-                control={control}
-                name="name"
-                rules={{ required: 'Requerido' }}
-                render={({ field, fieldState: { error } }) => (
+              {course && (
+                <>
                   <Field
-                    validationState={error ? 'error' : 'none'}
-                    validationMessage={error?.message}
                     required
                     orientation="horizontal"
-                    label="Nombre del curso:"
+                    label="Codigo de curso:"
                   >
-                    <Input {...field} readOnly={readOnly} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                rules={{ required: 'Requerido' }}
-                name="cycle"
-                render={({ field, fieldState: { error } }) => (
-                  <Field
-                    orientation="horizontal"
-                    validationState={error ? 'error' : 'none'}
-                    validationMessage={error?.message}
-                    label="Ciclo:"
-                    required
-                  >
-                    <Select
-                      onChange={(_, d) => {
-                        const cycle = cycles?.find((c) => c.id === d.value)
-                        if (cycle) {
-                          field.onChange(cycle)
-                        } else {
-                          field.onChange(null)
-                        }
-                      }}
-                      value={field.value?.id}
-                    >
-                      <option value={''}>Seleccionar ciclo</option>
-                      {cycles?.map((cycle) => (
-                        <option key={cycle.id} value={cycle.id}>
-                          {cycle.code} - {cycle.name}
-                        </option>
-                      ))}
-                    </Select>
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="teoricHours"
-                render={({ field }) => (
-                  <Field orientation="horizontal" label="Horas teóricas:">
-                    <Input {...field} type="number" readOnly={readOnly} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="practiceHours"
-                render={({ field }) => (
-                  <Field orientation="horizontal" label="Horas prácticas:">
-                    <Input {...field} type="number" readOnly={readOnly} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="credits"
-                render={({ field }) => (
-                  <Field orientation="horizontal" label="Número de créditos:">
-                    <Input {...field} type="number" readOnly={readOnly} />
-                  </Field>
-                )}
-              />
-              <Controller
-                control={control}
-                name="status"
-                render={({ field, fieldState: { error } }) => (
-                  <Field
-                    orientation="horizontal"
-                    validationState={error ? 'error' : 'none'}
-                    validationMessage={error?.message}
-                    label="Estado:"
-                  >
-                    <Switch
-                      checked={field.value}
-                      onChange={field.onChange}
-                      disabled={readOnly}
+                    <Input
+                      disabled
+                      value={course?.code ?? ''}
+                      readOnly={readOnly}
                     />
                   </Field>
-                )}
-              />
+                  <Controller
+                    control={control}
+                    name="name"
+                    rules={{ required: 'Requerido' }}
+                    render={({ field, fieldState: { error } }) => (
+                      <Field
+                        validationState={error ? 'error' : 'none'}
+                        validationMessage={error?.message}
+                        required
+                        orientation="horizontal"
+                        label="Nombre del curso:"
+                      >
+                        <Input {...field} readOnly={readOnly} />
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    rules={{ required: 'Requerido' }}
+                    name="cycle"
+                    render={({ field, fieldState: { error } }) => (
+                      <Field
+                        orientation="horizontal"
+                        validationState={error ? 'error' : 'none'}
+                        validationMessage={error?.message}
+                        label="Ciclo:"
+                        required
+                      >
+                        <Select
+                          onChange={(_, d) => {
+                            const cycle = cycles?.find((c) => c.id === d.value)
+                            if (cycle) {
+                              field.onChange(cycle)
+                            } else {
+                              field.onChange(null)
+                            }
+                          }}
+                          value={field.value?.id}
+                        >
+                          <option value={''}>Seleccionar ciclo</option>
+                          {cycles?.map((cycle) => (
+                            <option key={cycle.id} value={cycle.id}>
+                              {cycle.code} - {cycle.name}
+                            </option>
+                          ))}
+                        </Select>
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="teoricHours"
+                    render={({ field }) => (
+                      <Field orientation="horizontal" label="Horas teóricas:">
+                        <Input {...field} type="number" readOnly={readOnly} />
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="practiceHours"
+                    render={({ field }) => (
+                      <Field orientation="horizontal" label="Horas prácticas:">
+                        <Input {...field} type="number" readOnly={readOnly} />
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="credits"
+                    render={({ field }) => (
+                      <Field
+                        orientation="horizontal"
+                        label="Número de créditos:"
+                      >
+                        <Input {...field} type="number" readOnly={readOnly} />
+                      </Field>
+                    )}
+                  />
+                  <Controller
+                    control={control}
+                    name="status"
+                    render={({ field, fieldState: { error } }) => (
+                      <Field
+                        orientation="horizontal"
+                        validationState={error ? 'error' : 'none'}
+                        validationMessage={error?.message}
+                        label="Estado:"
+                      >
+                        <Switch
+                          checked={field.value}
+                          onChange={field.onChange}
+                          disabled={readOnly}
+                        />
+                      </Field>
+                    )}
+                  />
+                </>
+              )}
             </DialogContent>
             <DialogActions className="pt-5">
               <Button
