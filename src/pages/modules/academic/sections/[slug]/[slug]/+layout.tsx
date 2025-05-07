@@ -22,10 +22,7 @@ export default function SectionProgramSlugLayout() {
   })
 
   React.useEffect(() => {
-    if (data) setProgram(data)
-    return () => {
-      setProgram(null)
-    }
+    if (data) setProgram?.(data)
   }, [data, setProgram])
 
   if (isLoading)
