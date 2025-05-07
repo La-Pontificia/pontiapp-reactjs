@@ -4,6 +4,7 @@ import { UserRole } from './user-role'
 import { ContractType } from './contract-type'
 import { RmBranch } from './rm-branch'
 import { Session } from './user/session'
+import { Schedule } from './schedule'
 
 export type ContactType = {
   value: string
@@ -24,6 +25,7 @@ export class User {
   username: string
   entryDate?: Date
   birthdate?: Date
+  schedulesNotAvailable: Schedule[]
   fullName: string
   branch: RmBranch | null
   contractType: ContractType
@@ -74,6 +76,7 @@ export class User {
     this.coworkers = data.coworkers
     this.updatedUser = data.updatedUser
     this.role = data.role
+    this.schedulesNotAvailable = data.schedulesNotAvailable
     this.customPrivileges = data.customPrivileges
     this.internalDisplayName = data.displayName
     this.edaInvitedAt = data.edaInvitedAt
@@ -93,6 +96,11 @@ export class User {
       this.coworkers = data.coworkers.map((c: User) => new User(c))
     if (data.sessions)
       this.sessions = data.sessions.map((s: Session) => new Session(s))
+
+    if (data.schedulesNotAvailable)
+      this.schedulesNotAvailable = data.schedulesNotAvailable.map(
+        (s: Schedule) => new Schedule(s)
+      )
   }
 
   get displayName() {
