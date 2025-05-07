@@ -23,9 +23,7 @@ export default function ScheduleProgramSlugLayout() {
 
   React.useEffect(() => {
     if (data && !isLoading) setProgram?.(data)
-    return () => setProgram(null)
   }, [data, setProgram, isLoading])
-
 
   if (isLoading)
     return (
@@ -43,8 +41,6 @@ export default function ScheduleProgramSlugLayout() {
         </Button>
       </div>
     )
-
-
 
   return <Outlet />
 }

@@ -20,14 +20,14 @@ import { Controller, useForm } from 'react-hook-form'
 import { api } from '@/lib/api'
 import { Pavilion } from '@/types/academic/pavilion'
 import { SectionCourse } from '@/types/academic/section-course'
-import { handleError, parseTime } from '@/utils'
+import { handleError } from '@/utils'
 import { useSlugSchedules } from '../+layout'
 import { Classroom } from '@/types/academic/classroom'
 import {
   formatDateToTimeString,
   TimePicker
 } from '@fluentui/react-timepicker-compat'
-import { format, parse } from '@/lib/dayjs'
+import { format, parse, parseTime } from '@/lib/dayjs'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { calendarStrings, days } from '@/const'
 import { SectionCourseSchedule } from '@/types/academic/section-course-schedule'
@@ -55,7 +55,7 @@ export default function ScheduleForm({
   open,
   onOpenChange,
   defaultProp,
-  refetch = () => { },
+  refetch = () => {},
   sectionCourse
 }: Props) {
   const { control, handleSubmit, reset, watch } = useForm<FormValues>()
@@ -131,12 +131,28 @@ export default function ScheduleForm({
   })
 
   const onSubmit = handleSubmit((values) => {
+    // verify startTime and endTime if correct format
+    // if (!startTime || !endTime) {
+    //   toast.error('Hora de inicio y fin son requeridas')
+    //   return
+    // }
+
+    // if (!formatTime(startTime)) {
+    //   toast.error('Hora de inicio no es correcta')
+    //   return
+    // }
+
+    // if (!formatTime(endTime)) {
+    //   toast.error('Hora de fin no es correcta')
+    //   return
+    // }
+
     fetch({
       sectionCourseId: sectionCourse.id,
       pavilionId: values.pavilion?.id,
       classroomId: values.classroom?.id,
-      startTime: format(values.startTime, 'YYYY-MM-DD HH:mm:ss'),
-      endTime: format(values.endTime, 'YYYY-MM-DD HH:mm:ss'),
+      startTime: format(values.startTime),
+      endTime: format(values.endTime),
       startDate: format(values.startDate, 'YYYY-MM-DD'),
       endDate: format(values.endDate, 'YYYY-MM-DD'),
       daysOfWeek: values.daysOfWeek
@@ -211,11 +227,14 @@ export default function ScheduleForm({
                   readOnly
                   defaultValue={
                     defaultProp?.sectionCourse?.teacher
-                      ? `${defaultProp?.sectionCourse?.teacher?.documentId ?? ''
-                      } - ${defaultProp?.sectionCourse?.teacher?.fullName ?? ''
-                      }`
-                      : `${sectionCourse.teacher?.documentId ?? ''} - ${sectionCourse.teacher?.fullName ?? ''
-                      }`
+                      ? `${
+                          defaultProp?.sectionCourse?.teacher?.documentId ?? ''
+                        } - ${
+                          defaultProp?.sectionCourse?.teacher?.fullName ?? ''
+                        }`
+                      : `${sectionCourse.teacher?.documentId ?? ''} - ${
+                          sectionCourse.teacher?.fullName ?? ''
+                        }`
                   }
                 />
               </Field>
@@ -290,7 +309,7 @@ export default function ScheduleForm({
               <Controller
                 control={control}
                 rules={{
-                  required: 'Requerido'
+                  required: 'Hora no válida'
                 }}
                 name="startTime"
                 render={({ field, fieldState: { error } }) => (
@@ -301,6 +320,7 @@ export default function ScheduleForm({
                     label="Hora inicio de clase:"
                   >
                     <TimePicker
+                      inlinePopup
                       ref={field.ref}
                       defaultValue={
                         field.value ? formatDateToTimeString(field.value) : ''
@@ -324,7 +344,7 @@ export default function ScheduleForm({
               <Controller
                 control={control}
                 rules={{
-                  required: 'Requerido'
+                  required: 'Hora no válida'
                 }}
                 name="endTime"
                 render={({ field, fieldState: { error } }) => (
@@ -335,6 +355,7 @@ export default function ScheduleForm({
                     label="Hora fin de clase:"
                   >
                     <TimePicker
+                      inlinePopup
                       ref={field.ref}
                       defaultValue={
                         field.value ? formatDateToTimeString(field.value) : ''
@@ -439,8 +460,8 @@ export default function ScheduleForm({
                                 d.checked
                                   ? [...(field.value ?? []), key]
                                   : field.value
-                                    ? field.value.filter((w) => w !== key)
-                                    : []
+                                  ? field.value.filter((w) => w !== key)
+                                  : []
                               )
                             }}
                             required={false}
@@ -475,6 +496,7 @@ export default function ScheduleForm({
                   Eliminar
                 </Button>
               )}
+
               <Button onClick={() => onOpenChange(false)} appearance="outline">
                 Cerrar
               </Button>

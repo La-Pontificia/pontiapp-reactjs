@@ -5,14 +5,12 @@ import {
   DialogBody,
   DialogContent,
   DialogSurface,
-  DialogTitle,
-  DialogTrigger,
-  Spinner
+  Spinner,
+  Tooltip
 } from '@fluentui/react-components'
 import {
   CalendarEditRegular,
   CheckmarkCircleFilled,
-  Dismiss24Regular,
   DocumentRegular,
   PersonLightbulbRegular
 } from '@fluentui/react-icons'
@@ -48,13 +46,14 @@ type PreEvent = {
   title: string
   from: Date
   to: Date
+  interactive?: boolean
   dates: Date[]
   backgroundColor: string
   extendedProps?: Record<string, string | React.ReactNode>
 }
 
 const Item = ({ item, refetchSections }: Props) => {
-  const { period } = useSlugSchedules()
+  const { period, program } = useSlugSchedules()
   const [openDialog, setOpenDialog] = React.useState(false)
   const [openForm, setOpenForm] = React.useState(false)
   const [defaultValues, setDefaultValues] = React.useState<
@@ -91,7 +90,8 @@ const Item = ({ item, refetchSections }: Props) => {
 
   const {
     data: teacherSchedulesUnavailables,
-    refetch: refetchTeacherSchedulesUnavailables
+    refetch: refetchTeacherSchedulesUnavailables,
+    isLoading: isLoading
   } = useQuery<Schedule[]>({
     queryKey: ['schedules', item.teacher],
     enabled: !!(openDialog && item.teacher),
@@ -148,14 +148,19 @@ const Item = ({ item, refetchSections }: Props) => {
         from: s.startTime,
         to: s.endTime,
         dates: s.dates,
-        backgroundColor: '#fcd53f',
+        backgroundColor: '#c9a932',
         extendedProps: {
+          ...(program?.id !== s.program.id
+            ? {
+                Programa: s.program.name
+              }
+            : {}),
           Aula: s.classroom?.code,
           Desde: format(s.startDate, 'DD [de] MMM YYYY'),
           Hasta: format(s.endDate, 'DD [de] MMM YYYY')
         }
       })) ?? [],
-    [teacherSchedules]
+    [teacherSchedules, program]
   )
 
   const events = React.useMemo<EventSourceInput>(() => {
@@ -175,7 +180,7 @@ const Item = ({ item, refetchSections }: Props) => {
       if (scheduleMap.has(schedule.id)) {
         scheduleMap.set(schedule.id, {
           ...schedule,
-          backgroundColor: '#a878eb'
+          backgroundColor: '#7956a9'
         })
       } else {
         scheduleMap.set(schedule.id, schedule)
@@ -247,44 +252,16 @@ const Item = ({ item, refetchSections }: Props) => {
         open={openDialog}
         onOpenChange={(_, { open }) => setOpenDialog(open)}
       >
-        <DialogSurface className="min-w-[99vw] w-[99vw] !border-0 !min-h-[99vh] max-lg:min-w-[99vw] max-lg:w-[99vw] !p-0">
-          <DialogBody style={{
-            maxHeight: '99vh',
-            gap: 0
-          }}>
-            <DialogTitle
-              className='p-2.5 !text-white rounded-t-lg bg-cyan-500 dark:bg-cyan-600'
-              action={
-                <DialogTrigger action="close">
-                  <Button
-                    className='absolute !text-white top-2 right-2'
-                    appearance="subtle"
-                    aria-label="close"
-                    icon={<Dismiss24Regular />}
-                  />
-                </DialogTrigger>
-              }
-            >
-              Horario: {item.planCourse?.course?.code} -{' '}
-              {item.planCourse?.name} | {item.section?.code}
-            </DialogTitle>
-            <DialogContent className="grid gap-2 !px-2 !pt-2 !grow !h-full !max-h-[100%]">
+        <DialogSurface className="max-xl:!max-w-[95vw] !bg-[#f5f5f4] dark:!bg-[#2f2e2b] !max-h-[95vh] xl:!min-w-[1300px] !p-0">
+          <DialogBody
+            style={{
+              maxHeight: '99vh',
+              gap: 0
+            }}
+          >
+            <DialogContent className="flex !p-1 !pb-0 !grow xl:!h-[700px] !max-h-[100%]">
               <Calendar
                 events={events}
-                nav={
-                  <div className="flex flex-wrap gap-2 pt-1">
-                    <div className='text-nowrap'>🔵 {item.section?.code}</div>
-                    {item.teacher && (
-                      <>
-                        <div className='text-nowrap'>🟡 Docente</div>
-                        <div className='text-nowrap'>
-                          🟣 {item.section?.code} y Docente
-                        </div>
-                        <div className='text-nowrap'>🔴 Docente no disponible</div>
-                      </>
-                    )}
-                  </div>
-                }
                 onDateSelect={(args) => {
                   setDefaultValues({
                     startTime: args.start,
@@ -306,25 +283,92 @@ const Item = ({ item, refetchSections }: Props) => {
 
                   if (!schedule) return
 
-                  setDefaultValues(schedule ?? {})
+                  if (schedule?.sectionCourse.section.id !== item.section.id)
+                    return
+
+                  setDefaultValues(schedule)
                   setTimeout(() => {
                     setOpenForm(true)
                   }, 50)
                 }}
                 defaultView="timeGridWeek"
+                footerFLoat={
+                  <div className="flex text-xs max-lg:flex-wrap gap-2">
+                    <div className="text-nowrap">🔵 {item.section?.code}</div>
+                    {item.teacher && (
+                      <>
+                        <div className="text-nowrap">🟡 Docente</div>
+                        <div className="text-nowrap">
+                          🟣 {item.section?.code} y Docente
+                        </div>
+                        <div className="text-nowrap">
+                          🔴 Docente no disponible
+                        </div>
+                      </>
+                    )}
+                  </div>
+                }
+                nav={
+                  <div className="text-center">
+                    {item.planCourse?.course?.code} - {item.planCourse?.name} -{' '}
+                    {item.section?.code}
+                  </div>
+                }
               />
+              <div className="w-[400px] overflow-auto max-w-[400px] flex gap-1 flex-col p-2">
+                {isLoading ? (
+                  <div className="grow grid place-content-center">
+                    <Spinner />
+                  </div>
+                ) : (
+                  <div className="grow overflow-y-auto flex gap-1 flex-col">
+                    <p className="font-medium pb-1">
+                      Horarios de {item.section?.code}
+                    </p>
+                    {sectionSchedules?.map((s) => (
+                      <Tooltip
+                        key={s.id}
+                        content={
+                          <div className="text-sm capitalize pb-2 font-semibold">
+                            - {s.sectionCourse.planCourse.course.code}
+                            <br />- {s.sectionCourse.planCourse.name}
+                          </div>
+                        }
+                        relationship="inaccessible"
+                        withArrow
+                      >
+                        <div className="p-2 text-left flex items-center bg-stone-200 text-stone-950 dark:text-stone-200 dark:bg-stone-900 rounded-lg text-sm">
+                          <div className="grow">
+                            <div className="capitalize font-semibold">
+                              {format(s.startDate, 'DD MMM, YYYY')} -{' '}
+                              {format(s.endDate, 'DD MMM, YYYY')}
+                            </div>
+                            <div className="opacity-70">
+                              {format(s.startTime, 'hh:mm A')} -{' '}
+                              {format(s.endTime, 'hh:mm A')}
+                            </div>
+                          </div>
+                        </div>
+                      </Tooltip>
+                    ))}
+                  </div>
+                )}
+                <DialogActions className="flex justify-end">
+                  <Button
+                    onClick={() => setOpenDialog(false)}
+                    appearance="outline"
+                  >
+                    Cerrar
+                  </Button>
+                </DialogActions>
+              </div>
             </DialogContent>
-            <DialogActions className='p-2'>
-              <Button onClick={() => setOpenDialog(false)} appearance="outline">
-                Cerrar
-              </Button>
-            </DialogActions>
           </DialogBody>
         </DialogSurface>
       </Dialog>
       <TableRow>
         <TableSelectionCell type="radio" />
-        <TableCell className='max-w-[150px]'>
+        <TableCell className="max-w-[150px]">
           <TableCellLayout media={<DocumentRegular fontSize={25} />}>
             {item.planCourse?.course?.code}
           </TableCellLayout>
@@ -363,8 +407,10 @@ const Item = ({ item, refetchSections }: Props) => {
             }}
           />
         </TableCell>
-        <TableCell className="font-semibold max-w-[130px]">{item.section?.code}</TableCell>
-        <TableCell className='max-w-[130px]'>
+        <TableCell className="font-semibold max-w-[130px]">
+          {item.section?.code}
+        </TableCell>
+        <TableCell className="max-w-[130px]">
           <Button
             onClick={() => setOpenDialog(true)}
             icon={<CalendarEditRegular />}

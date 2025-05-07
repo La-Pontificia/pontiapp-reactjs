@@ -174,12 +174,20 @@ export default function SchedulesProgramSchedulesPage() {
           <TableHeader>
             <TableRow>
               <TableSelectionCell type="radio" invisible />
-              <TableHeaderCell className='max-w-[150px]'>Codigo</TableHeaderCell>
+              <TableHeaderCell className="max-w-[150px]">
+                Codigo
+              </TableHeaderCell>
               <TableHeaderCell>Unidad didactica</TableHeaderCell>
-              <TableHeaderCell className='max-w-[150px]'>Plan</TableHeaderCell>
-              <TableHeaderCell className='max-w-[200px]'>Docente</TableHeaderCell>
-              <TableHeaderCell className='max-w-[130px]'>Sección</TableHeaderCell>
-              <TableHeaderCell className='max-w-[130px]'>Horarios</TableHeaderCell>
+              <TableHeaderCell className="max-w-[150px]">Plan</TableHeaderCell>
+              <TableHeaderCell className="max-w-[200px]">
+                Docente
+              </TableHeaderCell>
+              <TableHeaderCell className="max-w-[130px]">
+                Sección
+              </TableHeaderCell>
+              <TableHeaderCell className="max-w-[130px]">
+                Horarios
+              </TableHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>
