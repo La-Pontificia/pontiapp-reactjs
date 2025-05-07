@@ -22,10 +22,7 @@ export default function PavilionSlugLayout() {
   })
 
   React.useEffect(() => {
-    if (data) setPavilion(data)
-    return () => {
-      setPavilion(null)
-    }
+    if (data) setPavilion?.(data)
   }, [data, setPavilion])
 
   if (isLoading)

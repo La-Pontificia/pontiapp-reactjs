@@ -16,9 +16,13 @@ export default function Item({ item }: { item: Period }) {
       <TableRow>
         <TableSelectionCell type="radio" />
         <TableCell>
-          <TableCellLayout onClick={() =>
-            navigate(`/m/academic/classrooms/${item.id}/pavilions`)
-          } className='hover:underline cursor-pointer hover:text-blue-800 dark:hover:text-blue-400' media={<FolderOpenRegular fontSize={25} />}>
+          <TableCellLayout
+            onClick={() =>
+              navigate(`/m/academic/classrooms/${item.id}/pavilions`)
+            }
+            className="hover:underline cursor-pointer hover:text-blue-800 dark:hover:text-blue-400"
+            media={<FolderOpenRegular fontSize={25} />}
+          >
             {item.name}
           </TableCellLayout>
         </TableCell>

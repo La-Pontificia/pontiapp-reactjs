@@ -51,7 +51,7 @@ export default function ClassroomsPage() {
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
     Classroom[]
   > | null>({
-    queryKey: ['academic/classrooms', filters, period.id, pavilion?.id],
+    queryKey: ['academic/classrooms', filters, period?.id, pavilion?.id],
     queryFn: async () => {
       const res = await api.get<ResponsePaginate<Classroom[]>>(
         'academic/classrooms' + query
@@ -66,16 +66,14 @@ export default function ClassroomsPage() {
 
   return (
     <>
-      {
-        period && pavilion && (
-          <Helmet>
-            <title>
-              Aulas y pabellones {'>'} {period?.name} {'>'} {pavilion?.name} |
-              Pontiapp
-            </title>
-          </Helmet>
-        )
-      }
+      {period && pavilion && (
+        <Helmet>
+          <title>
+            Aulas y pabellones {'>'} {period?.name} {'>'} {pavilion?.name} |
+            Pontiapp
+          </title>
+        </Helmet>
+      )}
       <TableContainer
         isLoading={isLoading}
         isEmpty={!data?.data.length}
@@ -116,14 +114,18 @@ export default function ClassroomsPage() {
             <TableRow>
               <TableSelectionCell type="radio" invisible />
               <TableHeaderCell>Aula</TableHeaderCell>
-              <TableHeaderCell className='max-w-[70px]'># Piso</TableHeaderCell>
-              <TableHeaderCell className='max-w-[100px]'>Tipo</TableHeaderCell>
-              <TableHeaderCell className='max-w-[80px]'>Capacidad</TableHeaderCell>
+              <TableHeaderCell className="max-w-[70px]"># Piso</TableHeaderCell>
+              <TableHeaderCell className="max-w-[100px]">Tipo</TableHeaderCell>
+              <TableHeaderCell className="max-w-[80px]">
+                Capacidad
+              </TableHeaderCell>
               <TableHeaderCell className="max-lg:!hidden max-w-[130px]">
                 Registrado por
               </TableHeaderCell>
-              <TableHeaderCell className='max-w-[100px]'>Horarios</TableHeaderCell>
-              <TableHeaderCell className='max-w-[100px]'></TableHeaderCell>
+              <TableHeaderCell className="max-w-[100px]">
+                Horarios
+              </TableHeaderCell>
+              <TableHeaderCell className="max-w-[100px]"></TableHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>

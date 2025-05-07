@@ -23,7 +23,6 @@ import {
   BreakoutRoomRegular,
   CalendarEditRegular,
   DeleteRegular,
-  Dismiss24Regular,
   PenRegular
 } from '@fluentui/react-icons'
 import React from 'react'
@@ -61,7 +60,7 @@ export default function Item({
     }
   })
 
-  const { data: schedules } = useQuery<SectionCourseSchedule[]>({
+  const { data: schedules, isLoading } = useQuery<SectionCourseSchedule[]>({
     queryKey: ['academic/sections/courses/schedules', item],
     enabled: !!(openDialogCalendar && item),
     queryFn: async () => {
@@ -105,32 +104,69 @@ export default function Item({
         open={openDialogCalendar}
         onOpenChange={(_, { open }) => setOpenDialogCalendar(open)}
       >
-        <DialogSurface className="min-w-[99vw] w-[100vw] max-lg:min-w-[98vw] max-lg:w-[98vw] !p-2">
-          <DialogBody>
-            <DialogTitle
-              action={
-                <DialogTrigger action="close">
+        <DialogSurface className="max-xl:!max-w-[95vw] !bg-[#f5f5f4] dark:!bg-[#2f2e2b] !max-h-[95vh] xl:!min-w-[1100px] !p-0">
+          <DialogBody
+            style={{
+              gap: 0,
+              maxHeight: '99vh'
+            }}
+          >
+            <DialogContent className="flex !p-1 !pb-0 !grow xl:!h-[700px] !max-h-[100%]">
+              <Calendar
+                nav={
+                  <div>
+                    {item.code} ({item.type}) - {item.pavilion?.name}
+                  </div>
+                }
+                events={events}
+                defaultView="timeGridWeek"
+              />
+              <div className="w-[400px] overflow-auto max-w-[400px] flex gap-1 flex-col p-2">
+                {isLoading ? (
+                  <div className="grow grid place-content-center">
+                    <Spinner />
+                  </div>
+                ) : (
+                  <div className="grow overflow-y-auto flex gap-1 flex-col">
+                    <p className="font-medium pb-1">Horarios</p>
+                    {schedules?.map((s) => (
+                      <Tooltip
+                        key={s.id}
+                        content={
+                          <div className="text-sm capitalize pb-2 font-semibold">
+                            - {s.sectionCourse.planCourse.course.code}
+                            <br />- {s.sectionCourse.planCourse.name}
+                          </div>
+                        }
+                        relationship="inaccessible"
+                        withArrow
+                      >
+                        <div className="p-2 text-left flex items-center bg-stone-200 text-stone-950 dark:text-stone-200 dark:bg-stone-900 rounded-lg text-sm">
+                          <div className="grow">
+                            <div className="capitalize font-semibold">
+                              {format(s.startDate, 'DD MMM, YYYY')} -{' '}
+                              {format(s.endDate, 'DD MMM, YYYY')}
+                            </div>
+                            <div className="opacity-70">
+                              {format(s.startTime, 'hh:mm A')} -{' '}
+                              {format(s.endTime, 'hh:mm A')}
+                            </div>
+                          </div>
+                        </div>
+                      </Tooltip>
+                    ))}
+                  </div>
+                )}
+                <DialogActions className="flex justify-end">
                   <Button
-                    appearance="subtle"
-                    aria-label="close"
-                    icon={<Dismiss24Regular />}
-                  />
-                </DialogTrigger>
-              }
-            >
-              Horarios: {item.pavilion?.name} - {item.code}
-            </DialogTitle>
-            <DialogContent className="grid gap-2">
-              <Calendar events={events} defaultView="timeGridWeek" />
+                    onClick={() => setOpenDialogCalendar(false)}
+                    appearance="outline"
+                  >
+                    Cerrar
+                  </Button>
+                </DialogActions>
+              </div>
             </DialogContent>
-            <DialogActions>
-              <Button
-                onClick={() => setOpenDialogCalendar(false)}
-                appearance="outline"
-              >
-                Cerrar
-              </Button>
-            </DialogActions>
           </DialogBody>
         </DialogSurface>
       </Dialog>
@@ -142,15 +178,20 @@ export default function Item({
             {item.code}
           </TableCellLayout>
         </TableCell>
-        <TableCell className='max-w-[70px]'>
+        <TableCell className="max-w-[70px]">
           <Badge>{item.floor ?? '-'}</Badge>
         </TableCell>
-        <TableCell className='max-w-[100px]'>{item.type ?? '-'}</TableCell>
-        <TableCell className='max-w-[80px]'>{item.capacity ?? '-'}</TableCell>
+        <TableCell className="max-w-[100px]">{item.type ?? '-'}</TableCell>
+        <TableCell className="max-w-[80px]">{item.capacity ?? '-'}</TableCell>
         <TableCell className="max-lg:!hidden max-w-[130px]">
-          <p className="font-medium">{item.creator?.displayName} <span className="opacity-70 font-normal">{timeAgo(item.created_at)}</span></p>
+          <p className="font-medium">
+            {item.creator?.displayName}{' '}
+            <span className="opacity-70 font-normal">
+              {timeAgo(item.created_at)}
+            </span>
+          </p>
         </TableCell>
-        <TableCell className='max-w-[100px]'>
+        <TableCell className="max-w-[100px]">
           <Button
             onClick={() => setOpenDialogCalendar(true)}
             icon={<CalendarEditRegular />}
@@ -159,7 +200,7 @@ export default function Item({
             Horarios
           </Button>
         </TableCell>
-        <TableCell className='max-w-[100px]'>
+        <TableCell className="max-w-[100px]">
           <div>
             <Tooltip content="Editar" relationship="description">
               <Button

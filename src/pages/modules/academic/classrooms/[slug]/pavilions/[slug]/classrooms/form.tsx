@@ -32,7 +32,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => { },
+  refetch = () => {},
   defaultProp,
   readOnly = false
 }: {
@@ -42,20 +42,20 @@ export default function Form({
   defaultProp?: Classroom | null
   readOnly?: boolean
 }) {
-  const { pavilion, period } = useSlugClassroom()
+  const { pavilion } = useSlugClassroom()
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-        ...defaultProp,
-        capacity: defaultProp.capacity?.toString(),
-        floor: defaultProp.floor?.toString()
-      }
+          ...defaultProp,
+          capacity: defaultProp.capacity?.toString(),
+          floor: defaultProp.floor?.toString()
+        }
       : {
-        capacity: '',
-        code: '',
-        floor: '',
-        type: ''
-      }
+          capacity: '',
+          code: '',
+          floor: '',
+          type: ''
+        }
   })
 
   const { mutate: fetch, isPending: fetching } = useMutation({
@@ -111,9 +111,6 @@ export default function Form({
               {defaultProp ? 'Editar aula' : 'Registrar nueva aula'}
             </DialogTitle>
             <DialogContent className="grid gap-2">
-              <Field orientation="horizontal" label="Periodo:" required>
-                <Input disabled defaultValue={period?.name} />
-              </Field>
               <Field orientation="horizontal" label="Pabellon:" required>
                 <Input disabled defaultValue={pavilion?.name} />
               </Field>

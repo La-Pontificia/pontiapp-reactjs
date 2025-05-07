@@ -18,7 +18,6 @@ import { Controller, useForm } from 'react-hook-form'
 import { api } from '@/lib/api'
 import { Pavilion } from '@/types/academic/pavilion'
 import { handleError } from '@/utils'
-import { useSlugClassroom } from '../+layout'
 
 type FormValues = {
   name: string
@@ -27,7 +26,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => { },
+  refetch = () => {},
   defaultProp,
   readOnly = false
 }: {
@@ -37,12 +36,11 @@ export default function Form({
   defaultProp?: Pavilion | null
   readOnly?: boolean
 }) {
-  const { period } = useSlugClassroom()
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-        name: defaultProp.name
-      }
+          name: defaultProp.name
+        }
       : { name: '' }
   })
 
@@ -72,8 +70,7 @@ export default function Form({
 
   const onSubmit = handleSubmit((values) => {
     fetch({
-      name: values.name,
-      periodId: period.id
+      name: values.name
     })
   })
 
@@ -96,9 +93,6 @@ export default function Form({
               {defaultProp ? 'Editar pabellón' : 'Registrar nuevo pabellón'}
             </DialogTitle>
             <DialogContent className="grid gap-2">
-              <Field orientation="horizontal" label="Periodo:" required>
-                <Input defaultValue={period.name} readOnly />
-              </Field>
               <Controller
                 control={control}
                 rules={{ required: 'Requerido' }}
