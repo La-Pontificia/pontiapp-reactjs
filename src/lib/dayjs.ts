@@ -8,23 +8,23 @@ dayjs.extend(customParseFormat)
 dayjs.extend(relativeTime)
 
 export { dayjs }
+
 export const parse = (date: any, format?: string): Date => {
-  return dayjs(date, format).toDate()
+  if (format) {
+    return dayjs(date, format).locale('es').toDate()
+  }
+  return dayjs(date).locale('es').toDate()
 }
 
 export const format = (date: any, format?: string, label?: string): string => {
-  if (!date) {
-    return label ?? ''
-  }
-  if (!format) {
-    return dayjs(date).locale('es').format()
-  }
-  return dayjs(date).locale('es').format(format)
+  if (!date) return label ?? ''
+  const fmt = format ?? 'YYYY-MM-DD HH:mm:ss'
+  return dayjs(date).locale('es').format(fmt)
 }
 
 export const isIquals = (date1: any, date2: any): boolean => {
-  const d1 = dayjs(date1).format('YYYY-MM-DD')
-  const d2 = dayjs(date2).format('YYYY-MM-DD')
+  const d1 = dayjs(date1).locale('es').format('YYYY-MM-DD')
+  const d2 = dayjs(date2).locale('es').format('YYYY-MM-DD')
   return d1 === d2
 }
 
@@ -46,22 +46,32 @@ export const formatTime = (time: any, format?: string): string => {
   return dayjs(newDate).locale('es').format(format)
 }
 
-export const countRangeMinutes = (start: any, end: any): string => {
-  const startDate = new Date(start)
-  const endDate = new Date(end)
+export const countRangeMinutes = (
+  dateTimeStart: any,
+  dateTimeEnd: any
+): string => {
+  const format = 'YYYY-MM-DD HH:mm:ss'
+  const startDate = dayjs(dateTimeStart, format)
+  const endDate = dayjs(dateTimeEnd, format)
 
-  startDate.setDate(new Date('01-01-2000').getDate())
-  endDate.setDate(new Date('01-01-2000').getDate())
+  if (!startDate.isValid() || !endDate.isValid()) {
+    return 'Formato inválido'
+  }
 
-  const diff = endDate.getTime() - startDate.getTime()
+  const formattedStart = startDate.format('hh:mm A')
+  const formattedEnd = endDate.format('hh:mm A')
+
+  const startTime = dayjs(`2000-01-01 ${formattedStart}`, 'YYYY-MM-DD hh:mm A')
+  const endTime = dayjs(`2000-01-01 ${formattedEnd}`, 'YYYY-MM-DD hh:mm A')
+
+  const diff = endTime.diff(startTime, 'minute')
 
   if (diff < 0) {
     return 'El rango no es válido'
   }
 
-  const minutes = Math.floor(diff / 1000 / 60)
-  const hours = Math.floor(minutes / 60)
-  const remainingMinutes = minutes % 60
+  const hours = Math.floor(diff / 60)
+  const remainingMinutes = diff % 60
 
   const hoursText =
     hours > 0 ? `${hours} ${hours === 1 ? 'hora' : 'horas'}` : ''
@@ -134,4 +144,27 @@ export const getDays = (daysOfWeek: string[]): string => {
     .map((day) => daysMap[day])
     .filter((day): day is string => Boolean(day))
     .join(', ')
+}
+
+export const formatTimeTime = (date: Date) => {
+  const hours = date.getHours()
+  const minutes = date.getMinutes()
+  const period = hours >= 12 ? 'AM' : 'PM'
+  const formattedHours = hours % 12 || 12 // Convierte 24h a formato 12h
+
+  return `${formattedHours}:${minutes.toString().padStart(2, '0')} ${period}`
+}
+
+export const parseTime = (time: string): Date | null => {
+  const timeRegex =
+    /^(1[0-2]|0?[1-9]):([0-5][0-9])\s?(?:([AaPp])\.?\s?[Mm]\.?)$/
+  const match = time.trim().match(timeRegex)
+
+  if (!match) return null
+
+  const [, hours, minutes, period] = match
+  const formattedTime = `${hours}:${minutes} ${period?.toUpperCase()}M`
+  const parsedDate = dayjs(formattedTime, 'h:mm A').locale('es')
+
+  return parsedDate.isValid() ? parsedDate.toDate() : null
 }
