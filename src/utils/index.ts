@@ -42,7 +42,8 @@ export const hashCode = (str: string): number => {
 }
 
 export const parseTime = (time: string): Date | null => {
-  const timeRegex = /^(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM)$/i
+  // const timeRegex = /^(1[0-2]|0?[1-9]):([0-5][0-9])\s?(AM|PM)$/i
+  const timeRegex = /^(1[0-2]|0?[1-9]):([0-5][0-9])\s?(?:[AaPp]\.?[Mm]\.?)$/
   const match = time.trim().match(timeRegex)
 
   if (!match) return null
