@@ -104,6 +104,7 @@ export default function Item({
                 planCourseId: item.planCourse.id
               })
             }}
+            onlyTeachers
             max={1}
             onSubmitTitle="Asignar"
             title="Asignar profesor"
@@ -126,9 +127,14 @@ export default function Item({
           />
         </TableCell>
         <TableCell className="max-lg:!hidden max-w-[200px]">
-          <p className="font-medium">{item.creator?.displayName} <span className="opacity-70 font-normal">{timeAgo(item.created_at)}</span></p>
+          <p className="font-medium">
+            {item.creator?.displayName}{' '}
+            <span className="opacity-70 font-normal">
+              {timeAgo(item.created_at)}
+            </span>
+          </p>
         </TableCell>
-        <TableCell className='max-w-[100px]'>
+        <TableCell className="max-w-[100px]">
           <div>
             <Tooltip content="Editar" relationship="description">
               <Button
