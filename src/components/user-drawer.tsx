@@ -21,6 +21,7 @@ import { useDebounce } from 'hothooks'
 
 type UserDrawerProps = {
   title?: string
+  onlyTeachers?: boolean
   max?: number
   onSubmitTitle?: string
   onSubmit: (user: User[]) => void
@@ -103,10 +104,15 @@ export function Users(
     max = 1,
     selectedUsers,
     setSelectedUsers,
+    onlyTeachers,
     includeCurrentUser = true
   } = props
 
   const [query, setQuery] = React.useState<string | null>(null)
+
+  const uri = `users/all?status=actives&limit=15&q=${query}${
+    onlyTeachers ? '&onlyTeachers=true' : ''
+  }`
 
   const {
     data: users,
@@ -117,7 +123,7 @@ export function Users(
     queryFn: async () => {
       if (!query) return []
       const res = await api.get<User[]>(
-        'users/all?status=actives&limit=15&q=' + query
+        uri.replace(/&+/g, '&').replace(/(\?|&)$/, '')
       )
       if (!res.ok) return []
       return res.data.map((u) => new User(u))
