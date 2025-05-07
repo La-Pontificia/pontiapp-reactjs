@@ -181,7 +181,7 @@ export default function Item({
         <TableCell className="max-w-[70px]">
           <Badge>{item.floor ?? '-'}</Badge>
         </TableCell>
-        <TableCell className="max-w-[100px]">{item.type ?? '-'}</TableCell>
+        <TableCell className="max-w-[140px]">{item.type ?? '-'}</TableCell>
         <TableCell className="max-w-[80px]">{item.capacity ?? '-'}</TableCell>
         <TableCell className="max-lg:!hidden max-w-[130px]">
           <p className="font-medium">

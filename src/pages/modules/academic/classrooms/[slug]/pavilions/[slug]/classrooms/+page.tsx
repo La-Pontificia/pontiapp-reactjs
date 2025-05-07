@@ -115,7 +115,7 @@ export default function ClassroomsPage() {
               <TableSelectionCell type="radio" invisible />
               <TableHeaderCell>Aula</TableHeaderCell>
               <TableHeaderCell className="max-w-[70px]"># Piso</TableHeaderCell>
-              <TableHeaderCell className="max-w-[100px]">Tipo</TableHeaderCell>
+              <TableHeaderCell className="max-w-[140px]">Tipo</TableHeaderCell>
               <TableHeaderCell className="max-w-[80px]">
                 Capacidad
               </TableHeaderCell>
