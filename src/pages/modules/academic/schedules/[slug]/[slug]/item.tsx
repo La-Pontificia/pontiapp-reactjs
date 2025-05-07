@@ -386,6 +386,7 @@ const Item = ({ item, refetchSections }: Props) => {
                 planCourseId: item.planCourse.id
               })
             }}
+            onlyTeachers
             max={1}
             onSubmitTitle="Asignar"
             title="Asignar docente"
