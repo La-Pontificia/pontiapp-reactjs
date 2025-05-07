@@ -1,48 +1,45 @@
-"use client"
+'use client'
 
-import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, LabelList, XAxis, YAxis } from 'recharts'
 
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  CardTitle
+} from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
   ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Data } from "./+page"
-import React from "react"
-import { capitalizeText } from "@/utils"
+  ChartTooltipContent
+} from '@/components/ui/chart'
+import { Data } from './+page'
+import React from 'react'
+import { capitalizeText } from '@/utils'
 
-
-export function ChartPlans({
-  store
-}: {
-  store?: Data | null
-}) {
+export function ChartPlans({ store }: { store?: Data | null }) {
   const { plans = {}, programs = {} } = store || {}
 
   const chart = React.useMemo(() => {
-
     const data = Object.entries(plans).map(([key, value], i) => ({
       career: key,
-      careerName: capitalizeText(programs[key] || "Sin programa"),
+      careerName: capitalizeText(programs[key] || 'Sin programa'),
       count: value,
-      fill: `hsl(var(--chart-${i + 1}))`,
+      fill: `hsl(var(--chart-${i + 1}))`
     }))
 
-    const config = Object.entries(programs).reduce((acc, [key, label], index) => {
-      acc[key] = {
-        label: capitalizeText(label),
-        color: `hsl(var(--chart-${index + 1}))`,
-      };
-      return acc;
-    }, {} as Record<string, { label: string; color: string }>) satisfies ChartConfig
+    const config = Object.entries(programs).reduce(
+      (acc, [key, label], index) => {
+        acc[key] = {
+          label: capitalizeText(label),
+          color: `hsl(var(--chart-${index + 1}))`
+        }
+        return acc
+      },
+      {} as Record<string, { label: string; color: string }>
+    ) satisfies ChartConfig
 
     return {
       data,
@@ -63,18 +60,20 @@ export function ChartPlans({
         <CardTitle>Planes de estudio</CardTitle>
       </CardHeader>
       <CardContent>
-        <ChartContainer config={{
-          ...chart.config,
-          count: {
-            label: "Planes",
-          }
-        }}>
+        <ChartContainer
+          config={{
+            ...chart.config,
+            count: {
+              label: 'Planes'
+            }
+          }}
+        >
           <BarChart
             accessibilityLayer
             data={chart.data}
             layout="vertical"
             margin={{
-              right: 16,
+              right: 16
             }}
           >
             <CartesianGrid horizontal={false} />

@@ -1,60 +1,54 @@
-"use client"
+'use client'
 
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
 import {
   Card,
   CardContent,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  CardTitle
+} from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
-  ChartLegend,
-  ChartLegendContent,
   ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Data } from "./+page"
-import React from "react"
-import { CLASSROOM_TYPES } from "@/const"
+  ChartTooltipContent
+} from '@/components/ui/chart'
+import { Data } from './+page'
+import React from 'react'
 
-export function ChartClassrooms({
-  store
-}: {
-  store?: Data | null
-}) {
-
+export function ChartClassrooms({ store }: { store?: Data | null }) {
   const { classrooms = {} } = store || {}
 
   const chart = React.useMemo(() => {
-
-    const data = Object.entries(classrooms).map(([key, value]) => ({
-      period: key,
-      ...value
+    const data = Object.entries(classrooms).map(([key, value], i) => ({
+      type: key,
+      count: value,
+      fill: `hsl(var(--chart-${i + 1}))`
     }))
 
-    const config = CLASSROOM_TYPES.reduce((acc, key, index) => {
-      acc[key] = {
-        label: key,
-        color: `hsl(var(--chart-${index + 2}))`,
-      };
-      return acc;
+    const config = data.reduce((acc, { type }, index) => {
+      acc[type] = {
+        label: type,
+        color: `hsl(var(--chart-${index + 1}))`
+      }
+      return acc
     }, {} as Record<string, { label: string; color: string }>) satisfies ChartConfig
 
     return {
       data,
-      config
+      config: {
+        ...config,
+        count: {
+          label: 'Aulas'
+        }
+      }
     }
   }, [classrooms])
 
   const totalClassrooms = React.useMemo(() => {
-    const total = Object.entries(classrooms).reduce((acc, [, value]) => {
-      return acc + Object.values(value).reduce((acc, item) => acc + item, 0)
-    }, 0)
-    return total
+    return Object.values(classrooms).reduce((acc, item) => acc + item, 0)
   }, [classrooms])
 
   return (
@@ -67,27 +61,29 @@ export function ChartClassrooms({
           <BarChart accessibilityLayer data={chart.data}>
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="period"
+              dataKey="type"
               tickLine={false}
               tickMargin={10}
+              tick={({ y, x, payload }) => {
+                const words = payload.value.split(' ')
+                return (
+                  <text x={x} y={y + 0} textAnchor="middle" fill="#666">
+                    {words.map((word: string, index: number) => (
+                      <tspan x={x} dy={index === 0 ? 0 : 12} key={index}>
+                        {word}
+                      </tspan>
+                    ))}
+                  </text>
+                )
+              }}
               axisLine={false}
             />
             <ChartTooltip
               cursor={false}
-              content={<ChartTooltipContent indicator="dashed" />}
+              content={<ChartTooltipContent hideLabel />}
             />
-            <ChartLegend content={<ChartLegendContent />} />
-            {
-              CLASSROOM_TYPES.map((key, index) => (
-                <Bar
-                  key={key}
-                  dataKey={key}
-                  stackId="a"
-                  fill={`hsl(var(--chart-${index + 2}))`}
-                  radius={4}
-                />
-              ))
-            }
+            {/* <ChartLegend content={<ChartLegendContent />} /> */}
+            <Bar dataKey="count" strokeWidth={2} radius={8} />
           </BarChart>
         </ChartContainer>
       </CardContent>

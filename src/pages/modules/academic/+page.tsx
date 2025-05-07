@@ -1,19 +1,19 @@
-import { ChartSections } from './chart-sections';
-import { ChartSchedules } from './chart-shedules';
-import React from 'react';
-import { ChartPlans } from './chart-plans';
-import { Period } from '@/types/academic/period';
-import { useQuery } from '@tanstack/react-query';
-import { useAuth } from '@/store/auth';
-import { api } from '@/lib/api';
-import { ChartClassrooms } from './chart-classrooms';
+import { ChartSections } from './chart-sections'
+import { ChartSchedules } from './chart-shedules'
+import React from 'react'
+import { ChartPlans } from './chart-plans'
+import { Period } from '@/types/academic/period'
+import { useQuery } from '@tanstack/react-query'
+import { useAuth } from '@/store/auth'
+import { api } from '@/lib/api'
+import { ChartClassrooms } from './chart-classrooms'
 
 type ScheduleData = {
   data: Record<string, number>
   total: number
 }
 type SectionData = Record<string, Record<string, number>>
-type ClassroomData = Record<string, Record<string, number>>
+type ClassroomData = Record<string, number>
 type PlanData = Record<string, number>
 
 export type Data = {
@@ -26,7 +26,7 @@ export type Data = {
 
 export default function AcademicPage() {
   const { businessUnit } = useAuth()
-  const [period] = React.useState<Period | null>(null);
+  const [period] = React.useState<Period | null>(null)
 
   // const { data: periods } = useQuery<Period[]>({
   //   queryKey: ['academic/periods', businessUnit],
@@ -55,7 +55,7 @@ export default function AcademicPage() {
 
   return (
     <div className="grow px-2 overflow-auto pb-4">
-      <nav className='py-4 pb-2'>
+      <nav className="py-4 pb-2">
         <h2 className="text-center text-2xl  font-semibold">
           Gestión Académica
         </h2>
@@ -88,8 +88,6 @@ export default function AcademicPage() {
         <ChartPlans store={stadistics} />
         <ChartClassrooms store={stadistics} />
       </div>
-    </div >
+    </div>
   )
 }
-
-

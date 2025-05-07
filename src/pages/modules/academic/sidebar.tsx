@@ -4,6 +4,8 @@ import {
   BuildingFilled,
   BuildingRegular,
   CalendarFilled,
+  CalendarPersonFilled,
+  CalendarPersonRegular,
   CalendarRegular,
   ChartMultipleFilled,
   ChartMultipleRegular,
@@ -65,62 +67,71 @@ export const AcademicSidebar = () => {
           'academic:sections',
           'academic:courses',
           'academic:pavilionsClassrooms',
-          'academic:areas'
+          'academic:areas',
+          'academic:teacherSchedules'
         ],
         'or'
       ) && (
-          <>
-            <SidebarTitle>Metadatos académicos</SidebarTitle>
-            <ItemSidebarNav
-              icon={HatGraduationRegular}
-              iconActive={HatGraduationFilled}
-              href="/m/academic/programs"
-              has={['academic:programs']}
-            >
-              Programas y planes
-            </ItemSidebarNav>
-            <ItemSidebarNav
-              icon={FolderListRegular}
-              iconActive={FolderListFilled}
-              href="/m/academic/periods"
-              has={['academic:periods']}
-            >
-              Periodos
-            </ItemSidebarNav>
-            <ItemSidebarNav
-              icon={FolderListRegular}
-              iconActive={FolderListFilled}
-              href="/m/academic/sections"
-              has={['academic:sections']}
-            >
-              Secciones
-            </ItemSidebarNav>
-            <ItemSidebarNav
-              icon={BookSearchRegular}
-              iconActive={BookSearchFilled}
-              href="/m/academic/courses"
-              has={['academic:courses']}
-            >
-              Cursos
-            </ItemSidebarNav>
-            <ItemSidebarNav
-              icon={BuildingRegular}
-              iconActive={BuildingFilled}
-              href="/m/academic/classrooms"
-              has={['academic:pavilionsClassrooms']}
-            >
-              Aulas y pabellones
-            </ItemSidebarNav>
-            <ItemSidebarNav
-              icon={FolderListRegular}
-              iconActive={FolderListFilled}
-              href="/m/academic/areas"
-              has={['academic:areas']}
-            >
-              Áreas
-            </ItemSidebarNav>
-          </>
-        )}
+        <>
+          <SidebarTitle>Metadatos académicos</SidebarTitle>
+          <ItemSidebarNav
+            icon={CalendarPersonRegular}
+            iconActive={CalendarPersonFilled}
+            href="/m/academic/teacher-schedules"
+            has={['academic:teacherSchedules']}
+          >
+            Horarios docentes
+          </ItemSidebarNav>
+          <ItemSidebarNav
+            icon={HatGraduationRegular}
+            iconActive={HatGraduationFilled}
+            href="/m/academic/programs"
+            has={['academic:programs']}
+          >
+            Programas y planes
+          </ItemSidebarNav>
+          <ItemSidebarNav
+            icon={FolderListRegular}
+            iconActive={FolderListFilled}
+            href="/m/academic/periods"
+            has={['academic:periods']}
+          >
+            Periodos
+          </ItemSidebarNav>
+          <ItemSidebarNav
+            icon={FolderListRegular}
+            iconActive={FolderListFilled}
+            href="/m/academic/sections"
+            has={['academic:sections']}
+          >
+            Secciones
+          </ItemSidebarNav>
+          <ItemSidebarNav
+            icon={BookSearchRegular}
+            iconActive={BookSearchFilled}
+            href="/m/academic/courses"
+            has={['academic:courses']}
+          >
+            Cursos
+          </ItemSidebarNav>
+          <ItemSidebarNav
+            icon={BuildingRegular}
+            iconActive={BuildingFilled}
+            href="/m/academic/classrooms"
+            has={['academic:pavilionsClassrooms']}
+          >
+            Aulas y pabellones
+          </ItemSidebarNav>
+          <ItemSidebarNav
+            icon={FolderListRegular}
+            iconActive={FolderListFilled}
+            href="/m/academic/areas"
+            has={['academic:areas']}
+          >
+            Áreas
+          </ItemSidebarNav>
+        </>
+      )}
     </ReusableSidebar>
   )
 }

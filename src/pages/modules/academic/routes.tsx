@@ -33,6 +33,7 @@ import ScheduleProgramSlugLayout from './schedules/[slug]/[slug]/+layout'
 import SchedulesProgramSchedulesPage from './schedules/[slug]/[slug]/+page'
 import AreasPage from './areas/+page'
 import AcademicReportFilesPage from './report-files/+page'
+import AcademicTeacherSchedulesPage from './teacher-schedules/+page'
 
 export default function AcademicRoutes() {
   return (
@@ -81,6 +82,14 @@ export default function AcademicRoutes() {
           element={
             <Protected has="academic:reportFiles" navigate="/m/academic">
               <AcademicReportFilesPage />
+            </Protected>
+          }
+        />
+        <Route
+          path="teacher-schedules"
+          element={
+            <Protected has="academic:teacherSchedules" navigate="/m/academic">
+              <AcademicTeacherSchedulesPage />
             </Protected>
           }
         />
@@ -173,11 +182,14 @@ export default function AcademicRoutes() {
               </ProtectedModule>
             }
           />
-          <Route path=":periodId" element={
-            <Protected has="academic:sections" navigate="/m/academic">
-              <SectionSlugLayout />
-            </Protected>
-          }>
+          <Route
+            path=":periodId"
+            element={
+              <Protected has="academic:sections" navigate="/m/academic">
+                <SectionSlugLayout />
+              </Protected>
+            }
+          >
             <Route index element={<SectionProgramsPage />} />
             <Route path=":programId" element={<SectionProgramSlugLayout />}>
               <Route path="sections">

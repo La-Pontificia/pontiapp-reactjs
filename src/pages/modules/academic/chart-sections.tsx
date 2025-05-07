@@ -1,4 +1,4 @@
-import { Bar, BarChart, CartesianGrid, XAxis } from "recharts"
+import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts'
 
 import {
   Card,
@@ -6,40 +6,38 @@ import {
   CardDescription,
   CardFooter,
   CardHeader,
-  CardTitle,
-} from "@/components/ui/card"
+  CardTitle
+} from '@/components/ui/card'
 import {
   ChartConfig,
   ChartContainer,
   ChartLegend,
   ChartLegendContent,
   ChartTooltip,
-  ChartTooltipContent,
-} from "@/components/ui/chart"
-import { Data } from "./+page"
-import React from "react"
-import { capitalizeText } from "@/utils"
+  ChartTooltipContent
+} from '@/components/ui/chart'
+import { Data } from './+page'
+import React from 'react'
+import { capitalizeText } from '@/utils'
 
-export function ChartSections({
-  store,
-}: {
-  store?: Data | null
-}) {
+export function ChartSections({ store }: { store?: Data | null }) {
   const { sections = {}, programs = {} } = store || {}
   const chart = React.useMemo(() => {
-
-    const config = Object.entries(programs).reduce((acc, [key, label], index) => {
-      acc[key] = {
-        label: capitalizeText(label),
-        color: `hsl(var(--chart-${index + 1}))`,
-      };
-      return acc;
-    }, {} as Record<string, { label: string; color: string }>) satisfies ChartConfig
-
     const data = Object.entries(sections).map(([key, value]) => ({
       period: key,
       ...value
     }))
+
+    const config = Object.entries(programs).reduce(
+      (acc, [key, label], index) => {
+        acc[key] = {
+          label: capitalizeText(label),
+          color: `hsl(var(--chart-${index + 1}))`
+        }
+        return acc
+      },
+      {} as Record<string, { label: string; color: string }>
+    ) satisfies ChartConfig
 
     return {
       data,
@@ -58,8 +56,7 @@ export function ChartSections({
     <Card className="lg:col-span-2">
       <CardHeader>
         <CardTitle>Secciones</CardTitle>
-        <CardDescription>
-        </CardDescription>
+        <CardDescription></CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chart.config}>
@@ -73,17 +70,15 @@ export function ChartSections({
             />
             <ChartTooltip content={<ChartTooltipContent hideLabel />} />
             <ChartLegend content={<ChartLegendContent />} />
-            {
-              Object.entries(programs).map(([key], index) => (
-                <Bar
-                  key={key}
-                  dataKey={key}
-                  stackId="a"
-                  fill={`hsl(var(--chart-${index + 1}))`}
-                  radius={[index === 0 ? 0 : 4, index === 0 ? 0 : 4, 0, 0]}
-                />
-              ))
-            }
+            {Object.entries(programs).map(([key], index) => (
+              <Bar
+                key={key}
+                dataKey={key}
+                stackId="a"
+                fill={`hsl(var(--chart-${index + 1}))`}
+                radius={[index === 0 ? 0 : 4, index === 0 ? 0 : 4, 0, 0]}
+              />
+            ))}
           </BarChart>
         </ChartContainer>
       </CardContent>
