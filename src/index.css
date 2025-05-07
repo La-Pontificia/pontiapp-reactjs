@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 @layer base {
   :root {
     --chart-1: 12 76% 61%;
@@ -11,7 +10,7 @@
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
   }
- 
+
   .dark {
     --chart-1: 220 70% 50%;
     --chart-2: 160 60% 45%;
@@ -344,6 +343,9 @@ body {
   overflow: auto;
   flex-direction: column;
   flex: 1;
+  .fc-scroller {
+    overflow: auto !important;
+  }
 
   .fc-event-main {
     overflow: hidden !important;
@@ -422,7 +424,7 @@ body {
 }
 
 .fc-timegrid-event-harness-inset .fc-timegrid-event {
-  @apply shadow-md shadow-black/20 rounded-xl p-1 dark:!border-2 dark:border-[#21201d] border-[#f2f2f2] cursor-pointer hover:scale-105 transition-transform;
+  @apply shadow-md shadow-black/20 rounded-xl p-1 dark:!border-2 dark:border-[#21201d] border-[#f2f2f2] cursor-pointer hover:scale-[1.01] transition-transform;
 }
 
 .fc-highlight {
@@ -432,8 +434,6 @@ body {
 .fc-daygrid-day-number {
   @apply !text-sm opacity-70;
 }
-
-
 
 @layer base {
   :root {
@@ -461,6 +461,16 @@ body {
     --chart-3: 197 37% 24%;
     --chart-4: 43 74% 66%;
     --chart-5: 27 87% 67%;
+    --chart-6: 210 90% 60%;
+    --chart-7: 330 70% 55%;
+    --chart-8: 90 65% 50%;
+    --chart-9: 270 60% 65%;
+    --chart-10: 15 85% 50%;
+    --chart-11: 120 75% 45%;
+    --chart-12: 300 80% 60%;
+    --chart-13: 60 70% 55%;
+    --chart-14: 200 85% 50%;
+    --chart-15: 240 65% 55%;
     --radius: 0.5rem;
   }
   .dark {
@@ -488,10 +498,18 @@ body {
     --chart-3: 30 80% 55%;
     --chart-4: 280 65% 60%;
     --chart-5: 340 75% 55%;
+    --chart-6: 210 80% 50%;
+    --chart-7: 330 60% 50%;
+    --chart-8: 90 55% 45%;
+    --chart-9: 270 50% 60%;
+    --chart-10: 15 75% 45%;
+    --chart-11: 120 65% 40%;
+    --chart-12: 300 70% 55%;
+    --chart-13: 60 60% 50%;
+    --chart-14: 200 75% 45%;
+    --chart-15: 240 55% 50%;
   }
 }
-
-
 
 @layer base {
   * {
