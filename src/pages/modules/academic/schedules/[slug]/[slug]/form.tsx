@@ -173,6 +173,9 @@ export default function ScheduleForm({
     }
   })
 
+  const dteacher = defaultProp?.sectionCourse?.teacher
+  const steacher = sectionCourse.teacher
+
   return (
     <>
       <Dialog open={open} onOpenChange={(_, { open }) => onOpenChange(open)}>
@@ -226,14 +229,12 @@ export default function ScheduleForm({
                   disabled
                   readOnly
                   defaultValue={
-                    defaultProp?.sectionCourse?.teacher
-                      ? `${
-                          defaultProp?.sectionCourse?.teacher?.documentId ?? ''
-                        } - ${
-                          defaultProp?.sectionCourse?.teacher?.fullName ?? ''
+                    dteacher
+                      ? `${dteacher?.documentId ?? ''} - ${
+                          dteacher?.fullName || dteacher?.displayName || ''
                         }`
-                      : `${sectionCourse.teacher?.documentId ?? ''} - ${
-                          sectionCourse.teacher?.fullName ?? ''
+                      : `${steacher?.documentId ?? ''} - ${
+                          steacher?.fullName || steacher?.displayName || ''
                         }`
                   }
                 />
