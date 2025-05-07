@@ -55,9 +55,7 @@ export const ReusableSidebar = React.forwardRef<
           className
         )}
       >
-        <SidebarTitle>
-          {title}
-        </SidebarTitle>
+        {title && <SidebarTitle>{title}</SidebarTitle>}
         {children}
       </aside>
     </ContextReusableSidebar.Provider>
@@ -90,7 +88,9 @@ export const ItemSidebarNav = (props: ItemNav) => {
     'only screen and (min-width : 169px) and (max-width : 992px)'
   )
 
-  const hasPrivilege = props.has ? props.has.some((p) => privileges.includes(p)) : true
+  const hasPrivilege = props.has
+    ? props.has.some((p) => privileges.includes(p))
+    : true
   const toggleSidebar = useUi((state) => state.toggleSidebar)
 
   if (!hasPrivilege && !user.isDeveloper) return null
