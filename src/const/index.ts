@@ -221,7 +221,8 @@ export const PRIVILEGES = {
   'academic:courses': '(Académica) Cursos académicos',
   'academic:pavilionsClassrooms': '(Académica) Pabellones y aulas',
   'academic:reportFiles': '(Académica) Archivo de reportes',
-  'academic:areas': '(Académica) Areas académicas'
+  'academic:areas': '(Académica) Areas académicas',
+  'academic:teacherSchedules': '(Académica) Horarios de docentes'
 }
 
 export const BIRTHDAY_MESSAGE: string[] = [
@@ -249,8 +250,10 @@ export const PATHNAMES = {
 } as const
 
 export const CLASSROOM_TYPES = [
-  'Aula',
-  'Laboratorio',
-  'Virtual',
-  'Taller'
+  'Aula computo',
+  'Aula teoria',
+  'Aula virtual',
+  'Lab. computo',
+  'Lab. CIIE',
+  'Taller enfermeria'
 ] as const
