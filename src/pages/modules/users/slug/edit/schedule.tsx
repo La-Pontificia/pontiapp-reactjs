@@ -94,10 +94,6 @@ export const ScheduleItem = ({
     return '🌆'
   }, [schedule.from])
 
-  const type = React.useMemo(() => {
-    return schedule.type === 'available' ? 'Laboral' : 'No disponible'
-  }, [schedule.type])
-
   return (
     <div className="relative group bg-stone-500/10 dark:text-neutral-300 shadow-sm rounded-lg">
       <div className="py-2 px-4 border-b border-neutral-500/20 flex items-center gap-3">
@@ -123,13 +119,6 @@ export const ScheduleItem = ({
           ) : (
             turn
           )}
-          <span
-            data-unavailable={schedule.type === 'unavailable' ? '' : undefined}
-            className="text-sm data-[unavailable]:text-red-500"
-          >
-            {' '}
-            {type}
-          </span>
         </div>
       </div>
       <div className="py-3 px-4 flex items-center gap-3">

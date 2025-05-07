@@ -2,9 +2,9 @@ import { useParams } from 'react-router'
 import { Schedule } from '@/types/schedule'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
-import { cn, handleError, parseTime } from '@/utils'
+import { cn, handleError } from '@/utils'
 import { ScheduleItem } from './schedule'
-import { Input, Select, Spinner } from '@fluentui/react-components'
+import { Input, Spinner } from '@fluentui/react-components'
 import {
   Button,
   Checkbox,
@@ -26,7 +26,7 @@ import {
   TimePicker
 } from '@fluentui/react-timepicker-compat'
 import React from 'react'
-import { format, parse } from '@/lib/dayjs'
+import { format, parse, parseTime } from '@/lib/dayjs'
 import { useUserEdit } from './+page'
 import { AddRegular } from '@fluentui/react-icons'
 import { useAuth } from '@/store/auth'
@@ -119,11 +119,11 @@ type ScheduleFormValue = {
   startDate: Date
   endDate: Date | null
   days: string[]
-  type: Schedule['type']
   from?: Date
   to?: Date
   tolerance?: string
 }
+
 export function ScheduleForm(props: {
   default?: Schedule
   refetch?: () => void
@@ -136,7 +136,7 @@ export function ScheduleForm(props: {
   const open = props.open !== undefined ? props.open : o
   const setOpen = props.onOpenChange ?? setO
 
-  const { control, handleSubmit, reset, watch } = useForm<ScheduleFormValue>({
+  const { control, handleSubmit, reset } = useForm<ScheduleFormValue>({
     defaultValues: {
       days: props.default?.days ?? [],
       from: props.default?.from && parse(props.default?.from),
@@ -145,7 +145,6 @@ export function ScheduleForm(props: {
         ? parse(props.default?.startDate)
         : new Date(),
       tolerance: props.default?.tolerance || '5',
-      type: props.default?.type || 'available',
       endDate: props.default?.endDate ? parse(props.default?.endDate) : null
     }
   })
@@ -180,20 +179,14 @@ export function ScheduleForm(props: {
       values: JSON.stringify({
         from: format(values.from, 'YYYY-MM-DD HH:mm:ss'),
         to: format(values.to, 'YYYY-MM-DD HH:mm:ss'),
-        type: values.type,
         userId: user?.id,
         days: values.days,
         tolerance: values.tolerance ? Number(values.tolerance) : 0,
         startDate: format(values.startDate, 'YYYY-MM-DD'),
-        endDate:
-          values.type === 'unavailable'
-            ? format(values.endDate, 'YYYY-MM-DD')
-            : null
+        endDate: null
       })
     })
   })
-
-  const type = watch('type')
 
   return (
     <Dialog
@@ -207,33 +200,6 @@ export function ScheduleForm(props: {
             {props.default ? 'Editar horario' : 'Agregar horario'}
           </DialogTitle>
           <DialogContent className="grid gap-2">
-            <Controller
-              control={control}
-              rules={{
-                required: 'Requerido'
-              }}
-              render={({ field, fieldState: { error } }) => (
-                <Field
-                  required
-                  orientation="horizontal"
-                  validationMessage={error?.message}
-                  label="Tipo de horario:"
-                  validationState={error ? 'error' : 'none'}
-                >
-                  <Select
-                    value={field.value}
-                    onChange={(_, d) => field.onChange(d.value)}
-                  >
-                    {['available', 'unavailable'].map((type) => (
-                      <option key={type} value={type}>
-                        {type === 'available' ? 'Laboral' : 'No disponible'}
-                      </option>
-                    ))}
-                  </Select>
-                </Field>
-              )}
-              name="type"
-            />
             <Controller
               control={control}
               rules={{
@@ -261,35 +227,6 @@ export function ScheduleForm(props: {
               )}
               name="startDate"
             />
-            {type === 'unavailable' && (
-              <Controller
-                control={control}
-                rules={{
-                  required: 'Selecciona la fecha de fin'
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <Field
-                    required
-                    orientation="horizontal"
-                    validationMessage={error?.message}
-                    label="Termina en la fecha"
-                  >
-                    <DatePicker
-                      value={field.value ? new Date(field.value) : null}
-                      onSelectDate={(date) => {
-                        field.onChange(date)
-                      }}
-                      formatDate={(date) =>
-                        format(date, '[Hasta el] dddd D [de] MMMM [del] YYYY')
-                      }
-                      strings={calendarStrings}
-                      placeholder="Selecciona una fecha"
-                    />
-                  </Field>
-                )}
-                name="endDate"
-              />
-            )}
             <Controller
               control={control}
               name="days"
@@ -306,8 +243,7 @@ export function ScheduleForm(props: {
                   <Field
                     required
                     orientation="horizontal"
-                    label={`Días de la semana que se aplicará el horario ${type === 'unavailable' ? 'no disponible' : 'laboral'
-                      }:`}
+                    label={`Días de la semana que se aplicará el horario:`}
                     validationMessage={error?.message}
                     validationState={error ? 'error' : 'none'}
                   ></Field>
@@ -321,8 +257,8 @@ export function ScheduleForm(props: {
                               d.checked
                                 ? [...(field.value ?? []), key]
                                 : field.value
-                                  ? field.value.filter((w) => w !== key)
-                                  : []
+                                ? field.value.filter((w) => w !== key)
+                                : []
                             )
                           }}
                           label={day.short}
@@ -348,6 +284,7 @@ export function ScheduleForm(props: {
                   label="Desde:"
                 >
                   <TimePicker
+                    inlinePopup
                     ref={field.ref}
                     defaultValue={
                       field.value ? formatDateToTimeString(field.value) : ''
@@ -355,8 +292,8 @@ export function ScheduleForm(props: {
                     startHour={6}
                     endHour={23}
                     onBlur={(e) => {
-                      const parse = parseTime(e.target.value)
-                      if (parse) field.onChange(parse)
+                      const parsed = parseTime(e.target.value)
+                      if (parsed) field.onChange(parsed)
                       else field.onChange(null)
                     }}
                     onTimeChange={(_, e) =>
@@ -381,6 +318,7 @@ export function ScheduleForm(props: {
                   label="Hasta:"
                 >
                   <TimePicker
+                    inlinePopup
                     ref={field.ref}
                     defaultValue={
                       field.value ? formatDateToTimeString(field.value) : ''
@@ -388,8 +326,8 @@ export function ScheduleForm(props: {
                     startHour={6}
                     endHour={23}
                     onBlur={(e) => {
-                      const parse = parseTime(e.target.value)
-                      if (parse) field.onChange(parse)
+                      const parsed = parseTime(e.target.value)
+                      if (parsed) field.onChange(parsed)
                       else field.onChange(null)
                     }}
                     onTimeChange={(_, e) =>
@@ -401,30 +339,28 @@ export function ScheduleForm(props: {
               )}
               name="to"
             />
-            {type === 'available' && (
-              <Controller
-                control={control}
-                rules={{
-                  required: 'Ingresa la tolerancia en minutos'
-                }}
-                render={({ field, fieldState: { error } }) => (
-                  <Field
-                    required
-                    orientation="horizontal"
-                    validationMessage={error?.message}
-                    label="Tolerancia:"
-                    validationState={error ? 'error' : 'none'}
-                  >
-                    <Input
-                      className="w-[100px]"
-                      {...field}
-                      contentAfter={<>min.</>}
-                    />
-                  </Field>
-                )}
-                name="tolerance"
-              />
-            )}
+            <Controller
+              control={control}
+              rules={{
+                required: 'Ingresa la tolerancia en minutos'
+              }}
+              render={({ field, fieldState: { error } }) => (
+                <Field
+                  required
+                  orientation="horizontal"
+                  validationMessage={error?.message}
+                  label="Tolerancia:"
+                  validationState={error ? 'error' : 'none'}
+                >
+                  <Input
+                    className="w-[100px]"
+                    {...field}
+                    contentAfter={<>min.</>}
+                  />
+                </Field>
+              )}
+              name="tolerance"
+            />
           </DialogContent>
           <DialogActions>
             <DialogTrigger disableButtonEnhancement>
