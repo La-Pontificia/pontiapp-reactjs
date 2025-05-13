@@ -13,7 +13,7 @@ import {
   Select,
   Spinner
 } from '@fluentui/react-components'
-import { DeleteRegular, Dismiss24Regular } from '@fluentui/react-icons'
+import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
@@ -61,7 +61,6 @@ export default function ScheduleForm({
   const { control, handleSubmit, reset, watch } = useForm<FormValues>()
   const { period } = useSlugSchedules()
 
-  const [openDelete, setOpenDelete] = React.useState(false)
   React.useEffect(() => {
     if (defaultProp) {
       reset({
@@ -131,22 +130,6 @@ export default function ScheduleForm({
   })
 
   const onSubmit = handleSubmit((values) => {
-    // verify startTime and endTime if correct format
-    // if (!startTime || !endTime) {
-    //   toast.error('Hora de inicio y fin son requeridas')
-    //   return
-    // }
-
-    // if (!formatTime(startTime)) {
-    //   toast.error('Hora de inicio no es correcta')
-    //   return
-    // }
-
-    // if (!formatTime(endTime)) {
-    //   toast.error('Hora de fin no es correcta')
-    //   return
-    // }
-
     fetch({
       sectionCourseId: sectionCourse.id,
       pavilionId: values.pavilion?.id,
@@ -157,20 +140,6 @@ export default function ScheduleForm({
       endDate: format(values.endDate, 'YYYY-MM-DD'),
       daysOfWeek: values.daysOfWeek
     })
-  })
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: () =>
-      api.post(`academic/sections/courses/schedules/${defaultProp?.id}/delete`),
-    onSuccess: () => {
-      setOpenDelete(false)
-      onOpenChange(false)
-      refetch()
-      toast.success('En hora buena! El horario ha sido eliminado con éxito.')
-    },
-    onError: (error) => {
-      toast.error(handleError(error.message))
-    }
   })
 
   const dteacher = defaultProp?.sectionCourse?.teacher
@@ -488,43 +457,8 @@ export default function ScheduleForm({
               >
                 {defaultProp?.id ? 'Actualizar' : 'Registrar'}
               </Button>
-              {defaultProp?.id && (
-                <Button
-                  icon={<DeleteRegular />}
-                  onClick={() => setOpenDelete(true)}
-                  appearance="outline"
-                >
-                  Eliminar
-                </Button>
-              )}
-
               <Button onClick={() => onOpenChange(false)} appearance="outline">
                 Cerrar
-              </Button>
-            </DialogActions>
-          </DialogBody>
-        </DialogSurface>
-      </Dialog>
-
-      <Dialog
-        open={openDelete}
-        onOpenChange={(_, e) => setOpenDelete(e.open)}
-        modalType="alert"
-      >
-        <DialogSurface>
-          <DialogBody>
-            <DialogTitle>¿Estás seguro de eliminar el horario?</DialogTitle>
-            <DialogActions>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary">Cancelar</Button>
-              </DialogTrigger>
-              <Button
-                onClick={() => mutate()}
-                disabled={isPending}
-                icon={isPending ? <Spinner size="tiny" /> : undefined}
-                appearance="primary"
-              >
-                ELiminar
               </Button>
             </DialogActions>
           </DialogBody>

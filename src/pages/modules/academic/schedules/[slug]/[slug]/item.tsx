@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Button,
   Dialog,
@@ -5,13 +6,19 @@ import {
   DialogBody,
   DialogContent,
   DialogSurface,
-  Spinner,
-  Tooltip
+  DialogTitle,
+  DialogTrigger,
+  Spinner
 } from '@fluentui/react-components'
 import {
+  BuildingMultipleRegular,
   CalendarEditRegular,
+  CalendarLtrRegular,
   CheckmarkCircleFilled,
+  ClockRegular,
+  DeleteRegular,
   DocumentRegular,
+  PenRegular,
   PersonLightbulbRegular
 } from '@fluentui/react-icons'
 import React from 'react'
@@ -41,19 +48,10 @@ type Props = {
   refetchSections: () => void
 }
 
-type PreEvent = {
-  id: string
-  title: string
-  from: Date
-  to: Date
-  interactive?: boolean
-  dates: Date[]
-  backgroundColor: string
-  extendedProps?: Record<string, string | React.ReactNode>
-}
+type PreEvent = Record<string, any>
 
 const Item = ({ item, refetchSections }: Props) => {
-  const { period, program } = useSlugSchedules()
+  const { period } = useSlugSchedules()
   const [openDialog, setOpenDialog] = React.useState(false)
   const [openForm, setOpenForm] = React.useState(false)
   const [defaultValues, setDefaultValues] = React.useState<
@@ -104,24 +102,6 @@ const Item = ({ item, refetchSections }: Props) => {
     }
   })
 
-  const parseSectionSchedules = React.useMemo(
-    (): PreEvent[] =>
-      sectionSchedules?.map((s) => ({
-        id: s.id,
-        title: s.sectionCourse?.planCourse?.name,
-        from: s.startTime,
-        to: s.endTime,
-        dates: s.dates,
-        backgroundColor: '#0074ba',
-        extendedProps: {
-          Aula: s.classroom?.code,
-          Desde: format(s.startDate, 'DD [de] MMM YYYY'),
-          Hasta: format(s.endDate, 'DD [de] MMM YYYY')
-        }
-      })) ?? [],
-    [sectionSchedules]
-  )
-
   const parseTeacherSchedulesUnavailables = React.useMemo(
     (): PreEvent[] =>
       teacherSchedulesUnavailables?.map((s) => ({
@@ -130,11 +110,18 @@ const Item = ({ item, refetchSections }: Props) => {
         from: s.from,
         to: s.to,
         dates: s.dates ?? [],
-        backgroundColor: '#ff1000',
+        classNames: [
+          'dark:!bg-red-600',
+          '[&>div]:dark:!text-red-100',
+
+          'bg-red-700',
+          '[&>div]:!text-white'
+        ],
         extendedProps: {
           Descripción: 'Docente no disponible',
           Desde: format(s.startDate, 'DD [de] MMM YYYY'),
-          Hasta: format(s.endDate, 'DD [de] MMM YYYY')
+          Hasta: format(s.endDate, 'DD [de] MMM YYYY'),
+          $icon: '🙅‍♂️'
         }
       })) ?? [],
     [teacherSchedulesUnavailables, item.teacher]
@@ -148,31 +135,60 @@ const Item = ({ item, refetchSections }: Props) => {
         from: s.startTime,
         to: s.endTime,
         dates: s.dates,
-        backgroundColor: '#c9a932',
+        classNames: [
+          'dark:!bg-yellow-500',
+          '[&>div]:dark:!text-black',
+
+          '!bg-yellow-400',
+          '[&>div]:!text-yellow-950'
+        ],
         extendedProps: {
-          ...(program?.id !== s.program.id
-            ? {
-                Programa: s.program.name
-              }
-            : {}),
+          Programa: s.program.name,
+          $img: s.program.businessUnit?.logoURL,
           Aula: s.classroom?.code,
           Desde: format(s.startDate, 'DD [de] MMM YYYY'),
           Hasta: format(s.endDate, 'DD [de] MMM YYYY')
         }
       })) ?? [],
-    [teacherSchedules, program]
+    [teacherSchedules]
+  )
+
+  const parseSectionSchedules = React.useMemo(
+    (): PreEvent[] =>
+      sectionSchedules?.map((s) => ({
+        id: s.id,
+        title: s.sectionCourse?.planCourse?.name,
+        from: s.startTime,
+        to: s.endTime,
+        dates: s.dates,
+        classNames: [
+          'interactive',
+          'dark:!bg-blue-500',
+          '[&>div]:dark:!text-black',
+
+          '!bg-blue-800',
+          '[&>div]:!text-blue-100'
+        ],
+        extendedProps: {
+          Programa: s.program.name,
+          $img: s.program.businessUnit?.logoURL,
+          Aula: s.classroom?.code,
+          Desde: format(s.startDate, 'DD [de] MMM YYYY'),
+          Hasta: format(s.endDate, 'DD [de] MMM YYYY')
+        }
+      })) ?? [],
+    [sectionSchedules]
   )
 
   const events = React.useMemo<EventSourceInput>(() => {
     const newEvents: EventSourceInput = []
 
     const combinedSchedules = [
-      ...(parseSectionSchedules ?? []),
       ...(parseTeacherSchedules ?? []),
-      ...(parseTeacherSchedulesUnavailables ?? [])
+      ...(parseTeacherSchedulesUnavailables ?? []),
+      ...(parseSectionSchedules ?? [])
     ]
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const scheduleMap = new Map<string, any>()
 
     for (let i = 0; i < combinedSchedules.length; i++) {
@@ -180,7 +196,14 @@ const Item = ({ item, refetchSections }: Props) => {
       if (scheduleMap.has(schedule.id)) {
         scheduleMap.set(schedule.id, {
           ...schedule,
-          backgroundColor: '#7956a9'
+          classNames: [
+            'interactive',
+            'dark:!bg-violet-500',
+            '[&>div]:dark:!text-black',
+
+            '!bg-violet-800',
+            '[&>div]:!text-violet-100'
+          ]
         })
       } else {
         scheduleMap.set(schedule.id, schedule)
@@ -195,6 +218,7 @@ const Item = ({ item, refetchSections }: Props) => {
       if (!schedule?.dates) continue
       for (const date of schedule.dates) {
         newEvents.push({
+          classNames: schedule.classNames,
           title: schedule.title,
           start: concatDateWithTime(date, schedule.from),
           end: concatDateWithTime(date, schedule.to),
@@ -252,14 +276,14 @@ const Item = ({ item, refetchSections }: Props) => {
         open={openDialog}
         onOpenChange={(_, { open }) => setOpenDialog(open)}
       >
-        <DialogSurface className="max-xl:!max-w-[95vw] !bg-[#f5f5f4] dark:!bg-[#2f2e2b] !max-h-[95vh] xl:!min-w-[1300px] !p-0">
+        <DialogSurface className="max-xl:!max-w-[95vw] !overflow-hidden !bg-[#f5f5f4] dark:!bg-[#2f2e2b] !max-h-[95vh] xl:!min-w-[1300px] !p-0">
           <DialogBody
             style={{
               maxHeight: '99vh',
               gap: 0
             }}
           >
-            <DialogContent className="flex !p-1 !pb-0 !grow xl:!h-[700px] !max-h-[100%]">
+            <DialogContent className="flex !p-1 !pb-0 xl:!h-[750px] !max-h-[100%]">
               <Calendar
                 events={events}
                 onDateSelect={(args) => {
@@ -315,41 +339,67 @@ const Item = ({ item, refetchSections }: Props) => {
                   </div>
                 }
               />
-              <div className="w-[400px] overflow-auto max-w-[400px] flex gap-1 flex-col p-2">
+              <div className="w-[350px] max-md:hidden overflow-auto max-w-[350px] flex gap-1 flex-col p-2">
                 {isLoading ? (
                   <div className="grow grid place-content-center">
                     <Spinner />
                   </div>
                 ) : (
-                  <div className="grow overflow-y-auto flex gap-1 flex-col">
+                  <div className="grow overflow-y-auto flex gap-1.5 flex-col">
                     <p className="font-medium pb-1">
                       Horarios de {item.section?.code}
                     </p>
                     {sectionSchedules?.map((s) => (
-                      <Tooltip
+                      <div
                         key={s.id}
-                        content={
-                          <div className="text-sm capitalize pb-2 font-semibold">
-                            - {s.sectionCourse.planCourse.course.code}
-                            <br />- {s.sectionCourse.planCourse.name}
-                          </div>
-                        }
-                        relationship="inaccessible"
-                        withArrow
+                        className="p-2 flex bg-white dark:bg-stone-900 items-center gap-2 text-left rounded-lg"
                       >
-                        <div className="p-2 text-left flex items-center bg-stone-200 text-stone-950 dark:text-stone-200 dark:bg-stone-900 rounded-lg text-sm">
-                          <div className="grow">
-                            <div className="capitalize font-semibold">
-                              {format(s.startDate, 'DD MMM, YYYY')} -{' '}
-                              {format(s.endDate, 'DD MMM, YYYY')}
-                            </div>
-                            <div className="opacity-70">
-                              {format(s.startTime, 'hh:mm A')} -{' '}
-                              {format(s.endTime, 'hh:mm A')}
-                            </div>
+                        <div className="grow">
+                          <p className="overflow-ellipsis font-medium line-clamp-1 pb-1">
+                            {s.sectionCourse?.planCourse?.name}
+                          </p>
+                          <div className="text-xs flex items-center gap-1">
+                            <BuildingMultipleRegular
+                              fontSize={19}
+                              className="opacity-50"
+                            />
+                            {s.classroom.code} - {s.classroom.pavilion.name}
+                          </div>
+                          <div className="text-xs flex items-center gap-1">
+                            <CalendarLtrRegular
+                              fontSize={19}
+                              className="opacity-50"
+                            />
+                            {format(s.startDate, 'DD MMM, YYYY')} -{' '}
+                            {format(s.endDate, 'DD MMM, YYYY')}
+                          </div>
+                          <div className="text-xs flex items-center gap-1">
+                            <ClockRegular
+                              fontSize={19}
+                              className="opacity-50"
+                            />
+                            {format(s.startTime, 'hh:mm A')} -{' '}
+                            {format(s.endTime, 'hh:mm A')}
+                          </div>
+                          <div className="pt-1 gap-1 flex">
+                            <Button
+                              onClick={() => {
+                                setDefaultValues(s)
+                                // open form with 2s delay
+                                setTimeout(() => {
+                                  setOpenForm(true)
+                                }, 50)
+                              }}
+                              shape="circular"
+                              size="small"
+                              icon={<PenRegular />}
+                            >
+                              Editar
+                            </Button>
+                            <ScheduleDelete refetch={refetch} schedule={s} />
                           </div>
                         </div>
-                      </Tooltip>
+                      </div>
                     ))}
                   </div>
                 )}
@@ -426,3 +476,63 @@ const Item = ({ item, refetchSections }: Props) => {
 }
 
 export default Item
+
+export const ScheduleDelete = ({
+  schedule,
+  refetch
+}: {
+  schedule: SectionCourseSchedule
+  refetch: () => void
+}) => {
+  const [openDelete, setOpenDelete] = React.useState(false)
+
+  const { mutate, isPending } = useMutation({
+    mutationFn: () =>
+      api.post(`academic/sections/courses/schedules/${schedule?.id}/delete`),
+    onSuccess: () => {
+      setOpenDelete(false)
+      refetch()
+      toast.success('En hora buena! El horario ha sido eliminado con éxito.')
+    },
+    onError: (error) => {
+      toast.error(handleError(error.message))
+    }
+  })
+
+  return (
+    <>
+      <Button
+        onClick={() => setOpenDelete(true)}
+        shape="circular"
+        size="small"
+        icon={<DeleteRegular />}
+      >
+        Eliminar
+      </Button>
+      <Dialog
+        open={openDelete}
+        onOpenChange={(_, e) => setOpenDelete(e.open)}
+        modalType="alert"
+      >
+        <DialogSurface>
+          <DialogBody>
+            <DialogTitle>¿Estás seguro de eliminar el horario?</DialogTitle>
+            <DialogActions>
+              <DialogTrigger disableButtonEnhancement>
+                <Button appearance="secondary">Cancelar</Button>
+              </DialogTrigger>
+              <Button
+                onClick={() => mutate()}
+                disabled={isPending}
+                icon={isPending ? <Spinner size="tiny" /> : undefined}
+                appearance="primary"
+              >
+                ELiminar
+              </Button>
+            </DialogActions>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
+    </>
+  )
+}
