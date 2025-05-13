@@ -5,11 +5,9 @@ import { useQuery } from '@tanstack/react-query'
 import ReportPage from '@/components/report-page'
 export default function EventsReportFilesPage() {
   const { data: reports, isLoading } = useQuery<Report[]>({
-    queryKey: ['events-records', 'report-files'],
+    queryKey: ['events', 'report-files'],
     queryFn: async () => {
-      const res = await api.get<Report[]>(
-        'partials/reports/all?module=events-records'
-      )
+      const res = await api.get<Report[]>('partials/reports/all?module=events')
       if (!res.ok) return []
       return res.data.map((d) => new Report(d))
     }

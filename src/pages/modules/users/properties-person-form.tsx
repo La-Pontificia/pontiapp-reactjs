@@ -70,8 +70,8 @@ export default function PropertiesPersonForm({
     })
 
     if (!res.ok) {
-      console.error(res.error)
-      setValue('photoURL', '')
+      // console.error(res.error)
+      // setValue('photoURL', '')
       toast.error('No se pudo subir la imagen')
       return
     }
@@ -244,8 +244,8 @@ export default function PropertiesPersonForm({
                       contact.type === 'email'
                         ? MailRegular
                         : contact.type === 'phone'
-                          ? PhoneRegular
-                          : FaWhatsapp
+                        ? PhoneRegular
+                        : FaWhatsapp
                     return (
                       <div key={key} className="flex items-center gap-2 py-1">
                         <Icon
