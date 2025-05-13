@@ -116,7 +116,11 @@ export const days = {
 
 export const availableDomains = {
   'lapontificia.edu.pe': 'La Pontificia',
-  'elp.edu.pe': 'Escuela Superior La Pontificia'
+  'elp.edu.pe': 'Escuela Superior La Pontificia',
+  'ilp.edu.pe': 'Instituto La Pontificia',
+  'idiomaslp.edu.pe': 'Idiomas La Pontificia',
+  'continualp.edu.pe': 'Educación Continua La Pontificia',
+  'cybenet.edu.pe': 'Colegio Cybernet'
 } as const
 
 export const AREA_DEVELOPER_ID = VITE_AREA_DEVELOPER_ID
