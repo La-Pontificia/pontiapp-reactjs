@@ -25,7 +25,7 @@ export default function ResourceManagementSidebar() {
       >
         Archivos de reportes
       </ItemSidebarNav>
-      {authUser.hasPrivilege('rm:club') && (
+      {authUser.hasPrivilege(['rm:club'], 'or') && (
         <>
           <SidebarTitle>Apps de LP</SidebarTitle>
           <ItemSidebarNav
@@ -38,64 +38,27 @@ export default function ResourceManagementSidebar() {
           </ItemSidebarNav>
         </>
       )}
-      {(authUser.hasPrivilege('rm:businessUnits') ||
-        authUser.hasPrivilege('rm:locations') ||
-        authUser.hasPrivilege('rm:areas') ||
-        authUser.hasPrivilege('rm:departments') ||
-        authUser.hasPrivilege('rm:positions') ||
-        authUser.hasPrivilege('rm:roles')) && (
-          <>
-            <SidebarTitle>Meta datos pontiapp</SidebarTitle>
-            <ItemSidebarNav
-              icon={FolderOpenRegular}
-              iconActive={FolderOpenFilled}
-              href="/m/rm/business-units"
-              has={['rm:businessUnits']}
-            >
-              Unidad de negocios
-            </ItemSidebarNav>
-            <ItemSidebarNav
-              icon={FolderOpenRegular}
-              iconActive={FolderOpenFilled}
-              href="/m/rm/locations"
-              has={['rm:locations']}
-            >
-              Sedes
-            </ItemSidebarNav>
-            <ItemSidebarNav
-              icon={FolderOpenRegular}
-              iconActive={FolderOpenFilled}
-              href="/m/rm/areas"
-              has={['rm:areas']}
-            >
-              Áreas
-            </ItemSidebarNav>
-            <ItemSidebarNav
-              icon={FolderOpenRegular}
-              iconActive={FolderOpenFilled}
-              href="/m/rm/departments"
-              has={['rm:departments']}
-            >
-              Departamentos
-            </ItemSidebarNav>
-            <ItemSidebarNav
-              icon={FolderOpenRegular}
-              iconActive={FolderOpenFilled}
-              href="/m/rm/positions"
-              has={['rm:positions']}
-            >
-              Puestos
-            </ItemSidebarNav>
-            <ItemSidebarNav
-              icon={FolderOpenRegular}
-              iconActive={FolderOpenFilled}
-              href="/m/rm/roles"
-              has={['rm:roles']}
-            >
-              Cargos
-            </ItemSidebarNav>
-          </>
-        )}
+      {authUser.hasPrivilege(['rm:businessUnits', 'rm:locations'], 'or') && (
+        <>
+          <SidebarTitle>Meta datos pontiapp</SidebarTitle>
+          <ItemSidebarNav
+            icon={FolderOpenRegular}
+            iconActive={FolderOpenFilled}
+            href="/m/rm/business-units"
+            has={['rm:businessUnits']}
+          >
+            Unidad de negocios
+          </ItemSidebarNav>
+          <ItemSidebarNav
+            icon={FolderOpenRegular}
+            iconActive={FolderOpenFilled}
+            href="/m/rm/locations"
+            has={['rm:locations']}
+          >
+            Sedes
+          </ItemSidebarNav>
+        </>
+      )}
     </ReusableSidebar>
   )
 }

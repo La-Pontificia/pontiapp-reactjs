@@ -4,7 +4,7 @@ import { Spinner } from '@fluentui/react-components'
 import { useQuery } from '@tanstack/react-query'
 import ReportPage from '@/components/report-page'
 
-export default function ResourceManagementReportFilesPage() {
+export default function ReportFilesPage() {
   const { data: reports, isLoading } = useQuery<Report[]>({
     queryKey: ['rm', 'report-files'],
     queryFn: async () => {

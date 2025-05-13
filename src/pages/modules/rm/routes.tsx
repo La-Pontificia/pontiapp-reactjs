@@ -1,8 +1,9 @@
 import { Route, Routes } from 'react-router'
 import ProtectedModule from '@/protected/module'
 import ResourceManagementLayout from './+layout'
-import ResourceManagementReportFilesPage from './report-files/+page'
+import ReportFilesPage from './report-files/+page'
 import ResourceManagementPage from './+page'
+import BusinessUnitsPage from './business-units/+page'
 
 export default function ResourceManagementRoutes() {
   return (
@@ -26,7 +27,15 @@ export default function ResourceManagementRoutes() {
           path="report-files"
           element={
             <ProtectedModule has="rm:reportFiles" navigate="/">
-              <ResourceManagementReportFilesPage />
+              <ReportFilesPage />
+            </ProtectedModule>
+          }
+        />
+        <Route
+          path="business-units"
+          element={
+            <ProtectedModule has="rm:businessUnits" navigate="/">
+              <BusinessUnitsPage />
             </ProtectedModule>
           }
         />
