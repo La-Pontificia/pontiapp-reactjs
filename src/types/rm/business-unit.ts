@@ -6,6 +6,7 @@ export class BusinessUnit {
   domain: string
   acronym: string
   logoURL: string
+  logoURLSquare: string
   created_at: Date
   updated_at: Date
   creator: User
@@ -16,6 +17,7 @@ export class BusinessUnit {
     this.domain = data.domain
     this.acronym = data.acronym
     this.logoURL = data.logoURL
+    this.logoURLSquare = data.logoURLSquare
     this.created_at = data.created_at
     this.updated_at = data.updated_at
     this.creator = data.creator

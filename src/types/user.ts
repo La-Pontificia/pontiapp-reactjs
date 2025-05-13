@@ -18,7 +18,9 @@ export class User {
   firstNames: string
   lastNames: string
   role: Role | null
+  role2: Role | null
   userRole: UserRole
+  userRole2: UserRole
   status: boolean
   email: string
   manager: User
@@ -57,6 +59,7 @@ export class User {
     this.updatedBy = data.updatedBy
     this.createdBy = data.createdBy
     this.userRole = data.userRole
+    this.userRole2 = data.userRole2
     this.status = data.status
     this.email = data.email
     this.manager = data.manager
@@ -76,6 +79,7 @@ export class User {
     this.coworkers = data.coworkers
     this.updatedUser = data.updatedUser
     this.role = data.role
+    this.role2 = data.role2
     this.schedulesNotAvailable = data.schedulesNotAvailable
     this.customPrivileges = data.customPrivileges
     this.internalDisplayName = data.displayName
@@ -87,7 +91,9 @@ export class User {
     if (data.manager) this.manager = new User(data.manager)
     if (data.branch) this.branch = new RmBranch(data.branch)
     if (data.role) this.role = new Role(data.role)
+    if (data.role2) this.role2 = new Role(data.role2)
     if (data.userRole) this.userRole = new UserRole(data.userRole)
+    if (data.userRole2) this.userRole2 = new UserRole(data.userRole2)
 
     if (data.subordinates)
       this.subordinates = data.subordinates.map((s: User) => new User(s))
