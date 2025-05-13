@@ -1,5 +1,4 @@
 import {
-  Avatar,
   Menu,
   MenuItemRadio,
   MenuList,
@@ -27,16 +26,14 @@ export default function BusinessUnitToggle() {
         <MenuTrigger disableButtonEnhancement>
           <button
             onClick={() => setOpen(!open)}
-            className="flex bg-sky-400/40 dark:bg-sky-500/20 p-1.5 rounded-xl overflow-hidden items-center gap-2"
+            className="flex bg-sky-400/40 text-left dark:bg-sky-500/20 p-1.5 rounded-xl overflow-hidden items-center gap-2"
           >
-            <Avatar
-              size={28}
-              image={{
-                src: businessUnit?.logoURL
-              }}
-              className="!rounded-lg"
+            <img
+              className="max-h-[25px] max-w-[100px]"
+              src={businessUnit?.logoURLSquare}
+              alt=""
             />
-            <div className="flex flex-col items-start">
+            <div className="flex flex-col">
               <p className="leading-4 font-semibold">
                 {businessUnit?.acronym ?? 'Seleccionar'}
               </p>
@@ -62,9 +59,10 @@ export default function BusinessUnitToggle() {
               >
                 <Persona
                   avatar={{
-                    className: '!rounded-lg',
+                    className: '!rounded-md',
                     image: {
-                      src: item.logoURL
+                      className: 'p-1',
+                      src: item.logoURLSquare
                     }
                   }}
                   name={item.acronym}

@@ -37,7 +37,8 @@ export default function BusinessUnitVerify() {
                     avatar={{
                       className: '!rounded-lg',
                       image: {
-                        src: item.logoURL
+                        className: 'p-1.5',
+                        src: item.logoURLSquare
                       }
                     }}
                     name={item.acronym}
