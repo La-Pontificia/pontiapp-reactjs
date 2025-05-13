@@ -5,6 +5,7 @@ import { BIRTHDAY_MESSAGE } from '@/const/index'
 import clsx, { type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 import { parse } from '@/lib/dayjs'
+import { VITE_DOWNLOAD_HOST } from '@/config/env'
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
@@ -76,4 +77,8 @@ export function capitalizeText(text: string) {
       return word.charAt(0).toUpperCase() + word.slice(1)
     })
     .join(' ')
+}
+
+export const linkDownloadReport = (id: string) => {
+  return `${VITE_DOWNLOAD_HOST}/reports/${id}`
 }

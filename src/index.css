@@ -347,6 +347,10 @@ body {
     overflow: auto !important;
   }
 
+  .fc-day-today {
+    @apply dark:!bg-yellow-200/5 !bg-yellow-50;
+  }
+
   .fc-event-main {
     overflow: hidden !important;
   }
@@ -404,11 +408,6 @@ body {
   @apply !p-0 font-normal opacity-70 capitalize;
 }
 
-.fc-daygrid-day.fc-day-today,
-.fc-timegrid-col.fc-day-today {
-  @apply !bg-transparent;
-}
-
 .fc-timegrid-now-indicator-arrow {
   @apply !border-0 rounded-full w-1.5 aspect-square bg-pink-400;
 }
@@ -424,9 +423,16 @@ body {
 }
 
 .fc-timegrid-event-harness-inset .fc-timegrid-event {
-  @apply shadow-md shadow-black/20 rounded-xl p-1 dark:!border-2 dark:border-[#21201d] border-[#f2f2f2] cursor-pointer hover:scale-[1.01] transition-transform;
+  @apply shadow-[0_0px_10px_rgba(0,0,0,.1)] dark:shadow-[0_0px_10px_rgba(0,0,0,.3)] rounded-xl border dark:border-[#21201d] border-[#dedede];
 }
 
+.fc-event {
+  @apply overflow-hidden;
+}
+
+.interactive {
+  @apply hover:scale-[1.01] transition-transform cursor-pointer;
+}
 .fc-highlight {
   @apply rounded-lg border-blue-500 !bg-blue-500/10 z-10;
 }
