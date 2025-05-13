@@ -13,7 +13,7 @@ import { Report } from '@/types/report'
 import { TableContainer } from './table-container'
 import { Helmet } from 'react-helmet'
 import { TableSelectionCell } from '@fluentui/react-components'
-import { VITE_API_HOST } from '@/config/env'
+import { linkDownloadReport } from '@/utils'
 
 export default function ReportPage({ reports }: { reports?: Report[] }) {
   const grouped = reports?.reduce((acc, item) => {
@@ -23,8 +23,6 @@ export default function ReportPage({ reports }: { reports?: Report[] }) {
     acc[key].push(item)
     return acc
   }, {} as Record<string, Report[]>)
-
-
 
   return (
     <>
@@ -47,7 +45,9 @@ export default function ReportPage({ reports }: { reports?: Report[] }) {
               return (
                 <React.Fragment key={key}>
                   <nav className="border-b border-stone-500/40 p-2 opacity-60">
-                    <h2>{isToday ? 'Hoy' : format(new Date(key), 'DD MMM YYYY')}</h2>
+                    <h2>
+                      {isToday ? 'Hoy' : format(new Date(key), 'DD MMM YYYY')}
+                    </h2>
                   </nav>
                   <Table>
                     <TableBody>
@@ -73,19 +73,22 @@ export default function ReportPage({ reports }: { reports?: Report[] }) {
                                 </a>
                               </TableCellLayout>
                             </TableCell>
-                            <TableCell className='max-w-[180px] max-sm:!hidden'>
+                            <TableCell className="max-w-[180px] max-sm:!hidden">
                               <p className="">
                                 <span className="opacity-60">
-                                  {format(item.created_at, 'DD MMM YYYY h:mm A')}
+                                  {format(
+                                    item.created_at,
+                                    'DD MMM YYYY h:mm A'
+                                  )}
                                 </span>
                               </p>
                             </TableCell>
-                            <TableCell className='max-w-[150px] max-lg:!hidden'>
+                            <TableCell className="max-w-[150px] max-lg:!hidden">
                               <p className="">{item.user.displayName} </p>
                             </TableCell>
-                            <TableCell className='max-w-[150px]'>
+                            <TableCell className="max-w-[150px]">
                               <a
-                                href={VITE_API_HOST + '/api/tools/downloadReportFile/' + item.id}
+                                href={linkDownloadReport(item.id)}
                                 target="_blank"
                                 className="flex items-center hover:underline dark:text-stone-300 text-stone-800 font-medium relative gap-1"
                               >

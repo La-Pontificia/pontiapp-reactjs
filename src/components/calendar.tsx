@@ -181,11 +181,13 @@ export default function Calendar({
                 ? 'numeric'
                 : undefined
           }}
-          slotMinTime="05:30:00"
-          slotMaxTime="23:30:00"
+          slotMinTime="06:00:00"
+          slotMaxTime="23:15:00"
+          slotDuration="00:30:00"
           slotLabelInterval={{ minutes: 30 }}
           slotLabelClassNames={['text-xs', 'opacity-70']}
           nowIndicator
+          hiddenDays={[0]}
           headerToolbar={false}
           plugins={[
             dayGridPlugin,
@@ -217,18 +219,18 @@ function renderEventContent(eventInfo: EventContentArg) {
       withArrow
       content={
         <div className="flex flex-col gap-px">
-          <p className="font-medium text-sm">{eventInfo.event.title}</p>
-          <p className="text-sm">
-            <span className="font-semibold opacity-60">Hora: </span>
+          <p className="text-sm">{eventInfo.event.title}</p>
+          <p className="text-xs">
+            <span className="opacity-60">Hora: </span>
             {format(eventInfo.event.start, 'h:mm A')} -{' '}
             {format(eventInfo.event.end, 'h:mm A')}
           </p>
           <div className="flex flex-col gap-1">
             {Object.entries(eventInfo.event.extendedProps)
-              .filter(([key]) => key !== '$classNames')
+              .filter(([key]) => !key.startsWith('$'))
               .map(([key, value]) => (
-                <div className="text-sm">
-                  <span className="font-semibold opacity-60">{key}: </span>
+                <div className="text-xs">
+                  <span className="opacity-60">{key}: </span>
                   <span className="">{value}</span>
                 </div>
               ))}
@@ -237,22 +239,29 @@ function renderEventContent(eventInfo: EventContentArg) {
       }
       relationship="description"
     >
-      <div
-        className={cn(
-          eventInfo.event.extendedProps.$classNames,
-          '!overflow-hidden h-full grow line-clamp-2',
-          eventInfo.view.type === 'dayGridMonth'
-            ? 'dark:text-white'
-            : 'text-white dark:text-black'
-        )}
-      >
-        <p className="font-medium text-xs leading-4 text-ellipsis overflow-hidden">
+      <div className="h-full flex flex-col">
+        <p className="font-medium px-1 pt-1 text-nowrap text-xs leading-4 text-ellipsis overflow-hidden">
           {eventInfo.event.title}
         </p>
-        <p className="text-xs font-medium opacity-80">
+        <p className="text-[11px] opacity-80 px-1 text-ellipsis text-nowrap overflow-hidden">
           {format(eventInfo.event.start, 'h:mm A')} -{' '}
           {format(eventInfo.event.end, 'h:mm A')}
         </p>
+        {eventInfo.event.extendedProps.$img ? (
+          <div className="mt-auto px-1 pb-1">
+            <img
+              className="w-auto max-w-full min-h-[20px] h-[20px]"
+              src={eventInfo.event.extendedProps.$img}
+              alt="Business unit logo"
+            />
+          </div>
+        ) : (
+          eventInfo.event.extendedProps.$icon && (
+            <div className="mt-auto text-xl px-1 pb-1">
+              {eventInfo.event.extendedProps.$icon}
+            </div>
+          )
+        )}
       </div>
     </Tooltip>
   )
