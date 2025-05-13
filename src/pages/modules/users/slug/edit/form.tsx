@@ -26,7 +26,9 @@ export type FormUserValues = {
   birthdate: Date
   contacts: ContactType[]
   job: Job | null
+  job2: Job | null
   role: Role | null
+  role2: Role | null
   contractType: ContractType | null
   entryDate: Date
   branch: RmBranch | null
@@ -34,6 +36,7 @@ export type FormUserValues = {
   domain: string
   status: boolean
   userRole: UserRole | null
+  userRole2: UserRole | null
   customPrivileges: string[]
   manager?: User
 }
@@ -64,7 +67,10 @@ export default function FormUser() {
       manager: user.manager,
       photoURL: user.photoURL,
       role: user.role,
-      userRole: user.userRole
+      role2: user.role2,
+      job2: user.role2?.job,
+      userRole: user.userRole,
+      userRole2: user.userRole2
     }
   })
 
@@ -78,7 +84,9 @@ export default function FormUser() {
       contacts: values.contacts.length > 0 ? values.contacts : undefined,
       photoURL: values.photoURL,
       roleId: values.role?.id,
+      role2Id: values.role2?.id ?? null,
       userRoleId: values.userRole?.id,
+      userRole2Id: values.userRole2?.id ?? null,
       contractTypeId: values.contractType?.id,
       branchId: values.branch?.id,
       entryDate: values.entryDate,
@@ -88,9 +96,8 @@ export default function FormUser() {
       customPrivileges: values.customPrivileges,
       managerId: values.manager?.id
     }
-    console.log({
-      newData
-    })
+
+    console.log(newData)
 
     setFetching(true)
     const res = await api.post<User>(`users/${user.username}`, {

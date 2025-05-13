@@ -15,8 +15,7 @@ import { availableDomains } from '@/const'
 import {
   AddRegular,
   ArrowSyncCircleRegular,
-  KeyResetRegular,
-  WrenchRegular
+  KeyResetRegular
 } from '@fluentui/react-icons'
 import { useQuery } from '@tanstack/react-query'
 import { UserRole } from '@/types/user-role'
@@ -119,6 +118,7 @@ export default function AccountForm({
           </Field>
         )}
       />
+
       <Controller
         control={control}
         rules={{ required: 'Este campo es requerido' }}
@@ -151,6 +151,7 @@ export default function AccountForm({
           </Tooltip>
         )}
       </Field>
+
       <Controller
         control={control}
         render={({ field, fieldState: { error } }) => (
@@ -170,6 +171,7 @@ export default function AccountForm({
         )}
         name="status"
       />
+
       <Controller
         control={control}
         render={({ field, fieldState: { error } }) => (
@@ -195,11 +197,7 @@ export default function AccountForm({
             >
               {userRoles?.map((c) =>
                 c.isDeveloper && !authUser.isDeveloper ? null : (
-                  <Option key={c.id} text={c.title} value={c.id}>
-                    <WrenchRegular
-                      fontSize={25}
-                      className="dark:text-blue-700 text-blue-500"
-                    />
+                  <Option key={c.id} value={c.id}>
                     {c.title}
                   </Option>
                 )
@@ -209,6 +207,43 @@ export default function AccountForm({
         )}
         name="userRole"
       />
+
+      <Controller
+        control={control}
+        name="userRole2"
+        render={({ field, fieldState: { error } }) => (
+          <Field
+            className="w-full"
+            orientation="horizontal"
+            label="Rol secundario"
+            validationMessage={error?.message}
+          >
+            <Combobox
+              input={{
+                autoComplete: 'off'
+              }}
+              {...field}
+              defaultSelectedOptions={field.value?.id ? [field.value?.id] : []}
+              disabled={isUserRolesLoading}
+              onOptionSelect={(_, data) => {
+                const role = userRoles?.find((ur) => ur.id === data.optionValue)
+                field.onChange(role)
+              }}
+              value={field.value?.title ?? ''}
+              placeholder="Selecciona un rol"
+            >
+              {userRoles?.map((c) =>
+                c.isDeveloper && !authUser.isDeveloper ? null : (
+                  <Option key={c.id} value={c.id}>
+                    {c.title}
+                  </Option>
+                )
+              )}
+            </Combobox>
+          </Field>
+        )}
+      />
+
       <Controller
         control={control}
         name="customPrivileges"
@@ -240,6 +275,7 @@ export default function AccountForm({
           </Field>
         )}
       />
+
       <Controller
         control={control}
         name="manager"

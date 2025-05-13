@@ -26,7 +26,7 @@ export default function OrganizationForm({
   watch: UseFormWatch<FormUserValues>
   setValue: UseFormSetValue<FormUserValues>
 }) {
-  const { job } = watch()
+  const { job, job2 } = watch()
   const { user } = useAuth()
   const { data: jobs, isLoading: isJobsLoading } = useQuery<Job[]>({
     queryKey: ['jobs'],
@@ -41,6 +41,15 @@ export default function OrganizationForm({
     queryKey: ['roles', job?.id],
     queryFn: async () => {
       const res = await api.get<Role[]>(`partials/roles/all?job=${job?.id}`)
+      if (!res.ok) return []
+      return res.data.map((role) => new Role(role))
+    }
+  })
+
+  const { data: roles2, isLoading: isRolesLoading2 } = useQuery<Role[]>({
+    queryKey: ['roles', job2?.id],
+    queryFn: async () => {
+      const res = await api.get<Role[]>(`partials/roles/all?job=${job2?.id}`)
       if (!res.ok) return []
       return res.data.map((role) => new Role(role))
     }
@@ -102,6 +111,7 @@ export default function OrganizationForm({
           </Field>
         )}
       />
+      {/*  */}
       <Controller
         control={control}
         render={({ field, fieldState: { error } }) => (
@@ -137,6 +147,7 @@ export default function OrganizationForm({
         )}
         name="job"
       />
+
       <Controller
         control={control}
         render={({ field, fieldState: { error } }) => (
@@ -174,6 +185,83 @@ export default function OrganizationForm({
         )}
         name="role"
       />
+
+      <Controller
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <Field
+            orientation="horizontal"
+            validationMessage={error?.message}
+            label="Puesto de trabajo secundario"
+          >
+            <Combobox
+              {...field}
+              value={field.value?.name ?? undefined}
+              input={{
+                autoComplete: 'off'
+              }}
+              defaultSelectedOptions={field.value?.id ? [field.value?.id] : []}
+              disabled={isJobsLoading}
+              onOptionSelect={(_, data) => {
+                const job = jobs?.find((j) => j.id === data.optionValue)
+                field.onChange(job)
+                setValue('role2', null)
+              }}
+              placeholder="Selecciona un puesto"
+            >
+              {jobs?.map((j) =>
+                j.isDeveloper && !user.isDeveloper ? null : (
+                  <Option key={j.id} text={j.name} value={j.id}>
+                    {j.name}
+                  </Option>
+                )
+              )}
+            </Combobox>
+          </Field>
+        )}
+        name="job2"
+      />
+
+      <Controller
+        control={control}
+        render={({ field, fieldState: { error } }) => (
+          <Field
+            orientation="horizontal"
+            validationMessage={
+              error?.message ??
+              'Seleccione un puesto secundario para ver los cargos'
+            }
+            validationState={error?.message ? 'error' : 'warning'}
+            label="Cargo secundario"
+          >
+            <Combobox
+              input={{
+                autoComplete: 'off'
+              }}
+              {...field}
+              selectedOptions={[field.value?.id ?? '']}
+              disabled={isRolesLoading2}
+              onOptionSelect={(_, data) => {
+                const role = roles2?.find((r) => r.id === data.optionValue)
+                field.onChange(role)
+              }}
+              value={field.value?.name ?? ''}
+              placeholder="Selecciona un cargo"
+            >
+              {roles2?.map((role) =>
+                role.isDeveloper && !user.isDeveloper ? null : (
+                  <Option key={role.id} text={role.name} value={role.id}>
+                    {role.name}
+                  </Option>
+                )
+              )}
+            </Combobox>
+          </Field>
+        )}
+        name="role2"
+      />
+      {/*  */}
+
       <Controller
         control={control}
         render={({ field, fieldState: { error } }) => (
@@ -209,6 +297,7 @@ export default function OrganizationForm({
         )}
         name="contractType"
       />
+
       <Controller
         control={control}
         render={({ field, fieldState: { error } }) => (

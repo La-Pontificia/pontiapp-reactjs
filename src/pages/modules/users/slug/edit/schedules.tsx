@@ -138,8 +138,10 @@ export function ScheduleForm(props: {
   const open = props.open !== undefined ? props.open : o
   const setOpen = props.onOpenChange ?? setO
 
-  const { control, handleSubmit, reset } = useForm<ScheduleFormValue>({
-    defaultValues: {
+  const { control, handleSubmit, reset } = useForm<ScheduleFormValue>()
+
+  React.useEffect(() => {
+    reset({
       days: props.default?.days ?? [],
       from: props.default?.from && parse(props.default?.from),
       to: props.default?.to && parse(props.default?.to),
@@ -148,8 +150,8 @@ export function ScheduleForm(props: {
         : new Date(),
       tolerance: props.default?.tolerance || '5',
       endDate: props.default?.endDate ? parse(props.default?.endDate) : null
-    }
-  })
+    })
+  }, [props.default, reset])
 
   const { mutate: fetch, isPending: fetching } = useMutation({
     mutationKey: ['schedules'],
