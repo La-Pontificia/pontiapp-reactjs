@@ -1,7 +1,7 @@
 import { toast } from 'anni'
 import { api } from '@/lib/api'
 import { User } from '@/types/user'
-import { handleAuthError } from '@/utils'
+import { handleError } from '@/utils'
 import {
   Avatar,
   Badge,
@@ -78,8 +78,8 @@ export default function UsersSlugLayout(): JSX.Element {
     queryFn: async () => {
       const res = await api.get<User>(
         'users/' +
-        slug +
-        '?relationship=role,role.department,role.department.area,branch'
+          slug +
+          '?relationship=role,role.department,role.department.area,branch'
       )
       if (!res.ok) return null
       return new User(res.data)
@@ -184,10 +184,10 @@ export default function UsersSlugLayout(): JSX.Element {
                           status: updating
                             ? 'unknown'
                             : !user.status
-                              ? 'blocked'
-                              : hasEdit
-                                ? 'unknown'
-                                : 'available',
+                            ? 'blocked'
+                            : hasEdit
+                            ? 'unknown'
+                            : 'available',
                           icon: updating ? (
                             <Spinner size="tiny" />
                           ) : hasEdit ? (
@@ -354,12 +354,13 @@ export const UserOptions = ({ user }: { user: User }) => {
     const res = await api.post<string>(`users/${user.id}/toggle-status`)
     if (!res.ok) {
       setToglingStatus(false)
-      return toast(handleAuthError(res.error))
+      return toast.warning(handleError(res.error))
     }
     setToglingStatus(false)
     setIsToggleStatusOpen(false)
-    toast(
-      `Usuario ${user.displayName} ${user.status ? 'deshabilitado' : 'habilitado'
+    toast.success(
+      `Usuario ${user.displayName} ${
+        user.status ? 'deshabilitado' : 'habilitado'
       }.`
     )
     refetch()

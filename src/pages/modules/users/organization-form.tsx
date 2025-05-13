@@ -1,23 +1,13 @@
 import {
   Button,
-  Checkbox,
   Combobox,
-  Dialog,
-  DialogActions,
-  DialogBody,
-  DialogContent,
-  DialogSurface,
-  DialogTitle,
-  DialogTrigger,
   Divider,
   Field,
-  Input,
   Option
 } from '@fluentui/react-components'
 import {
   Control,
   Controller,
-  useForm,
   UseFormSetValue,
   UseFormWatch
 } from 'react-hook-form'
@@ -28,36 +18,30 @@ import { api } from '@/lib/api'
 import { Role } from '@/types/role'
 import { ContractType } from '@/types/contract-type'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { format, parse } from '@/lib/dayjs'
+import { format } from '@/lib/dayjs'
 import { calendarStrings, days } from '@/const'
 import {
   AddRegular,
   DeleteRegular,
   TimelineRegular
 } from '@fluentui/react-icons'
-import {
-  formatDateToTimeString,
-  TimePicker
-} from '@fluentui/react-timepicker-compat'
-import { useAuth } from '@/store/auth'
-import { Schedule } from '@/types/schedule'
-import { parseTime } from '@/utils'
+
 import { RmBranch } from '@/types/rm-branch'
+import React from 'react'
+import { useAuth } from '@/store/auth'
 
 export default function OrganizationForm({
   control,
   watch,
   setValue,
-  setOpen,
   open,
   setOpenFormSchedule
 }: {
   control: Control<FormUserValues>
   watch: UseFormWatch<FormUserValues>
   setValue: UseFormSetValue<FormUserValues>
-  setOpen: (open: boolean) => void
-  setOpenFormSchedule: (open: boolean) => void
   open: boolean
+  setOpenFormSchedule: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   const { job } = watch()
   const { user } = useAuth()
@@ -288,7 +272,6 @@ export default function OrganizationForm({
               <Button
                 onClick={() => {
                   setOpenFormSchedule(true)
-                  setOpen(false)
                 }}
                 icon={
                   <AddRegular className="dark:text-blue-500 text-blue-700" />
@@ -310,8 +293,8 @@ export default function OrganizationForm({
                         {format(schedule.to, 'hh:mm A')}
                       </p>
                       <p className="text-xs opacity-70">
-                        {schedule
-                          .days!.map((d) => days[d as keyof typeof days].short)
+                        {schedule.days
+                          ?.map((d) => days[d as keyof typeof days].short)
                           .join(', ')}
                       </p>
                     </div>
@@ -326,240 +309,12 @@ export default function OrganizationForm({
                     />
                   </div>
                 ))}
+                {/* <pre>{JSON.stringify(field.value, null, 2)}</pre> */}
               </div>
             </div>
           </Field>
         )}
       />
     </>
-  )
-}
-
-export const ScheduleForm = ({
-  open,
-  setOpen,
-  watch: watchProp,
-  setValue: setValueProp
-}: {
-  open: boolean
-  setOpen: (open: boolean) => void
-  setValue: UseFormSetValue<FormUserValues>
-  watch: UseFormWatch<FormUserValues>
-}) => {
-  const { control, handleSubmit, reset } = useForm<Schedule>({
-    defaultValues: {
-      days: [],
-      tolerance: '5'
-    }
-  })
-
-  const onSubmit = handleSubmit((values) => {
-    reset()
-    setOpen(false)
-    setValueProp('schedules', [
-      ...watchProp('schedules'),
-      {
-        ...values,
-        id: crypto.randomUUID()
-      }
-    ])
-  })
-
-  return (
-    <Dialog
-      modalType="modal"
-      open={open}
-      onOpenChange={(_, e) => setOpen(e.open)}
-    >
-      <DialogSurface aria-describedby={undefined}>
-        <DialogBody>
-          <DialogTitle className="pb-5">Agregar nuevo horario</DialogTitle>
-          <DialogContent className="grid gap-2">
-            <Controller
-              control={control}
-              rules={{
-                required: 'Selecciona la fecha de inicio'
-              }}
-              render={({ field, fieldState: { error } }) => (
-                <Field
-                  required
-                  orientation="horizontal"
-                  validationMessage={error?.message}
-                  label="Inicia o inició a partir de la fecha"
-                >
-                  <DatePicker
-                    value={field.value ? new Date(field.value) : null}
-                    onSelectDate={(date) => {
-                      field.onChange(date)
-                    }}
-                    formatDate={(date) =>
-                      format(date, '[Desde el] dddd D [de] MMMM [del] YYYY')
-                    }
-                    strings={calendarStrings}
-                    placeholder="Selecciona una fecha"
-                  />
-                </Field>
-              )}
-              name="startDate"
-            />
-            <Controller
-              control={control}
-              name="days"
-              rules={{
-                validate: (value) => {
-                  if (!value || value.length === 0) {
-                    return 'Selecciona al menos un día'
-                  }
-                  return true
-                }
-              }}
-              render={({ field, fieldState: { error } }) => (
-                <Field
-                  required
-                  orientation="horizontal"
-                  label="Días de la semana que se aplicará el horario:"
-                  validationMessage={error?.message}
-                  validationState={error ? 'error' : 'none'}
-                >
-                  <div className="flex flex-col">
-                    {Object.entries(days).map(([key, day]) => {
-                      return (
-                        <Checkbox
-                          checked={field.value?.includes(key)}
-                          onChange={(_, d) => {
-                            field.onChange(
-                              d.checked
-                                ? [...(field.value ?? []), key]
-                                : field.value
-                                  ? field.value.filter((w) => w !== key)
-                                  : []
-                            )
-                          }}
-                          label={day.label}
-                          value={key}
-                          key={key}
-                        />
-                      )
-                    })}
-                  </div>
-                </Field>
-              )}
-            />
-            <Controller
-              control={control}
-              rules={{
-                required: 'Selecciona la hora de ingreso'
-              }}
-              render={({ field, fieldState: { error } }) => (
-                <Field
-                  required
-                  orientation="horizontal"
-                  validationMessage={error?.message}
-                  label="Entrada:"
-                >
-                  <TimePicker
-                    ref={field.ref}
-                    defaultValue={
-                      field.value ? formatDateToTimeString(field.value) : ''
-                    }
-                    startHour={6}
-                    endHour={23}
-                    onBlur={(e) => {
-                      const parse = parseTime(e.target.value)
-                      if (parse) field.onChange(parse)
-                      else field.onChange(null)
-                    }}
-                    formatDateToTimeString={(time) =>
-                      new Intl.DateTimeFormat('en-US', {
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        hour12: true
-                      }).format(time)
-                    }
-                    onTimeChange={(_, e) =>
-                      e.selectedTime && field.onChange(parse(e.selectedTime))
-                    }
-                    freeform
-                    placeholder="Hora de ingreso"
-                  />
-                </Field>
-              )}
-              name="from"
-            />
-            <Controller
-              control={control}
-              rules={{
-                required: 'Selecciona la hora de salida'
-              }}
-              render={({ field, fieldState: { error } }) => (
-                <Field
-                  required
-                  orientation="horizontal"
-                  validationMessage={error?.message}
-                  label="Salida:"
-                >
-                  <TimePicker
-                    ref={field.ref}
-                    defaultValue={
-                      field.value ? formatDateToTimeString(field.value) : ''
-                    }
-                    startHour={6}
-                    endHour={23}
-                    onBlur={(e) => {
-                      const parse = parseTime(e.target.value)
-                      if (parse) field.onChange(parse)
-                      else field.onChange(null)
-                    }}
-                    formatDateToTimeString={(time) =>
-                      new Intl.DateTimeFormat('en-US', {
-                        hour: 'numeric',
-                        minute: 'numeric',
-                        hour12: true
-                      }).format(time)
-                    }
-                    onTimeChange={(_, e) =>
-                      e.selectedTime && field.onChange(parse(e.selectedTime))
-                    }
-                    freeform
-                    placeholder="Hora de salida"
-                  />
-                </Field>
-              )}
-              name="to"
-            />
-            <Controller
-              control={control}
-              rules={{
-                required: 'Ingresa la tolerancia en minutos'
-              }}
-              render={({ field, fieldState: { error } }) => (
-                <Field
-                  required
-                  orientation="horizontal"
-                  validationMessage={error?.message}
-                  label="Tolerancia:"
-                  validationState={error ? 'error' : 'none'}
-                >
-                  <Input
-                    className="w-[100px]"
-                    {...field}
-                    contentAfter={<>min.</>}
-                  />
-                </Field>
-              )}
-              name="tolerance"
-            />
-          </DialogContent>
-          <DialogActions>
-            <DialogTrigger disableButtonEnhancement>
-              <Button appearance="secondary">Cancelar</Button>
-            </DialogTrigger>
-            <Button onClick={onSubmit} appearance="primary">
-              Agregar
-            </Button>
-          </DialogActions>
-        </DialogBody>
-      </DialogSurface>
-    </Dialog>
   )
 }

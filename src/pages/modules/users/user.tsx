@@ -3,7 +3,7 @@ import UserDrawer from '@/components/user-drawer'
 import { api } from '@/lib/api'
 import { useAuth } from '@/store/auth'
 import { User } from '@/types/user'
-import { handleAuthError } from '@/utils'
+import { handleAuthError, handleError } from '@/utils'
 import {
   Avatar,
   Button,
@@ -27,7 +27,12 @@ import React from 'react'
 import { Link, useNavigate } from 'react-router'
 import UserHoverInfo from '@/components/user-hover-info'
 import ResetPassword from '@/components/reset-password'
-import { TableCell, TableCellLayout, TableRow, TableSelectionCell } from '@/components/table'
+import {
+  TableCell,
+  TableCellLayout,
+  TableRow,
+  TableSelectionCell
+} from '@/components/table'
 
 export default function UserGrid({
   user: userProp,
@@ -75,7 +80,7 @@ export default function UserGrid({
                     name={user.displayName}
                     color="colorful"
                     badge={{
-                      status: user.status ? 'available' : 'away',
+                      status: user.status ? 'available' : 'away'
                     }}
                     image={{
                       src: user.photoURL
@@ -179,7 +184,7 @@ export const UserGridOptions = ({
     const res = await api.post<string>(`users/${user.id}/toggle-status`)
     if (!res.ok) {
       setToglingStatus(false)
-      return toast(handleAuthError(res.error))
+      return toast.warning(handleError(res.error))
     }
     setToglingStatus(false)
     setIsToggleStatusOpen(false)
@@ -191,7 +196,8 @@ export const UserGridOptions = ({
         } as User)
     )
     toast(
-      `Usuario ${user.displayName} ${user.status ? 'deshabilitado' : 'habilitado'
+      `Usuario ${user.displayName} ${
+        user.status ? 'deshabilitado' : 'habilitado'
       }.`
     )
     refetch()

@@ -11,7 +11,7 @@ import {
 } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons'
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { availableDomains } from '@/const'
 import { ContractType } from '@/types/contract-type'
 import { Job } from '@/types/job'
@@ -22,12 +22,13 @@ import { UserRole } from '@/types/user-role'
 import { generateRandomPassword } from '@/utils'
 import AccountForm from './account-form'
 import PropertiesPersonForm, { UserContacts } from './properties-person-form'
-import OrganizationForm, { ScheduleForm } from './organization-form'
+import OrganizationForm from './organization-form'
 import { format } from '@/lib/dayjs'
 import { toast } from 'anni'
 import { useNavigate } from 'react-router'
 import { api } from '@/lib/api'
 import { RmBranch } from '@/types/rm-branch'
+import { ScheduleForm } from './schedules-form'
 
 type Props = {
   title?: string
@@ -64,12 +65,12 @@ export type FormUserValues = {
 
 export default function FormUser(props?: Props) {
   const [fetching, setFetching] = React.useState(false)
-  const [openFormSchedule, setOpenFormSchedule] = React.useState(false)
   const [openFormContact, setOpenFormContact] = React.useState(false)
+  const [openFormSchedule, setOpenFormSchedule] = React.useState(false)
   const navigate = useNavigate()
   const {
     open = false,
-    setOpen = () => { },
+    setOpen = () => {},
     readOnly = false,
     defaultUser
   } = props ?? {}
@@ -160,7 +161,6 @@ export default function FormUser(props?: Props) {
                 control={control}
                 watch={watch}
                 setValue={setValue}
-                setOpen={setOpen}
                 open={open}
                 setOpenFormSchedule={setOpenFormSchedule}
               />
@@ -187,14 +187,18 @@ export default function FormUser(props?: Props) {
           </DialogBody>
         </DialogSurface>
       </Dialog>
-      <ScheduleForm
-        open={openFormSchedule}
-        setValue={setValue}
-        watch={watch}
-        setOpen={(value) => {
-          setOpenFormSchedule(value)
-          setOpen(true)
-        }}
+      <Controller
+        control={control}
+        name="schedules"
+        render={({ field }) => (
+          <ScheduleForm
+            onSubmit={(schedule) => {
+              field.onChange([...(field.value ?? []), schedule])
+            }}
+            open={openFormSchedule}
+            setOpen={setOpenFormSchedule}
+          />
+        )}
       />
       <UserContacts
         open={openFormContact}
