@@ -12,7 +12,7 @@ import {
   Field,
   Spinner
 } from '@fluentui/react-components'
-import { DeleteRegular, Dismiss24Regular } from '@fluentui/react-icons'
+import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useMutation } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
@@ -54,7 +54,6 @@ export default function ScheduleForm({
 }: Props) {
   const { control, handleSubmit, reset } = useForm<FormValues>()
 
-  const [openDelete, setOpenDelete] = React.useState(false)
   React.useEffect(() => {
     if (defaultProp) {
       reset({
@@ -104,20 +103,6 @@ export default function ScheduleForm({
       endDate: format(values.endDate, 'YYYY-MM-DD'),
       days: values.days
     })
-  })
-
-  const { mutate, isPending } = useMutation({
-    mutationFn: () =>
-      api.post(`academic/teachers/schedules/${defaultProp?.id}/delete`),
-    onSuccess: () => {
-      setOpenDelete(false)
-      onOpenChange(false)
-      refetch()
-      toast.success('En hora buena! El horario ha sido eliminado con éxito.')
-    },
-    onError: (error) => {
-      toast.error(handleError(error.message))
-    }
   })
 
   return (
@@ -327,43 +312,8 @@ export default function ScheduleForm({
               >
                 {defaultProp?.id ? 'Actualizar' : 'Registrar'}
               </Button>
-              {defaultProp?.id && (
-                <Button
-                  icon={<DeleteRegular />}
-                  onClick={() => setOpenDelete(true)}
-                  appearance="outline"
-                >
-                  Eliminar
-                </Button>
-              )}
-
               <Button onClick={() => onOpenChange(false)} appearance="outline">
                 Cerrar
-              </Button>
-            </DialogActions>
-          </DialogBody>
-        </DialogSurface>
-      </Dialog>
-
-      <Dialog
-        open={openDelete}
-        onOpenChange={(_, e) => setOpenDelete(e.open)}
-        modalType="alert"
-      >
-        <DialogSurface>
-          <DialogBody>
-            <DialogTitle>¿Estás seguro de eliminar el horario?</DialogTitle>
-            <DialogActions>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary">Cancelar</Button>
-              </DialogTrigger>
-              <Button
-                onClick={() => mutate()}
-                disabled={isPending}
-                icon={isPending ? <Spinner size="tiny" /> : undefined}
-                appearance="primary"
-              >
-                ELiminar
               </Button>
             </DialogActions>
           </DialogBody>

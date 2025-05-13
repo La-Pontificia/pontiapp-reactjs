@@ -87,7 +87,6 @@ export default function SectionProgramsPage() {
             <TableRow>
               <TableSelectionCell type="radio" />
               <TableHeaderCell>Programa</TableHeaderCell>
-              <TableHeaderCell>Unidad</TableHeaderCell>
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -18,12 +18,25 @@ import { Period } from '@/types/academic/period'
 import { TableContainer } from '@/components/table-container'
 import { useDebounce } from 'hothooks'
 import { useAuth } from '@/store/auth'
-import { Button, Dialog, DialogActions, DialogBody, DialogContent, DialogSurface, DialogTitle, DialogTrigger, Spinner } from '@fluentui/react-components'
-import { AddFilled } from '@fluentui/react-icons'
+import {
+  Button,
+  Checkbox,
+  Dialog,
+  DialogActions,
+  DialogBody,
+  DialogContent,
+  DialogSurface,
+  DialogTitle,
+  DialogTrigger,
+  Divider,
+  Field,
+  Spinner
+} from '@fluentui/react-components'
 import { ExcelColored } from '@/icons'
 import { toast } from 'anni'
 import { handleError } from '@/utils'
 import { Link } from 'react-router'
+import { Program } from '@/types/academic/program'
 
 export type FiltersValues = {
   q: string | null
@@ -37,6 +50,7 @@ export default function SectionPeriodsPage() {
     page: 1
   })
   const [selected, setSelected] = React.useState<Period[]>([])
+  const [programsSelected, setProgramsSelected] = React.useState<Program[]>([])
   const [openReport, setOpenReport] = React.useState(false)
   const query = React.useMemo(() => {
     let uri = `?paginate=true&businessUnitId=${businessUnit?.id}`
@@ -50,7 +64,9 @@ export default function SectionPeriodsPage() {
     onFinish: (value) => setFilters((prev) => ({ ...prev, q: value }))
   })
 
-  const { data, isLoading } = useQuery<ResponsePaginate<Period[]> | null>({
+  const { data: periods, isLoading } = useQuery<ResponsePaginate<
+    Period[]
+  > | null>({
     queryKey: ['academic/periods', query],
     queryFn: async () => {
       const res = await api.get<ResponsePaginate<Period[]>>(
@@ -61,32 +77,57 @@ export default function SectionPeriodsPage() {
     }
   })
 
+  const { data: programs } = useQuery<Program[]>({
+    queryKey: ['academic/programs', filters, businessUnit, 'array'],
+    queryFn: async () => {
+      const res = await api.get<Program[]>('academic/programs')
+      if (!res.ok) return []
+      return res.data
+    }
+  })
+
   const allSelected = React.useMemo(() => {
-    return selected.length === data?.data.length
-  }, [data, selected])
+    return selected.length === periods?.data.length
+  }, [periods, selected])
 
   const someSelected = React.useMemo(() => {
     return selected.length > 0 && !allSelected
   }, [allSelected, selected])
 
+  const uriReport = React.useMemo(() => {
+    const selectedPeriods = selected.map((i) => i.id).join(',')
+    const selectedPrograms = programsSelected.map((i) => i.id).join(',')
+    return `academic/sections/courses/schedules/report?periodIds=${selectedPeriods}&programIds=${selectedPrograms}`
+  }, [selected, programsSelected])
+
   const { mutate: handleReport, isPending: reporting } = useMutation({
     mutationFn: () =>
-      api.post(
-        `academic/sections/courses/schedules/report?periodIds=${selected.map((item) => item.id).join(',')}`,
-        {
-          alreadyHandleError: false
-        }
-      ),
-    onSuccess: () => {
-      toast.success(
-        'Reporte en proceso, Le enviaremos un correo cuando esté listo.'
-      )
-      setOpenReport(false)
+      api.post(uriReport, {
+        alreadyHandleError: false
+      }),
+    onSuccess: (data) => {
+      if (data.ok) {
+        window.open(String(data.data), '_blank')
+        setOpenReport(false)
+        setSelected([])
+        setProgramsSelected([])
+      }
     },
     onError: (error) => {
       toast.error(handleError(error.message))
     }
   })
+
+  const programsGroupedByBusinessUnit = React.useMemo(() => {
+    return programs?.reduce((acc, program) => {
+      const businessUnitName = program.businessUnit.name
+      if (!acc[businessUnitName]) {
+        acc[businessUnitName] = []
+      }
+      acc[businessUnitName].push(program)
+      return acc
+    }, {} as Record<string, Program[]>)
+  }, [programs])
 
   return (
     <>
@@ -97,14 +138,11 @@ export default function SectionPeriodsPage() {
       >
         <DialogSurface>
           <DialogBody>
-            <DialogTitle>
-              Verifica los filtros seleccionados antes de generar el reporte.
-            </DialogTitle>
+            <DialogTitle>Exportar excel</DialogTitle>
             <DialogContent>
               <p className="w-full">
-                Puedes seguir usando el sistema mientras se genera el reporte.
-                enviaremos un correo cuando esté listo o puedes descargarlo
-                desde la sección de{' '}
+                Enviaremos un correo del link de descarga o tambien puedes
+                descargarlo desde la sección de{' '}
                 <Link
                   to="/m/academic/report-files"
                   target="_blank"
@@ -114,30 +152,74 @@ export default function SectionPeriodsPage() {
                 </Link>{' '}
                 del módulo.
               </p>
-              <div className='mt-4'>
-                <p>Periodos seleccionados</p>
-                {
-                  selected.length > 0 ? (
-                    <ul className="list-disc pl-5">
-                      {selected.map((item) => (
-                        <li key={item.id}>{item.name}</li>
-                      ))}
-                    </ul>
-                  ) : (
-                    <p className="text-gray-500">No hay periodos seleccionados</p>
+              <div className="pt-2 flex flex-col">
+                <Field required label="Periodos" />
+                {periods?.data.map((period) => {
+                  const isSelected = selected.some((i) => i.id === period.id)
+
+                  return (
+                    <Checkbox
+                      checked={isSelected}
+                      onClick={() =>
+                        setSelected((prev) =>
+                          isSelected
+                            ? prev.filter((i) => i.id !== period.id)
+                            : [...prev, period]
+                        )
+                      }
+                      label={period.name}
+                    />
                   )
-                }
+                })}
+                <Divider />
+                <Field required label="Programas academicas" />
+
+                {programsGroupedByBusinessUnit &&
+                  Object.entries(programsGroupedByBusinessUnit).map(
+                    ([business, programs]) => (
+                      <div className="pl-2 pt-2 flex flex-col">
+                        <Field label={business} />
+                        {programs?.map((program) => {
+                          const isSelected = programsSelected.some(
+                            (i) => i.id === program.id
+                          )
+                          return (
+                            <Checkbox
+                              checked={isSelected}
+                              onClick={() =>
+                                setProgramsSelected((prev) =>
+                                  isSelected
+                                    ? prev.filter((i) => i.id !== program.id)
+                                    : [...prev, program]
+                                )
+                              }
+                              label={program.name}
+                            />
+                          )
+                        })}
+                      </div>
+                    )
+                  )}
               </div>
             </DialogContent>
             <DialogActions>
               <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary">Cancelar</Button>
+                <Button
+                  shape="circular"
+                  disabled={reporting}
+                  appearance="secondary"
+                >
+                  Cancelar
+                </Button>
               </DialogTrigger>
               <Button
                 onClick={() => handleReport()}
-                disabled={reporting}
+                disabled={
+                  reporting || !selected.length || !programsSelected.length
+                }
                 icon={reporting ? <Spinner size="tiny" /> : undefined}
                 appearance="primary"
+                shape="circular"
               >
                 Generar reporte
               </Button>
@@ -151,12 +233,12 @@ export default function SectionPeriodsPage() {
       </Helmet>
       <TableContainer
         isLoading={isLoading}
-        isEmpty={!data?.data?.length}
+        isEmpty={!periods?.data?.length}
         footer={
-          data && (
+          periods && (
             <Pagination
               onChangePage={(page) => setFilters((prev) => ({ ...prev, page }))}
-              state={data}
+              state={periods}
             />
           )
         }
@@ -164,38 +246,16 @@ export default function SectionPeriodsPage() {
           <>
             <nav className="flex items-center gap-3 flex-wrap w-full">
               <h1 className="font-semibold flex-grow text-xl">Horarios</h1>
-              {
-                selected.length > 0 && (
-                  <div className='absolute right-0 top-0 z-[1] px-2'>
-                    <div className='bg-blue-200 dark:bg-[#082338] flex items-center gap-1 rounded-lg p-1 py-3'>
-                      <div className='grow'> </div>
-                      <div>
-                        <Button
-                          onClick={() => {
-                            setSelected([])
-                          }}
-                          size='small'
-                          icon={<AddFilled className='rotate-45' />}
-                          appearance='transparent'>
-                          {selected.length > 0
-                            ? `Seleccionados ${selected.length}`
-                            : 'Seleccionar todos'}
-                        </Button>
-                        <Button
-                          onClick={() => {
-                            setOpenReport(true)
-                          }}
-                          size='small'
-                          icon={<ExcelColored />}
-                          appearance='transparent'>
-                          Exportar Excel
-                        </Button>
-                      </div>
-
-                    </div>
-                  </div>
-                )
-              }
+              <Button
+                onClick={() => {
+                  setOpenReport(true)
+                }}
+                size="small"
+                icon={<ExcelColored />}
+                appearance="transparent"
+              >
+                Exportar Excel
+              </Button>
               <SearchBox onSearch={setValue} placeholder="Filtrar " />
             </nav>
           </>
@@ -203,14 +263,13 @@ export default function SectionPeriodsPage() {
       >
         <Table>
           <TableHeader>
-            <TableRow
-            >
+            <TableRow>
               <TableSelectionCell
                 checked={allSelected ? true : someSelected ? 'mixed' : false}
                 onClick={() => {
                   setSelected((prev) => {
                     if (prev.length > 0) return []
-                    return data?.data || []
+                    return periods?.data || []
                   })
                 }}
               />
@@ -218,8 +277,13 @@ export default function SectionPeriodsPage() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {data?.data.map((item) => (
-              <Item key={item.id} setSelected={setSelected} selected={selected} item={item} />
+            {periods?.data.map((item) => (
+              <Item
+                key={item.id}
+                setSelected={setSelected}
+                selected={selected}
+                item={item}
+              />
             ))}
           </TableBody>
         </Table>
