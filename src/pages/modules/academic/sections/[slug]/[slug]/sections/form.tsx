@@ -48,7 +48,7 @@ type FormValues = {
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => { },
+  refetch = () => {},
   defaultProp,
   readOnly = false
 }: {
@@ -65,11 +65,11 @@ export default function Form({
     {
       values: defaultProp
         ? {
-          code: defaultProp.code,
-          cycle: defaultProp.cycle,
-          courses: [],
-          plan: defaultProp.plan
-        }
+            code: defaultProp.code,
+            cycle: defaultProp.cycle,
+            courses: [],
+            plan: defaultProp.plan
+          }
         : { code: '', plan: null, cycle: null, courses: [] }
     }
   )
@@ -143,8 +143,9 @@ export default function Form({
     enabled: open && !!plan,
     queryFn: async () => {
       const res = await api.get<PlanCourse[]>(
-        `academic/plans/courses?planId=${plan?.id}${q ? `&q=${q}` : ''}${cycle ? `&cycleId=${cycle?.id}` : ''
-        }`
+        `academic/plans/courses?status=true&planId=${plan?.id}${
+          q ? `&q=${q}` : ''
+        }${cycle ? `&cycleId=${cycle?.id}` : ''}`
       )
       if (!res.ok) return []
       return res.data
@@ -305,11 +306,11 @@ export default function Form({
                                   <TableSelectionCell
                                     checked={
                                       field.value?.length ===
-                                        planCourses?.length
+                                      planCourses?.length
                                         ? true
                                         : field.value.length !== 0
-                                          ? 'mixed'
-                                          : false
+                                        ? 'mixed'
+                                        : false
                                     }
                                     onClick={() => {
                                       if (field.value?.length) {
