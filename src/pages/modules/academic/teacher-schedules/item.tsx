@@ -41,7 +41,7 @@ import { EventSourceInput } from '@fullcalendar/core/index.js'
 import ScheduleForm from './form'
 import { SectionCourseSchedule } from '@/types/academic/section-course-schedule'
 import { toast } from 'anni'
-import { handleError } from '@/utils'
+import { getDaysShort, handleError } from '@/utils'
 
 type PreEvent = Record<string, any>
 
@@ -266,6 +266,11 @@ export default function Item({ user }: { user: User; refetch: () => void }) {
                                   {format(s.from, 'hh:mm A')} -{' '}
                                   {format(s.to, 'hh:mm A')}
                                 </div>
+                                <div className="py-1 pl-5">
+                                  <Badge color="danger">
+                                    {getDaysShort(s.days)}
+                                  </Badge>
+                                </div>
                                 <div className="pt-1 gap-1 flex">
                                   <Button
                                     onClick={() => {
@@ -318,6 +323,11 @@ export default function Item({ user }: { user: User; refetch: () => void }) {
                             />
                             {format(s.startDate, 'DD MMM, YYYY')} -{' '}
                             {format(s.endDate, 'DD MMM, YYYY')}
+                          </div>
+                          <div className="py-1 pl-5">
+                            <Badge color="warning">
+                              {getDaysShort(s.daysOfWeek)}
+                            </Badge>
                           </div>
                           <div className="text-xs flex items-center gap-1">
                             <ClockRegular
@@ -381,14 +391,19 @@ export default function Item({ user }: { user: User; refetch: () => void }) {
         </TableCell>
         <TableCell>
           <div className="flex items-center">
-            <Badge shape="rounded" color="danger">
-              {user.schedulesNotAvailable?.length}
-            </Badge>
             <Button
               onClick={() => setOpenDialog(true)}
               icon={<CalendarEditRegular />}
               appearance="transparent"
             >
+              <Badge
+                size="medium"
+                shape="rounded"
+                color="warning"
+                className="mr-1"
+              >
+                {user.schedulesNotAvailable?.length}
+              </Badge>
               Ver
             </Button>
           </div>

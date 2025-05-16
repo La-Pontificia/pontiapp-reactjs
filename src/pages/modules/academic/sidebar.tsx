@@ -91,7 +91,7 @@ export const AcademicSidebar = () => {
         href="/m/academic/programs"
         has={['academic:programs']}
       >
-        Programas y planes
+        Programas
       </ItemSidebarNav>
       <ItemSidebarNav
         icon={FolderListRegular}
