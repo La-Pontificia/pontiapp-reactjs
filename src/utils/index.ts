@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ERRORS } from '@/const/errors'
-import { BIRTHDAY_MESSAGE } from '@/const/index'
+import { BIRTHDAY_MESSAGE, days } from '@/const/index'
 
 import clsx, { type ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
@@ -82,3 +82,15 @@ export function capitalizeText(text: string) {
 export const linkDownloadReport = (id: string) => {
   return `${VITE_DOWNLOAD_HOST}/reports/${id}`
 }
+
+export const getDaysShort = (array: string[] = []) =>
+  array!
+    .sort((a, b) => parseInt(a) - parseInt(b))
+    .map((d) => days[d as keyof typeof days].short)
+    .join(', ')
+
+export const getDays = (array: string[] = []) =>
+  array!
+    .sort((a, b) => parseInt(a) - parseInt(b))
+    .map((d) => days[d as keyof typeof days].label)
+    .join(', ')
