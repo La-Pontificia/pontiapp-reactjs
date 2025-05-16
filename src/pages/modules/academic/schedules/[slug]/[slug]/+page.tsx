@@ -79,16 +79,18 @@ export default function SchedulesProgramSchedulesPage() {
   const { mutate: handleReport, isPending: reporting } = useMutation({
     mutationFn: () =>
       api.post(
-        `academic/sections/courses/schedules/report?programId=${program?.id}&periodId=${period.id}`,
+        `academic/sections/courses/schedules/report?programId=${
+          program?.id
+        }&periodId=${period.id}${filters.q ? `&q=${filters.q}` : ''}`.trim(),
         {
           alreadyHandleError: false
         }
       ),
-    onSuccess: () => {
-      toast.success(
-        'Reporte en proceso, Le enviaremos un correo cuando esté listo.'
-      )
-      setOpenReport(false)
+    onSuccess: (data) => {
+      if (data.ok) {
+        window.open(String(data.data), '_blank')
+        setOpenReport(false)
+      }
     },
     onError: (error) => {
       toast.error(handleError(error.message))

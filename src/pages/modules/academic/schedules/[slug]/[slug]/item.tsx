@@ -1,5 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
+  Avatar,
+  Badge,
   Button,
   Dialog,
   DialogActions,
@@ -14,12 +16,11 @@ import {
   BuildingMultipleRegular,
   CalendarEditRegular,
   CalendarLtrRegular,
-  CheckmarkCircleFilled,
   ClockRegular,
   DeleteRegular,
   DocumentRegular,
   PenRegular,
-  PersonLightbulbRegular
+  PersonAddRegular
 } from '@fluentui/react-icons'
 import React from 'react'
 import Calendar from '@/components/calendar'
@@ -41,7 +42,7 @@ import { Schedule } from '@/types/schedule'
 import { useSlugSchedules } from '../+layout'
 import UserDrawer from '@/components/user-drawer'
 import { toast } from 'anni'
-import { handleError } from '@/utils'
+import { getDaysShort, handleError } from '@/utils'
 
 type Props = {
   item: SectionCourse
@@ -381,6 +382,11 @@ const Item = ({ item, refetchSections }: Props) => {
                             {format(s.startTime, 'hh:mm A')} -{' '}
                             {format(s.endTime, 'hh:mm A')}
                           </div>
+                          <div className="py-1 pl-5">
+                            <Badge color="warning">
+                              {getDaysShort(s.daysOfWeek)}
+                            </Badge>
+                          </div>
                           <div className="pt-1 gap-1 flex">
                             <Button
                               onClick={() => {
@@ -442,18 +448,26 @@ const Item = ({ item, refetchSections }: Props) => {
             title="Asignar docente"
             users={item.teacher ? [item.teacher] : []}
             triggerProps={{
-              disabled: isAsigning,
+              disabled: isAsigning || item.schedulesCount !== 0,
               icon: isAsigning ? (
                 <Spinner size="tiny" />
               ) : item.teacher ? (
-                <CheckmarkCircleFilled className="dark:text-green-500 text-green-700" />
+                <Avatar
+                  image={{
+                    src: item.teacher.photoURL
+                  }}
+                  size={20}
+                  color="colorful"
+                  name={item.teacher.displayName}
+                />
               ) : (
-                <PersonLightbulbRegular />
+                <PersonAddRegular fontSize={16} />
               ),
               children: item.teacher
                 ? item.teacher?.displayName
                 : 'Sin docente',
-              appearance: 'transparent',
+              size: 'small',
+              appearance: 'secondary',
               className: '!px-1 !text-left !text-nowrap'
             }}
           />
@@ -467,7 +481,15 @@ const Item = ({ item, refetchSections }: Props) => {
             icon={<CalendarEditRegular />}
             appearance="transparent"
           >
-            Horarios
+            <Badge
+              size="small"
+              className="mr-1"
+              color="warning"
+              appearance="filled"
+            >
+              {item.schedulesCount}
+            </Badge>
+            Ver
           </Button>
         </TableCell>
       </TableRow>
