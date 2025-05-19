@@ -86,31 +86,31 @@ export const localizedStrings = calendarStrings
 export const days = {
   '1': {
     label: 'Lunes',
-    short: 'Lun'
+    short: 'Lun.'
   },
   '2': {
     label: 'Martes',
-    short: 'Mar'
+    short: 'Mar.'
   },
   '3': {
     label: 'Miércoles',
-    short: 'Mié'
+    short: 'Mié.'
   },
   '4': {
     label: 'Jueves',
-    short: 'Jue'
+    short: 'Jue.'
   },
   '5': {
     label: 'Viernes',
-    short: 'Vie'
+    short: 'Vie.'
   },
   '6': {
     label: 'Sábado',
-    short: 'Sáb'
+    short: 'Sáb.'
   },
   '7': {
     label: 'Domingo',
-    short: 'Dom'
+    short: 'Dom.'
   }
 } as const
 
