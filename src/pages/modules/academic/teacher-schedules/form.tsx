@@ -10,6 +10,7 @@ import {
   DialogTrigger,
   Divider,
   Field,
+  Input,
   Spinner
 } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons'
@@ -18,11 +19,7 @@ import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
 import { api } from '@/lib/api'
 import { handleError } from '@/utils'
-import {
-  formatDateToTimeString,
-  TimePicker
-} from '@fluentui/react-timepicker-compat'
-import { format, parse, parseTime } from '@/lib/dayjs'
+import { format, parse, parseTimeWithFormat } from '@/lib/dayjs'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { calendarStrings, days } from '@/const'
 import React from 'react'
@@ -38,8 +35,8 @@ type Props = {
 }
 
 type FormValues = {
-  from: Date
-  to: Date
+  from: string
+  to: string
   startDate: Date
   endDate: Date | null
   days: string[]
@@ -57,8 +54,8 @@ export default function ScheduleForm({
   React.useEffect(() => {
     if (defaultProp) {
       reset({
-        from: defaultProp.from ? parse(defaultProp.from) : new Date(),
-        to: defaultProp.to ? parse(defaultProp.to) : new Date(),
+        from: defaultProp.from ? format(defaultProp.from, 'HH:mm') : '',
+        to: defaultProp.to ? format(defaultProp.to, 'HH:mm') : '',
         startDate: defaultProp.startDate
           ? parse(defaultProp.startDate)
           : new Date(),
@@ -97,8 +94,8 @@ export default function ScheduleForm({
   const onSubmit = handleSubmit((values) => {
     fetch({
       userId: user.id,
-      from: format(values.from),
-      to: format(values.to),
+      from: parseTimeWithFormat(values.from),
+      to: parseTimeWithFormat(values.to),
       startDate: format(values.startDate, 'YYYY-MM-DD'),
       endDate: format(values.endDate, 'YYYY-MM-DD'),
       days: values.days
@@ -129,7 +126,11 @@ export default function ScheduleForm({
               <Controller
                 control={control}
                 rules={{
-                  required: 'Hora no válida'
+                  required: 'Requerido',
+                  pattern: {
+                    value: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/,
+                    message: 'Ingrese la hora en formato HH:mm y 24 horas'
+                  }
                 }}
                 name="from"
                 render={({ field, fieldState: { error } }) => (
@@ -139,34 +140,18 @@ export default function ScheduleForm({
                     validationMessage={error?.message}
                     label="Hora inicio:"
                   >
-                    <TimePicker
-                      ref={field.ref}
-                      defaultValue={
-                        field.value ? formatDateToTimeString(field.value) : ''
-                      }
-                      inlinePopup
-                      startHour={6}
-                      endHour={23}
-                      onBlur={(e) => {
-                        const parse = parseTime(e.target.value)
-                        if (parse) field.onChange(parse)
-                        else field.onChange(null)
-                      }}
-                      onTimeChange={(_, e) =>
-                        field.onChange(
-                          e.selectedTime ? parse(e.selectedTime) : null
-                        )
-                      }
-                      freeform
-                      placeholder=""
-                    />
+                    <Input {...field} placeholder="HH:mm" />
                   </Field>
                 )}
               />
               <Controller
                 control={control}
                 rules={{
-                  required: 'Hora no válida'
+                  required: 'Requerido',
+                  pattern: {
+                    value: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/,
+                    message: 'Ingrese la hora en formato HH:mm y 24 horas'
+                  }
                 }}
                 name="to"
                 render={({ field, fieldState: { error } }) => (
@@ -176,27 +161,7 @@ export default function ScheduleForm({
                     validationMessage={error?.message}
                     label="Hora fin:"
                   >
-                    <TimePicker
-                      inlinePopup
-                      ref={field.ref}
-                      defaultValue={
-                        field.value ? formatDateToTimeString(field.value) : ''
-                      }
-                      startHour={6}
-                      endHour={23}
-                      onBlur={(e) => {
-                        const parse = parseTime(e.target.value)
-                        if (parse) field.onChange(parse)
-                        else field.onChange(null)
-                      }}
-                      onTimeChange={(_, e) =>
-                        field.onChange(
-                          e.selectedTime ? parse(e.selectedTime) : null
-                        )
-                      }
-                      freeform
-                      placeholder=""
-                    />
+                    <Input {...field} placeholder="HH:mm" />
                   </Field>
                 )}
               />

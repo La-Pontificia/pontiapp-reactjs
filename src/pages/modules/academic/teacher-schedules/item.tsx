@@ -37,7 +37,6 @@ import { Schedule } from '@/types/schedule'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { api } from '@/lib/api'
 import { concatDateWithTime, format } from '@/lib/dayjs'
-import { EventSourceInput } from '@fullcalendar/core/index.js'
 import ScheduleForm from './form'
 import { SectionCourseSchedule } from '@/types/academic/section-course-schedule'
 import { toast } from 'anni'
@@ -119,7 +118,7 @@ export default function Item({ user }: { user: User; refetch: () => void }) {
         ],
         extendedProps: {
           Programa: s.program?.name,
-          $img: s.program?.businessUnit?.logoURL,
+          $img: s.program?.businessUnit?.logoURLSquare,
           Descripción: 'Horario de clase',
           Desde: format(s.startDate, 'DD [de] MMM YYYY'),
           Hasta: format(s.endDate, 'DD [de] MMM YYYY')
@@ -128,43 +127,78 @@ export default function Item({ user }: { user: User; refetch: () => void }) {
     [schedules]
   )
 
-  const events = React.useMemo<EventSourceInput>(() => {
-    const newEvents: EventSourceInput = []
-
+  const calendarComp = React.useMemo(() => {
     const combinedSchedules = [
       ...(parseTeacherSchedulesUnavailables ?? []),
       ...(parseTeachersClassSchedules ?? [])
     ]
 
-    const scheduleMap = new Map<string, any>()
+    const uniqueSchedules = Array.from(
+      new Map(combinedSchedules.map((s) => [s.id, s])).values()
+    )
 
-    for (let i = 0; i < combinedSchedules.length; i++) {
-      const schedule = combinedSchedules[i]
-      scheduleMap.set(schedule.id, schedule)
-    }
+    const eventSources = uniqueSchedules.flatMap((schedule) =>
+      (schedule?.dates ?? []).map((date: any) => ({
+        classNames: schedule.classNames,
+        title: schedule.title,
+        start: concatDateWithTime(date, schedule.from),
+        end: concatDateWithTime(date, schedule.to),
+        date,
+        id: schedule.id,
+        backgroundColor: schedule.backgroundColor,
+        extendedProps: schedule.extendedProps
+      }))
+    )
 
-    const uniqueSchedules = Array.from(scheduleMap.values())
+    return (
+      <Calendar
+        nav={
+          <div className="flex items-center gap-1">
+            <Avatar
+              size={20}
+              name={user.displayName}
+              color="colorful"
+              image={{
+                src: user.photoURL
+              }}
+            />
+            {user.displayName}
+          </div>
+        }
+        events={eventSources}
+        onDateSelect={(args) => {
+          setDefaultValues({
+            from: args.start,
+            to: args.end,
+            days: [args.start.getDay().toString()],
+            startDate: args.start
+          })
 
-    if (!uniqueSchedules) return newEvents
+          // open form with 2s delay
+          setTimeout(() => {
+            setOpenForm(true)
+          }, 50)
+        }}
+        onEventClick={(args) => {
+          const schedule = schedules?.unavailable.find((s) => s?.id === args.id)
 
-    for (const schedule of uniqueSchedules) {
-      if (!schedule?.dates) continue
-      for (const date of schedule.dates) {
-        newEvents.push({
-          classNames: schedule.classNames,
-          title: schedule.title,
-          start: concatDateWithTime(date, schedule.from),
-          end: concatDateWithTime(date, schedule.to),
-          date: date,
-          id: schedule.id,
-          backgroundColor: schedule.backgroundColor,
-          extendedProps: schedule.extendedProps
-        })
-      }
-    }
+          if (!schedule) return
 
-    return newEvents
-  }, [parseTeacherSchedulesUnavailables, parseTeachersClassSchedules])
+          setDefaultValues(schedule ?? {})
+          setTimeout(() => {
+            setOpenForm(true)
+          }, 50)
+        }}
+        defaultView="timeGridWeek"
+      />
+    )
+  }, [
+    parseTeacherSchedulesUnavailables,
+    parseTeachersClassSchedules,
+    schedules?.unavailable,
+    user.displayName,
+    user.photoURL
+  ])
 
   return (
     <>
@@ -189,48 +223,7 @@ export default function Item({ user }: { user: User; refetch: () => void }) {
             }}
           >
             <DialogContent className="flex !p-1 !pb-0 !grow xl:!h-[700px] !max-h-[100%]">
-              <Calendar
-                nav={
-                  <div className="flex items-center gap-1">
-                    <Avatar
-                      size={20}
-                      name={user.displayName}
-                      color="colorful"
-                      image={{
-                        src: user.photoURL
-                      }}
-                    />
-                    {user.displayName}
-                  </div>
-                }
-                events={events}
-                onDateSelect={(args) => {
-                  setDefaultValues({
-                    from: args.start,
-                    to: args.end,
-                    days: [args.start.getDay().toString()],
-                    startDate: args.start
-                  })
-
-                  // open form with 2s delay
-                  setTimeout(() => {
-                    setOpenForm(true)
-                  }, 50)
-                }}
-                onEventClick={(args) => {
-                  const schedule = schedules?.unavailable.find(
-                    (s) => s?.id === args.id
-                  )
-
-                  if (!schedule) return
-
-                  setDefaultValues(schedule ?? {})
-                  setTimeout(() => {
-                    setOpenForm(true)
-                  }, 50)
-                }}
-                defaultView="timeGridWeek"
-              />
+              {calendarComp}
               <div className="w-[350px] max-md:hidden overflow-auto max-w-[350px] flex gap-1 flex-col p-2">
                 {isLoading ? (
                   <div className="grow grid place-content-center">
