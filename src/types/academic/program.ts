@@ -6,6 +6,7 @@ export class Program {
   id: string
   name: string
   businessUnit: BusinessUnit
+  pontisisCode: string
   area: Area
   creator: User
   created_at: Date
@@ -19,6 +20,7 @@ export class Program {
     this.created_at = data.created_at
     this.updated_at = data.updated_at
     this.area = data.area
+    this.pontisisCode = data.pontisisCode
 
     if (this.area) this.area = new Area(this.area)
 

@@ -9,6 +9,7 @@ export class Plan {
   program: Program
   courses: Course[]
   status: boolean
+  pontisisCode?: string
   created_at?: Date
   updated_at?: Date
   creator?: User
@@ -18,6 +19,7 @@ export class Plan {
     this.id = data.id
     this.name = data.name
     this.courses = data.courses
+    this.pontisisCode = data.pontisisCode
     this.program = data.program
     this.status = data.status
     this.created_at = data.created_at
