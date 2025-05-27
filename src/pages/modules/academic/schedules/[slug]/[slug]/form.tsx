@@ -198,69 +198,74 @@ export default function ScheduleForm({
 
   return (
     <>
-      <Dialog
-        open={openConflict}
-        onOpenChange={(_, { open }) => setOpenConflict(open)}
-      >
-        <DialogSurface className="max-xl:!max-w-[95vw] !overflow-hidden !bg-[#f5f5f4] dark:!bg-[#2f2e2b] !max-h-[95vh] xl:!min-w-[1000px] !p-0">
-          <DialogBody
-            style={{
-              maxHeight: '99vh',
-              gap: 0
-            }}
-          >
-            <DialogContent className="flex !p-1 !pb-0 xl:!h-[600px] !max-h-[100%]">
-              {calendarComp}
-              {scheduleConflict && (
-                <div className="w-[350px] max-md:hidden overflow-auto max-w-[350px] flex gap-1 flex-col p-2">
-                  <div className="grow overflow-y-auto flex gap-1.5 flex-col">
-                    <div className="p-2 flex bg-white dark:bg-stone-900 items-center gap-2 text-left rounded-lg">
-                      <div className="grow">
-                        <p className="overflow-ellipsis font-medium line-clamp-1 pb-1">
-                          {scheduleConflict?.name}
-                        </p>
-                        <div className="text-xs flex items-center gap-1">
-                          <BuildingMultipleRegular
-                            fontSize={19}
-                            className="opacity-50"
-                          />
-                          {scheduleConflict.name}
-                        </div>
-                        <div className="text-xs flex items-center gap-1">
-                          <CalendarLtrRegular
-                            fontSize={19}
-                            className="opacity-50"
-                          />
-                          {format(scheduleConflict.startDate, 'DD MMM, YYYY')} -{' '}
-                          {format(scheduleConflict.endDate, 'DD MMM, YYYY')}
-                        </div>
-                        <div className="text-xs flex items-center gap-1">
-                          <ClockRegular fontSize={19} className="opacity-50" />
-                          {format(scheduleConflict.startTime, 'hh:mm A')} -{' '}
-                          {format(scheduleConflict.endTime, 'hh:mm A')}
-                        </div>
-                        <div className="py-1 pl-5">
-                          <Badge color="warning">
-                            {getDaysShort(scheduleConflict?.daysOfWeek)}
-                          </Badge>
+      {openConflict && (
+        <Dialog
+          open={openConflict}
+          // onOpenChange={(_, { open }) => setOpenConflict(open)}
+        >
+          <DialogSurface className="max-xl:!max-w-[95vw] !overflow-hidden !bg-[#f5f5f4] dark:!bg-[#2f2e2b] !max-h-[95vh] xl:!min-w-[1000px] !p-0">
+            <DialogBody
+              style={{
+                maxHeight: '99vh',
+                gap: 0
+              }}
+            >
+              <DialogContent className="flex !p-1 !pb-0 xl:!h-[600px] !max-h-[100%]">
+                {calendarComp}
+                {scheduleConflict && (
+                  <div className="w-[350px] max-md:hidden overflow-auto max-w-[350px] flex gap-1 flex-col p-2">
+                    <div className="grow overflow-y-auto flex gap-1.5 flex-col">
+                      <div className="p-2 flex bg-white dark:bg-stone-900 items-center gap-2 text-left rounded-lg">
+                        <div className="grow">
+                          <p className="overflow-ellipsis font-medium line-clamp-1 pb-1">
+                            {scheduleConflict?.name}
+                          </p>
+                          <div className="text-xs flex items-center gap-1">
+                            <BuildingMultipleRegular
+                              fontSize={19}
+                              className="opacity-50"
+                            />
+                            {scheduleConflict.name}
+                          </div>
+                          <div className="text-xs flex items-center gap-1">
+                            <CalendarLtrRegular
+                              fontSize={19}
+                              className="opacity-50"
+                            />
+                            {format(scheduleConflict.startDate, 'DD MMM, YYYY')}{' '}
+                            - {format(scheduleConflict.endDate, 'DD MMM, YYYY')}
+                          </div>
+                          <div className="text-xs flex items-center gap-1">
+                            <ClockRegular
+                              fontSize={19}
+                              className="opacity-50"
+                            />
+                            {format(scheduleConflict.startTime, 'hh:mm A')} -{' '}
+                            {format(scheduleConflict.endTime, 'hh:mm A')}
+                          </div>
+                          <div className="py-1 pl-5">
+                            <Badge color="warning">
+                              {getDaysShort(scheduleConflict?.daysOfWeek)}
+                            </Badge>
+                          </div>
                         </div>
                       </div>
                     </div>
+                    <DialogActions className="flex justify-end">
+                      <Button
+                        onClick={() => setOpenConflict(false)}
+                        appearance="outline"
+                      >
+                        Cerrar
+                      </Button>
+                    </DialogActions>
                   </div>
-                  <DialogActions className="flex justify-end">
-                    <Button
-                      onClick={() => setOpenConflict(false)}
-                      appearance="outline"
-                    >
-                      Cerrar
-                    </Button>
-                  </DialogActions>
-                </div>
-              )}
-            </DialogContent>
-          </DialogBody>
-        </DialogSurface>
-      </Dialog>
+                )}
+              </DialogContent>
+            </DialogBody>
+          </DialogSurface>
+        </Dialog>
+      )}
 
       <Dialog open={open} onOpenChange={(_, { open }) => onOpenChange(open)}>
         <DialogSurface className="min-w-[550px] w-[550px]">
