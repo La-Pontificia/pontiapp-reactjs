@@ -101,8 +101,8 @@ export default function SectionPeriodsPage() {
   }, [selected, programsSelected])
 
   const { mutate: handleReport, isPending: reporting } = useMutation({
-    mutationFn: () =>
-      api.post(uriReport, {
+    mutationFn: ({ type }: { type?: string }) =>
+      api.post(`${uriReport}&type=${type}`, {
         alreadyHandleError: false
       }),
     onSuccess: (data) => {
@@ -213,7 +213,11 @@ export default function SectionPeriodsPage() {
                 </Button>
               </DialogTrigger>
               <Button
-                onClick={() => handleReport()}
+                onClick={() =>
+                  handleReport({
+                    type: 'pontisis'
+                  })
+                }
                 disabled={
                   reporting || !selected.length || !programsSelected.length
                 }
@@ -221,7 +225,18 @@ export default function SectionPeriodsPage() {
                 appearance="primary"
                 shape="circular"
               >
-                Generar reporte
+                Pontisis
+              </Button>
+              <Button
+                onClick={() => handleReport({})}
+                disabled={
+                  reporting || !selected.length || !programsSelected.length
+                }
+                icon={reporting ? <Spinner size="tiny" /> : undefined}
+                appearance="primary"
+                shape="circular"
+              >
+                Exportar
               </Button>
             </DialogActions>
           </DialogBody>
