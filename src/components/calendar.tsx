@@ -58,6 +58,8 @@ type ScheduleCalendarProps = {
   onDateSelect?: (selectInfo: DateSelectArg) => void
   events?: EventSourceInput
   onEventClick?: (event: EventImpl) => void
+  focusDate?: Date
+  highlightEventId?: string
 }
 
 export default function Calendar({
@@ -68,7 +70,9 @@ export default function Calendar({
   header,
   events = [],
   footerFLoat,
-  onEventClick = () => {}
+  onEventClick = () => {},
+  focusDate,
+  highlightEventId
 }: ScheduleCalendarProps) {
   const calendarRef = React.useRef<FullCalendar>(null)
   const [view, setView] = React.useState<Views>(defaultView)
@@ -127,6 +131,13 @@ export default function Calendar({
     }
   }, [events])
 
+  React.useEffect(() => {
+    if (focusDate) {
+      calendarRef.current?.getApi().gotoDate(focusDate)
+      updateTitle()
+    }
+  }, [focusDate])
+
   return (
     <div
       className={cn(
@@ -174,6 +185,15 @@ export default function Calendar({
           selectable
           selectMirror
           now={new Date()}
+          eventDidMount={(info) => {
+            if (info.event.id === highlightEventId) {
+              info.el.classList.add(
+                'outline',
+                'outline-2',
+                'outline-yellow-500'
+              )
+            }
+          }}
           dayHeaderFormat={{
             weekday: 'short',
             day:
@@ -195,6 +215,7 @@ export default function Calendar({
             timeGridPlugin,
             listPlugin
           ]}
+          eventClassNames={'bg-[#3788d8]'}
           initialView={view}
           allDayClassNames={['text-xs', 'opacity-70']}
           select={handleDateSelect}
@@ -248,9 +269,9 @@ function renderEventContent(eventInfo: EventContentArg) {
           {format(eventInfo.event.end, 'h:mm A')}
         </p>
         {eventInfo.event.extendedProps.$img ? (
-          <div className="mt-auto px-1 pb-1">
+          <div className="m-1 size-5 mt-auto p-0.5 aspect-square grid place-content-center bg-white rounded-full w-fit">
             <img
-              className="w-auto max-w-full min-h-[20px] h-[20px]"
+              className="max-w-full"
               src={eventInfo.event.extendedProps.$img}
               alt="Business unit logo"
             />
