@@ -4,9 +4,11 @@ import relativeTime from 'dayjs/plugin/relativeTime'
 import customParseFormat from 'dayjs/plugin/customParseFormat'
 import dayjs from 'dayjs'
 import 'dayjs/locale/es'
+import utc from 'dayjs/plugin/utc'
 dayjs.extend(customParseFormat)
 dayjs.extend(relativeTime)
-
+dayjs.extend(utc)
+// Configuración de la localización a español
 export { dayjs }
 
 export const parse = (date: any, format?: string): Date => {
@@ -20,6 +22,11 @@ export const format = (date: any, format?: string, label?: string): string => {
   if (!date) return label ?? ''
   const fmt = format ?? 'YYYY-MM-DD HH:mm:ss'
   return dayjs(date).locale('es').format(fmt)
+}
+
+export function parseTimeWithFormat(time: string, format?: string): string {
+  const fmt = format ?? 'YYYY-MM-DD HH:mm:ss'
+  return dayjs.utc(time, 'HH:mm').locale('es').format(fmt)
 }
 
 export const isIquals = (date1: any, date2: any): boolean => {
