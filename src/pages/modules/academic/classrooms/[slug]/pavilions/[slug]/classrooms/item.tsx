@@ -115,7 +115,7 @@ export default function Item({
               <Calendar
                 nav={
                   <div>
-                    {item.code} ({item.type}) - {item.pavilion?.name}
+                    {item.code} ({item.type?.name}) - {item.pavilion?.name}
                   </div>
                 }
                 events={events}
@@ -181,7 +181,9 @@ export default function Item({
         <TableCell className="max-w-[70px]">
           <Badge>{item.floor ?? '-'}</Badge>
         </TableCell>
-        <TableCell className="max-w-[140px]">{item.type ?? '-'}</TableCell>
+        <TableCell className="max-w-[140px]">
+          {item.type?.name ?? '-'}
+        </TableCell>
         <TableCell className="max-w-[80px]">{item.capacity ?? '-'}</TableCell>
         <TableCell className="max-lg:!hidden max-w-[130px]">
           <p className="font-medium">
@@ -233,7 +235,7 @@ export default function Item({
         <DialogSurface>
           <DialogBody>
             <DialogTitle>
-              ¿Estás seguro de eliminar: {item.code} - {item.type}?
+              ¿Estás seguro de eliminar: {item.code} - {item.type?.name}?
             </DialogTitle>
             <DialogActions>
               <DialogTrigger disableButtonEnhancement>

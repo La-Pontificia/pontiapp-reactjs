@@ -13,18 +13,19 @@ import {
   Spinner
 } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons'
-import { useMutation } from '@tanstack/react-query'
+import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
 import { api } from '@/lib/api'
 import { handleError } from '@/utils'
 import { useSlugClassroom } from '../../../+layout'
 import { Classroom } from '@/types/academic/classroom'
-import { CLASSROOM_TYPES } from '@/const'
+import { ClassType } from '@/types/academic/class-type'
 
 type FormValues = {
   code: string
-  type: string
+  pontisisCode: string
+  type?: ClassType | null
   capacity: string
   floor: string
 }
@@ -48,14 +49,28 @@ export default function Form({
       ? {
           ...defaultProp,
           capacity: defaultProp.capacity?.toString(),
-          floor: defaultProp.floor?.toString()
+          floor: defaultProp.floor?.toString(),
+          code: defaultProp.code,
+          type: defaultProp.type,
+          pontisisCode: defaultProp.pontisisCode || ''
         }
       : {
           capacity: '',
           code: '',
           floor: '',
-          type: ''
+          type: null,
+          pontisisCode: ''
         }
+  })
+
+  const { data: classTypes } = useQuery<ClassType[]>({
+    enabled: open,
+    queryKey: ['academic/classrooms/types'],
+    queryFn: async () => {
+      const res = await api.get<ClassType[]>('academic/classrooms/types')
+      if (!res.ok) return []
+      return res.data.map((type) => new ClassType(type))
+    }
   })
 
   const { mutate: fetch, isPending: fetching } = useMutation({
@@ -86,9 +101,10 @@ export default function Form({
     fetch({
       pavilionId: pavilion?.id,
       code: values.code,
-      type: values.type,
+      typeId: values.type?.id,
       floor: values.floor ? Number(values.floor) : undefined,
-      capacity: values.capacity ? Number(values.capacity) : undefined
+      capacity: values.capacity ? Number(values.capacity) : undefined,
+      pontisisCode: values.pontisisCode || undefined
     })
   })
 
@@ -131,6 +147,22 @@ export default function Form({
                   </Field>
                 )}
               />
+              <Controller
+                control={control}
+                rules={{ required: 'Requerido' }}
+                name="pontisisCode"
+                render={({ field, fieldState: { error } }) => (
+                  <Field
+                    orientation="horizontal"
+                    validationState={error ? 'error' : 'none'}
+                    validationMessage={error?.message}
+                    label="Cod. pontisis:"
+                    required
+                  >
+                    <Input {...field} readOnly={readOnly} />
+                  </Field>
+                )}
+              />
 
               <Controller
                 control={control}
@@ -143,13 +175,22 @@ export default function Form({
                     validationMessage={error?.message}
                     label="Tipo de aula:"
                   >
-                    <Select value={field.value} onChange={field.onChange}>
+                    <Select
+                      value={field.value?.id}
+                      onChange={(e) =>
+                        field.onChange(
+                          classTypes?.find(
+                            (type) => type.id === e.target.value
+                          ) || null
+                        )
+                      }
+                    >
                       <option value="">Seleccione un tipo de aula</option>
-                      {CLASSROOM_TYPES.map((type) => (
-                        <option key={type} value={type}>
-                          {type}
+                      {classTypes?.map((type) => (
+                        <option key={type.id} value={type.id}>
+                          {type.pontisisCode} - {type.name}
                         </option>
-                      ))}
+                      )) || <option value="">Cargando tipos...</option>}
                     </Select>
                   </Field>
                 )}
