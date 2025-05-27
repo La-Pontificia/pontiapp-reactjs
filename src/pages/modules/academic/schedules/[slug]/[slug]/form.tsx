@@ -1,4 +1,6 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import {
+  Badge,
   Button,
   Checkbox,
   Dialog,
@@ -13,25 +15,33 @@ import {
   Select,
   Spinner
 } from '@fluentui/react-components'
-import { Dismiss24Regular } from '@fluentui/react-icons'
+import {
+  BuildingMultipleRegular,
+  CalendarLtrRegular,
+  ClockRegular,
+  Dismiss24Regular
+} from '@fluentui/react-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
 import { toast } from 'anni'
 import { Controller, useForm } from 'react-hook-form'
 import { api } from '@/lib/api'
 import { Pavilion } from '@/types/academic/pavilion'
 import { SectionCourse } from '@/types/academic/section-course'
-import { handleError } from '@/utils'
 import { useSlugSchedules } from '../+layout'
 import { Classroom } from '@/types/academic/classroom'
 import {
-  formatDateToTimeString,
-  TimePicker
-} from '@fluentui/react-timepicker-compat'
-import { format, parse, parseTime } from '@/lib/dayjs'
+  concatDateWithTime,
+  format,
+  parse,
+  parseTimeWithFormat
+} from '@/lib/dayjs'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
 import { calendarStrings, days } from '@/const'
 import { SectionCourseSchedule } from '@/types/academic/section-course-schedule'
 import React from 'react'
+import { EventSourceInput } from '@fullcalendar/core/index.js'
+import Calendar from '@/components/calendar'
+import { getDaysShort } from '@/utils'
 
 type Props = {
   open: boolean
@@ -44,10 +54,20 @@ type Props = {
 type FormValues = {
   pavilion: Pavilion | null
   classroom: Classroom | null
-  startTime: Date
-  endTime: Date
+  startTime: string
+  endTime: string
   startDate: Date
   endDate: Date
+  daysOfWeek: string[]
+}
+
+type ScheduleConflict = {
+  name: string
+  startDate: Date
+  endDate: Date
+  startTime: Date
+  endTime: Date
+  dates: Date[]
   daysOfWeek: string[]
 }
 
@@ -58,6 +78,11 @@ export default function ScheduleForm({
   refetch = () => {},
   sectionCourse
 }: Props) {
+  const [scheduleConflict, setScheduleConflict] = React.useState<
+    ScheduleConflict | undefined
+  >(undefined)
+  const [openConflict, setOpenConflict] = React.useState(false)
+
   const { control, handleSubmit, reset, watch } = useForm<FormValues>()
   const { period } = useSlugSchedules()
 
@@ -67,9 +92,11 @@ export default function ScheduleForm({
         pavilion: defaultProp.classroom?.pavilion ?? null,
         classroom: defaultProp.classroom ?? null,
         startTime: defaultProp.startTime
-          ? parse(defaultProp.startTime)
-          : new Date(),
-        endTime: defaultProp.endTime ? parse(defaultProp.endTime) : new Date(),
+          ? format(defaultProp.startTime, 'HH:mm')
+          : '',
+        endTime: defaultProp.endTime
+          ? format(defaultProp.endTime, 'HH:mm')
+          : '',
         startDate: defaultProp.startDate
           ? parse(defaultProp.startDate)
           : new Date(),
@@ -77,7 +104,7 @@ export default function ScheduleForm({
         daysOfWeek: defaultProp.daysOfWeek ?? []
       })
     }
-  }, [defaultProp, reset])
+  }, [defaultProp])
 
   const pavilion = watch('pavilion')
 
@@ -93,7 +120,10 @@ export default function ScheduleForm({
         }
       ),
     onError: (error) => {
-      toast.error(handleError(error.message))
+      const parse = JSON.parse(error.message)
+      setOpenConflict(true)
+      setScheduleConflict(parse.item)
+      toast.error(parse.message)
     },
     onSuccess: () => {
       toast.success(
@@ -134,8 +164,8 @@ export default function ScheduleForm({
       sectionCourseId: sectionCourse.id,
       pavilionId: values.pavilion?.id,
       classroomId: values.classroom?.id,
-      startTime: format(values.startTime),
-      endTime: format(values.endTime),
+      startTime: parseTimeWithFormat(values.startTime),
+      endTime: parseTimeWithFormat(values.endTime),
       startDate: format(values.startDate, 'YYYY-MM-DD'),
       endDate: format(values.endDate, 'YYYY-MM-DD'),
       daysOfWeek: values.daysOfWeek
@@ -145,8 +175,93 @@ export default function ScheduleForm({
   const dteacher = defaultProp?.sectionCourse?.teacher
   const steacher = sectionCourse.teacher
 
+  const calendarComp = React.useMemo(() => {
+    const sourcesEvents: EventSourceInput = {
+      events: scheduleConflict?.dates?.map((date, i) => ({
+        id: `schedule-conflict-${i}`,
+        title: scheduleConflict?.name ?? 'Conflicto de horario',
+        start: concatDateWithTime(date, scheduleConflict?.startTime),
+        end: concatDateWithTime(date, scheduleConflict?.endTime),
+        className: '!bg-red-700 text-white'
+      }))
+    }
+    return (
+      <Calendar
+        focusDate={scheduleConflict?.dates[0]}
+        highlightEventId={`schedule-conflict-0`}
+        events={sourcesEvents}
+        defaultView="timeGridWeek"
+        nav={<div className="text-center">{scheduleConflict?.name}</div>}
+      />
+    )
+  }, [scheduleConflict])
+
   return (
     <>
+      <Dialog
+        open={openConflict}
+        onOpenChange={(_, { open }) => setOpenConflict(open)}
+      >
+        <DialogSurface className="max-xl:!max-w-[95vw] !overflow-hidden !bg-[#f5f5f4] dark:!bg-[#2f2e2b] !max-h-[95vh] xl:!min-w-[1000px] !p-0">
+          <DialogBody
+            style={{
+              maxHeight: '99vh',
+              gap: 0
+            }}
+          >
+            <DialogContent className="flex !p-1 !pb-0 xl:!h-[600px] !max-h-[100%]">
+              {calendarComp}
+              {scheduleConflict && (
+                <div className="w-[350px] max-md:hidden overflow-auto max-w-[350px] flex gap-1 flex-col p-2">
+                  <div className="grow overflow-y-auto flex gap-1.5 flex-col">
+                    <div className="p-2 flex bg-white dark:bg-stone-900 items-center gap-2 text-left rounded-lg">
+                      <div className="grow">
+                        <p className="overflow-ellipsis font-medium line-clamp-1 pb-1">
+                          {scheduleConflict?.name}
+                        </p>
+                        <div className="text-xs flex items-center gap-1">
+                          <BuildingMultipleRegular
+                            fontSize={19}
+                            className="opacity-50"
+                          />
+                          {scheduleConflict.name}
+                        </div>
+                        <div className="text-xs flex items-center gap-1">
+                          <CalendarLtrRegular
+                            fontSize={19}
+                            className="opacity-50"
+                          />
+                          {format(scheduleConflict.startDate, 'DD MMM, YYYY')} -{' '}
+                          {format(scheduleConflict.endDate, 'DD MMM, YYYY')}
+                        </div>
+                        <div className="text-xs flex items-center gap-1">
+                          <ClockRegular fontSize={19} className="opacity-50" />
+                          {format(scheduleConflict.startTime, 'hh:mm A')} -{' '}
+                          {format(scheduleConflict.endTime, 'hh:mm A')}
+                        </div>
+                        <div className="py-1 pl-5">
+                          <Badge color="warning">
+                            {getDaysShort(scheduleConflict?.daysOfWeek)}
+                          </Badge>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <DialogActions className="flex justify-end">
+                    <Button
+                      onClick={() => setOpenConflict(false)}
+                      appearance="outline"
+                    >
+                      Cerrar
+                    </Button>
+                  </DialogActions>
+                </div>
+              )}
+            </DialogContent>
+          </DialogBody>
+        </DialogSurface>
+      </Dialog>
+
       <Dialog open={open} onOpenChange={(_, { open }) => onOpenChange(open)}>
         <DialogSurface className="min-w-[550px] w-[550px]">
           <DialogBody>
@@ -279,7 +394,11 @@ export default function ScheduleForm({
               <Controller
                 control={control}
                 rules={{
-                  required: 'Hora no válida'
+                  required: 'Requerido',
+                  pattern: {
+                    value: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/,
+                    message: 'Ingrese la hora en formato HH:mm y 24 horas'
+                  }
                 }}
                 name="startTime"
                 render={({ field, fieldState: { error } }) => (
@@ -289,32 +408,18 @@ export default function ScheduleForm({
                     validationMessage={error?.message}
                     label="Hora inicio de clase:"
                   >
-                    <TimePicker
-                      inlinePopup
-                      ref={field.ref}
-                      defaultValue={
-                        field.value ? formatDateToTimeString(field.value) : ''
-                      }
-                      startHour={6}
-                      endHour={23}
-                      onBlur={(e) => {
-                        const parse = parseTime(e.target.value)
-                        if (parse) field.onChange(parse)
-                        else field.onChange(null)
-                      }}
-                      onTimeChange={(_, e) =>
-                        e.selectedTime && field.onChange(parse(e.selectedTime))
-                      }
-                      freeform
-                      placeholder=""
-                    />
+                    <Input {...field} placeholder="HH:mm" />
                   </Field>
                 )}
               />
               <Controller
                 control={control}
                 rules={{
-                  required: 'Hora no válida'
+                  required: 'Requerido',
+                  pattern: {
+                    value: /^(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9]$/,
+                    message: 'Ingrese la hora en formato HH:mm y 24 horas'
+                  }
                 }}
                 name="endTime"
                 render={({ field, fieldState: { error } }) => (
@@ -324,25 +429,7 @@ export default function ScheduleForm({
                     validationMessage={error?.message}
                     label="Hora fin de clase:"
                   >
-                    <TimePicker
-                      inlinePopup
-                      ref={field.ref}
-                      defaultValue={
-                        field.value ? formatDateToTimeString(field.value) : ''
-                      }
-                      startHour={6}
-                      endHour={23}
-                      onBlur={(e) => {
-                        const parse = parseTime(e.target.value)
-                        if (parse) field.onChange(parse)
-                        else field.onChange(null)
-                      }}
-                      onTimeChange={(_, e) =>
-                        e.selectedTime && field.onChange(parse(e.selectedTime))
-                      }
-                      freeform
-                      placeholder=""
-                    />
+                    <Input {...field} placeholder="HH:mm" />
                   </Field>
                 )}
               />

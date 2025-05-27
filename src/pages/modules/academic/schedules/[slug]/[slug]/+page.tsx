@@ -76,16 +76,17 @@ export default function SchedulesProgramSchedulesPage() {
     }
   })
 
+  const uriReport = React.useMemo(() => {
+    return `academic/sections/courses/schedules/report?programId=${
+      program?.id
+    }&periodId=${period.id}${filters.q ? `&q=${filters.q}` : ''}`
+  }, [period, filters, program])
+
   const { mutate: handleReport, isPending: reporting } = useMutation({
-    mutationFn: () =>
-      api.post(
-        `academic/sections/courses/schedules/report?programId=${
-          program?.id
-        }&periodId=${period.id}${filters.q ? `&q=${filters.q}` : ''}`.trim(),
-        {
-          alreadyHandleError: false
-        }
-      ),
+    mutationFn: ({ type }: { type?: string }) =>
+      api.post(`${uriReport}&type=${type}`.trim(), {
+        alreadyHandleError: false
+      }),
     onSuccess: (data) => {
       if (data.ok) {
         window.open(String(data.data), '_blank')
@@ -129,12 +130,24 @@ export default function SchedulesProgramSchedulesPage() {
                 <Button appearance="secondary">Cancelar</Button>
               </DialogTrigger>
               <Button
-                onClick={() => handleReport()}
+                onClick={() =>
+                  handleReport({
+                    type: 'pontisis'
+                  })
+                }
                 disabled={reporting}
                 icon={reporting ? <Spinner size="tiny" /> : undefined}
                 appearance="primary"
               >
-                Generar reporte
+                Pontisis
+              </Button>
+              <Button
+                onClick={() => handleReport({})}
+                disabled={reporting}
+                icon={reporting ? <Spinner size="tiny" /> : undefined}
+                appearance="primary"
+              >
+                Exportar
               </Button>
             </DialogActions>
           </DialogBody>

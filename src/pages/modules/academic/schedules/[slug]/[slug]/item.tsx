@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
   Avatar,
@@ -49,63 +50,63 @@ type Props = {
   refetchSections: () => void
 }
 
+type CalendarSchedules = {
+  sectionSchedules: SectionCourseSchedule[]
+  teacherSchedules: SectionCourseSchedule[]
+  teacherUnavailables: Schedule[]
+}
+
+const classNameViolet = [
+  'interactive',
+  '!bg-[#6e72c3]',
+  '[&>div]:!text-violet-100'
+]
+
 type PreEvent = Record<string, any>
 
 const Item = ({ item, refetchSections }: Props) => {
   const { period } = useSlugSchedules()
   const [openDialog, setOpenDialog] = React.useState(false)
+
   const [openForm, setOpenForm] = React.useState(false)
   const [defaultValues, setDefaultValues] = React.useState<
     Partial<SectionCourseSchedule>
   >({})
 
-  const { data: teacherSchedules, refetch: refetchTeacherSchedules } = useQuery<
-    SectionCourseSchedule[]
-  >({
-    queryKey: ['academic/sections/courses/schedules', item.teacher],
-    enabled: !!(openDialog && item),
-    queryFn: async () => {
-      const res = await api.get<SectionCourseSchedule[]>(
-        `academic/sections/courses/schedules?teacherId=${item.teacher?.id}`
-      )
-      if (!res.ok) return []
-      return res.data
-    }
-  })
-
-  const { data: sectionSchedules, refetch: refetchSectionSchedules } = useQuery<
-    SectionCourseSchedule[]
-  >({
-    queryKey: ['academic/sections/courses/schedules', item],
+  const {
+    data: schedules,
+    refetch: refetchSchedules,
+    isLoading
+  } = useQuery<CalendarSchedules>({
+    queryKey: ['academic/sections/courses/schedules', item.id],
     enabled: openDialog,
     queryFn: async () => {
-      const res = await api.get<SectionCourseSchedule[]>(
-        `academic/sections/courses/schedules?sectionId=${item.section?.id}`
+      const res = await api.get<CalendarSchedules>(
+        `academic/sections/courses/calendar/${item.id}?sectionId=${item.section?.id}&teacherId=${item.teacher?.id}`
       )
-      if (!res.ok) return []
-      return res.data
-    }
-  })
-
-  const {
-    data: teacherSchedulesUnavailables,
-    refetch: refetchTeacherSchedulesUnavailables,
-    isLoading: isLoading
-  } = useQuery<Schedule[]>({
-    queryKey: ['schedules', item.teacher],
-    enabled: !!(openDialog && item.teacher),
-    queryFn: async () => {
-      const res = await api.get<Schedule[]>(
-        `users/schedules/${item.teacher.id}?archived=false&type=unavailable`
-      )
-      if (!res.ok) return []
-      return res.data
+      if (!res.ok)
+        return {
+          sectionSchedules: [],
+          teacherSchedules: [],
+          teacherUnavailables: []
+        }
+      return {
+        sectionSchedules: res.data.sectionSchedules.map(
+          (s) => new SectionCourseSchedule(s)
+        ),
+        teacherSchedules: res.data.teacherSchedules.map(
+          (s) => new SectionCourseSchedule(s)
+        ),
+        teacherUnavailables: res.data.teacherUnavailables.map(
+          (s) => new Schedule(s)
+        )
+      }
     }
   })
 
   const parseTeacherSchedulesUnavailables = React.useMemo(
     (): PreEvent[] =>
-      teacherSchedulesUnavailables?.map((s) => ({
+      schedules?.teacherUnavailables?.map((s) => ({
         id: s.id,
         title: item.teacher.displayName,
         from: s.from,
@@ -115,7 +116,7 @@ const Item = ({ item, refetchSections }: Props) => {
           'dark:!bg-red-600',
           '[&>div]:dark:!text-red-100',
 
-          'bg-red-700',
+          '!bg-red-700',
           '[&>div]:!text-white'
         ],
         extendedProps: {
@@ -125,113 +126,86 @@ const Item = ({ item, refetchSections }: Props) => {
           $icon: '🙅‍♂️'
         }
       })) ?? [],
-    [teacherSchedulesUnavailables, item.teacher]
+    [schedules?.teacherUnavailables, item.teacher]
   )
 
   const parseTeacherSchedules = React.useMemo(
     (): PreEvent[] =>
-      teacherSchedules?.map((s) => ({
-        id: s.id,
-        title: s.sectionCourse?.planCourse?.name,
-        from: s.startTime,
-        to: s.endTime,
-        dates: s.dates,
-        classNames: [
-          'dark:!bg-yellow-500',
-          '[&>div]:dark:!text-black',
+      schedules?.teacherSchedules?.map((s) => {
+        const isTheSection = s.sectionCourse.section.id === item.section.id
+        return {
+          id: s.id,
+          title: s.sectionCourse?.planCourse?.name,
+          from: s.startTime,
+          to: s.endTime,
+          dates: s.dates,
+          classNames: isTheSection
+            ? classNameViolet
+            : [
+                'dark:!bg-[#e7ba51]',
+                '[&>div]:dark:!text-black',
 
-          '!bg-yellow-400',
-          '[&>div]:!text-yellow-950'
-        ],
-        extendedProps: {
-          Programa: s.program.name,
-          $img: s.program.businessUnit?.logoURL,
-          Aula: s.classroom?.code,
-          Desde: format(s.startDate, 'DD [de] MMM YYYY'),
-          Hasta: format(s.endDate, 'DD [de] MMM YYYY')
+                '!bg-[#e7ba51]',
+                '[&>div]:!text-amber-950'
+              ],
+          extendedProps: {
+            Programa: s.program.name,
+            $img: s.program.businessUnit?.logoURLSquare,
+            Aula: s.classroom?.code,
+            Desde: format(s.startDate, 'DD [de] MMM YYYY'),
+            Hasta: format(s.endDate, 'DD [de] MMM YYYY')
+          }
         }
-      })) ?? [],
-    [teacherSchedules]
+      }) ?? [],
+    [schedules?.teacherSchedules]
   )
 
   const parseSectionSchedules = React.useMemo(
     (): PreEvent[] =>
-      sectionSchedules?.map((s) => ({
-        id: s.id,
-        title: s.sectionCourse?.planCourse?.name,
-        from: s.startTime,
-        to: s.endTime,
-        dates: s.dates,
-        classNames: [
-          'interactive',
-          'dark:!bg-blue-500',
-          '[&>div]:dark:!text-black',
-
-          '!bg-blue-800',
-          '[&>div]:!text-blue-100'
-        ],
-        extendedProps: {
-          Programa: s.program.name,
-          $img: s.program.businessUnit?.logoURL,
-          Aula: s.classroom?.code,
-          Desde: format(s.startDate, 'DD [de] MMM YYYY'),
-          Hasta: format(s.endDate, 'DD [de] MMM YYYY')
+      schedules?.sectionSchedules?.map((s) => {
+        const withTeacher = s.sectionCourse.teacher.id === item.teacher?.id
+        return {
+          id: s.id,
+          title: s.sectionCourse?.planCourse?.name,
+          from: s.startTime,
+          to: s.endTime,
+          dates: s.dates,
+          classNames: withTeacher ? classNameViolet : ['interactive'],
+          extendedProps: {
+            Programa: s.program.name,
+            $img: s.program.businessUnit?.logoURLSquare,
+            Aula: s.classroom?.code,
+            Desde: format(s.startDate, 'DD [de] MMM YYYY'),
+            Hasta: format(s.endDate, 'DD [de] MMM YYYY')
+          }
         }
-      })) ?? [],
-    [sectionSchedules]
+      }) ?? [],
+    [schedules?.sectionSchedules]
   )
 
   const events = React.useMemo<EventSourceInput>(() => {
-    const newEvents: EventSourceInput = []
-
-    const combinedSchedules = [
+    const schedules = [
       ...(parseTeacherSchedules ?? []),
       ...(parseTeacherSchedulesUnavailables ?? []),
       ...(parseSectionSchedules ?? [])
     ]
 
-    const scheduleMap = new Map<string, any>()
+    const uniqueSchedules = Array.from(
+      new Map(schedules.map((s) => [s.id, s])).values()
+    )
 
-    for (let i = 0; i < combinedSchedules.length; i++) {
-      const schedule = combinedSchedules[i]
-      if (scheduleMap.has(schedule.id)) {
-        scheduleMap.set(schedule.id, {
-          ...schedule,
-          classNames: [
-            'interactive',
-            'dark:!bg-violet-500',
-            '[&>div]:dark:!text-black',
-
-            '!bg-violet-800',
-            '[&>div]:!text-violet-100'
-          ]
-        })
-      } else {
-        scheduleMap.set(schedule.id, schedule)
-      }
-    }
-
-    const uniqueSchedules = Array.from(scheduleMap.values())
-
-    if (!uniqueSchedules) return newEvents
-
-    for (const schedule of uniqueSchedules) {
-      if (!schedule?.dates) continue
-      for (const date of schedule.dates) {
-        newEvents.push({
-          classNames: schedule.classNames,
-          title: schedule.title,
-          start: concatDateWithTime(date, schedule.from),
-          end: concatDateWithTime(date, schedule.to),
-          date: date,
-          id: schedule.id,
-          backgroundColor: schedule.backgroundColor,
-          extendedProps: schedule.extendedProps
-        })
-      }
-    }
-
-    return newEvents
+    return uniqueSchedules.flatMap((schedule) =>
+      (schedule?.dates ?? []).map((date: any) => ({
+        classNames: schedule.classNames,
+        title: schedule.title,
+        start: concatDateWithTime(date, schedule.from),
+        end: concatDateWithTime(date, schedule.to),
+        date,
+        id: schedule.id,
+        backgroundColor: schedule.backgroundColor,
+        extendedProps: schedule.extendedProps
+      }))
+    )
   }, [
     parseTeacherSchedulesUnavailables,
     parseTeacherSchedules,
@@ -239,9 +213,8 @@ const Item = ({ item, refetchSections }: Props) => {
   ])
 
   const refetch = () => {
-    refetchTeacherSchedules()
-    refetchSectionSchedules()
-    refetchTeacherSchedulesUnavailables()
+    refetchSchedules()
+    refetchSections()
   }
 
   const { mutate: asignTeacher, isPending: isAsigning } = useMutation({
@@ -251,7 +224,7 @@ const Item = ({ item, refetchSections }: Props) => {
         alreadyHandleError: false
       }),
     onSuccess: () => {
-      refetchSections()
+      refetchSchedules()
       toast.success(
         <p>
           En hora buena! El profesor del curso <b>{item.planCourse?.name}</b> ha
@@ -260,12 +233,84 @@ const Item = ({ item, refetchSections }: Props) => {
       )
     },
     onError: (error) => {
-      toast.error(handleError(error.message))
+      toast.error(error.message)
     }
   })
 
+  const allSchedules = React.useMemo(
+    () => [
+      ...(schedules?.sectionSchedules ?? []),
+      ...(schedules?.teacherSchedules ?? [])
+    ],
+    [schedules?.sectionSchedules, schedules?.teacherSchedules]
+  )
+
+  const CalendarComp = React.useMemo(
+    () => (
+      <Calendar
+        events={events}
+        onDateSelect={(args) => {
+          setDefaultValues({
+            startTime: args.start,
+            endTime: args.end,
+            daysOfWeek: [args.start.getDay().toString()],
+            startDate: period.startDate,
+            endDate: period.endDate
+          })
+
+          // open form with 2s delay
+          setTimeout(() => {
+            setOpenForm(true)
+          }, 50)
+        }}
+        onEventClick={(args) => {
+          const schedule = allSchedules?.find((s) => s?.id === args.id)
+          if (!schedule) return
+          if (schedule?.sectionCourse.section.id !== item.section.id) return
+          setDefaultValues(schedule)
+          setTimeout(() => {
+            setOpenForm(true)
+          }, 50)
+        }}
+        defaultView="timeGridWeek"
+        footerFLoat={
+          <div className="flex text-xs max-lg:flex-wrap gap-2">
+            <div className="text-nowrap">🔵 {item.section?.code}</div>
+            {item.teacher && (
+              <>
+                <div className="text-nowrap">🟡 Docente</div>
+                <div className="text-nowrap">
+                  🟣 {item.section?.code} y Docente
+                </div>
+                <div className="text-nowrap">🔴 Docente no disponible</div>
+              </>
+            )}
+          </div>
+        }
+        nav={
+          <div className="text-center">
+            {item.planCourse?.course?.code} - {item.planCourse?.name} -{' '}
+            {item.section?.code}
+          </div>
+        }
+      />
+    ),
+    [
+      events,
+      item.section?.code,
+      item.section.id,
+      item.teacher,
+      item.planCourse?.course?.code,
+      item.planCourse?.name,
+      period.startDate,
+      period.endDate,
+      allSchedules
+    ]
+  )
+
   return (
     <>
+      {/* SCHEDULE FORM */}
       <ScheduleForm
         sectionCourse={item}
         onOpenChange={setOpenForm}
@@ -273,6 +318,7 @@ const Item = ({ item, refetchSections }: Props) => {
         defaultProp={defaultValues}
         refetch={refetch}
       />
+      {/* SCHEDULE DIALOG */}
       <Dialog
         open={openDialog}
         onOpenChange={(_, { open }) => setOpenDialog(open)}
@@ -284,62 +330,8 @@ const Item = ({ item, refetchSections }: Props) => {
               gap: 0
             }}
           >
-            <DialogContent className="flex !p-1 !pb-0 xl:!h-[750px] !max-h-[100%]">
-              <Calendar
-                events={events}
-                onDateSelect={(args) => {
-                  setDefaultValues({
-                    startTime: args.start,
-                    endTime: args.end,
-                    daysOfWeek: [args.start.getDay().toString()],
-                    startDate: period.startDate,
-                    endDate: period.endDate
-                  })
-
-                  // open form with 2s delay
-                  setTimeout(() => {
-                    setOpenForm(true)
-                  }, 50)
-                }}
-                onEventClick={(args) => {
-                  const schedule =
-                    sectionSchedules?.find((s) => s?.id === args.id) ||
-                    teacherSchedules?.find((s) => s?.id === args.id)
-
-                  if (!schedule) return
-
-                  if (schedule?.sectionCourse.section.id !== item.section.id)
-                    return
-
-                  setDefaultValues(schedule)
-                  setTimeout(() => {
-                    setOpenForm(true)
-                  }, 50)
-                }}
-                defaultView="timeGridWeek"
-                footerFLoat={
-                  <div className="flex text-xs max-lg:flex-wrap gap-2">
-                    <div className="text-nowrap">🔵 {item.section?.code}</div>
-                    {item.teacher && (
-                      <>
-                        <div className="text-nowrap">🟡 Docente</div>
-                        <div className="text-nowrap">
-                          🟣 {item.section?.code} y Docente
-                        </div>
-                        <div className="text-nowrap">
-                          🔴 Docente no disponible
-                        </div>
-                      </>
-                    )}
-                  </div>
-                }
-                nav={
-                  <div className="text-center">
-                    {item.planCourse?.course?.code} - {item.planCourse?.name} -{' '}
-                    {item.section?.code}
-                  </div>
-                }
-              />
+            <DialogContent className="flex !p-1 !pb-0 xl:!h-[800px] !max-h-[100%]">
+              {CalendarComp}
               <div className="w-[350px] max-md:hidden overflow-auto max-w-[350px] flex gap-1 flex-col p-2">
                 {isLoading ? (
                   <div className="grow grid place-content-center">
@@ -350,7 +342,7 @@ const Item = ({ item, refetchSections }: Props) => {
                     <p className="font-medium pb-1">
                       Horarios de {item.section?.code}
                     </p>
-                    {sectionSchedules?.map((s) => (
+                    {schedules?.sectionSchedules?.map((s) => (
                       <div
                         key={s.id}
                         className="p-2 flex bg-white dark:bg-stone-900 items-center gap-2 text-left rounded-lg"
