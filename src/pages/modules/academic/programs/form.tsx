@@ -26,12 +26,13 @@ import { Area } from '@/types/academic/area'
 type FormValues = {
   name: string
   area?: Area | null
+  pontisisCode?: string
 }
 
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => { },
+  refetch = () => {},
   defaultProp,
   readOnly = false
 }: {
@@ -44,10 +45,11 @@ export default function Form({
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-        name: defaultProp.name,
-        area: defaultProp.area
-      }
-      : { name: '', area: null }
+          name: defaultProp.name,
+          area: defaultProp.area,
+          pontisisCode: defaultProp.pontisisCode || ''
+        }
+      : { name: '', area: null, pontisisCode: '' }
   })
 
   const { businessUnit } = useAuth()
@@ -80,14 +82,15 @@ export default function Form({
       const res = await api.get<Area[]>('academic/areas')
       if (!res.ok) return []
       return res.data.map((area) => new Area(area))
-    },
+    }
   })
 
   const onSubmit = handleSubmit((values) => {
     fetch({
       name: values.name,
       businessUnitId: businessUnit?.id,
-      areaId: values.area?.id
+      areaId: values.area?.id,
+      pontisisCode: values.pontisisCode
     })
   })
 
@@ -124,6 +127,22 @@ export default function Form({
               <Controller
                 control={control}
                 rules={{ required: 'Requerido' }}
+                name="pontisisCode"
+                render={({ field, fieldState: { error } }) => (
+                  <Field
+                    orientation="horizontal"
+                    validationState={error ? 'error' : 'none'}
+                    validationMessage={error?.message}
+                    label="Cod. pontisis:"
+                    required
+                  >
+                    <Input {...field} readOnly={readOnly} />
+                  </Field>
+                )}
+              />
+              <Controller
+                control={control}
+                rules={{ required: 'Requerido' }}
                 name="name"
                 render={({ field, fieldState: { error } }) => (
                   <Field
@@ -142,7 +161,7 @@ export default function Form({
                 rules={{
                   required: 'Requerido'
                 }}
-                name='area'
+                name="area"
                 render={({ field, fieldState: { error } }) => (
                   <Field
                     orientation="horizontal"
@@ -156,7 +175,9 @@ export default function Form({
                       value={field.value ? field.value.name : ''}
                       selectedOptions={field.value ? [field.value.id] : []}
                       onOptionSelect={(_, data) => {
-                        field.onChange(areas?.find((p) => p.id === data.optionValue));
+                        field.onChange(
+                          areas?.find((p) => p.id === data.optionValue)
+                        )
                       }}
                       placeholder="Seleciona una area"
                     >

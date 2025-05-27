@@ -23,13 +23,14 @@ import { useSlugProgram } from '../+layout'
 
 type FormValues = {
   name: string
+  pontisisCode: string
   status: boolean
 }
 
 export default function Form({
   onOpenChange,
   open,
-  refetch = () => { },
+  refetch = () => {},
   defaultProp,
   readOnly = false
 }: {
@@ -42,10 +43,11 @@ export default function Form({
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
-        name: defaultProp.name,
-        status: defaultProp.status
-      }
-      : { name: '', status: true }
+          name: defaultProp.name,
+          status: defaultProp.status,
+          pontisisCode: defaultProp.pontisisCode || ''
+        }
+      : { name: '', status: true, pontisisCode: '' }
   })
 
   const { mutate: fetch, isPending: fetching } = useMutation({
@@ -73,7 +75,8 @@ export default function Form({
   const onSubmit = handleSubmit((values) => {
     fetch({
       name: values.name,
-      programId: program?.id
+      programId: program?.id,
+      pontisisCode: values.pontisisCode
     })
   })
 
@@ -110,6 +113,22 @@ export default function Form({
                   }
                 />
               </Field>
+              <Controller
+                control={control}
+                rules={{ required: 'Requerido' }}
+                name="pontisisCode"
+                render={({ field, fieldState: { error } }) => (
+                  <Field
+                    orientation="horizontal"
+                    validationState={error ? 'error' : 'none'}
+                    validationMessage={error?.message}
+                    label="Cod. pontisis:"
+                    required
+                  >
+                    <Input {...field} />
+                  </Field>
+                )}
+              />
               <Controller
                 control={control}
                 rules={{ required: 'Requerido' }}
