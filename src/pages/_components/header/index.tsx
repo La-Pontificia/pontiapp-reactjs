@@ -34,13 +34,11 @@ const Toggles = () => {
             relationship="label"
           >
             <button onClick={toggleSidebar} className="p-0.5">
-              {
-                isSidebarOpen ? (
-                  <PanelLeftFilled fontSize={25} />
-                ) : (
-                  <PanelLeftRegular fontSize={25} />
-                )
-              }
+              {isSidebarOpen ? (
+                <PanelLeftFilled fontSize={25} />
+              ) : (
+                <PanelLeftRegular fontSize={25} />
+              )}
             </button>
           </Tooltip>
         </div>
@@ -52,7 +50,6 @@ const Toggles = () => {
 export default function RootHeader() {
   const isHeaderOpen = useUi((s) => s.isHeaderOpen)
   const toggleHeader = useUi((s) => s.toggleHeader)
-  // const { user: authUser } = useAuth()
   return (
     <header
       style={{
@@ -69,14 +66,6 @@ export default function RootHeader() {
         <RootSearch />
       </nav>
       <nav className="flex px-2 flex-grow items-center dark:text-[#eaa8ff] text-[#0e37cd] basis-0 gap-5 justify-end">
-        {/* <Tooltip
-          content="Manual de usuario (Docs PontiApp)"
-          relationship="label"
-        >
-          <Link to="/docs" target="_blank">
-            <NotebookQuestionMarkRegular fontSize={25} />
-          </Link>
-        </Tooltip> */}
         <Tooltip content="Buscar" relationship="label">
           <button className="block lg:hidden">
             <SearchRegular fontSize={25} />
