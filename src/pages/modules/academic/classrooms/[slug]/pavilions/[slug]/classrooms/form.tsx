@@ -21,6 +21,7 @@ import { handleError } from '@/utils'
 import { useSlugClassroom } from '../../../+layout'
 import { Classroom } from '@/types/academic/classroom'
 import { ClassType } from '@/types/academic/class-type'
+import { useAuth } from '@/store/auth'
 
 type FormValues = {
   code: string
@@ -44,6 +45,7 @@ export default function Form({
   readOnly?: boolean
 }) {
   const { pavilion } = useSlugClassroom()
+  const { businessUnit } = useAuth()
   const { control, handleSubmit, reset } = useForm<FormValues>({
     values: defaultProp
       ? {
@@ -104,7 +106,8 @@ export default function Form({
       typeId: values.type?.id,
       floor: values.floor ? Number(values.floor) : undefined,
       capacity: values.capacity ? Number(values.capacity) : undefined,
-      pontisisCode: values.pontisisCode || undefined
+      pontisisCode: values.pontisisCode || undefined,
+      businessUnitId: businessUnit?.id
     })
   })
 
@@ -156,7 +159,7 @@ export default function Form({
                     orientation="horizontal"
                     validationState={error ? 'error' : 'none'}
                     validationMessage={error?.message}
-                    label="Cod. pontisis:"
+                    label={`Cod. pontisis ${businessUnit?.acronym}:`}
                     required
                   >
                     <Input {...field} readOnly={readOnly} />

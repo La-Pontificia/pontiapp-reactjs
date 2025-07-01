@@ -26,6 +26,7 @@ import { PlanCourse } from '@/types/academic/plan'
 import { handleError } from '@/utils'
 import { useSlugProgram } from '../../../+layout'
 import React from 'react'
+import { PLAN_COURSE_FORMULAS } from '@/const'
 
 type FormValues = {
   cycle: Cycle | null
@@ -33,6 +34,7 @@ type FormValues = {
   name: string
   teoricHours: string
   practiceHours: string
+  formula: string | null
   credits: string
   status: boolean
 }
@@ -62,6 +64,7 @@ export default function Form({
             teoricHours: defaultProp.teoricHours.toString(),
             credits: defaultProp.credits.toString(),
             practiceHours: defaultProp.practiceHours.toString(),
+            formula: defaultProp.formula ?? '',
             status: defaultProp.status
           }
         : {
@@ -69,6 +72,7 @@ export default function Form({
             course: null,
             name: '',
             teoricHours: '0',
+            formula: null,
             practiceHours: '0',
             credits: '0',
             status: true
@@ -139,7 +143,8 @@ export default function Form({
       practiceHours: values.practiceHours
         ? Number(values.practiceHours)
         : undefined,
-      status: values.status
+      status: values.status,
+      formula: values.formula
     })
   })
 
@@ -336,6 +341,35 @@ export default function Form({
                       </Field>
                     )}
                   />
+                  <Field required label="Fórmula:" orientation="horizontal">
+                    <Controller
+                      control={control}
+                      rules={{ required: 'Requerido' }}
+                      name="formula"
+                      render={({ field, fieldState: { error } }) => (
+                        <Field
+                          validationMessage={error?.message}
+                          validationState={error ? 'error' : 'none'}
+                        >
+                          <Select
+                            onChange={(_, d) => {
+                              field.onChange(d.value)
+                            }}
+                            value={field.value ?? ''}
+                          >
+                            <option value={''}>Seleccionar una fórmula</option>
+                            {Object.entries(PLAN_COURSE_FORMULAS)?.map(
+                              ([key, name]) => (
+                                <option key={key} value={key}>
+                                  {name}
+                                </option>
+                              )
+                            )}
+                          </Select>
+                        </Field>
+                      )}
+                    />
+                  </Field>
                   <Controller
                     control={control}
                     name="status"

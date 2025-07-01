@@ -25,7 +25,6 @@ import {
   DialogBody,
   DialogSurface,
   DialogTitle,
-  DialogActions,
   DialogTrigger,
   Spinner
 } from '@fluentui/react-components'
@@ -45,6 +44,11 @@ export default function SchedulesProgramSchedulesPage() {
   const [filters, setFilters] = React.useState<FiltersValues>({
     q: null,
     page: 1
+  })
+  const [isPending, setIsPending] = React.useState({
+    normal: false,
+    pontisis: false,
+    pontisisTeachers: false
   })
   const query = React.useMemo(() => {
     let uri = '?paginate=true'
@@ -76,24 +80,44 @@ export default function SchedulesProgramSchedulesPage() {
     }
   })
 
-  const uriReport = React.useMemo(() => {
-    return `academic/sections/courses/schedules/report?programId=${
-      program?.id
-    }&periodId=${period.id}${filters.q ? `&q=${filters.q}` : ''}`
+  const queryReport = React.useMemo(() => {
+    return `?programId=${program?.id}&periodId=${period.id}${
+      filters.q ? `&q=${filters.q}` : ''
+    }`
   }, [period, filters, program])
+
+  const uri = (type?: string) =>
+    type === 'normal'
+      ? 'report'
+      : type === 'pontisis'
+      ? 'report-pontisis'
+      : 'report-pontisis-teachers'
 
   const { mutate: handleReport, isPending: reporting } = useMutation({
     mutationFn: ({ type }: { type?: string }) =>
-      api.post(`${uriReport}&type=${type}`.trim(), {
-        alreadyHandleError: false
-      }),
+      api.post(
+        `academic/sections/courses/schedules/${uri(type)}${queryReport}`.trim(),
+        {
+          alreadyHandleError: false
+        }
+      ),
     onSuccess: (data) => {
+      setIsPending({
+        normal: false,
+        pontisis: false,
+        pontisisTeachers: false
+      })
       if (data.ok) {
         window.open(String(data.data), '_blank')
         setOpenReport(false)
       }
     },
     onError: (error) => {
+      setIsPending({
+        normal: false,
+        pontisis: false,
+        pontisisTeachers: false
+      })
       toast.error(handleError(error.message))
     }
   })
@@ -125,31 +149,72 @@ export default function SchedulesProgramSchedulesPage() {
                 del módulo.
               </p>
             </DialogContent>
-            <DialogActions>
-              <DialogTrigger disableButtonEnhancement>
-                <Button appearance="secondary">Cancelar</Button>
-              </DialogTrigger>
-              <Button
-                onClick={() =>
-                  handleReport({
-                    type: 'pontisis'
-                  })
-                }
-                disabled={reporting}
-                icon={reporting ? <Spinner size="tiny" /> : undefined}
-                appearance="primary"
-              >
-                Pontisis
-              </Button>
-              <Button
-                onClick={() => handleReport({})}
-                disabled={reporting}
-                icon={reporting ? <Spinner size="tiny" /> : undefined}
-                appearance="primary"
-              >
-                Exportar
-              </Button>
-            </DialogActions>
+            <div className="w-full col-span-2">
+              <p className="text-nowrap my-2 opacity-60">
+                Selecciona el tipo de reporte que deseas generar:
+              </p>
+              <div className="grid gap-2">
+                <Button
+                  onClick={() => {
+                    handleReport({
+                      type: 'normal'
+                    })
+                    setIsPending((prev) => ({
+                      ...prev,
+                      normal: true
+                    }))
+                  }}
+                  disabled={reporting}
+                  icon={isPending.normal ? <Spinner size="tiny" /> : undefined}
+                  appearance="secondary"
+                >
+                  Normal
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleReport({
+                      type: 'pontisis'
+                    })
+                    setIsPending((prev) => ({
+                      ...prev,
+                      pontisis: true
+                    }))
+                  }}
+                  disabled={reporting}
+                  icon={
+                    isPending.pontisis ? <Spinner size="tiny" /> : undefined
+                  }
+                  appearance="secondary"
+                >
+                  Para pontisis
+                </Button>
+                <Button
+                  onClick={() => {
+                    handleReport({
+                      type: 'pontisisTeachers'
+                    })
+                    setIsPending((prev) => ({
+                      ...prev,
+                      pontisisTeachers: true
+                    }))
+                  }}
+                  disabled={reporting}
+                  icon={
+                    isPending.pontisisTeachers ? (
+                      <Spinner size="tiny" />
+                    ) : undefined
+                  }
+                  appearance="secondary"
+                >
+                  Para pontisis (Docentes)
+                </Button>
+                <DialogTrigger disableButtonEnhancement>
+                  <Button className="!mt-3" appearance="secondary">
+                    Cancelar
+                  </Button>
+                </DialogTrigger>
+              </div>
+            </div>
           </DialogBody>
         </DialogSurface>
       </Dialog>

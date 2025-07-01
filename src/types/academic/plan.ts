@@ -44,6 +44,7 @@ export class PlanCourse {
   course: Course
   status: boolean
   name: string
+  formula: string
   teoricHours: number
   practiceHours: number
   credits: number
@@ -59,6 +60,7 @@ export class PlanCourse {
     this.course = data.course
     this.status = data.status
     this.name = data.name
+    this.formula = data.formula
     this.teoricHours = data.teoricHours
     this.practiceHours = data.practiceHours
     this.credits = data.credits

@@ -36,7 +36,7 @@ import {
   parseTimeWithFormat
 } from '@/lib/dayjs'
 import { DatePicker } from '@fluentui/react-datepicker-compat'
-import { calendarStrings, days } from '@/const'
+import { calendarStrings, days, SCHEDULE_TYPES } from '@/const'
 import { SectionCourseSchedule } from '@/types/academic/section-course-schedule'
 import React from 'react'
 import { EventSourceInput } from '@fullcalendar/core/index.js'
@@ -54,6 +54,7 @@ type Props = {
 type FormValues = {
   pavilion: Pavilion | null
   classroom: Classroom | null
+  type: string | null
   startTime: string
   endTime: string
   startDate: Date
@@ -91,6 +92,7 @@ export default function ScheduleForm({
       reset({
         pavilion: defaultProp.classroom?.pavilion ?? null,
         classroom: defaultProp.classroom ?? null,
+        type: defaultProp.type ?? null,
         startTime: defaultProp.startTime
           ? format(defaultProp.startTime, 'HH:mm')
           : '',
@@ -168,7 +170,8 @@ export default function ScheduleForm({
       endTime: parseTimeWithFormat(values.endTime),
       startDate: format(values.startDate, 'YYYY-MM-DD'),
       endDate: format(values.endDate, 'YYYY-MM-DD'),
-      daysOfWeek: values.daysOfWeek
+      daysOfWeek: values.daysOfWeek,
+      type: values.type
     })
   })
 
@@ -326,6 +329,33 @@ export default function ScheduleForm({
                           steacher?.fullName || steacher?.displayName || ''
                         }`
                   }
+                />
+              </Field>
+              <Field required label="Tipo de horario:" orientation="horizontal">
+                <Controller
+                  control={control}
+                  rules={{ required: 'Requerido' }}
+                  name="type"
+                  render={({ field, fieldState: { error } }) => (
+                    <Field
+                      validationMessage={error?.message}
+                      validationState={error ? 'error' : 'none'}
+                    >
+                      <Select
+                        onChange={(_, d) => {
+                          field.onChange(d.value)
+                        }}
+                        value={field.value ?? ''}
+                      >
+                        <option value={''}>Seleccionar tipo de horario</option>
+                        {Object.entries(SCHEDULE_TYPES)?.map(([key, name]) => (
+                          <option key={key} value={key}>
+                            {name}
+                          </option>
+                        ))}
+                      </Select>
+                    </Field>
+                  )}
                 />
               </Field>
               <Field required label="Pab/Aula:" orientation="horizontal">

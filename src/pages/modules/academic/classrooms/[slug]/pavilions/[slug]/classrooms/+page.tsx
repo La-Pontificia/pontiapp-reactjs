@@ -23,6 +23,7 @@ import { Classroom } from '@/types/academic/classroom'
 import Item from './item'
 import { TableContainer } from '@/components/table-container'
 import { useDebounce } from 'hothooks'
+import { useAuth } from '@/store/auth'
 
 export type FiltersValues = {
   q: string | null
@@ -30,18 +31,19 @@ export type FiltersValues = {
 }
 export default function ClassroomsPage() {
   const { period, pavilion, breadcrumbsComp } = useSlugClassroom()
+  const { businessUnit } = useAuth()
   const [openForm, setOpenForm] = React.useState(false)
   const [filters, setFilters] = React.useState<FiltersValues>({
     q: null,
     page: 1
   })
   const query = React.useMemo(() => {
-    let uri = '?paginate=true'
+    let uri = '?paginate=true&businessUnitId=' + businessUnit?.id
     uri += `&pavilionId=${pavilion?.id}`
     if (filters.q) uri += `&q=${filters.q}`
     if (filters.page) uri += `&page=${filters.page}`
     return uri
-  }, [filters, pavilion])
+  }, [filters, pavilion, businessUnit])
 
   const { setValue } = useDebounce<string | null>({
     delay: 500,
@@ -51,7 +53,7 @@ export default function ClassroomsPage() {
   const { data, isLoading, refetch } = useQuery<ResponsePaginate<
     Classroom[]
   > | null>({
-    queryKey: ['academic/classrooms', filters, period?.id, pavilion?.id],
+    queryKey: ['academic/classrooms', query],
     queryFn: async () => {
       const res = await api.get<ResponsePaginate<Classroom[]>>(
         'academic/classrooms' + query

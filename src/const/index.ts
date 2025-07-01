@@ -261,3 +261,19 @@ export const CLASSROOM_TYPES = [
   'Lab. CIIE',
   'Taller enfermeria'
 ] as const
+
+export const SCHEDULE_TYPES = {
+  TE: 'Teoría',
+  LA: 'Laboratorio',
+  VT: 'Virtual',
+  TA: 'Taller'
+}
+
+export const PLAN_COURSE_FORMULAS = {
+  'Carpeta de Trabajo': 'Carpeta de Trabajo',
+  'Desarrollo de Proyectos': 'Desarrollo de Proyectos',
+  General: 'General',
+  'General + laboratorio': 'General + laboratorio',
+  'General + proyecto': 'General + proyecto',
+  'Experiencias Formativas': 'Experiencias Formativas'
+}

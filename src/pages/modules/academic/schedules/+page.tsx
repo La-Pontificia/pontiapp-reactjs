@@ -22,7 +22,6 @@ import {
   Button,
   Checkbox,
   Dialog,
-  DialogActions,
   DialogBody,
   DialogContent,
   DialogSurface,
@@ -49,6 +48,13 @@ export default function SectionPeriodsPage() {
     q: null,
     page: 1
   })
+
+  const [isPending, setIsPending] = React.useState({
+    normal: false,
+    pontisis: false,
+    pontisisTeachers: false
+  })
+
   const [selected, setSelected] = React.useState<Period[]>([])
   const [programsSelected, setProgramsSelected] = React.useState<Program[]>([])
   const [openReport, setOpenReport] = React.useState(false)
@@ -94,26 +100,46 @@ export default function SectionPeriodsPage() {
     return selected.length > 0 && !allSelected
   }, [allSelected, selected])
 
-  const uriReport = React.useMemo(() => {
+  const queryReport = React.useMemo(() => {
     const selectedPeriods = selected.map((i) => i.id).join(',')
     const selectedPrograms = programsSelected.map((i) => i.id).join(',')
-    return `academic/sections/courses/schedules/report?periodIds=${selectedPeriods}&programIds=${selectedPrograms}`
+    return `?periodIds=${selectedPeriods}&programIds=${selectedPrograms}`
   }, [selected, programsSelected])
+
+  const uri = (type?: string) =>
+    type === 'normal'
+      ? 'report'
+      : type === 'pontisis'
+      ? 'report-pontisis'
+      : 'report-pontisis-teachers'
 
   const { mutate: handleReport, isPending: reporting } = useMutation({
     mutationFn: ({ type }: { type?: string }) =>
-      api.post(`${uriReport}&type=${type}`, {
-        alreadyHandleError: false
-      }),
+      api.post(
+        `academic/sections/courses/schedules/${uri(type)}${queryReport}`,
+        {
+          alreadyHandleError: false
+        }
+      ),
     onSuccess: (data) => {
       if (data.ok) {
         window.open(String(data.data), '_blank')
         setOpenReport(false)
         setSelected([])
         setProgramsSelected([])
+        setIsPending({
+          normal: false,
+          pontisis: false,
+          pontisisTeachers: false
+        })
       }
     },
     onError: (error) => {
+      setIsPending({
+        normal: false,
+        pontisis: false,
+        pontisisTeachers: false
+      })
       toast.error(handleError(error.message))
     }
   })
@@ -202,7 +228,66 @@ export default function SectionPeriodsPage() {
                   )}
               </div>
             </DialogContent>
-            <DialogActions>
+            <div className="grid gap-2 col-span-2">
+              <Button
+                onClick={() => {
+                  handleReport({
+                    type: 'normal'
+                  })
+                  setIsPending((prev) => ({
+                    ...prev,
+                    normal: true
+                  }))
+                }}
+                disabled={reporting}
+                icon={isPending.normal ? <Spinner size="tiny" /> : undefined}
+                appearance="secondary"
+              >
+                Normal
+              </Button>
+              <Button
+                onClick={() => {
+                  handleReport({
+                    type: 'pontisis'
+                  })
+                  setIsPending((prev) => ({
+                    ...prev,
+                    pontisis: true
+                  }))
+                }}
+                disabled={reporting}
+                icon={isPending.pontisis ? <Spinner size="tiny" /> : undefined}
+                appearance="secondary"
+              >
+                Para pontisis
+              </Button>
+              <Button
+                onClick={() => {
+                  handleReport({
+                    type: 'pontisisTeachers'
+                  })
+                  setIsPending((prev) => ({
+                    ...prev,
+                    pontisisTeachers: true
+                  }))
+                }}
+                disabled={reporting}
+                icon={
+                  isPending.pontisisTeachers ? (
+                    <Spinner size="tiny" />
+                  ) : undefined
+                }
+                appearance="secondary"
+              >
+                Para pontisis (Docentes)
+              </Button>
+              <DialogTrigger disableButtonEnhancement>
+                <Button className="!mt-3" appearance="secondary">
+                  Cancelar
+                </Button>
+              </DialogTrigger>
+            </div>
+            {/* <DialogActions>
               <DialogTrigger disableButtonEnhancement>
                 <Button
                   shape="circular"
@@ -238,7 +323,7 @@ export default function SectionPeriodsPage() {
               >
                 Exportar
               </Button>
-            </DialogActions>
+            </DialogActions> */}
           </DialogBody>
         </DialogSurface>
       </Dialog>

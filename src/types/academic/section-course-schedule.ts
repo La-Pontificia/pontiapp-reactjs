@@ -14,6 +14,7 @@ export class SectionCourseSchedule {
   endTime: Date
   daysOfWeek: string[]
   startDate: Date
+  type: string
   endDate: Date
   dates: DateSchedule
   created_at?: Date
@@ -31,6 +32,7 @@ export class SectionCourseSchedule {
     this.startDate = data.startDate
     this.endDate = data.endDate
     this.dates = data.dates
+    this.type = data.type
     this.created_at = data.created_at
     this.updated_at = data.updated_at
     this.creator = data.creator
