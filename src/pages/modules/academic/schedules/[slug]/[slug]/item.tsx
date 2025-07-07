@@ -163,7 +163,7 @@ const Item = ({ item, refetchSections }: Props) => {
   const parseSectionSchedules = React.useMemo(
     (): PreEvent[] =>
       schedules?.sectionSchedules?.map((s) => {
-        const withTeacher = s.sectionCourse.teacher.id === item.teacher?.id
+        const withTeacher = s.sectionCourse.teacher?.id === item.teacher?.id
         return {
           id: s.id,
           title: s.sectionCourse?.planCourse?.name,
@@ -429,9 +429,7 @@ const Item = ({ item, refetchSections }: Props) => {
           <UserDrawer
             onSubmit={(users) => {
               asignTeacher({
-                teacherId: users[0]?.id,
-                sectionId: item.section.id,
-                planCourseId: item.planCourse.id
+                teacherId: users[0]?.id
               })
             }}
             onlyTeachers
@@ -440,7 +438,8 @@ const Item = ({ item, refetchSections }: Props) => {
             title="Asignar docente"
             users={item.teacher ? [item.teacher] : []}
             triggerProps={{
-              disabled: isAsigning || item.schedulesCount !== 0,
+              disabled:
+                isAsigning || (!!item.teacher && item.schedulesCount !== 0),
               icon: isAsigning ? (
                 <Spinner size="tiny" />
               ) : item.teacher ? (
