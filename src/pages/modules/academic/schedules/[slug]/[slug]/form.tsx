@@ -284,7 +284,7 @@ export default function ScheduleForm({
       )}
 
       <Dialog open={open} onOpenChange={(_, { open }) => onOpenChange(open)}>
-        <DialogSurface className="min-w-[600px] w-[600px]">
+        <DialogSurface className="min-w-[550px] w-[550px]">
           <DialogBody>
             <DialogTitle
               action={
@@ -393,6 +393,7 @@ export default function ScheduleForm({
                               field.onChange(null)
                             }
                           }}
+                          className="!max-w-[165px]"
                           value={field.value?.id}
                         >
                           <option value={''}>Seleccionar pabellon</option>
@@ -425,7 +426,7 @@ export default function ScheduleForm({
                               field.onChange(null)
                             }
                           }}
-                          className="!max-w-[180px]"
+                          className="!max-w-[165px]"
                           value={field.value?.id}
                         >
                           <option value={''}>Seleccionar aula</option>
