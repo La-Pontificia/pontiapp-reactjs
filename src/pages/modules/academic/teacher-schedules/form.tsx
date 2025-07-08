@@ -92,6 +92,16 @@ export default function ScheduleForm({
   })
 
   const onSubmit = handleSubmit((values) => {
+    if (parseTimeWithFormat(values.from) <= parseTimeWithFormat(values.to)) {
+      toast.warning('La hora de fin debe ser mayor que la hora de inicio')
+      return
+    }
+
+    if (values.endDate && values.endDate <= values.startDate) {
+      toast.warning('La fecha de fin debe ser mayor que la fecha de inicio')
+      return
+    }
+
     fetch({
       userId: user.id,
       from: parseTimeWithFormat(values.from),
