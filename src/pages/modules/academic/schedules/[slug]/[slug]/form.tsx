@@ -284,7 +284,7 @@ export default function ScheduleForm({
       )}
 
       <Dialog open={open} onOpenChange={(_, { open }) => onOpenChange(open)}>
-        <DialogSurface className="min-w-[550px] w-[550px]">
+        <DialogSurface className="min-w-[600px] w-[600px]">
           <DialogBody>
             <DialogTitle
               action={
@@ -372,7 +372,7 @@ export default function ScheduleForm({
                 />
               </Field>
               <Field required label="Pab/Aula:" orientation="horizontal">
-                <div className="grid grid-cols-2 !gap-4">
+                <div className="grid grid-cols-2 !gap-2">
                   <Controller
                     control={control}
                     rules={{ required: 'Requerido' }}
@@ -425,12 +425,13 @@ export default function ScheduleForm({
                               field.onChange(null)
                             }
                           }}
+                          className="!max-w-[180px]"
                           value={field.value?.id}
                         >
                           <option value={''}>Seleccionar aula</option>
                           {classrooms?.map((classroom) => (
                             <option key={classroom.id} value={classroom.id}>
-                              {classroom.code}
+                              {classroom.code} - ({classroom.type?.name})
                             </option>
                           ))}
                         </Select>
