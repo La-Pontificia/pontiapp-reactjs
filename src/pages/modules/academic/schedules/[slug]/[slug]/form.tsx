@@ -162,6 +162,19 @@ export default function ScheduleForm({
   })
 
   const onSubmit = handleSubmit((values) => {
+    if (
+      parseTimeWithFormat(values.endTime) <=
+      parseTimeWithFormat(values.startTime)
+    ) {
+      toast.warning('La hora de fin debe ser mayor que la hora de inicio')
+      return
+    }
+
+    if (values.endDate <= values.startDate) {
+      toast.warning('La fecha de fin debe ser mayor que la fecha de inicio')
+      return
+    }
+
     fetch({
       sectionCourseId: sectionCourse.id,
       pavilionId: values.pavilion?.id,
