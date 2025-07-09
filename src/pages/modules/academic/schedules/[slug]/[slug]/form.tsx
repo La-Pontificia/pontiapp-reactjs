@@ -70,6 +70,7 @@ type ScheduleConflict = {
   endTime: Date
   dates: Date[]
   daysOfWeek: string[]
+  extendedProperties: Record<string, string>
 }
 
 export default function ScheduleForm({
@@ -198,7 +199,9 @@ export default function ScheduleForm({
         title: scheduleConflict?.name ?? 'Conflicto de horario',
         start: concatDateWithTime(date, scheduleConflict?.startTime),
         end: concatDateWithTime(date, scheduleConflict?.endTime),
-        className: '!bg-red-700 text-white'
+        className: '!bg-red-700 text-white',
+        extendedProps: scheduleConflict?.extendedProperties ?? {},
+        $img: scheduleConflict.extendedProperties?.$photoURL ?? null
       }))
     }
     return (
