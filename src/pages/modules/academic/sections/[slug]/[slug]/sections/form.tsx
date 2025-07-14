@@ -192,7 +192,16 @@ export default function Form({
               </Field>
               <Controller
                 control={control}
-                rules={{ required: 'Requerido' }}
+                rules={{
+                  required: 'Requerido',
+                  validate: (value) => {
+                    const regex = /^[a-zA-Z0-9-]+$/
+                    return (
+                      regex.test(value) ||
+                      'El código solo puede contener letras, números y guiones.'
+                    )
+                  }
+                }}
                 name="code"
                 render={({ field, fieldState: { error } }) => (
                   <Field
