@@ -1,7 +1,6 @@
 import { api } from '@/lib/api'
 import { TeCategory } from '@/types/academic/te-category'
 import { handleError } from '@/utils'
-import { BiSolidRightArrow } from 'react-icons/bi'
 import {
   Button,
   Dialog,
@@ -48,7 +47,7 @@ export default function Categories() {
   const [openForm, setOpenForm] = React.useState(false)
 
   return (
-    <div className="col-span-3 pr-2 flex flex-col">
+    <div className="dark:bg-stone-800 p-4 grow rounded-xl border shadow-lg bg-white flex flex-col">
       <p className="opacity-60">Competencias</p>
       <div className="grow">
         {isLoading ? (
@@ -137,13 +136,8 @@ const Item = ({ prop, refetch }: { prop: TeCategory; refetch: () => void }) => {
         ) : (
           <div
             data-current={isCurrent ? '' : undefined}
-            className="flex py-1 pr-2 relative group items-center rounded-lg data-[current]:dark:bg-blue-400 data-[current]:dark:text-blue-900 data-[current]:bg-blue-800 data-[current]:text-blue-100 transition-colors hover:bg-stone-500/10"
+            className="flex py-1 pr-2 relative group items-center rounded-lg data-[current]:dark:bg-blue-600/20 data-[current]:dark:text-blue-300 data-[current]:bg-blue-100 data-[current]:text-blue-800 transition-colors hover:bg-stone-500/10"
           >
-            {isCurrent && (
-              <div className="absolute inset-y-0 -right-[11px] flex items-center">
-                <BiSolidRightArrow className="dark:text-blue-400 text-blue-800" />
-              </div>
-            )}
             <button
               className="absolute inset-0 cursor-pointer"
               onClick={() => {

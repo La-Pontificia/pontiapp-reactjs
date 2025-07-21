@@ -26,7 +26,6 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useSettingContext } from '.'
 import { TeQuestion } from '@/types/academic/te-question'
-import { BiSolidRightArrow } from 'react-icons/bi'
 
 // eslint-disable-next-line react-refresh/only-export-components
 export const types = {
@@ -60,38 +59,40 @@ export default function Questions() {
   return (
     <div
       data-open={question ? '' : undefined}
-      className="col-span-6 data-[open]:col-span-3 px-2 flex flex-col"
+      className="p-2 col-span-6 data-[open]:col-span-4 grow flex flex-col"
     >
-      <p className="opacity-60">Preguntas</p>
-      <div className="grow">
-        {isLoading ? (
-          <div className="py-20">
-            <Spinner size="tiny" />
-          </div>
-        ) : questions && questions?.length > 0 ? (
-          <ol className="grid pt-1">
-            {questions?.map((prop) => (
-              <Item key={prop.id} prop={prop} refetch={refetch} />
-            ))}
-          </ol>
-        ) : (
-          <div className="py-20 px-10 text-center">
-            No hay nada que mostrar
-            <br />
-            <p className="text-xs pt-1 opacity-60">
-              Selecciona una medición para ver las preguntas.
-            </p>
-          </div>
-        )}
-      </div>
-      <div className="py-1">
-        {openForm ? (
-          <Form refetch={refetch} open={openForm} setOpen={setOpenForm} />
-        ) : (
-          <Button onClick={() => setOpenForm(true)} className="!w-full">
-            <AddRegular fontSize={20} />
-          </Button>
-        )}
+      <div className="dark:bg-stone-800 p-4 grow rounded-xl border shadow-lg bg-white flex flex-col">
+        <p className="opacity-60">Preguntas</p>
+        <div className="grow">
+          {isLoading ? (
+            <div className="py-20">
+              <Spinner size="tiny" />
+            </div>
+          ) : questions && questions?.length > 0 ? (
+            <ol className="grid pt-1">
+              {questions?.map((prop) => (
+                <Item key={prop.id} prop={prop} refetch={refetch} />
+              ))}
+            </ol>
+          ) : (
+            <div className="py-20 px-10 text-center">
+              No hay nada que mostrar
+              <br />
+              <p className="text-xs pt-1 opacity-60">
+                Selecciona una medición para ver las preguntas.
+              </p>
+            </div>
+          )}
+        </div>
+        <div className="py-1">
+          {openForm ? (
+            <Form refetch={refetch} open={openForm} setOpen={setOpenForm} />
+          ) : (
+            <Button onClick={() => setOpenForm(true)} className="!w-full">
+              <AddRegular fontSize={20} />
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   )
@@ -156,13 +157,8 @@ const Item = ({ prop, refetch }: { prop: TeQuestion; refetch: () => void }) => {
         ) : (
           <div
             data-current={isCurrent ? '' : undefined}
-            className="flex py-1 pr-2 relative group items-center rounded-lg data-[current]:dark:bg-yellow-400 data-[current]:dark:text-yellow-900 data-[current]:bg-yellow-800 data-[current]:text-yellow-100 transition-colors hover:bg-stone-500/10"
+            className="flex py-1 pr-2 relative group items-center rounded-lg data-[current]:dark:bg-yellow-500/10 data-[current]:dark:text-yellow-400 data-[current]:bg-yellow-100 data-[current]:text-yellow-900 transition-colors hover:bg-stone-500/10"
           >
-            {isCurrent && (
-              <div className="absolute inset-y-0 -right-[11px] flex items-center">
-                <BiSolidRightArrow className="dark:text-yellow-400 text-yellow-800" />
-              </div>
-            )}
             <div className="w-9 flex justify-center opacity-60 items-center">
               {String(prop.order).padStart(2, '0')}
             </div>

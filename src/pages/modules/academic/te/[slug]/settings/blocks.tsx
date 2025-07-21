@@ -20,7 +20,6 @@ import React from 'react'
 import { Controller, useForm } from 'react-hook-form'
 import { useSettingContext } from '.'
 import { TeBlock } from '@/types/academic/te-block'
-import { BiSolidRightArrow } from 'react-icons/bi'
 
 // export default function Blocks() {
 //   const { category } = useSettingContext()
@@ -57,7 +56,7 @@ export default function Categories() {
   const [openForm, setOpenForm] = React.useState(false)
 
   return (
-    <div className="col-span-3 flex flex-col px-2">
+    <div className="dark:bg-stone-800 p-4 grow rounded-xl border shadow-lg bg-white flex flex-col">
       <p className="opacity-60">Medición de competencias</p>
       <div className="grow">
         {isLoading ? (
@@ -151,13 +150,8 @@ const Item = ({ prop, refetch }: { prop: TeBlock; refetch: () => void }) => {
         ) : (
           <div
             data-current={isCurrent ? '' : undefined}
-            className="flex py-1 pr-2 relative group items-center rounded-lg data-[current]:dark:bg-purple-400 data-[current]:dark:text-purple-900 data-[current]:bg-purple-800 data-[current]:text-purple-100 transition-colors hover:bg-stone-500/10"
+            className="flex py-1 pr-2 relative group items-center rounded-lg data-[current]:dark:bg-purple-400/10 data-[current]:dark:text-purple-300 data-[current]:bg-purple-200 data-[current]:text-purple-900 transition-colors hover:bg-stone-500/10"
           >
-            {isCurrent && (
-              <div className="absolute inset-y-0 -right-[11px] flex items-center">
-                <BiSolidRightArrow className="dark:text-purple-400 text-purple-800" />
-              </div>
-            )}
             <button
               className="absolute inset-0 cursor-pointer"
               onClick={() => {

@@ -3,8 +3,7 @@ import {
   Dialog,
   DialogSurface,
   DialogBody,
-  DialogContent,
-  Button
+  DialogContent
 } from '@fluentui/react-components'
 import React from 'react'
 import Categories from './categories'
@@ -64,23 +63,27 @@ export default function SettingDialog({
       }}
     >
       <Dialog open={open} onOpenChange={(_, { open }) => onOpenChange(open)}>
-        <DialogSurface className="!max-w-[95svw] w-[1400px] !p-0">
+        <DialogSurface className="!max-w-[95svw] !p-0 !overflow-hidden !bg-violet-50 dark:!bg-[#201d25]">
           <DialogBody className="!flex flex-col !grow xl:h-[800px] max-h-[95svh]">
             <p className="p-1 pb-0 text-xs text-stone-500 dark:text-stone-400">
               Por favor evite agregar preguntas combinadas, agrupe preguntas de
               tipo "Selección simple" y de tipo "Texto".
             </p>
-            <DialogContent className="grow [&>div]:p-4 [&>div]:pb-0  divide-x dark:divide-stone-500/30 grid grid-cols-12">
-              <Categories />
-              <Blocks />
+            <DialogContent className="grow [&>div]:pt-0 grid grid-cols-12">
+              <div className="p-2 pr-0 col-span-3 grow flex flex-col">
+                <Categories />
+              </div>
+              <div className="p-2 pr-0 col-span-3 grow flex flex-col">
+                <Blocks />
+              </div>
               <Questions />
               <Options />
             </DialogContent>
-            <div className="p-2 flex justify-end pt-0">
+            {/* <div className="p-2 flex justify-end pt-0">
               <Button size="small" onClick={() => onOpenChange(false)}>
                 Cerrar
               </Button>
-            </div>
+            </div> */}
           </DialogBody>
         </DialogSurface>
       </Dialog>

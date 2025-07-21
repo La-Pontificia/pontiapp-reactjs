@@ -43,37 +43,39 @@ export default function Options() {
   if (!question || question.type === 'text') return null
 
   return (
-    <div className="col-span-3 px-2 flex flex-col">
-      <p className="opacity-60">Opciones</p>
-      <div className="grow">
-        {isLoading ? (
-          <div className="py-20">
-            <Spinner size="tiny" />
-          </div>
-        ) : options && options?.length > 0 ? (
-          <ol className="grid pt-1">
-            {options?.map((prop) => (
-              <Item key={prop.id} prop={prop} refetch={refetch} />
-            ))}
-          </ol>
-        ) : (
-          <div className="py-20 px-10 text-center">
-            No hay nada que mostrar
-            <br />
-            <p className="text-xs pt-1 opacity-60">
-              Selecciona una pregunta de tipo "Selección simple" para agregar
-            </p>
-          </div>
-        )}
-      </div>
-      <div className="py-1">
-        {openForm ? (
-          <Form refetch={refetch} open={openForm} setOpen={setOpenForm} />
-        ) : (
-          <Button onClick={() => setOpenForm(true)} className="!w-full">
-            <AddRegular fontSize={20} />
-          </Button>
-        )}
+    <div className="p-2 col-span-2 pl-0 grow flex flex-col">
+      <div className="dark:bg-stone-800 p-4 grow rounded-xl border shadow-lg bg-white flex flex-col">
+        <p className="opacity-60">Opciones</p>
+        <div className="grow">
+          {isLoading ? (
+            <div className="py-20">
+              <Spinner size="tiny" />
+            </div>
+          ) : options && options?.length > 0 ? (
+            <ol className="grid pt-1">
+              {options?.map((prop) => (
+                <Item key={prop.id} prop={prop} refetch={refetch} />
+              ))}
+            </ol>
+          ) : (
+            <div className="py-20 px-10 text-center">
+              No hay nada que mostrar
+              <br />
+              <p className="text-xs pt-1 opacity-60">
+                Selecciona una pregunta de tipo "Selección simple" para agregar
+              </p>
+            </div>
+          )}
+        </div>
+        <div className="py-1">
+          {openForm ? (
+            <Form refetch={refetch} open={openForm} setOpen={setOpenForm} />
+          ) : (
+            <Button onClick={() => setOpenForm(true)} className="!w-full">
+              <AddRegular fontSize={20} />
+            </Button>
+          )}
+        </div>
       </div>
     </div>
   )
