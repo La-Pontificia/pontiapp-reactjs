@@ -22,7 +22,7 @@ export default function UiProvider({
   return (
     <UIContext.Provider
       value={{
-        contentRef
+        contentRef: contentRef as React.RefObject<HTMLDivElement>
       }}
     >
       <Toaster theme={theme} appearance="invert" position="bottom-right" />
