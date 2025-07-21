@@ -14,5 +14,7 @@ export const ERRORS = {
   already_exists:
     'Ya existe un registro con los datos ingresados. Por favor, verifica e intenta de nuevo.',
   not_found:
-    'No se encontraron resultados. Por favor, verifica e intenta de nuevo.'
+    'No se encontraron resultados. Por favor, verifica e intenta de nuevo.',
+  already_exists_02:
+    'Ya existe esta evaluacion para este curso y docente, por favor verifica e intenta de nuevo.'
 } as const

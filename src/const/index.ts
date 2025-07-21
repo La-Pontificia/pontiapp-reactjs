@@ -215,7 +215,9 @@ export const PRIVILEGES = {
   settings: 'Acceso a configuraciones del sistema',
 
   // Resource management
-  'academic:trakingTeachers': '(Académica) Seguimiento de docentes',
+  'academic:teacherEvaluation': '(Académica) Evaluacion de docentes',
+  'academic:teacherEvaluation:groups:write':
+    '(Académica) Crear, Editar, Eliminar grupos de evaluaciones',
   'academic:schedules': '(Académica) Horarios académicos',
   'academic:programs': '(Académica) Programas académicos',
   'academic:plans': '(Académica) Planes de estudio',
