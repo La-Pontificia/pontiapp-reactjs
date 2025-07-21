@@ -26,7 +26,7 @@ export type FormValues = {
   sectionCourse: SectionCourse | null
   schedule: SectionCourseSchedule | null
   branch: Branch | null
-  trackingTime: string | null
+  trackingTime: string
   evaluationNumber: string
   answers: Answer[]
 }
@@ -63,7 +63,7 @@ export const useForm = ({
       toast.success('En hora buena! La evaluación ha sido creada exitosamente.')
       reset({
         answers: [],
-        trackingTime: null,
+        trackingTime: '',
         evaluationNumber: '',
         program: null,
         period: null,
@@ -157,7 +157,7 @@ export const useForm = ({
     return () => {
       reset({
         answers: [],
-        trackingTime: null,
+        trackingTime: '',
         evaluationNumber: '',
         program: null,
         period: null,

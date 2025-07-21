@@ -26,7 +26,7 @@ export default function Survey({
 }: {
   open: boolean
   setOpen: (open: boolean) => void
-  sectionCourse: SectionCourse
+  sectionCourse: SectionCourse | null
   setValue: any
   answers: any
 }) {
