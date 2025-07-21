@@ -39,8 +39,8 @@ export const AcademicSidebar = () => {
       <ItemSidebarNav
         icon={PeopleEyeRegular}
         iconActive={PeopleEyeFilled}
-        href="/m/academic/tt"
-        has={['academic:trakingTeachers']}
+        href="/m/academic/te"
+        has={['academic:teacherEvaluations']}
       >
         Seguimiento docentes
       </ItemSidebarNav>

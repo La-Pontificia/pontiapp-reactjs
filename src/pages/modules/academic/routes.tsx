@@ -6,7 +6,7 @@ import Protected from '@/protected/auth'
 import SchedulesPage from './schedules/+page'
 import PeriodsPage from './periods/+page'
 import AcademicPage from './+page'
-import TeacherTrackingsPage from './tt/+page'
+import TeacherTrackingsPage from './te/+page'
 import PlansPage from './programs/[slug]/plans/+page'
 import LayoutSlugPrograms from './programs/[slug]/+layout'
 import LayoutSlugPlan from './programs/[slug]/plans/[slug]/+layout'
@@ -34,6 +34,8 @@ import SchedulesProgramSchedulesPage from './schedules/[slug]/[slug]/+page'
 import AreasPage from './areas/+page'
 import AcademicReportFilesPage from './report-files/+page'
 import AcademicTeacherSchedulesPage from './teacher-schedules/+page'
+import TevaluationLayout from './te/[slug]/+layout'
+import TevaluationsPage from './te/[slug]/+page'
 
 export default function AcademicRoutes() {
   return (
@@ -69,14 +71,32 @@ export default function AcademicRoutes() {
             </Route>
           </Route>
         </Route>
-        <Route
-          path="tt"
-          element={
-            <Protected has="academic:trakingTeachers" navigate="/">
-              <TeacherTrackingsPage />
-            </Protected>
-          }
-        />
+        <Route path="te">
+          <Route
+            index
+            element={
+              <Protected
+                has="academic:teacherEvaluation"
+                navigate="/m/academic"
+              >
+                <TeacherTrackingsPage />
+              </Protected>
+            }
+          />
+          <Route
+            path=":groupId"
+            element={
+              <Protected
+                has="academic:teacherEvaluation"
+                navigate="/m/academic"
+              >
+                <TevaluationLayout />
+              </Protected>
+            }
+          >
+            <Route index element={<TevaluationsPage />} />
+          </Route>
+        </Route>
         <Route
           path="report-files"
           element={
