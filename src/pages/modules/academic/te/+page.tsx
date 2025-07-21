@@ -126,10 +126,15 @@ export default function TeGroupsGroup() {
               onOpenChange={setOpenForm}
               defaultProp={null}
             />
-            <Tooltip content="Exportar excel" relationship="description">
+            <Tooltip
+              content="Aún se esta implementando la exportación a excel"
+              // content="Exportar excel"
+              relationship="description"
+            >
               <button
                 disabled={
-                  isLoading || !evaluations || evaluations?.data?.length === 0
+                  true
+                  // isLoading || !evaluations || evaluations?.data?.length === 0
                 }
                 className="flex disabled:opacity-50 disabled:grayscale font-semibold items-center gap-1"
                 onClick={() => setOpenReport(true)}
