@@ -359,6 +359,7 @@ export default function Form({ open, setOpen, refetch }: Props) {
           </DialogBody>
         </DialogSurface>
       </Dialog>
+
       <Survey
         open={openSurvey}
         sectionCourse={sectionCourse}

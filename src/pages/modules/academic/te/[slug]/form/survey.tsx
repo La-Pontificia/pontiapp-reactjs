@@ -3,8 +3,11 @@ import { SectionCourse } from '@/types/academic/section-course'
 import {
   Button,
   Dialog,
+  DialogActions,
   DialogBody,
+  DialogContent,
   DialogSurface,
+  DialogTrigger,
   Radio,
   RadioGroup,
   Spinner,
@@ -127,10 +130,14 @@ export default function Survey({
 
   return (
     <>
-      <Dialog open={open} onOpenChange={(_, { open }) => setOpen(open)}>
+      <Dialog
+        open={open}
+        modalType="alert"
+        onOpenChange={(_, { open }) => setOpen(open)}
+      >
         <DialogSurface className="min-w-[700px] !p-0 !overflow-hidden !bg-violet-50 dark:!bg-[#110f15]">
           <DialogBody className="!p-0">
-            <div className="space-y-2 flex flex-col overflow-y-auto w-full col-span-3">
+            <DialogContent className="space-y-2 flex flex-col overflow-y-auto w-full col-span-3">
               {isLoading ? (
                 <div className="p-2 !min-h-[600px] grid place-content-center">
                   <Spinner size="small" />
@@ -139,138 +146,139 @@ export default function Survey({
                   </p>
                 </div>
               ) : (
-                open && (
-                  <>
-                    <div className="p-7 pb-0">
-                      <div className="bg-white dark:text-violet-100 text-violet-950 dark:bg-violet-950 p-4 rounded-lg border-t-8 shadow-md border-violet-500">
-                        <p className="text-2xl tracking-tight font-semibold">
-                          Encuesta
-                        </p>
-                        <p>
-                          de{' '}
-                          <span className="font-semibold">
-                            {sectionCourse?.teacher?.fullName}
-                          </span>{' '}
-                          en el curso{' '}
-                          <span className="font-semibold">
-                            {sectionCourse?.planCourse?.name}
-                          </span>{' '}
-                        </p>
-                        <p className="pt-3 opacity-70">
-                          Completada{' '}
-                          <span className="font-semibold">
-                            {counts.answered} de {counts.questions}
-                          </span>
-                        </p>
-                      </div>
+                <>
+                  <div className="p-7 pb-0">
+                    <div className="bg-white dark:text-violet-100 text-violet-950 dark:bg-violet-950 p-4 rounded-lg border-t-8 shadow-md border-violet-500">
+                      <p className="text-2xl tracking-tight font-semibold">
+                        Encuesta
+                      </p>
+                      <p>
+                        de{' '}
+                        <span className="font-semibold">
+                          {sectionCourse?.teacher?.fullName}
+                        </span>{' '}
+                        en el curso{' '}
+                        <span className="font-semibold">
+                          {sectionCourse?.planCourse?.name}
+                        </span>{' '}
+                      </p>
+                      <p className="pt-3 opacity-70">
+                        Completada{' '}
+                        <span className="font-semibold">
+                          {counts.answered} de {counts.questions}
+                        </span>
+                      </p>
                     </div>
-                    <div className="overflow-y-auto px-7">
-                      <div className="">
-                        {full?.categories.map((category) => (
-                          <div key={category.id} className="py-3">
-                            <p className="text-lg tracking-tight">
-                              <span className="opacity-60 text-sm">
-                                {category.order}.{' '}
-                              </span>
-                              {category.name}
-                            </p>
-                            <div className="flex flex-col gap-2">
-                              {category.blocks.map((block) => (
-                                <div key={block.id}>
-                                  <div className="py-2">
-                                    <span className="opacity-60">
-                                      {category.order}.{block.order}.{' '}
-                                    </span>
-                                    {block.name}
-                                  </div>
-                                  <div className="flex flex-col gap-2">
-                                    {block.questions.map((question) => {
-                                      const value = virtualAnswers?.find(
-                                        (answer: any) =>
-                                          answer.questionId === question.id
-                                      )?.answer
-
-                                      return (
-                                        <div
-                                          key={question.id}
-                                          className="p-3 flex flex-col bg-white shadow-sm dark:bg-violet-100/10 border rounded-xl border-violet-900/10"
-                                        >
-                                          <div className="text-base pb-2">
-                                            <span className="opacity-60">
-                                              {category.order}.{block.order}.
-                                              {question.order}.{' '}
-                                            </span>
-                                            {question.question}
-                                          </div>
-                                          {question.type === 'text' ? (
-                                            <div className="pt-2 w-full">
-                                              <Textarea
-                                                defaultValue={value}
-                                                onChange={(e) => {
-                                                  handleChange(
-                                                    question,
-                                                    e.target.value
-                                                  )
-                                                }}
-                                                className="w-full"
-                                              />
-                                            </div>
-                                          ) : (
-                                            <div className="flex pt-1 w-full">
-                                              <RadioGroup
-                                                onChange={(_, data) => {
-                                                  handleChange(
-                                                    question,
-                                                    data.value
-                                                  )
-                                                }}
-                                                defaultValue={String(value)}
-                                                layout="vertical"
-                                              >
-                                                {question.options.map(
-                                                  (option) => (
-                                                    <Radio
-                                                      key={option.value}
-                                                      className="[&>label]:p-0"
-                                                      value={String(
-                                                        option.value
-                                                      )}
-                                                      label={option.name}
-                                                    />
-                                                  )
-                                                )}
-                                              </RadioGroup>
-                                            </div>
-                                          )}
-                                        </div>
-                                      )
-                                    })}
-                                  </div>
+                  </div>
+                  <div className="overflow-y-auto px-7">
+                    <div className="">
+                      {full?.categories.map((category) => (
+                        <div key={category.id} className="py-3">
+                          <p className="text-lg tracking-tight">
+                            <span className="opacity-60 text-sm">
+                              {category.order}.{' '}
+                            </span>
+                            {category.name}
+                          </p>
+                          <div className="flex flex-col gap-2">
+                            {category.blocks.map((block) => (
+                              <div key={block.id}>
+                                <div className="py-2">
+                                  <span className="opacity-60">
+                                    {category.order}.{block.order}.{' '}
+                                  </span>
+                                  {block.name}
                                 </div>
-                              ))}
-                            </div>
+                                <div className="flex flex-col gap-2">
+                                  {block.questions.map((question) => {
+                                    const value = virtualAnswers?.find(
+                                      (answer: any) =>
+                                        answer.questionId === question.id
+                                    )?.answer
+
+                                    return (
+                                      <div
+                                        key={question.id}
+                                        className="p-3 flex flex-col bg-white shadow-sm dark:bg-violet-100/10 border rounded-xl border-violet-900/10"
+                                      >
+                                        <div className="text-base pb-2">
+                                          <span className="opacity-60">
+                                            {category.order}.{block.order}.
+                                            {question.order}.{' '}
+                                          </span>
+                                          {question.question}
+                                        </div>
+                                        {question.type === 'text' ? (
+                                          <div className="pt-2 w-full">
+                                            <Textarea
+                                              defaultValue={value}
+                                              onChange={(e) => {
+                                                handleChange(
+                                                  question,
+                                                  e.target.value
+                                                )
+                                              }}
+                                              className="w-full"
+                                            />
+                                          </div>
+                                        ) : (
+                                          <div className="flex pt-1 w-full">
+                                            <RadioGroup
+                                              onChange={(_, data) => {
+                                                handleChange(
+                                                  question,
+                                                  data.value
+                                                )
+                                              }}
+                                              defaultValue={String(value)}
+                                              layout="vertical"
+                                            >
+                                              {question.options.map(
+                                                (option) => (
+                                                  <Radio
+                                                    key={option.value}
+                                                    className="[&>label]:p-0"
+                                                    value={String(option.value)}
+                                                    label={option.name}
+                                                  />
+                                                )
+                                              )}
+                                            </RadioGroup>
+                                          </div>
+                                        )}
+                                      </div>
+                                    )
+                                  })}
+                                </div>
+                              </div>
+                            ))}
                           </div>
-                        ))}
-                      </div>
+                        </div>
+                      ))}
                     </div>
-                    <div className="px-7 py-3">
-                      <Button
-                        className="w-full"
-                        appearance="primary"
-                        disabled={
-                          counts.answered < (questionsSelectable ?? 0) ||
-                          isLoading ||
-                          !full
-                        }
-                        onClick={onSubmit}
-                      >
-                        Culminar encuesta
-                      </Button>
-                    </div>
-                  </>
-                )
+                  </div>
+                  <div className="px-7 flex items-center gap-3 py-3">
+                    <DialogActions>
+                      <DialogTrigger disableButtonEnhancement>
+                        <Button>Cancelar</Button>
+                      </DialogTrigger>
+                    </DialogActions>
+                    <Button
+                      className="w-full"
+                      appearance="primary"
+                      disabled={
+                        counts.answered < (questionsSelectable ?? 0) ||
+                        isLoading ||
+                        !full
+                      }
+                      onClick={onSubmit}
+                    >
+                      Culminar encuesta
+                    </Button>
+                  </div>
+                </>
               )}
-            </div>
+            </DialogContent>
           </DialogBody>
         </DialogSurface>
       </Dialog>
