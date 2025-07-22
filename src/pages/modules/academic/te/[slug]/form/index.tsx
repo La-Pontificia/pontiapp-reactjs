@@ -52,7 +52,7 @@ export default function Form({ open, setOpen, refetch }: Props) {
 
   return (
     <>
-      <Dialog open={open} onOpenChange={(_, { open }) => setOpen(open)}>
+      <Dialog open={open} onOpenChange={(_, e) => setOpen(e.open)}>
         <DialogSurface className="min-w-[700px]">
           <DialogBody>
             <DialogTitle
@@ -82,6 +82,7 @@ export default function Form({ open, setOpen, refetch }: Props) {
                     orientation="horizontal"
                   >
                     <Select
+                      autoFocus
                       onChange={(e) => {
                         const program = programs?.find(
                           (p) => p.id === e.target.value
@@ -359,7 +360,6 @@ export default function Form({ open, setOpen, refetch }: Props) {
           </DialogBody>
         </DialogSurface>
       </Dialog>
-
       <Survey
         open={openSurvey}
         sectionCourse={sectionCourse}
