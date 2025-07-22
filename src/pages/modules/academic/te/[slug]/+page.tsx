@@ -76,7 +76,6 @@ export default function TevaluationsPage() {
 
   return (
     <>
-      <Form open={openForm} refetch={refetch} setOpen={setOpenForm} />
       <Helmet>
         <title>{group?.name} | Pontiapp</title>
       </Helmet>
@@ -169,6 +168,8 @@ export default function TevaluationsPage() {
       </TableContainer>
       {/* Dialogs */}
       <SettingDialog open={settings} onOpenChange={setSettings} group={group} />
+
+      <Form open={openForm} refetch={refetch} setOpen={setOpenForm} />
     </>
   )
 }
