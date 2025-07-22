@@ -3,7 +3,10 @@ import {
   Dialog,
   DialogSurface,
   DialogBody,
-  DialogContent
+  DialogContent,
+  Button,
+  DialogActions,
+  DialogTrigger
 } from '@fluentui/react-components'
 import React from 'react'
 import Categories from './categories'
@@ -79,11 +82,11 @@ export default function SettingDialog({
               <Questions />
               <Options />
             </DialogContent>
-            {/* <div className="p-2 flex justify-end pt-0">
-              <Button size="small" onClick={() => onOpenChange(false)}>
-                Cerrar
-              </Button>
-            </div> */}
+            <DialogActions className="p-2 !hidden justify-end pt-0">
+              <DialogTrigger disableButtonEnhancement>
+                <Button size="small">Cerrar</Button>
+              </DialogTrigger>
+            </DialogActions>
           </DialogBody>
         </DialogSurface>
       </Dialog>
