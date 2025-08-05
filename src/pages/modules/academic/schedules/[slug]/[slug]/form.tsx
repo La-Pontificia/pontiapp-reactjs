@@ -301,7 +301,7 @@ export default function ScheduleForm({
               }
             >
               {defaultProp?.id
-                ? 'Editar programa'
+                ? 'Editar horario de clase'
                 : 'Registrar horario de clase'}
             </DialogTitle>
             <DialogContent className="grid gap-2">

@@ -1,7 +1,6 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-  Avatar,
   Badge,
   Button,
   Dialog,
@@ -20,8 +19,7 @@ import {
   ClockRegular,
   DeleteRegular,
   DocumentRegular,
-  PenRegular,
-  PersonAddRegular
+  PenRegular
 } from '@fluentui/react-icons'
 import React from 'react'
 import Calendar from '@/components/calendar'
@@ -41,9 +39,9 @@ import { useMutation, useQuery } from '@tanstack/react-query'
 import { concatDateWithTime, format } from '@/lib/dayjs'
 import { Schedule } from '@/types/schedule'
 import { useSlugSchedules } from '../+layout'
-import UserDrawer from '@/components/user-drawer'
 import { toast } from 'anni'
 import { getDaysShort, handleError } from '@/utils'
+import TeacherUpdate from './teacher-update'
 
 type Props = {
   item: SectionCourse
@@ -216,26 +214,6 @@ const Item = ({ item, refetchSections }: Props) => {
     refetchSchedules()
     refetchSections()
   }
-
-  const { mutate: asignTeacher, isPending: isAsigning } = useMutation({
-    mutationFn: (data: object) =>
-      api.post(`academic/sections/courses/${item.id}`, {
-        data: JSON.stringify(data),
-        alreadyHandleError: false
-      }),
-    onSuccess: () => {
-      refetchSchedules()
-      toast.success(
-        <p>
-          En hora buena! El profesor del curso <b>{item.planCourse?.name}</b> ha
-          sido actualizado con éxito.
-        </p>
-      )
-    },
-    onError: (error) => {
-      toast.error(error.message)
-    }
-  })
 
   const allSchedules = React.useMemo(
     () => [
@@ -414,6 +392,7 @@ const Item = ({ item, refetchSections }: Props) => {
           </DialogBody>
         </DialogSurface>
       </Dialog>
+
       <TableRow>
         <TableSelectionCell type="radio" />
         <TableCell className="max-w-[150px]">
@@ -426,42 +405,7 @@ const Item = ({ item, refetchSections }: Props) => {
           {item.planCourse?.plan?.name}
         </TableCell>
         <TableCell className="font-semibold max-w-[200px]">
-          <UserDrawer
-            onSubmit={(users) => {
-              asignTeacher({
-                teacherId: users[0]?.id
-              })
-            }}
-            onlyTeachers
-            max={1}
-            onSubmitTitle="Asignar"
-            title="Asignar docente"
-            users={item.teacher ? [item.teacher] : []}
-            triggerProps={{
-              disabled:
-                isAsigning || (!!item.teacher && item.schedulesCount !== 0),
-              icon: isAsigning ? (
-                <Spinner size="tiny" />
-              ) : item.teacher ? (
-                <Avatar
-                  image={{
-                    src: item.teacher.photoURL
-                  }}
-                  size={20}
-                  color="colorful"
-                  name={item.teacher.displayName}
-                />
-              ) : (
-                <PersonAddRegular fontSize={16} />
-              ),
-              children: item.teacher
-                ? item.teacher?.displayName
-                : 'Sin docente',
-              size: 'small',
-              appearance: 'secondary',
-              className: '!px-1 !text-left !text-nowrap'
-            }}
-          />
+          <TeacherUpdate item={item} refetch={refetch} />
         </TableCell>
         <TableCell className="font-semibold max-w-[130px]">
           {item.section?.code}
