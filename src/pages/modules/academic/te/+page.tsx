@@ -1,4 +1,5 @@
 import {
+  Badge,
   Button,
   Dialog,
   DialogActions,
@@ -19,7 +20,7 @@ import {
   TableSelectionCell
 } from '@/components/table'
 
-import { AddFilled, DocumentTableRegular } from '@fluentui/react-icons'
+import { AddFilled } from '@fluentui/react-icons'
 import React from 'react'
 import { Helmet } from 'react-helmet'
 import SearchBox from '@/commons/search-box'
@@ -35,6 +36,8 @@ import { useDebounce } from 'hothooks'
 import Form from './form'
 import { TeGroup } from '@/types/academic/te-group'
 import { useAuth } from '@/store/auth'
+import { ExcelColored } from '@/icons'
+import { handleError } from '@/utils'
 
 export type Filter = {
   q: string | null
@@ -42,6 +45,7 @@ export type Filter = {
 
 export default function TeGroupsGroup() {
   const [openReport, setOpenReport] = React.useState(false)
+  const [selected, setSelected] = React.useState<TeGroup[]>([])
   const [openForm, setOpenForm] = React.useState(false)
   const [filters, setFilters] = React.useState<Filter>({
     q: null
@@ -77,19 +81,35 @@ export default function TeGroupsGroup() {
     }
   })
 
-  const { mutate: report, isPending: reporting } = useMutation({
+  const queryReport = React.useMemo(() => {
+    const selectedGroups = selected.map((i) => i.id).join(',')
+    return `?groupIds=${selectedGroups}`
+  }, [selected])
+
+  const { mutate: handleReport, isPending: reporting } = useMutation({
     mutationFn: () =>
-      api.post('academic/te/gro/report' + query, {
+      api.post(`academic/te/report${queryReport}`, {
         alreadyHandleError: false
       }),
-    onSuccess: () => {
-      setOpenReport(false)
-      toast.success('Reporte en proceso de generación, te notificaremos.')
+    onSuccess: (data) => {
+      if (data.ok) {
+        window.open(String(data.data), '_blank')
+        setOpenReport(false)
+        setSelected([])
+      }
     },
-    onError: () => {
-      toast.error('Ocurrió un error al generar el reporte.')
+    onError: (error) => {
+      toast.error(handleError(error.message))
     }
   })
+
+  const allSelected = React.useMemo(() => {
+    return selected.length === evaluations?.data.length
+  }, [evaluations, selected])
+
+  const someSelected = React.useMemo(() => {
+    return selected.length > 0 && !allSelected
+  }, [allSelected, selected])
 
   return (
     <>
@@ -127,23 +147,25 @@ export default function TeGroupsGroup() {
               defaultProp={null}
             />
             <Tooltip
-              content="Aún se esta implementando la exportación a excel"
-              // content="Exportar excel"
+              content={
+                selected.length === 0
+                  ? 'Selecciona al menos un grupo para generar el reporte'
+                  : 'Exportar excel'
+              }
               relationship="description"
             >
               <button
-                disabled={
-                  true
-                  // isLoading || !evaluations || evaluations?.data?.length === 0
-                }
-                className="flex disabled:opacity-50 disabled:grayscale font-semibold items-center gap-1"
+                className="flex disabled:grayscale disabled:opacity-50 font-semibold items-center gap-1"
                 onClick={() => setOpenReport(true)}
+                disabled={selected.length === 0}
               >
-                <DocumentTableRegular
-                  fontSize={20}
-                  className="dark:text-blue-600 text-blue-700"
-                />
+                <ExcelColored size={20} />
                 Excel
+                {selected.length > 0 && (
+                  <Badge color="brand" appearance="tint" size="small">
+                    {selected.length}
+                  </Badge>
+                )}
               </button>
             </Tooltip>
 
@@ -154,7 +176,16 @@ export default function TeGroupsGroup() {
         <Table>
           <TableHeader>
             <TableRow>
-              <TableSelectionCell type="radio" invisible />
+              <TableSelectionCell
+                checked={allSelected ? true : someSelected ? 'mixed' : false}
+                onClick={() => {
+                  setSelected((prev) => {
+                    if (prev.length > 0) return []
+                    return evaluations?.data || []
+                  })
+                }}
+                type="radio"
+              />
               <TableHeaderCell>Nombre</TableHeaderCell>
               <TableHeaderCell className="max-md:!hidden">
                 Registrado por
@@ -164,7 +195,13 @@ export default function TeGroupsGroup() {
           </TableHeader>
           <TableBody>
             {evaluations?.data?.map((item) => (
-              <Item refetch={refetch} key={item.id} item={item} />
+              <Item
+                setSelected={setSelected}
+                selected={selected}
+                refetch={refetch}
+                key={item.id}
+                item={item}
+              />
             ))}
           </TableBody>
         </Table>
@@ -182,9 +219,9 @@ export default function TeGroupsGroup() {
             </DialogTitle>
             <DialogContent>
               <p className="w-full">
-                Puedes seguir usando el sistema mientras se genera el reporte.
-                enviaremos un correo cuando esté listo o puedes descargarlo
-                desde la sección de{' '}
+                Por favor espere un momento, tambien puedes cerrar esta alerta,
+                igualmente enviaremos un correo del link de descarga o tambien
+                puedes descargarlo desde la sección de{' '}
                 <Link
                   to="/m/academic/report-files"
                   target="_blank"
@@ -194,18 +231,27 @@ export default function TeGroupsGroup() {
                 </Link>{' '}
                 del módulo.
               </p>
+
+              <div className="pt-4">
+                <p className="font-semibold">Grupos seleccionados</p>
+                <ul className="list-disc list-inside">
+                  {selected.map((item) => (
+                    <li key={item.id}>{item.name}</li>
+                  ))}
+                </ul>
+              </div>
             </DialogContent>
             <DialogActions>
               <DialogTrigger disableButtonEnhancement>
                 <Button appearance="secondary">Cancelar</Button>
               </DialogTrigger>
               <Button
-                onClick={() => report()}
+                onClick={() => handleReport()}
                 disabled={reporting}
                 icon={reporting ? <Spinner size="tiny" /> : undefined}
                 appearance="primary"
               >
-                Generar reporte
+                Exportar
               </Button>
             </DialogActions>
           </DialogBody>

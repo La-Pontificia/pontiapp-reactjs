@@ -57,17 +57,16 @@ export default function Survey({
   })
 
   const handleChange = (question: TeQuestion, value: string) => {
-    const already = answers?.find(
+    const already = virtualAnswers?.find(
       (answer: any) => answer.questionId === question.id
     )
-    const answerValue = question.type === 'text' ? value : Number(value)
     if (already) {
       setVirtualAnswers((prev) =>
         prev.map((answer) =>
           answer.questionId === question.id
             ? {
                 ...answer,
-                answer: String(answerValue)
+                answer: value
               }
             : {
                 ...answer
@@ -79,7 +78,7 @@ export default function Survey({
         ...prev,
         {
           questionId: question.id,
-          answer: String(answerValue)
+          answer: value
         }
       ])
     }
@@ -88,6 +87,7 @@ export default function Survey({
   const onSubmit = () => {
     setValue('answers', virtualAnswers)
     setOpen(false)
+    setVirtualAnswers([])
   }
 
   const counts = React.useMemo(() => {
@@ -128,6 +128,12 @@ export default function Survey({
     }
   }, [open, answers, refetch])
 
+  React.useEffect(() => {
+    return () => {
+      setVirtualAnswers([])
+    }
+  }, [])
+
   return (
     <Dialog open={open} onOpenChange={(_, e) => setOpen(e.open)}>
       <DialogSurface className="min-w-[700px] !p-0 !overflow-hidden !bg-violet-50 dark:!bg-[#110f15]">
@@ -143,10 +149,6 @@ export default function Survey({
             ) : (
               <>
                 <div className="p-7 pb-0 relative">
-                  <input
-                    autoFocus
-                    className="opacity-0 absolute inset-0 pointer-events-none"
-                  />
                   <div className="bg-white dark:text-violet-100 text-violet-950 dark:bg-violet-950 p-4 rounded-lg border-t-8 shadow-md border-violet-500">
                     <p className="text-2xl tracking-tight font-semibold">
                       Encuesta
@@ -210,7 +212,7 @@ export default function Survey({
                                       {question.type === 'text' ? (
                                         <div className="pt-2 w-full">
                                           <Textarea
-                                            defaultValue={value}
+                                            value={value ? String(value) : ''}
                                             onChange={(e) => {
                                               handleChange(
                                                 question,
@@ -226,7 +228,7 @@ export default function Survey({
                                             onChange={(_, data) => {
                                               handleChange(question, data.value)
                                             }}
-                                            defaultValue={String(value)}
+                                            value={String(value)}
                                             layout="vertical"
                                           >
                                             {question.options.map((option) => (

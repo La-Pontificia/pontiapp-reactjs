@@ -35,10 +35,14 @@ import { useMutation } from '@tanstack/react-query'
 
 export default function Item({
   item,
-  refetch
+  refetch,
+  selected,
+  setSelected
 }: {
   item: TeGroup
   refetch: () => void
+  selected: TeGroup[]
+  setSelected: React.Dispatch<React.SetStateAction<TeGroup[]>>
 }) {
   const [openEdit, setOpenEdit] = React.useState(false)
   const [openDelete, setOpenDelete] = React.useState(false)
@@ -79,7 +83,17 @@ export default function Item({
   return (
     <>
       <TableRow>
-        <TableSelectionCell type="radio" />
+        <TableSelectionCell
+          checked={selected.some((i) => i.id === item.id)}
+          onClick={() => {
+            setSelected((prev) =>
+              prev.some((i) => i.id === item.id)
+                ? prev.filter((i) => i.id !== item.id)
+                : [...prev, item]
+            )
+          }}
+          type="radio"
+        />
         <TableCell>
           <TableCellLayout
             onClick={() => navigate(`/m/academic/te/${item.id}`)}
