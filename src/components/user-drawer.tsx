@@ -192,7 +192,7 @@ export function Users(
                 return (
                   <label
                     key={u.id}
-                    className="flex cursor-pointer items-center gap-2 py-1"
+                    className="flex cursor-pointer items-center gap-2 py-2"
                   >
                     <div>
                       <Checkbox
@@ -210,6 +210,12 @@ export function Users(
                     />
                     <div className="flex-grow text-base font-semibold">
                       <p>{u?.displayName}</p>
+                      {u?.username && (
+                        <div className="flex items-center gap-1 text-xs opacity-70 font-normal">
+                          <p>@{u?.username}</p>-<p>{u?.email}</p>-
+                          <p>{u?.role?.name}</p>
+                        </div>
+                      )}
                     </div>
                   </label>
                 )
