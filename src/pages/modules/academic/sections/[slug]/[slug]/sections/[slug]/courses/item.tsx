@@ -18,12 +18,9 @@ import {
 } from '@/components/table'
 
 import {
-  CheckmarkCircleFilled,
-  // CalendarEditRegular,
   DeleteRegular,
   DocumentRegular,
-  PenRegular,
-  PersonLightbulbRegular
+  PenRegular
 } from '@fluentui/react-icons'
 import React from 'react'
 import { timeAgo } from '@/lib/dayjs'
@@ -33,7 +30,7 @@ import { api } from '@/lib/api'
 import { toast } from 'anni'
 import { handleError } from '@/utils'
 import { SectionCourse } from '@/types/academic/section-course'
-import UserDrawer from '@/components/user-drawer'
+import TeacherUpdate from '@/pages/modules/academic/schedules/[slug]/[slug]/teacher-update'
 
 export default function Item({
   item,
@@ -62,27 +59,6 @@ export default function Item({
     }
   })
 
-  const { mutate: asignTeacher, isPending: isAsigning } = useMutation({
-    mutationFn: (data: object) =>
-      api.post(`academic/sections/courses/${item.id}`, {
-        data: JSON.stringify(data),
-        alreadyHandleError: false
-      }),
-    onSuccess: () => {
-      setOpenDelete(false)
-      refetch()
-      toast.success(
-        <p>
-          En hora buena! El docente del curso <b>{item.planCourse?.name}</b> ha
-          sido actualizado con éxito.
-        </p>
-      )
-    },
-    onError: (error) => {
-      toast.error(handleError(error.message))
-    }
-  })
-
   return (
     <>
       <TableRow>
@@ -96,35 +72,7 @@ export default function Item({
           {item.planCourse?.plan?.name}
         </TableCell>
         <TableCell className="font-semibold max-w-[200px]">
-          <UserDrawer
-            onSubmit={(users) => {
-              asignTeacher({
-                teacherId: users[0]?.id,
-                sectionId: item.section.id,
-                planCourseId: item.planCourse.id
-              })
-            }}
-            onlyTeachers
-            max={1}
-            onSubmitTitle="Asignar"
-            title="Asignar profesor"
-            users={item.teacher ? [item.teacher] : []}
-            triggerProps={{
-              disabled: isAsigning,
-              icon: isAsigning ? (
-                <Spinner size="tiny" />
-              ) : item.teacher ? (
-                <CheckmarkCircleFilled className="dark:text-green-500 text-green-700" />
-              ) : (
-                <PersonLightbulbRegular />
-              ),
-              children: item.teacher
-                ? item.teacher?.displayName
-                : 'Sin asignar',
-              appearance: 'transparent',
-              className: '!px-1 !text-left !text-nowrap'
-            }}
-          />
+          <TeacherUpdate item={item} refetch={refetch} />
         </TableCell>
         <TableCell className="max-lg:!hidden max-w-[200px]">
           <p className="font-medium">
