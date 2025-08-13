@@ -219,6 +219,11 @@ export const PRIVILEGES = {
   'academic:teacherEvaluation:groups:write':
     '(Académica) Crear, Editar, Eliminar grupos de evaluaciones',
   'academic:schedules': '(Académica) Horarios académicos',
+  'academic:schedules:create': '(Académica) Registrar horarios académicos',
+  'academic:schedules:edit': '(Académica) Editar horarios académicos',
+  'academic:schedules:delete': '(Académica) Eliminar horarios académicos',
+  'academic:schedules:teacher':
+    '(Académica) Asignar docentes en horarios académicos',
   'academic:programs': '(Académica) Programas académicos',
   'academic:plans': '(Académica) Planes de estudio',
   'academic:periods': '(Académica) Periodos académicos',
