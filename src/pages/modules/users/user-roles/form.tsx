@@ -89,7 +89,7 @@ export default function Form({
           <DialogSurface aria-describedby={undefined}>
             <DialogBody>
               <DialogTitle>
-                {defaultValues ? 'Editar cargo' : 'Registrar cargo'}
+                {defaultValues ? 'Editar rol' : 'Registrar rol'}
               </DialogTitle>
               <DialogContent className="space-y-4">
                 <div className="grid gap-4">
