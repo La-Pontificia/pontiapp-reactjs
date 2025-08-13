@@ -42,6 +42,7 @@ import { useSlugSchedules } from '../+layout'
 import { toast } from 'anni'
 import { getDaysShort, handleError } from '@/utils'
 import TeacherUpdate from './teacher-update'
+import { useAuth } from '@/store/auth'
 
 type Props = {
   item: SectionCourse
@@ -65,7 +66,7 @@ type PreEvent = Record<string, any>
 const Item = ({ item, refetchSections }: Props) => {
   const { period } = useSlugSchedules()
   const [openDialog, setOpenDialog] = React.useState(false)
-
+  const { user } = useAuth()
   const [openForm, setOpenForm] = React.useState(false)
   const [defaultValues, setDefaultValues] = React.useState<
     Partial<SectionCourseSchedule>
@@ -228,6 +229,7 @@ const Item = ({ item, refetchSections }: Props) => {
       <Calendar
         events={events}
         onDateSelect={(args) => {
+          if (!user.hasPrivilege('academic:schedules:create')) return
           setDefaultValues({
             startTime: args.start,
             endTime: args.end,
@@ -242,6 +244,8 @@ const Item = ({ item, refetchSections }: Props) => {
           }, 50)
         }}
         onEventClick={(args) => {
+          if (!user.hasPrivilege('academic:schedules:edit')) return
+
           const schedule = allSchedules?.find((s) => s?.id === args.id)
           if (!schedule) return
           if (schedule?.sectionCourse.section.id !== item.section.id) return
@@ -296,6 +300,7 @@ const Item = ({ item, refetchSections }: Props) => {
         defaultProp={defaultValues}
         refetch={refetch}
       />
+
       {/* SCHEDULE DIALOG */}
       <Dialog
         open={openDialog}
@@ -358,20 +363,22 @@ const Item = ({ item, refetchSections }: Props) => {
                             </Badge>
                           </div>
                           <div className="pt-1 gap-1 flex">
-                            <Button
-                              onClick={() => {
-                                setDefaultValues(s)
-                                // open form with 2s delay
-                                setTimeout(() => {
-                                  setOpenForm(true)
-                                }, 50)
-                              }}
-                              shape="circular"
-                              size="small"
-                              icon={<PenRegular />}
-                            >
-                              Editar
-                            </Button>
+                            {user.hasPrivilege('academic:schedules:edit') && (
+                              <Button
+                                onClick={() => {
+                                  setDefaultValues(s)
+                                  // open form with 2s delay
+                                  setTimeout(() => {
+                                    setOpenForm(true)
+                                  }, 50)
+                                }}
+                                shape="circular"
+                                size="small"
+                                icon={<PenRegular />}
+                              >
+                                Editar
+                              </Button>
+                            )}
                             <ScheduleDelete refetch={refetch} schedule={s} />
                           </div>
                         </div>
@@ -441,6 +448,7 @@ export const ScheduleDelete = ({
   schedule: SectionCourseSchedule
   refetch: () => void
 }) => {
+  const { user } = useAuth()
   const [openDelete, setOpenDelete] = React.useState(false)
 
   const { mutate, isPending } = useMutation({
@@ -455,6 +463,8 @@ export const ScheduleDelete = ({
       toast.error(handleError(error.message))
     }
   })
+
+  if (!user.hasPrivilege('academic:schedules:delete')) return null
 
   return (
     <>
