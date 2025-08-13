@@ -1,5 +1,6 @@
 import UserDrawer from '@/components/user-drawer'
 import { api } from '@/lib/api'
+import { useAuth } from '@/store/auth'
 import { SectionCourse } from '@/types/academic/section-course'
 import { Avatar, Spinner } from '@fluentui/react-components'
 import { PersonAddRegular } from '@fluentui/react-icons'
@@ -11,6 +12,7 @@ type Props = {
   refetch: () => void
 }
 export default function TeacherUpdate({ item, refetch }: Props) {
+  const { user } = useAuth()
   const { mutate: asignTeacher, isPending: isAsigning } = useMutation({
     mutationFn: (data: object) =>
       api.post(`academic/sections/courses/${item.id}`, {
@@ -40,6 +42,7 @@ export default function TeacherUpdate({ item, refetch }: Props) {
         title={item ? 'Actualizar docente' : 'Asignar docente'}
         users={item.teacher ? [item.teacher] : []}
         triggerProps={{
+          disabled: !user.hasPrivilege('academic:schedules:teacher'),
           icon: isAsigning ? (
             <Spinner size="tiny" />
           ) : item.teacher ? (
