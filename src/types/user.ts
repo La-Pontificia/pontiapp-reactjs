@@ -92,6 +92,7 @@ export class User {
     if (data.branch) this.branch = new RmBranch(data.branch)
     if (data.role) this.role = new Role(data.role)
     if (data.role2) this.role2 = new Role(data.role2)
+
     if (data.userRole) this.userRole = new UserRole(data.userRole)
     if (data.userRole2) this.userRole2 = new UserRole(data.userRole2)
 
@@ -148,6 +149,7 @@ export class User {
 
     const allPrivileges = [
       ...(this.userRole?.privileges || []),
+      ...(this.userRole2?.privileges || []),
       ...(this.customPrivileges || [])
     ]
     if (Array.isArray(privilege)) {
@@ -167,6 +169,7 @@ export class User {
 
     const allPrivileges = [
       ...(this.userRole?.privileges || []),
+      ...(this.userRole2?.privileges || []),
       ...(this.customPrivileges || [])
     ]
     return allPrivileges.some((p) => p.startsWith(module))
