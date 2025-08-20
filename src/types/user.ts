@@ -129,6 +129,7 @@ export class User {
   get allPrivileges(): string[] {
     return [
       ...(this.userRole?.privileges || []),
+      ...(this.userRole2?.privileges || []),
       ...(this.customPrivileges || [])
     ]
   }
@@ -136,6 +137,7 @@ export class User {
   get isDeveloper(): boolean {
     const allPrivileges = [
       ...(this.userRole?.privileges || []),
+      ...(this.userRole2?.privileges || []),
       ...(this.customPrivileges || [])
     ]
     return allPrivileges?.includes(PRIVILEGE_DEVELOPER) ?? false
