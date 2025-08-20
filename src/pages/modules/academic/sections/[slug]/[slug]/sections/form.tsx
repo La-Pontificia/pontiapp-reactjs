@@ -11,8 +11,8 @@ import {
   Field,
   Input,
   Select,
-  Spinner
-  // Textarea
+  Spinner,
+  Textarea
 } from '@fluentui/react-components'
 import { Dismiss24Regular } from '@fluentui/react-icons'
 import { useMutation, useQuery } from '@tanstack/react-query'
@@ -126,8 +126,22 @@ export default function Form({
   })
 
   const onSubmit = handleSubmit((values) => {
+    const splited = values.code.split('\n').map((code) => code.trim())
+    const codes = splited.filter((code) => code !== '')
+
+    const duplicatedCodes = codes.filter(
+      (code, index) => codes.indexOf(code) !== index
+    )
+
+    if (duplicatedCodes.length > 0) {
+      toast.error(
+        `Los siguientes códigos están duplicados: ${duplicatedCodes.join(', ')}`
+      )
+      return
+    }
+
     fetch({
-      code: values.code,
+      code: defaultProp ? values.code : codes,
       planId: values.plan?.id,
       cycleId: values.cycle?.id,
       coursesIds: values.courses.map((course) => course.id),
@@ -156,6 +170,11 @@ export default function Form({
     delay: 500,
     onFinish: (v) => setQ(v)
   })
+
+  const codesPlaceholder = `IET2A252M1
+IET2C252M2
+IET2D252T
+IET3A252M1`
 
   return (
     <>
@@ -195,10 +214,14 @@ export default function Form({
                 rules={{
                   required: 'Requerido',
                   validate: (value) => {
-                    const regex = /^[a-zA-Z0-9-]+$/
+                    const regex = /^[a-zA-Z0-9-\n]+$/
                     return (
                       regex.test(value) ||
-                      'El código solo puede contener letras, números y guiones.'
+                      `${
+                        defaultProp
+                          ? 'El código solo puede'
+                          : 'Los códigos solo pueden'
+                      } contener letras, números y guiones.`
                     )
                   }
                 }}
@@ -208,10 +231,19 @@ export default function Form({
                     orientation="horizontal"
                     validationState={error ? 'error' : 'none'}
                     validationMessage={error?.message}
-                    label="Código:"
+                    label={defaultProp ? 'Código:' : 'Códigos:'}
                     required
                   >
-                    <Input {...field} readOnly={readOnly} />
+                    {defaultProp ? (
+                      <Input {...field} readOnly={readOnly} />
+                    ) : (
+                      <Textarea
+                        rows={4}
+                        placeholder={codesPlaceholder}
+                        {...field}
+                        readOnly={readOnly}
+                      />
+                    )}
                   </Field>
                 )}
               />
